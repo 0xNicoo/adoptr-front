@@ -2,7 +2,7 @@
 
 import { deleteExample } from "../actions"
 
-const DeleteBtn = async ({id}) => {
+const DeleteBtn = ({id}) => {
 
     const onDelete = (id) => {
         deleteExample(id)

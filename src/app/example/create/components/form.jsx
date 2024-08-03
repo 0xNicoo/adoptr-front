@@ -13,8 +13,8 @@ const Form = () => {
         createExample(data)
     }
 
-    const handleBack = () => {
-        router.back();
+    const handleBack = async () => {
+        router.back()
     };
 
     return (
