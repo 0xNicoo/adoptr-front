@@ -1,11 +1,9 @@
 import Link from 'next/link';
-import {getData} from '@/app/lib/api'
+import { getData } from '@/app/lib/api'
+import DeleteBtn from './components/deleteBtn';
 
 const Example = async () => {
-
     const data = await getData()
-    console.log(data)
-
     return(
         <>
             <h4 className="text-2xl font-bold mb-4">Prueba</h4>
@@ -18,8 +16,9 @@ const Example = async () => {
 
             <ul className="mt-4 space-y-2">
                 {data.map((item, index) => (
-                    <li key={index} className="bg-gray-100 p-4 rounded shadow-md">
-                        {item.title}
+                    <li key={index} className="bg-gray-100 p-4 rounded shadow-md flex items-center justify-between">
+                        <span>{item.title}</span>
+                        <DeleteBtn id={item.id} />
                     </li>
                 ))}
             </ul>

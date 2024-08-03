@@ -27,3 +27,14 @@ export async function postData(data){
 
     return res.json()
 }
+
+export async function deleteData(id){
+    const res = await fetch(`http://localhost:8080/example/${id}`,{
+        method: 'DELETE'
+    })
+
+    if(!res.ok){
+        throw new Error('Failed to fetch data')
+    }
+    return
+}
