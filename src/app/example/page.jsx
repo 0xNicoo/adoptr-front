@@ -5,14 +5,16 @@ import DeleteBtn from './components/deleteBtn';
 const Example = async () => {
     const data = await getData()
     return(
-        <>
+        <div className="px-4 py-4 mx-auto max-w-7xl">
             <h4 className="text-2xl font-bold mb-4">Prueba</h4>
 
-            <Link href="/example/create">
-                <button className="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">
-                    Crear example
-                </button>
-            </Link>
+            <div className="flex justify-end mb-4">
+                <Link href="/example/create">
+                    <button className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded transition">
+                        Crear example
+                    </button>
+                </Link>
+            </div>
 
             <ul className="mt-4 space-y-2">
                 {data.map((item, index) => (
@@ -22,7 +24,7 @@ const Example = async () => {
                     </li>
                 ))}
             </ul>
-        </>
+        </div>
     )
 }
 
