@@ -9,18 +9,10 @@ const Form = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const router = useRouter();
 
-    const handlePost = (data) => {
-        createExample(data)
-    }
-
-    const handleBack = async () => {
-        router.back()
-    };
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <form
-            onSubmit={handleSubmit(handlePost)}
+            onSubmit={handleSubmit((data) => {createExample(data)})}
             className="bg-white p-6 rounded-lg shadow-md w-full max-w-md space-y-4"
         >
             <h2 className="text-2xl font-bold mb-4 text-center">CREAR</h2>
@@ -67,7 +59,7 @@ const Form = () => {
 
             <button
                 type="button"
-                onClick={handleBack}
+                onClick={() => {router.back()}}
                 className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
             >
                 Volver
