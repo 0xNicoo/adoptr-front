@@ -50,6 +50,41 @@ const Form = () => {
                 {errors.text && <p className="text-red-500 text-sm mt-1">{errors.text.message}</p>}
             </div>
 
+            <div className="relative z-0">
+                    <select
+                        id="type"
+                        {...register('type', { required: 'El tipo es obligatorio' })}
+                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    >
+                        <option value="">Seleccione un tipo</option>
+                        <option value="TYPE_A">TYPE_A</option>
+                        <option value="TYPE_B">TYPE_B</option>
+                        <option value="TYPE_C">TYPE_C</option>
+                    </select>
+                    <label
+                        htmlFor="type"
+                        className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    >
+                        Tipo
+                    </label>
+                    {errors.type && <p className="text-red-500 text-sm mt-1">{errors.type.message}</p>}
+            </div>
+
+            <div className="relative z-0 flex items-center space-x-2">
+                    <input
+                        type="checkbox"
+                        id="active"
+                        {...register('active')}
+                        className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                    />
+                    <label
+                        htmlFor="active"
+                        className="text-sm text-gray-500"
+                    >
+                        Activo
+                    </label>
+            </div>
+
             <button
                 type="submit"
                 className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

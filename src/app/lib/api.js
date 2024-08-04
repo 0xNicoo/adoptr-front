@@ -11,8 +11,6 @@ export async function getData(){
 }
 
 export async function postData(data){
-    console.log(data)
-    console.log(JSON.stringify(data))
     const res = await fetch('http://localhost:8080/example',{
         method: 'POST',
         headers: {
@@ -37,4 +35,20 @@ export async function deleteData(id){
         throw new Error('Failed to fetch data')
     }
     return
+}
+
+export async function updateData(id, data){
+    const res = await fetch(`http://localhost:8080/example/${id}`,{
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+
+    if(!res.ok){
+        throw new Error('Failed to fetch data')
+    }
+
+    return res.json()
 }
