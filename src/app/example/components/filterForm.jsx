@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-const FilterForm = () => {
+const FilterForm = ({updateData}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { register, handleSubmit } = useForm();
 
@@ -12,7 +12,7 @@ const FilterForm = () => {
     };
 
     return (
-        <div className="w-full mb-8">
+        <div className="w-full">
         <button
             onClick={() => setIsOpen(!isOpen)}
             className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mb-4"
@@ -23,8 +23,6 @@ const FilterForm = () => {
         {isOpen && (
             <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-md w-full">
                 <div className="flex flex-col">
-                    <h2 className="text-2xl font-bold mb-4 text-center">Filtrar</h2>
-
                     <div className="flex flex-item-center gap-4">
                         <div className="relative z-0 w-full md:w-1/4">
                             <input
