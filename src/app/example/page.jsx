@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import ExampleContainer from './components/ExampleContainer';
+import ExampleContainer from './components/exampleContainer';
 
 
 const Example = () => {
@@ -18,7 +18,5 @@ const Example = () => {
         </div>
     )
 }
-
-
 
 export default Example
