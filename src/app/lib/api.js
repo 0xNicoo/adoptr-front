@@ -1,7 +1,10 @@
 'use server'
 
-export async function getData(){
-    const res = await fetch('http://localhost:8080/example')
+export async function getData(filter, page, size){
+
+    const queryParams = getQueryParams(filter, page, size)
+
+    const res = await fetch(`http://localhost:8080/example?${queryParams}`)
 
     if(!res.ok){
         throw new Error('Failed to fetch data')
@@ -51,4 +54,21 @@ export async function updateData(id, data){
     }
 
     return res.json()
+}
+
+
+//En caso de que llege un filtro como string vacio; no lo agrega como queryparam
+function getQueryParams(filter, page, size){
+    const filteredParams = Object.entries({
+        ...filter,
+        page,
+        size
+    }).reduce((acc, [key, value]) => {
+        if (value !== "" && value !== null && value !== undefined) {
+            acc[key] = value;
+        }
+        return acc;
+    }, {});
+
+    return new URLSearchParams(filteredParams).toString();
 }

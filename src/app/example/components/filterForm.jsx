@@ -1,5 +1,6 @@
 'use client'
 
+import { getAllExamples } from '../actions';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -8,7 +9,8 @@ const FilterForm = ({updateData}) => {
     const { register, handleSubmit } = useForm();
 
     const onSubmit = async (data) => {
-        console.log(data)
+        const filteredList = await getAllExamples(data)
+        updateData(filteredList)
     };
 
     return (

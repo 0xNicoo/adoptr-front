@@ -16,7 +16,7 @@ export async function editExample(id, example){
     redirect('/example/edit')
 }
 
-export async function getAllExamples(){
-    const data = await getData()
+export async function getAllExamples(filter){
+    const data = await getData(filter, 0, 10)
     return data;
 }
