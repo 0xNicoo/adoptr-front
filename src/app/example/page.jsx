@@ -1,24 +1,8 @@
-'use client'
-
-import { getAllExamples } from './actions';
 import Link from 'next/link';
-import FilterForm from './components/filterForm';
-import ExampleList from './components/exampleList';
-import { useEffect, useState } from 'react';
+import ExampleContainer from './components/ExampleContainer';
+
 
 const Example = () => {
-    
-    const [data, updateData] = useState([]);
-    
-    useEffect(() => {
-        handleGetData()
-    }, []);
-
-    const handleGetData = async () => {
-        const response = await getAllExamples()
-        updateData(response)
-    }
-
     return(
         <div className="px-4 py-4 mx-auto max-w-7xl">
             <h4 className="text-2xl font-bold mb-4">Prueba</h4>
@@ -30,8 +14,7 @@ const Example = () => {
                     </button>
                 </Link>
             </div>
-            <FilterForm updateData={updateData}/>
-            <ExampleList list={data} />
+            <ExampleContainer />
         </div>
     )
 }
