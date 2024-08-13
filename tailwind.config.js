@@ -16,6 +16,10 @@ module.exports = {
         'primary-orange-dark': '#db6826',
         'footer-primary': '#0B2545',
         'sectionB': '#F8F3EA',
+        'sectionC': '#D1E8FF',
+        'sectionD':'#5784E6',
+        'secondary-blue': '#0B1956',
+        'blue-hover': '#040A22',
       },
       spacing: {
         '18': '4.5rem', 
