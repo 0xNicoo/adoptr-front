@@ -10,23 +10,24 @@ const poppins = Poppins({
 const SectionB = () =>{
     return(
         <section className="bg-sectionB">
-            <h1 className={`${poppins.className} text-4xl text-black md:text-right pt-18 mr-20 mb-5`}>¿Cómo adoptar?</h1>
+            <h1 className={`${poppins.className} xl:text-4xl 2xl:text-6xl text-black md:text-right pt-18 xl:mr-10 2xl:mr-40 pb-5`}>¿Cómo adoptar?</h1>
             <div className="mt-1 grid grid-cols-1">
-                <div className="flex items-center justify-content mx-20">
-                <div className="mt-1 mr-10">
-                    <Image 
-                        src="/images/sectionB.png"
-                        width={180}
-                        height={180}
-                    />
-                </div>
-                <p className={`${poppins.className} text-black font-medium`}>
+                <div className="flex items-center justify-between gap-10 2xl:gap-15">
+                    <div className="relative xl:ml-10 2xl:ml-40">
+                        <Image className="xl:w-48 2xl:w-72"
+                            src="/images/sectionB.png"
+                            width={180}
+                            height={180}
+                            alt="Ilustración de un gato"
+                        />
+                    </div>
+                    <p className={`${poppins.className} text-black font-medium xl:mr-10 2xl:mr-40 2xl:text-2xl`}>
                     ¿Estás listo para darle un hogar a un amigo peludo? En nuestra sección Adoptar podés ver todas las mascotas disponibles en adopción.
                     <br/>
                     Cuando encuentres una mascota que te interese, usá el chat de Adoptr para contactarte con el dueño de la publicación. Ahí podés hacer todas las preguntas que tengas y coordinar los detalles de la adopción. 
                     <br/>
                     Con Adoptr estás más cerca de sumar un integrante a tu familia. 
-                </p>
+                    </p>
                 </div>
             </div>
             <div className="custom-shape-divider-top-1723505161" style={{ '--shape-fill-color': '#F8F3EA' }}>

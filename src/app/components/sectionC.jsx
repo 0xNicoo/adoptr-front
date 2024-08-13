@@ -16,22 +16,23 @@ const roboto = Roboto({
 const SectionC = () =>{
     return(
         <section className="bg-sectionC pt-24">
-            <h1 className={`${poppins.className} text-4xl text-black md:text-left ml-20 mt-24 relative`}>Perdidos y encontrados</h1>
-            <div className="mt-1 grid grid-cols-1">
-                <div className="flex items-center justify-content mx-20">
-                    <p className={`${poppins.className} text-black font-medium mt-1 mr-10`}>
+            <h1 className={`${poppins.className} xl:text-4xl 2xl:text-6xl text-black text-left xl:ml-10 2xl:ml-40 mt-24 relative`}>Perdidos y encontrados</h1>
+            <div className="grid grid-cols-1">
+                <div className="flex items-center justify-content gap-10 2xl:gap-15">
+                    <p className={`${poppins.className} text-black font-medium xl:ml-10 2xl:ml-40 2xl:text-2xl mr-10 mb-4`}>
                     Si encontraste un perro o gato que parece extraviado, o si perdiste a tu mascota, podés publicarlo en Adoptr para ayudar a que vuelvan a su casa. Completá el formulario contándonos cómo es, subí una foto y decinos donde lo viste o lo perdiste.
                     </p>
-                    <div>
-                        <Image 
+                    <div className="relative xl:mr-10 2xl:mr-40">
+                        <Image className="xl:w-48 2xl:w-72"
                             src="/images/sectionC.png"
                             width={180}
                             height={180}
+                            alt="Ilustración de un perro"
                         />
                     </div>
                 </div>
             </div>
-            <Link href="/perdidos" className={`${roboto.className} bg-secondary-blue text-white py-3 px-8 rounded-3xl shadow-lg hover:bg-blue-hover transition-colors duration-300 ml-20`}>
+            <Link href="/perdidos" className={`${roboto.className} bg-secondary-blue text-white py-3 px-8 rounded-3xl shadow-lg hover:bg-blue-hover transition-colors duration-300 xl:ml-10 2xl:ml-40`}>
                 Ver más
             </Link>
             <div className="custom-shape-divider-bottom-1723513432" style={{ '--shape-fill-color': '#5784E6' }}>

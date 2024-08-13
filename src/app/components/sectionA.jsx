@@ -44,6 +44,7 @@ const SectionA = () =>{
                         src="/images/pets-index.png"
                         width={420}
                         height={420}
+                        alt="Ilustración de perros"
                     />
                 </div>
             </div>

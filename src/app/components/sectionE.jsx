@@ -15,27 +15,30 @@ const roboto = Roboto({
 
 const SectionE = () =>{
     return(
-        <section className="bg-secondary-blue pt-24 pb-20">
-            <h1 className={`${poppins.className} text-4xl text-white mb-5 md:text-left ml-20`}>¿Querés ayudarnos?</h1>
+        <section className="bg-secondary-blue pb-20">
+        <h1 className={`${poppins.className} xl:text-4xl 2xl:text-6xl text-white md:text-left pt-18 xl:ml-10 2xl:ml-40`}>¿Querés ayudarnos?</h1>
             <div className="mt-1 grid grid-cols-1">
-                <div className="flex items-center justify-content mx-20">
-                    <p className={`${poppins.className} text-white font-medium mt-1 mr-10 mb-10`}>
+                <div className="flex items-center justify-content gap-10 2xl:gap-15">
+                    <p className={`${poppins.className} text-white font-medium xl:ml-10 2xl:ml-40 2xl:text-2xl mb-4`}>
                     Nos apasiona conectar mascotas con sus familias para siempre. Si querés contribuir para que nuestra plataforma siga mejorando, podés hacer una donación. 
                     <br/>
                     Cada aporte nos ayuda a hacer de nuestra comunidad un lugar aún más especial para los amantes de los animales.
                     </p>
-                    <div>
-                        <Image 
+                    <div className="relative xl:ml-10 2xl:ml-40"> //TODO: Redimensionar las imagenes para que queden todas del mismo tamaño
+                        <Image className="xl:w-48 2xl:w-72"
                             src="/images/sectionE.png"
-                            width={200}
-                            height={200}
+                            width={180}
+                            height={180}
+                            alt="Ilustración de un perro"
                         />
                     </div>
                 </div>
             </div>
-            <Link href="/donaciones" className={`${roboto.className} bg-primary-orange text-white py-3 px-8 rounded-3xl shadow-lg hover:bg-primary-orange-dark transition-colors duration-300 ml-20`}>
+            <div className="mb-30">
+            <Link href="/donaciones" className={`${roboto.className} bg-primary-orange text-white xl:text-2xl py-3 px-8 rounded-3xl shadow-lg hover:bg-primary-orange-dark transition-colors duration-300 xl:ml-10 2xl:ml-40`}>
                 Donar
             </Link>
+            </div>
         </section>
     )
 }
