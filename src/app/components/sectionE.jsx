@@ -24,7 +24,7 @@ const SectionE = () =>{
                     <br/>
                     Cada aporte nos ayuda a hacer de nuestra comunidad un lugar aún más especial para los amantes de los animales.
                     </p>
-                    <div className="relative xl:ml-10 2xl:ml-40"> //TODO: Redimensionar las imagenes para que queden todas del mismo tamaño
+                    <div className="relative xl:ml-10 2xl:ml-40"> {/*TODO: Redimensionar las imagenes para que queden todas del mismo tamaño*/}
                         <Image className="xl:w-48 2xl:w-72"
                             src="/images/sectionE.png"
                             width={180}
@@ -35,7 +35,7 @@ const SectionE = () =>{
                 </div>
             </div>
             <div className="mb-30">
-            <Link href="/donaciones" className={`${roboto.className} bg-primary-orange text-white xl:text-2xl py-3 px-8 rounded-3xl shadow-lg hover:bg-primary-orange-dark transition-colors duration-300 xl:ml-10 2xl:ml-40`}>
+            <Link href="/donaciones" className={`${roboto.className} bg-primary-orange text-white 2xl:text-2xl py-3 px-8 rounded-3xl shadow-lg hover:bg-primary-orange-dark transition-colors duration-300 xl:ml-10 2xl:ml-40`}>
                 Donar
             </Link>
             </div>
