@@ -14,6 +14,7 @@ module.exports = {
         'primary-blue': '#1C3EB2',
         'primary-orange': '#FF823B',
         'primary-orange-dark': '#db6826',
+        'sectionB': '#F8F3EA',
       },
       spacing: {
         '18': '4.5rem', 
