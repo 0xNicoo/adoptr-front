@@ -1,4 +1,4 @@
-import { Poppins, Roboto } from "next/font/google"
+import { Poppins } from "next/font/google"
 import Image from "next/image";
 import '../globals.css'
 
@@ -10,23 +10,23 @@ const poppins = Poppins({
 const SectionD = () =>{
     return(
         <section className="bg-sectionD">
-            <h1 className={`${poppins.className} text-4xl text-white md:text-right pt-18 mr-20 mb-5`}>Unite a nuestra comunidad</h1>
+            <h1 className={`${poppins.className} lg:text-4xl xl:text-6xl text-white md:text-right pt-18 mr-20 mb-5`}>Unite a nuestra comunidad</h1>
             <div className="mt-1 grid grid-cols-1">
-                <div className="flex items-center justify-content mx-20">
-                <div className="mt-1 mr-10">
-                    <Image 
-                        src="/images/sectionD.png"
-                        width={180}
-                        height={180}
-                    />
-                </div>
-                <p className={`${poppins.className} text-white font-medium`}>
-                En Adoptr podés compartir con los demás usuarios tu experiencia adoptando y disfrutando de la vida con tus mascotas. 
-                <br/>
-                Nuestra comunidad es el lugar perfecto para dar y recibir consejos sobre el cuidado de mascotas. 
-                <br/>
-                ¡Sumate y compartí tu historia! 
-                </p>
+                <div className="flex items-center justify-between">
+                    <div className="mt-1 ml-10">
+                        <Image 
+                            src="/images/sectionD.png"
+                            width={180}
+                            height={180}
+                        />
+                    </div>
+                    <p className={`${poppins.className} text-white font-medium xl:text-xl`}>
+                    En Adoptr podés compartir con los demás usuarios tu experiencia adoptando y disfrutando de la vida con tus mascotas. 
+                    <br/>
+                    Nuestra comunidad es el lugar perfecto para dar y recibir consejos sobre el cuidado de mascotas. 
+                    <br/>
+                    ¡Sumate y compartí tu historia! 
+                    </p>
                 </div>
             </div>
             <div className="custom-shape-divider-bottom-1723517902" style={{ '--shape-fill-color': '#0B1956' }}>

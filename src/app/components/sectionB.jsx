@@ -1,4 +1,4 @@
-import { Poppins, Roboto } from "next/font/google"
+import { Poppins } from "next/font/google"
 import Image from "next/image";
 import '../globals.css'
 
