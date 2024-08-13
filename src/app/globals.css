@@ -2,23 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-
-.custom-shape-divider-bottom-1723423794 {
+.custom-shape-divider-bottom-1723507213 {
     position: relative;
     bottom: 0;
     left: 0;
     width: 100%;
     overflow: hidden;
     line-height: 0;
+    margin-bottom: -10px;
 }
 
-.custom-shape-divider-bottom-1723423794 svg {
+.custom-shape-divider-bottom-1723507213 svg {
     position: relative;
     display: block;
-    width: calc(165% + 1.3px);
-    height: 182px;
+    width: calc(100% + 1.3px);
+    height: 157px;
 }
 
-.custom-shape-divider-bottom-1723423794 .shape-fill {
+.custom-shape-divider-bottom-1723507213 .shape-fill {
+    fill: var(--shape-fill-color);
+}
+
+.custom-shape-divider-top-1723505161 {
+    position: absolute;
+    top: 200;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-top-1723505161 svg {
+    position: relative;
+    display: block;
+    width: calc(145% + 1.3px);
+    height: 215px;
+}
+
+.custom-shape-divider-top-1723505161 .shape-fill {
     fill: var(--shape-fill-color);
 }
