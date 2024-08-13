@@ -7,11 +7,6 @@ const poppins = Poppins({
     weight: ['400', '500', '700']
 });
 
-const roboto = Roboto({
-    subsets: ['latin'],
-    weight: ['400', '500', '700'],
-});
-
 const SectionB = () =>{
     return(
         <section className="bg-sectionB">
