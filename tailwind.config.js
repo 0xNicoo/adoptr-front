@@ -21,6 +21,7 @@ module.exports = {
         'secondary-blue': '#0B1956',
         'blue-hover': '#040A22',
         'background-gray':'#F9F9FB',
+        'primary-orange-light': '#FFD4A2',
       },
       spacing: {
         '18': '4.5rem', 
