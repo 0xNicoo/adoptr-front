@@ -12,7 +12,7 @@ const DropdownAdoptar = () => {
   };
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="z-50 relative inline-block text-left">
       <button
         onClick={toggleDropdown}
         className="text-primary-blue flex items-center space-x-1"
