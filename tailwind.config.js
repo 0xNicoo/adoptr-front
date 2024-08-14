@@ -20,6 +20,7 @@ module.exports = {
         'sectionD':'#5784E6',
         'secondary-blue': '#0B1956',
         'blue-hover': '#040A22',
+        'primary-orange-light': '#FFD4A2',
       },
       spacing: {
         '18': '4.5rem', 
