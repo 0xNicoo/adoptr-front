@@ -14,6 +14,13 @@ module.exports = {
         'primary-blue': '#1C3EB2',
         'primary-orange': '#FF823B',
         'primary-orange-dark': '#db6826',
+        'footer-primary': '#0B2545',
+        'sectionB': '#F8F3EA',
+        'sectionC': '#D1E8FF',
+        'sectionD':'#5784E6',
+        'secondary-blue': '#0B1956',
+        'blue-hover': '#040A22',
+        'primary-orange-light': '#FFD4A2',
       },
       spacing: {
         '18': '4.5rem', 
@@ -46,3 +53,4 @@ module.exports = {
     }),
   ],
 };
+
