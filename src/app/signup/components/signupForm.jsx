@@ -4,10 +4,12 @@ import { useForm } from "react-hook-form";
 import { useRouter } from 'next/navigation';
 
 const SignupForm = () => {
+
     const router = useRouter();
+
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
 
-    // Obtén el valor de 'password' para la validación de 'confirmPassword'
+    // TODO Obtén el valor de 'password' para la validación de 'confirmPassword'
     const password = watch('password');
 
     const onSubmit = (data) => {
@@ -71,6 +73,7 @@ const SignupForm = () => {
                 </button>
                 <p className="text-center text-sm mt-4">
                     ¿Ya tenés una cuenta?{' '}
+                    {/*TODO cambiar el button por un Link */}
                     <button 
                         type="button"
                         onClick={handleRegisterClick}
