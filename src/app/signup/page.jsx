@@ -6,7 +6,7 @@ export default function Signup() {
     return (
         <>
             <section className="bg-[url('/images/sectionSignup-background.png')] bg-repeat bg-center bg-auto h-[40vh] flex flex-col justify-between ">
-                <div className="text-center mt-8">git 
+                <div className="text-center mt-8">
                     <h1 className="text-4xl font-bold text-primary-blue">
                         Crear <span className="text-primary-orange">Cuenta</span>
                     </h1>
