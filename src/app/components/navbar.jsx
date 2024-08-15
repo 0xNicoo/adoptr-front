@@ -31,9 +31,7 @@ const Navbar = () => {
         </div>
 
         <div className="relative">
-          <button className="flex items-center space-x-2 p-2 rounded">
-            <UserCircleIcon className="w-8 h-8 text-custom-blue" />
-          </button>
+            <Link href="/login" className="text-primary-blue font-bold">Iniciar Sesión</Link>
         </div>
       </div>
     </nav>
