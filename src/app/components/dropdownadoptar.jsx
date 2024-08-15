@@ -12,7 +12,7 @@ const DropdownAdoptar = () => {
   };
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="z-50 relative inline-block text-left">
       <button
         onClick={toggleDropdown}
         className="text-primary-blue flex items-center space-x-1"
@@ -31,7 +31,7 @@ const DropdownAdoptar = () => {
               Adoptar
             </Link>
             <Link
-              href="/adopcion/publicar"
+              href="/adopcion/publicar/step-1"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               Poner en Adopción
