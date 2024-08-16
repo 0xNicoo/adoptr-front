@@ -1,10 +1,17 @@
-'use server'
+import 'server-only'
+import { cookies } from 'next/headers'
 
 export async function getData(filter, page, size){
 
     const queryParams = getQueryParams(filter, page, size)
 
-    const res = await fetch(`http://localhost:8080/example?${queryParams}`)
+    const token = cookies().get('session')?.value
+
+    const res = await fetch(`http://localhost:8080/example?${queryParams}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
 
     if(!res.ok){
         throw new Error('Failed to fetch data')
