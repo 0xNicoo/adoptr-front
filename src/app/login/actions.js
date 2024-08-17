@@ -1,7 +1,7 @@
 'use server'
 
-import { setTokenCookie } from "../../lib/session"
+import { setSessionToken } from "../../lib/session"
 
 export async function login(data){
-   await setTokenCookie(data)
+   await setSessionToken(data)
 }
