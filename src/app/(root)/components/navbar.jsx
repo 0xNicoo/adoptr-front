@@ -1,14 +1,13 @@
 import localFont from 'next/font/local';
-import DropdownAdoptar from './dropdownadoptar'; // Asegúrate de que la ruta es correcta
+import DropdownAdoptar from './dropdownadoptar';
 
-import "../globals.css";
+import "../../globals.css";
 import Link from 'next/link';
 
 const gentyDemo = localFont({
-  src: '../../resources/font/GentyDemo-Regular.ttf',
+  src: '../../../resources/font/GentyDemo-Regular.ttf',
   display: 'swap',
 });
-
 
 
 const Navbar = () => {

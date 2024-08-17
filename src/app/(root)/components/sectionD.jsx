@@ -1,6 +1,6 @@
 import { Poppins } from "next/font/google"
 import Image from "next/image";
-import '../globals.css'
+import "../../globals.css";
 
 const poppins = Poppins({
     subsets: ['latin'],
