@@ -1,11 +1,13 @@
 import 'server-only'
-import { cookies } from 'next/headers'
+import { getToken } from '../session'
 
 export async function getData(filter, page, size){
 
     const queryParams = getQueryParams(filter, page, size)
 
-    const token = cookies().get('session')?.value
+    const token = await getToken()
+
+    console.log(token)
 
     const res = await fetch(`http://localhost:8080/example?${queryParams}`, {
         headers: {

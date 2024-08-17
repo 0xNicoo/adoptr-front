@@ -10,6 +10,11 @@ export async function setSessionToken(data){
   await session.save()
 }   
 
+export async function getToken(){
+  const session = await getSession()
+  return session.token
+}
+
 export async function getSession(){
   return await getIronSession(
     cookies(), {
@@ -20,3 +25,4 @@ export async function getSession(){
       }
     })
 }
+
