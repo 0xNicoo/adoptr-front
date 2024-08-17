@@ -1,10 +1,19 @@
-'use server'
+import 'server-only'
+import { getToken } from '../session'
 
 export async function getData(filter, page, size){
 
     const queryParams = getQueryParams(filter, page, size)
 
-    const res = await fetch(`http://localhost:8080/example?${queryParams}`)
+    const token = await getToken()
+
+    console.log(token)
+
+    const res = await fetch(`http://localhost:8080/example?${queryParams}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
 
     if(!res.ok){
         throw new Error('Failed to fetch data')

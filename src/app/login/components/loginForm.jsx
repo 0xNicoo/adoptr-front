@@ -2,16 +2,13 @@
 
 import { useForm } from "react-hook-form";
 import { useRouter } from 'next/navigation';
+import { login } from "../actions";
 
 
 const LoginForm = () => {
     const router = useRouter();
     
     const { register, handleSubmit, formState: { errors } } = useForm();
-
-    const onSubmit = (data) => {
-        console.log(data);
-    };
 
     const handleRegisterClick = () => {
         router.push('/signup'); 
@@ -20,7 +17,7 @@ const LoginForm = () => {
     return (
         <section className="bg-white p-8 rounded-3xl shadow-lg w-full max-w-md mx-auto min-h-[40vh]">
             <form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit((data) => {login(data)})}
                 className="flex flex-col space-y-4"
             >
                 <div className="mb-2">

@@ -1,4 +1,3 @@
-import { ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/solid';
 import localFont from 'next/font/local';
 import DropdownAdoptar from './dropdownadoptar'; // Asegúrate de que la ruta es correcta
 
@@ -6,7 +5,7 @@ import "../globals.css";
 import Link from 'next/link';
 
 const gentyDemo = localFont({
-  src: '../resources/font/GentyDemo-Regular.ttf',
+  src: '../../resources/font/GentyDemo-Regular.ttf',
   display: 'swap',
 });
 
