@@ -1,23 +1,16 @@
 'use client'
 
 import { useForm } from "react-hook-form";
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const SignupForm = () => {
 
-    const router = useRouter();
-
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
 
-    // TODO Obtén el valor de 'password' para la validación de 'confirmPassword'
     const password = watch('password');
 
     const onSubmit = (data) => {
         console.log(data);
-    };
-
-    const handleRegisterClick = () => {
-        router.push('/login'); 
     };
 
     return (
@@ -73,14 +66,9 @@ const SignupForm = () => {
                 </button>
                 <p className="text-center text-sm mt-4">
                     ¿Ya tenés una cuenta?{' '}
-                    {/*TODO cambiar el button por un Link */}
-                    <button 
-                        type="button"
-                        onClick={handleRegisterClick}
-                        className="text-primary-orange underline hover:text-primary-orange-dark transition-colors duration-300 font-semibold"
-                    >
+                    <Link href="/login" className="text-primary-orange underline hover:text-primary-orange-dark transition-colors duration-300 font-semibold">
                         Iniciar Sesión
-                    </button>
+                    </Link>
                 </p>
             </form>
         </section>
