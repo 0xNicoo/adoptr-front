@@ -10,6 +10,11 @@ const LoginForm = () => {
     
     const { register, handleSubmit, formState: { errors } } = useForm();
 
+    const handleLogin = async (data) => {
+        await login(data)
+        router.push('/')
+    }
+
     const handleRegisterClick = () => {
         router.push('/signup'); 
     };
@@ -17,7 +22,7 @@ const LoginForm = () => {
     return (
         <section className="bg-white p-8 rounded-3xl shadow-lg w-full max-w-md mx-auto min-h-[40vh]">
             <form
-                onSubmit={handleSubmit((data) => {login(data)})}
+                onSubmit={handleSubmit(handleLogin)}
                 className="flex flex-col space-y-4"
             >
                 <div className="mb-2">
