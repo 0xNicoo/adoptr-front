@@ -1,6 +1,6 @@
 'use server'
 
-import { deleteData, getData, updateData } from '../lib/api'
+import { deleteData, getData, updateData } from '../../lib/api/example'
 
 const EXAMPLE_PATH = "/example"
 

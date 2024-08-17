@@ -1,7 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
-import {postData} from '@/app/lib/api'
+import {postData} from '../../lib/api/example'
 
 const EXAMPLE_PATH = "/example"
 

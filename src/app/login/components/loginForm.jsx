@@ -3,18 +3,20 @@
 import { useForm } from "react-hook-form";
 import Link from 'next/link';
 
+
 const LoginForm = () => {
     
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = (data) => {
         console.log(data);
+
     };
 
     return (
         <section className="bg-white p-8 rounded-3xl shadow-lg w-full max-w-md mx-auto min-h-[40vh]">
             <form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit((data) => {login(data)})}
                 className="flex flex-col space-y-4"
             >
                 <div className="mb-2">
