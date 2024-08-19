@@ -19,7 +19,7 @@ export default function Login() {
                     <img src="/images/dog1.png" className="w-full max-w-[80px] md:max-w-[130px] h-auto mr-10" alt="Dog1" />
                 </div>
             </section>
-            <div className="bg-primary-orange w-full rounded-t-3xl h-[calc(100vh-35vh)] flex justify-center items-center">
+            <div className="bg-primary-orange w-full rounded-t-3xl h-[calc(100vh-33vh)] flex justify-center items-center">
                 <div className="bg-primary-orange-light w-[80%] max-w-[1300px] h-[55vh] p-8 rounded-3xl shadow-lg flex justify-center items-center">
                     <LoginForm/>
                 </div>

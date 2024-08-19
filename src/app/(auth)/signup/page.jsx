@@ -1,4 +1,4 @@
-import "../globals.css"
+import "../../globals.css"
 import SignupForm from "./components/signupForm"
 
 //TODO: Hacerlo responsive

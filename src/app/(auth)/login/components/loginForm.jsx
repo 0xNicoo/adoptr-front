@@ -1,12 +1,10 @@
 'use client'
 
 import { useForm } from "react-hook-form";
-import { useRouter } from 'next/navigation';
 import { login } from "../actions";
-
+import Link from 'next/link';
 
 const LoginForm = () => {
-    const router = useRouter();
     
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -15,9 +13,6 @@ const LoginForm = () => {
         router.push('/')
     }
 
-    const handleRegisterClick = () => {
-        router.push('/signup'); 
-    };
 
     return (
         <section className="bg-white p-8 rounded-3xl shadow-lg w-full max-w-md mx-auto min-h-[40vh]">
@@ -56,14 +51,10 @@ const LoginForm = () => {
                     Ingresar
                 </button>
                 <p className="text-center text-sm mt-4">
-                    ¿No tenés una cuenta?{' '}
-                    <button 
-                        type="button"
-                        onClick={handleRegisterClick}
-                        className="text-primary-orange underline hover:text-primary-orange-dark transition-colors duration-300 font-semibold"
-                    >
+                    ¿Ya tenés una cuenta?{' '}
+                    <Link href="/signup" className="text-primary-orange underline hover:text-primary-orange-dark transition-colors duration-300 font-semibold">
                         Registrarse
-                    </button>
+                    </Link>
                 </p>
             </form>
         </section>
