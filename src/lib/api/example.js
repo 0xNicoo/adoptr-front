@@ -7,8 +7,6 @@ export async function getData(filter, page, size){
 
     const token = await getToken()
 
-    console.log(token)
-
     const res = await fetch(`http://localhost:8080/example?${queryParams}`, {
         headers: {
             'Authorization': `Bearer ${token}`

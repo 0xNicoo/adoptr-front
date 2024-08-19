@@ -1,4 +1,4 @@
-import "../globals.css"
+import "../../globals.css"
 import LoginForm from "./components/loginForm"
 
 //TODO: Hacerlo responsive

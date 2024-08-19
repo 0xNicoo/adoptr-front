@@ -1,6 +1,6 @@
 import { Archivo_Black, Roboto } from "next/font/google"
 import Image from "next/image";
-import '../globals.css'
+import "../../globals.css";
 import Link from 'next/link';
 
 const archivoBlack = Archivo_Black({
