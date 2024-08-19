@@ -1,12 +1,14 @@
 'use client'
 
 import { useForm } from "react-hook-form";
+import { useRouter } from 'next/navigation';
 import { login } from "../actions";
 import Link from 'next/link';
 
 const LoginForm = () => {
     
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const router = useRouter();
 
     const handleLogin = async (data) => {
         await login(data)
