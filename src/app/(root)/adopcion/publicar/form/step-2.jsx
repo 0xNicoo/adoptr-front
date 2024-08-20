@@ -29,7 +29,7 @@ const mesesConst = generarMeses(0, 11);
 
 const Step2 = () => {
   const [selected, setSelected] = React.useState(null);
-  const { nombre, anios, meses, sexo, tamanio, vacunado, desparasitado, castrado, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado } = useFormStore();
+  const { animalType, nombre, anios, meses, sexo, tamanio, vacunado, desparasitado, castrado, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado } = useFormStore();
   
   const sexoAnimales = [
     { label: 'Masculino', 
@@ -124,10 +124,10 @@ const Step2 = () => {
                 <Radio value="Pequeño" className="hidden" aria-label="Tamaño"/>
                   <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'Pequeño' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('Pequeño')}>
                     <Image
-                    src="/images/dog-small.png"
+                    src={animalType == "perro" ? "/images/dog-small.png" : "/images/cat-small.png" } 
                     width={80}
                     height={80}
-                    alt="Perro pequeño"
+                    alt={animalType == "perro" ? "Perro pequeño" : "Gato pequeño"}
                     />
                   </div>
                   <p className={`${inter.className} mt-4 text-center text-black`}>Pequeño</p>
@@ -136,10 +136,10 @@ const Step2 = () => {
                 <Radio value="Mediano" className="hidden" aria-label="Tamaño"/>
                   <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'Mediano' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('Mediano')}>
                     <Image
-                    src="/images/dog-medium.png"
+                    src={animalType == "perro" ? "/images/dog-medium.png" : "/images/cat-medium.png" }
                     width={80}
                     height={80}
-                    alt="Perro mediano"
+                    alt={animalType == "perro" ? "Perro mediano" : "Gato mediano"}
                     />
                   </div>
                 <p className={`${inter.className} mt-4 text-center text-black`}>Mediano</p>
@@ -148,10 +148,10 @@ const Step2 = () => {
                 <Radio value="Grande" className="hidden" aria-label="Tamaño"/>
                   <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'Grande' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('Grande')}>
                   <Image
-                  src="/images/dog-big.png"
+                  src={animalType == "perro" ? "/images/dog-big.png" : "/images/cat-big.png" }
                   width={80}
                   height={80}
-                  alt="Perro grande"
+                  alt={animalType == "perro" ? "Perro grande" : "Gato grande"}
                   />
                   </div>
                 <p className={`${inter.className} mt-4 text-center text-black`}>Grande</p>
