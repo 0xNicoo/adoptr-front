@@ -31,7 +31,7 @@ const DropdownAdoptar = () => {
               Adoptar
             </Link>
             <Link
-              href="/adopcion/publicar/step-1"
+              href="/adopcion/publicar/form"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               Poner en Adopción
