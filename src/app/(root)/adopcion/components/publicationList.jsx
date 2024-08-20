@@ -16,6 +16,7 @@ const PublicationList = ({ publications, handlePageChange, currentPage }) => {
               {pub.name}
             </h2>
             <p className="text-center text-gray-700 text-lg">{pub.age}</p>
+            <p className="text-center text-gray-700 text-lg">{pub.sexo}</p>
           </Link>
         </div>
       ))}

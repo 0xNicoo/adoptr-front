@@ -6,14 +6,14 @@ import PublicationList from "./components/PublicationList";
 import SectionAdop from "./components/SectionAdop";
 
 const publications = [
-  { id: 1, name: "Pepito", age: "1 Año", image: "https://via.placeholder.com/300" },
-  { id: 2, name: "Juanito", age: "2 Años", image: "https://via.placeholder.com/300" },
-  { id: 3, name: "Dolo", age: "3 Años", image: "https://via.placeholder.com/300" },
-  { id: 4, name: "Vicky", age: "4 Años", image: "https://via.placeholder.com/300" },
-  { id: 5, name: "Nickito", age: "5 Años", image: "https://via.placeholder.com/300" },
-  { id: 6, name: "Franquito", age: "6 Años", image: "https://via.placeholder.com/300" },
-  { id: 7, name: "Sebas", age: "7 Años", image: "https://via.placeholder.com/300" },
-  { id: 8, name: "Die", age: "8 Años", image: "https://via.placeholder.com/300" },
+  { id: 1, name: "Pepito", age: "1 Año", sexo:"macho", image: "https://via.placeholder.com/300" },
+  { id: 2, name: "Juanito", age: "2 Años", sexo:"macho", image: "https://via.placeholder.com/300" },
+  { id: 3, name: "Luna", age: "3 Años", sexo:"hembra", image: "https://via.placeholder.com/300" },
+  { id: 4, name: "Mina", age: "4 Años", sexo:"hembra", image: "https://via.placeholder.com/300" },
+  { id: 5, name: "Nickito", age: "5 Años", sexo:"macho", image: "https://via.placeholder.com/300" },
+  { id: 6, name: "Cachi", age: "6 Años", sexo:"macho", image: "https://via.placeholder.com/300" },
+  { id: 7, name: "Sebas", age: "7 Años", sexo:"macho", image: "https://via.placeholder.com/300" },
+  { id: 8, name: "Die", age: "8 Años", sexo:"macho", image: "https://via.placeholder.com/300" },
 ];
 
 const itemsPerPage = 6;
