@@ -1,15 +1,13 @@
-import { ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/solid';
 import localFont from 'next/font/local';
-import DropdownAdoptar from './dropdownadoptar'; // Asegúrate de que la ruta es correcta
+import DropdownAdoptar from './dropdownadoptar';
 
-import "../globals.css";
+import "../../globals.css";
 import Link from 'next/link';
 
 const gentyDemo = localFont({
-  src: '../resources/font/GentyDemo-Regular.ttf',
+  src: '../../../resources/font/GentyDemo-Regular.ttf',
   display: 'swap',
 });
-
 
 
 const Navbar = () => {
@@ -31,9 +29,7 @@ const Navbar = () => {
         </div>
 
         <div className="relative">
-          <button className="flex items-center space-x-2 p-2 rounded">
-            <UserCircleIcon className="w-8 h-8 text-custom-blue" />
-          </button>
+            <Link href="/login" className="text-primary-blue font-bold">Iniciar Sesión</Link>
         </div>
       </div>
     </nav>
