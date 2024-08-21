@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from 'react';
-import { useFormStore } from './store';
+import { useFormStore } from '../../../../store';
 import { Radio, RadioGroup, Checkbox, Select, SelectItem, Input } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import Image from 'next/image';
