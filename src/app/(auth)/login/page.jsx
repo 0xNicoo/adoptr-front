@@ -1,16 +1,22 @@
 import "../../globals.css"
+import localFont from 'next/font/local';
 import LoginForm from "./components/loginForm"
+import Link from 'next/link';
 
-//TODO: Hacerlo responsive
+const gentyDemo = localFont({
+    src: '../../../resources/font/GentyDemo-Regular.ttf',
+    display: 'swap',
+  });
 
 export default function Login() {
     return (
         <>
             <section className="bg-[url('/images/sectionLogin-background.png')] bg-repeat bg-center bg-auto h-[33vh] flex flex-col justify-between ">
                 <div className="text-center mt-8">
-                    <h1 className="text-4xl font-bold text-primary-blue">
-                        Iniciar <span className="text-primary-orange">Sesión</span>
-                    </h1>
+                    <Link href="/" className={`${gentyDemo.className} text-7xl shadow-gray-500 text-shadow-lg`}>
+                        <span className="text-primary-blue">Adop</span>
+                        <span className="text-primary-orange">tr</span>
+                    </Link>
                 </div>
                 <div className="flex justify-between items-end ml-10">
                     <img src="/images/cat1.png" className="w-full max-w-[80px] md:max-w-[130px] h-auto" alt="Cat1" />
