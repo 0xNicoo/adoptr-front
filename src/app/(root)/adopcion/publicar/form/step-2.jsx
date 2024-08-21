@@ -27,8 +27,9 @@ const generarMeses = (min, max) => {
 
 const mesesConst = generarMeses(0, 11);
 
-const Step2 = () => {
+const Step2 = ({nextStep, prevStep}) => {
   const [selected, setSelected] = React.useState(null);
+  const [errors, setErrors] = React.useState('');
   const { animalType, nombre, anios, meses, sexo, tamanio, vacunado, desparasitado, castrado, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado } = useFormStore();
   
   const sexoAnimales = [
@@ -64,59 +65,104 @@ const Step2 = () => {
     setCastrado(castrado);
   }, [tamanio, vacunado, desparasitado, castrado, sexo]);
 
+  const handleNextStep = () => {
+    let newErrors = {}
+    if (!nombre) {
+      newErrors.nombre = '* Este campo es obligatorio';
+    }
+    if (!anios) {
+      newErrors.anios = '* Este campo es obligatorio';
+    }
+    if (!meses) {
+      newErrors.meses = '* Este campo es obligatorio';
+    }
+    if (!sexo) {
+      newErrors.sexo = '* Este campo es obligatorio';
+    }
+    if (!tamanio) {
+      newErrors.tamanio = '* Este campo es obligatorio';
+    }
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      nextStep();
+    }
+  }
+
   return (
-    <div className='flex flex-grow flex-col ml-12 mb-4'>
+    <div className='flex flex-grow flex-col mb-4 ml-12'>
       <div className='flex flex-row gap-12'>
         <div className='flex flex-col'>
-          <label htmlFor="nombre" className="block text-sm font-medium">Nombre</label>
+          <label htmlFor="nombre" className="block xl:text-md 2xl:text-xl font-medium">Nombre</label>
           <div className="flex mt-2 gap-4">
-            <Input aria-label="Seleccionar nombre" value={nombre} onChange={e => setNombre(e.target.value)} id="nombre" name="nombre" type="text" placeholder="Juan"/>
+            <Input isRequired aria-label="Seleccionar nombre" value={nombre} onChange={e => setNombre(e.target.value)} id="nombre" name="nombre" type="text" placeholder="Juan"/>
           </div>
+          {errors.nombre && <p className='text-red-500 mt-2 text-xs'>{errors.nombre}</p>}
         </div>
 
-        <div className='flex flex-col w-2/6'>
-          <label htmlFor="edad" className="block text-sm font-medium">Edad</label>
+        <div className='flex flex-col'>
+          <label htmlFor="edad" className="block xl:text-md 2xl:text-xl font-medium">Edad</label>
           <div className='flex flex-row gap-4 mt-2'>
-            <Select placeholder='Seleccionar' aria-label="Seleccionar año"
-            selectedKeys={anios ? [anios] : []}  
-            onSelectionChange={(keys) => handleAniosChange(keys.values().next().value)}
-            >
-              {aniosConst.map((anio) => (
-              <SelectItem key={anio.key} value={anio.key}>
-                {anio.label}
-              </SelectItem>
-              ))}
-            </Select>
-            <Select placeholder='Seleccionar' aria-label="Seleccionar mes"
-            selectedKeys={meses ? [meses] : []}  
-            onSelectionChange={(keys) => handleMesesChange(keys.values().next().value)}
-            >
-              {mesesConst.map((mes) => (
-              <SelectItem key={mes.key} value={mes.key}>
-                {mes.label}
-              </SelectItem>
-              ))}
-            </Select>
+            <div className='flex flex-col w-full'>
+              <div className='flex'>
+                <Select 
+                isRequired 
+                placeholder='Seleccionar año' 
+                aria-label="Seleccionar año"
+                selectedKeys={anios ? [anios] : []}  
+                onSelectionChange={(keys) => handleAniosChange(keys.values().next().value)}
+                className= "w-full min-w-[10rem]"
+                >
+                  {aniosConst.map((anio) => (
+                    <SelectItem key={anio.key} value={anio.key}>
+                      {anio.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+              </div>
+              {errors.anios && <p className='text-red-500 mt-2 text-xs'>{errors.anios}</p>}
           </div>
-        </div>
-
-        <div className='flex-col mr-10 flex flex-wrap w-1/6 md:flex-nowrap'>
-          <label htmlFor="sexo" className='block mb-2 text-sm font-medium'>Sexo</label>
-          <Select placeholder='Seleccionar' aria-label="Seleccionar sexo"
-          selectedKeys={sexo ? [sexo] : []}  
-          onSelectionChange={(keys) => handleSexoChange(keys.values().next().value)}
-          >
-            {sexoAnimales.map((sexoAnimal) => (
-            <SelectItem key={sexoAnimal.key} value={sexoAnimal.key}>
-              {sexoAnimal.label}
-            </SelectItem>
-            ))}
-          </Select>
+          <div className='flex flex-col w-full'>
+            <div className='flex'>
+              <Select 
+              isRequired 
+              placeholder='Seleccionar mes' 
+              aria-label="Seleccionar mes"
+              selectedKeys={meses ? [meses] : []}  
+              onSelectionChange={(keys) => handleMesesChange(keys.values().next().value)}
+              className= "w-full min-w-[10rem]"
+              >
+                {mesesConst.map((mes) => (
+                  <SelectItem key={mes.key} value={mes.key}>
+                    {mes.label}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+            {errors.meses && <p className='text-red-500 mt-2 text-xs'>{errors.meses}</p>}
+          </div>
         </div>
       </div>
 
+      <div className='flex flex-col'>
+        <label htmlFor="sexo" className='block mb-2 xl:text-md 2xl:text-xl font-medium'>Sexo</label>
+        <Select isRequired placeholder='Seleccionar' aria-label="Seleccionar sexo"
+        className= "w-full min-w-[10rem]"
+        selectedKeys={sexo ? [sexo] : []}  
+        onSelectionChange={(keys) => handleSexoChange(keys.values().next().value)}
+        >
+          {sexoAnimales.map((sexoAnimal) => (
+            <SelectItem key={sexoAnimal.key} value={sexoAnimal.key}>
+              {sexoAnimal.label}
+            </SelectItem>
+          ))}
+        </Select>
+        {errors.sexo && <p className='text-red-500 mt-2 text-xs'>{errors.sexo}</p>}
+      </div>
+    </div>
+
       <div className='flex flex-col mt-8'>
-        <label htmlFor="tamanio" className="block text-sm font-medium">Tamaño</label>
+        <label htmlFor="tamanio" className="block xl:text-md 2xl:text-xl font-medium">Tamaño</label>
         <div className='flex mt-4'>
           <RadioGroup value={selected} onValueChange={handleTamanioChange} orientation='horizontal'>
             <div className="flex flex-row gap-12 justify-center">
@@ -159,12 +205,17 @@ const Step2 = () => {
             </div>
           </RadioGroup>
         </div>
+        {errors.tamanio && <p className='text-red-500 mt-2 text-xs'>{errors.tamanio}</p>}
       </div>
 
       <div className='flex mt-8 gap-8'>
           <Checkbox isSelected={vacunado} onChange={handleVacunadoChange} checked={vacunado}>Vacunado</Checkbox>
           <Checkbox isSelected={desparasitado} onChange={handleDesparasitadoChange} checked={desparasitado}>Desparasitado</Checkbox>
           <Checkbox isSelected={castrado} onChange={handleCastradoChange} checked={castrado}>Castrado</Checkbox>
+      </div>
+      <div className="flex flex-row justify-between mt-4 items-end mr-4">
+        <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
+        <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ export const useFormStore = create(set => {
         castrado: false,
         descripcion: '',
         imagen: '',
+        nombreImagen: '',
         setAnimalType: (newType) => set({ animalType: newType }),
         setNombre: (newNombre) => set({ nombre: newNombre }),
         setTamanio: (newTamanio) => set({ tamanio: newTamanio }),
@@ -25,6 +26,7 @@ export const useFormStore = create(set => {
         setCastrado: (isChecked) => set({ castrado: isChecked }),
         setDescripcion: (newDescripcion) => set({ descripcion: newDescripcion }),
         setImagen: (newImagen) => set({ imagen: newImagen }),
+        setNombreImagen: (newNombreImagen) => set({ nombreImagen: newNombreImagen }),
         nextStep: () => set((state) => ({ step: state.step + 1 })),
         prevStep: () => set((state) => ({ step: state.step - 1 })),
         resetForm: () => set(state => ({ 
@@ -40,6 +42,7 @@ export const useFormStore = create(set => {
             castrado: false,
             descripcion: '',
             imagen: '',
+            nombreImagen: '',
         }))
     }
 })
