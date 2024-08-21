@@ -20,26 +20,16 @@ const MultiStepForm = () => {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return <Step1 />;
+        return <Step1 nextStep={nextStep}/>;
       case 2:
-        return <Step2 />;
+        return <Step2 nextStep={nextStep} prevStep={prevStep} />;
        case 3:
-        return <Step3 />;   
+        return <Step3 nextStep={nextStep} prevStep={prevStep}/>;   
       case 4:
-        return <Step4 />;
+        return <Step4 nextStep={nextStep} prevStep={prevStep}/>;
       default:
-        return <Step1 />;
+        return <Step1 nextStep={nextStep} prevStep={prevStep}/>;
     }
-  };
-
-  const renderButtons = () => {
-    return (
-      <div className="flex flex-row justify-between mt-4 mb-4 items-end mx-4">
-        {step > 1 && <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>}
-        {step < 4 && <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"  onClick={nextStep}>Siguiente</button>}
-        {step === 4 && <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" type="submit">Publicar</button>}
-      </div>
-    );
   };
 
     return (
@@ -48,7 +38,6 @@ const MultiStepForm = () => {
             <div className="bg-white flex w-full border rounded-3xl drop-shadow-md flex-col">
                 {renderStepper()}
                 {renderStep()}
-                {renderButtons()}
             </div>
         </div>
         </NextUIProvider>
