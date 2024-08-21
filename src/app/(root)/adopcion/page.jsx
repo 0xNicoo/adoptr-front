@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import PaginationComponent from "./components/Pagination";
-import PublicationList from "./components/PublicationList";
-import SectionAdop from "./components/SectionAdop";
+import PaginationComponent from "./components/pagination";
+import PublicationList from "./components/publicationList";
+import SectionAdop from "./components/sectionadop";
 
 const publications = [
   { id: 1, name: "Pepito", age: "1 Año", sexo:"macho", image: "https://via.placeholder.com/300" },

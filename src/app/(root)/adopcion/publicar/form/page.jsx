@@ -6,7 +6,7 @@ import Step2 from './step-2';
 import Step3 from './step-3';
 import Step4 from './step-4';
 import Stepper from './stepper';
-import { useFormStore } from './store';
+import { useFormStore } from '../../../../store';
 
 const MultiStepForm = () => {
   const { step, nextStep, prevStep } = useFormStore();

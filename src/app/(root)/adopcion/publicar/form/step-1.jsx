@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from 'react';
 import { Radio, RadioGroup } from '@nextui-org/react';
-import { useFormStore } from './store';
+import { useFormStore } from '../../../../store';
 import { Inter } from "next/font/google";
 import Image from "next/image";
 
