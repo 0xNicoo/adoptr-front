@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { useFormStore } from '../../../../store';
+import { useStore } from '../../../../store';
 import Image from 'next/image';
 import { CIcon } from '@coreui/icons-react';
 import { cilImagePlus } from '@coreui/icons';
@@ -8,7 +8,7 @@ import { Textarea } from '@nextui-org/react';
 
 const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
     const [selectedFile, setSelectedFile] = useState(null);
-    const { descripcion, setDescripcion, imagen, setImagen, nombreImagen, setNombreImagen } = useFormStore();
+    const { descripcion, setDescripcion, imagen, setImagen, nombreImagen, setNombreImagen } = useStore();
     const [errors, setErrors] = useState('');
     const imageHandler = (e) => {
         const file = e.target.files[0];

@@ -1,7 +1,8 @@
 import { create } from "zustand";
 
-export const useFormStore = create(set => {
+export const useStore = create(set => {
     return {
+        isLoggedIn: false,
         step: 1,
         animalType: '',
         nombre: '',
@@ -15,6 +16,8 @@ export const useFormStore = create(set => {
         descripcion: '',
         imagen: '',
         nombreImagen: '',
+        logIn: () => set({ isLoggedIn: true }),
+        logOut: () => set({ isLoggedIn: false }),
         setAnimalType: (newType) => set({ animalType: newType }),
         setNombre: (newNombre) => set({ nombre: newNombre }),
         setTamanio: (newTamanio) => set({ tamanio: newTamanio }),
