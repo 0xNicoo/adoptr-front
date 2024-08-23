@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
+import { logOut } from '../actions';
 
 const DropdownUser = () => {
 
@@ -12,7 +13,8 @@ const DropdownUser = () => {
         setIsOpen(!isOpen)
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await logOut()
         setIsOpen(false)
     };
 

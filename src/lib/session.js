@@ -5,6 +5,12 @@ import { getIronSession } from 'iron-session'
 
 //TODO (nico) hacer un middlewere o algo antes de cada request para checkear si tiene token.
 
+
+export async function logout() {
+  const session = await getSession()
+  session.destroy()
+}
+
 export async function setSessionToken(data){
   const res = await loginAPI(data)
   const session = await getSession()
