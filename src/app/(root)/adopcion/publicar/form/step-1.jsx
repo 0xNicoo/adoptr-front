@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from 'react';
 import { Radio, RadioGroup } from '@nextui-org/react';
-import { useStore } from '../../../../store';
+import { useGlobalStore } from '../../../../store';
 import { Inter } from "next/font/google";
 import Image from "next/image";
 
@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 const Step1 = ({nextStep}) => {
   const [selected, setSelected] = React.useState(null);
-  const { animalType, setAnimalType } = useStore();
+  const { animalType, setAnimalType } = useGlobalStore();
   const [error, setError] = React.useState('');
 
   useEffect(() => {

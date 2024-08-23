@@ -12,7 +12,6 @@ const LoginForm = () => {
 
     const handleLogin = async (data) => {
         await login(data)
-        
         router.push('/')
     }
 

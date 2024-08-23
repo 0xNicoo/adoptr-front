@@ -3,6 +3,8 @@ import { cookies } from 'next/headers'
 import { loginAPI } from './api/auth'
 import { getIronSession } from 'iron-session'
 
+//TODO (nico) hacer un middlewere o algo antes de cada request para checkear si tiene token.
+
 export async function setSessionToken(data){
   const res = await loginAPI(data)
   const session = await getSession()

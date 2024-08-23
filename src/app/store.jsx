@@ -1,8 +1,24 @@
 import { create } from "zustand";
+import { persist } from 'zustand/middleware';
 
-export const useStore = create(set => {
+export const useAuthStore = create(
+    persist(
+      (set) => ({
+        isAuthenticated: false,
+        logIn: () => set({ isAuthenticated: true }),
+        logOut: () => set({ isAuthenticated: false }),
+      }),
+      {
+        name: 'auth-storage', 
+        getStorage: () => localStorage, 
+      }
+    )
+  );
+
+
+//TODO (nico) cambiar esto de nombre
+export const useGlobalStore = create(set => {
     return {
-        isLoggedIn: false,
         step: 1,
         animalType: '',
         nombre: '',
@@ -16,8 +32,6 @@ export const useStore = create(set => {
         descripcion: '',
         imagen: '',
         nombreImagen: '',
-        logIn: () => set({ isLoggedIn: true }),
-        logOut: () => set({ isLoggedIn: false }),
         setAnimalType: (newType) => set({ animalType: newType }),
         setNombre: (newNombre) => set({ nombre: newNombre }),
         setTamanio: (newTamanio) => set({ tamanio: newTamanio }),

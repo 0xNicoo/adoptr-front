@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from 'react';
-import { useStore } from '../../../../store';
+import { useGlobalStore } from '../../../../store';
 import { Radio, RadioGroup, Checkbox, Select, SelectItem, Input } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import Image from 'next/image';
@@ -30,7 +30,7 @@ const mesesConst = generarMeses(0, 11);
 const Step2 = ({nextStep, prevStep}) => {
   const [selected, setSelected] = React.useState(null);
   const [errors, setErrors] = React.useState('');
-  const { animalType, nombre, anios, meses, sexo, tamanio, vacunado, desparasitado, castrado, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado } = useStore();
+  const { animalType, nombre, anios, meses, sexo, tamanio, vacunado, desparasitado, castrado, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado } = useGlobalStore();
   
   const sexoAnimales = [
     { label: 'Masculino', 
