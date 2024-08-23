@@ -1,23 +1,6 @@
 import { create } from "zustand";
-import { persist } from 'zustand/middleware';
 
-export const useAuthStore = create(
-    persist(
-      (set) => ({
-        isAuthenticated: false,
-        logIn: () => set({ isAuthenticated: true }),
-        logOut: () => set({ isAuthenticated: false }),
-      }),
-      {
-        name: 'auth-storage', 
-        getStorage: () => localStorage, 
-      }
-    )
-  );
-
-
-//TODO (nico) cambiar esto de nombre
-export const useGlobalStore = create(set => {
+export const useFormStore = create(set => {
     return {
         step: 1,
         animalType: '',
