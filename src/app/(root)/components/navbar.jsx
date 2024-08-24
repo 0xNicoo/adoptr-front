@@ -3,6 +3,7 @@ import DropdownAdoptar from './dropdownadoptar';
 
 import "../../globals.css";
 import Link from 'next/link';
+import LoginBtn from './loginBtn';
 
 const gentyDemo = localFont({
   src: '../../../resources/font/GentyDemo-Regular.ttf',
@@ -28,9 +29,8 @@ const Navbar = () => {
           <Link href="/novedades" className="text-primary-blue">Novedades</Link>
         </div>
 
-        <div className="relative">
-            <Link href="/login" className="text-primary-blue font-bold">Iniciar Sesión</Link>
-        </div>
+        <LoginBtn />
+
       </div>
     </nav>
   );
