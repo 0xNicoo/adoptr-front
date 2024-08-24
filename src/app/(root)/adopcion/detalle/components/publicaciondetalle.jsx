@@ -31,6 +31,10 @@ const PublicationDetail = () => {
               <p className={`${inter.className} xl:text-md 2xl:text-xl font-medium text-black`}>SEXO</p>
               <p className='xl:text-sm 2xl:text-lg'>Macho</p>
             </div>
+            <div className='mt-2 mb-2'>
+              <p className={`${inter.className} xl:text-md 2xl:text-xl font-medium text-black`}>LOCALIDAD</p>
+              <p className='xl:text-sm 2xl:text-lg'>Berazategui</p>
+            </div>
             <div className='flex mt-4 gap-8'>
               <Checkbox defaultSelected isSelected>Vacunado</Checkbox>
               <Checkbox defaultSelected isSelected>Desparasitado</Checkbox>
