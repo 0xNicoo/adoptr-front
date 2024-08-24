@@ -8,21 +8,21 @@ import Image from 'next/image';
 const inter = Inter({ subsets: ["latin"] });
 
 const generarAnios = (min, max) => {
-  const anios = [];
+  const ageYears = [];
   for (let i = min; i <= max; i++) {
-    anios.push({ key: `${i} año${i != 1 ? 's' : ''}`, label: `${i} año${i != 1 ? 's' : ''}` });
+    ageYears.push({ key: `${i}`, label: `${i} año${i != 1 ? 's' : ''}` });
   }
-  return anios;
+  return ageYears;
 }
 
 const aniosConst = generarAnios(0, 20);
 
 const generarMeses = (min, max) => {
-  const meses = [];
+  const ageMonths = [];
   for (let i = min; i <= max; i++) {
-    meses.push({ key: `${i} mes${i != 1 ? 'es' : ''}`, label: `${i} mes${i != 1 ? 'es' : ''}` });
+    ageMonths.push({ key: `${i}`, label: `${i} mes${i != 1 ? 'es' : ''}` });
   }
-  return meses;
+  return ageMonths;
 }
 
 const mesesConst = generarMeses(0, 11);
@@ -30,14 +30,17 @@ const mesesConst = generarMeses(0, 11);
 const Step2 = ({nextStep, prevStep}) => {
   const [selected, setSelected] = React.useState(null);
   const [errors, setErrors] = React.useState('');
-  const { animalType, nombre, anios, meses, sexo, tamanio, vacunado, desparasitado, castrado, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado } = useFormStore();
+  const { animalType, title, ageYears, ageMonths, sexType, sizeType, vaccinated, unprotected, castrated, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado } = useFormStore();
   
   const sexoAnimales = [
     { label: 'Masculino', 
-      key: 'Masculino'},
+      key: 'MALE'},
     {
       label: 'Femenino',
-      key: 'Femenino'
+      key: 'FEMENINE'},
+    {
+      label: 'Indeterminado',
+      key: 'INDETERMINATE'
     }
   ]
 
@@ -46,41 +49,47 @@ const Step2 = ({nextStep, prevStep}) => {
   const handleCastradoChange = (e) => setCastrado(e.target.checked);
   const handleSexoChange = (value) => {
     setSexo(value);  
+    console.log(value);
   };
   const handleTamanioChange = (value) => {
     setSelected(value); 
     setTamanio(value);
+    console.log(sizeType);
   }
   const handleAniosChange = (value) => { 
-    setAnios(value);
+    const numero = value.split(' ')[0];
+    setAnios(numero);
+    console.log(ageYears);
   };
   const handleMesesChange = (value) => {
-    setMeses(value);
+    const numero = value.split(' ')[0];
+    setMeses(numero);
+    console.log(ageMonths);
   };
   useEffect(() => {
-    setSelected(tamanio);
-    setVacunado(vacunado);
-    setSexo(sexo);
-    setDesparasitado(desparasitado);
-    setCastrado(castrado);
-  }, [tamanio, vacunado, desparasitado, castrado, sexo]);
+    setSelected(sizeType);
+    setVacunado(vaccinated);
+    setSexo(sexType);
+    setDesparasitado(unprotected);
+    setCastrado(castrated);
+  }, [sizeType, vaccinated, unprotected, castrated, sexType]);
 
   const handleNextStep = () => {
     let newErrors = {}
-    if (!nombre) {
-      newErrors.nombre = '* Este campo es obligatorio';
+    if (!title) {
+      newErrors.title = '* Este campo es obligatorio';
     }
-    if (!anios) {
-      newErrors.anios = '* Este campo es obligatorio';
+    if (!ageYears) {
+      newErrors.ageYears = '* Este campo es obligatorio';
     }
-    if (!meses) {
-      newErrors.meses = '* Este campo es obligatorio';
+    if (!ageMonths) {
+      newErrors.ageMonths = '* Este campo es obligatorio';
     }
-    if (!sexo) {
-      newErrors.sexo = '* Este campo es obligatorio';
+    if (!sexType) {
+      newErrors.sexType = '* Este campo es obligatorio';
     }
-    if (!tamanio) {
-      newErrors.tamanio = '* Este campo es obligatorio';
+    if (!sizeType) {
+      newErrors.sizeType = '* Este campo es obligatorio';
     }
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -95,9 +104,9 @@ const Step2 = ({nextStep, prevStep}) => {
         <div className='flex flex-col'>
           <label htmlFor="nombre" className="block xl:text-md 2xl:text-xl font-medium">Nombre</label>
           <div className="flex mt-2 gap-4">
-            <Input isRequired aria-label="Seleccionar nombre" value={nombre} onChange={e => setNombre(e.target.value)} id="nombre" name="nombre" type="text" placeholder="Juan"/>
+            <Input isRequired aria-label="Seleccionar nombre" value={title} onChange={e => setNombre(e.target.value)} id="nombre" name="nombre" type="text" placeholder="Juan"/>
           </div>
-          {errors.nombre && <p className='text-red-500 mt-2 text-xs'>{errors.nombre}</p>}
+          {errors.title && <p className='text-red-500 mt-2 text-xs'>{errors.title}</p>}
         </div>
 
         <div className='flex flex-col'>
@@ -109,7 +118,7 @@ const Step2 = ({nextStep, prevStep}) => {
                 isRequired 
                 placeholder='Seleccionar año' 
                 aria-label="Seleccionar año"
-                selectedKeys={anios ? [anios] : []}  
+                selectedKeys={ageYears ? [ageYears] : []}  
                 onSelectionChange={(keys) => handleAniosChange(keys.values().next().value)}
                 className= "w-full min-w-[10rem]"
                 >
@@ -120,7 +129,7 @@ const Step2 = ({nextStep, prevStep}) => {
                   ))}
                 </Select>
               </div>
-              {errors.anios && <p className='text-red-500 mt-2 text-xs'>{errors.anios}</p>}
+              {errors.ageYears && <p className='text-red-500 mt-2 text-xs'>{errors.ageYears}</p>}
           </div>
           <div className='flex flex-col w-full'>
             <div className='flex'>
@@ -128,7 +137,7 @@ const Step2 = ({nextStep, prevStep}) => {
               isRequired 
               placeholder='Seleccionar mes' 
               aria-label="Seleccionar mes"
-              selectedKeys={meses ? [meses] : []}  
+              selectedKeys={ageMonths ? [ageMonths] : []}  
               onSelectionChange={(keys) => handleMesesChange(keys.values().next().value)}
               className= "w-full min-w-[10rem]"
               >
@@ -139,7 +148,7 @@ const Step2 = ({nextStep, prevStep}) => {
                 ))}
               </Select>
             </div>
-            {errors.meses && <p className='text-red-500 mt-2 text-xs'>{errors.meses}</p>}
+            {errors.ageMonths && <p className='text-red-500 mt-2 text-xs'>{errors.ageMonths}</p>}
           </div>
         </div>
       </div>
@@ -148,7 +157,7 @@ const Step2 = ({nextStep, prevStep}) => {
         <label htmlFor="sexo" className='block mb-2 xl:text-md 2xl:text-xl font-medium'>Sexo</label>
         <Select isRequired placeholder='Seleccionar' aria-label="Seleccionar sexo"
         className= "w-full min-w-[10rem]"
-        selectedKeys={sexo ? [sexo] : []}  
+        selectedKeys={sexType ? [sexType] : []}  
         onSelectionChange={(keys) => handleSexoChange(keys.values().next().value)}
         >
           {sexoAnimales.map((sexoAnimal) => (
@@ -157,7 +166,7 @@ const Step2 = ({nextStep, prevStep}) => {
             </SelectItem>
           ))}
         </Select>
-        {errors.sexo && <p className='text-red-500 mt-2 text-xs'>{errors.sexo}</p>}
+        {errors.sexType && <p className='text-red-500 mt-2 text-xs'>{errors.sexType}</p>}
       </div>
     </div>
 
@@ -167,37 +176,37 @@ const Step2 = ({nextStep, prevStep}) => {
           <RadioGroup value={selected} onValueChange={handleTamanioChange} orientation='horizontal'>
             <div className="flex flex-row gap-12 justify-center">
               <div className='flex flex-col justify-center items-center'>
-                <Radio value="Pequeño" className="hidden" aria-label="Tamaño"/>
-                  <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'Pequeño' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('Pequeño')}>
+                <Radio value="SMALL" className="hidden" aria-label="Tamaño"/>
+                  <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'SMALL' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('SMALL')}>
                     <Image
-                    src={animalType == "perro" ? "/images/dog-small.png" : "/images/cat-small.png" } 
+                    src={animalType == "DOG" ? "/images/dog-small.png" : "/images/cat-small.png" } 
                     width={80}
                     height={80}
-                    alt={animalType == "perro" ? "Perro pequeño" : "Gato pequeño"}
+                    alt={animalType == "DOG" ? "Perro pequeño" : "Gato pequeño"}
                     />
                   </div>
                   <p className={`${inter.className} mt-4 text-center text-black`}>Pequeño</p>
               </div>
               <div className='flex flex-col justify-center items-center'>
-                <Radio value="Mediano" className="hidden" aria-label="Tamaño"/>
-                  <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'Mediano' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('Mediano')}>
+                <Radio value="MEDIUM" className="hidden" aria-label="Tamaño"/>
+                  <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'MEDIUM' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('MEDIUM')}>
                     <Image
-                    src={animalType == "perro" ? "/images/dog-medium.png" : "/images/cat-medium.png" }
+                    src={animalType == "DOG" ? "/images/dog-medium.png" : "/images/cat-medium.png" }
                     width={80}
                     height={80}
-                    alt={animalType == "perro" ? "Perro mediano" : "Gato mediano"}
+                    alt={animalType == "DOG" ? "Perro mediano" : "Gato mediano"}
                     />
                   </div>
                 <p className={`${inter.className} mt-4 text-center text-black`}>Mediano</p>
               </div>
               <div className='flex flex-col justify-center items-center'>
-                <Radio value="Grande" className="hidden" aria-label="Tamaño"/>
-                  <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'Grande' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('Grande')}>
+                <Radio value="BIG" className="hidden" aria-label="Tamaño"/>
+                  <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'BIG' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('BIG')}>
                   <Image
-                  src={animalType == "perro" ? "/images/dog-big.png" : "/images/cat-big.png" }
+                  src={animalType == "DOG" ? "/images/dog-big.png" : "/images/cat-big.png" }
                   width={80}
                   height={80}
-                  alt={animalType == "perro" ? "Perro grande" : "Gato grande"}
+                  alt={animalType == "DOG" ? "Perro grande" : "Gato grande"}
                   />
                   </div>
                 <p className={`${inter.className} mt-4 text-center text-black`}>Grande</p>
@@ -205,13 +214,13 @@ const Step2 = ({nextStep, prevStep}) => {
             </div>
           </RadioGroup>
         </div>
-        {errors.tamanio && <p className='text-red-500 mt-2 text-xs'>{errors.tamanio}</p>}
+        {errors.sizeType && <p className='text-red-500 mt-2 text-xs'>{errors.sizeType}</p>}
       </div>
 
       <div className='flex mt-8 gap-8'>
-          <Checkbox isSelected={vacunado} onChange={handleVacunadoChange} checked={vacunado}>Vacunado</Checkbox>
-          <Checkbox isSelected={desparasitado} onChange={handleDesparasitadoChange} checked={desparasitado}>Desparasitado</Checkbox>
-          <Checkbox isSelected={castrado} onChange={handleCastradoChange} checked={castrado}>Castrado</Checkbox>
+          <Checkbox isSelected={vaccinated} onChange={handleVacunadoChange} checked={vaccinated}>Vacunado</Checkbox>
+          <Checkbox isSelected={unprotected} onChange={handleDesparasitadoChange} checked={unprotected}>Desparasitado</Checkbox>
+          <Checkbox isSelected={castrated} onChange={handleCastradoChange} checked={castrated}>Castrado</Checkbox>
       </div>
       <div className="flex flex-row justify-between mt-4 items-end mr-4">
         <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>

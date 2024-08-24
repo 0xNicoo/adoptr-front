@@ -40,8 +40,8 @@ const Step1 = ({nextStep}) => {
           <RadioGroup value={selected} onValueChange={handleAnimalChange} orientation='horizontal'>
             <div className="flex flex-row gap-12 justify-center">
               <div className='flex flex-col justify-center items-center'>
-              <Radio value='perro' className="hidden" />
-                  <div className={`flex items-center justify-center xl:w-52 xl:h-52 2xl:w-72 2xl:h-72 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'perro' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleAnimalChange('perro')}>
+              <Radio value='DOG' className="hidden" />
+                  <div className={`flex items-center justify-center xl:w-52 xl:h-52 2xl:w-72 2xl:h-72 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'DOG' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleAnimalChange('DOG')}>
                     <Image
                     src= "/images/dogshape.png"
                     width={80}
@@ -52,8 +52,8 @@ const Step1 = ({nextStep}) => {
                 <p className={`${inter.className} mt-2 text-center text-black`}>Perro</p>
               </div>
               <div className='flex flex-col justify-center items-center'>
-                <Radio value='gato' className="hidden" />
-                  <div className={`flex items-center justify-center xl:w-52 xl:h-52 2xl:w-72 2xl:h-72 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'gato' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleAnimalChange('gato')}>
+                <Radio value='CAT' className="hidden" />
+                  <div className={`flex items-center justify-center xl:w-52 xl:h-52 2xl:w-72 2xl:h-72 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'CAT' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleAnimalChange('CAT')}>
                     <Image
                     src= "/images/catshape.png"
                     width={80}
