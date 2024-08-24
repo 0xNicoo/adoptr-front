@@ -7,11 +7,12 @@ import { cilImagePlus } from '@coreui/icons';
 import { Textarea } from '@nextui-org/react';
 
 const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
-    const { description, setDescripcion, image, setImagen, nombreImagen, setNombreImagen } = useFormStore();
+    const { description, setDescripcion, image, setImagen, nombreImagen, setNombreImagen, setFileImage } = useFormStore();
     const [errors, setErrors] = useState('');
     const imageHandler = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setFileImage(file)
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImagen(reader.result); 

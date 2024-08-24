@@ -9,37 +9,29 @@ import { handleCreateAdoption } from './actions';
 const inter = Inter({ subsets: ["latin"] });
 
 const Step4 = ({prevStep = {prevStep}}) => {
-    const { title, sizeType, animalType, ageYears, ageMonths, sexType, vaccinated, unprotected, castrated, description, image, resetForm } = useFormStore();
+    const { title, sizeType, animalType, ageYears, ageMonths, sexType, vaccinated, unprotected, castrated, description, image, resetForm, fileImage } = useFormStore();
     
     const publicarAdopcion = async () => {
-        const data = {
-            title,
-            description,
-            sexType,
-            vaccinated,
-            unprotected,
-            castrated,
-            animalType,
-            sizeType,
-            adoptionStatusType: 'FOR_ADOPTION',
-            ageYears,
-            ageMonths,
-            s3Url: "string",
-            locality: {
-                id: 1
-            },
-            user: {
-                id: 1,
-                email: "dolo@gmail.com"
-            }
-        }
-        
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('sexType', sexType);
+        formData.append('vaccinated', vaccinated);
+        formData.append('unprotected', unprotected);
+        formData.append('castrated', castrated);
+        formData.append('animalType', animalType);
+        formData.append('sizeType', sizeType);
+        formData.append('ageYears', ageYears);
+        formData.append('ageMonths', ageMonths);
+        formData.append('image', fileImage);
+        //TODO: despues agregar esto cuando este lo de la localidad
+        formData.append('locality_id', 1);
+
         try {
-            await handleCreateAdoption(data);
+            await handleCreateAdoption(formData);
             resetForm();
         } catch (error) {
             console.log('Error al publicar', error);
-            console.log(data);
         }
     }
     
