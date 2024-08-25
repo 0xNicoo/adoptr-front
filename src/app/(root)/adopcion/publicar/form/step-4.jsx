@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { useFormStore } from '../../../../store';
+import { useFormStoreAdopcion } from '../../../../store';
 import { Inter } from "next/font/google";
 import { Checkbox } from '@nextui-org/react';
 import Image from 'next/image';
@@ -9,7 +9,7 @@ import { handleCreateAdoption } from './actions';
 const inter = Inter({ subsets: ["latin"] });
 
 const Step4 = ({prevStep = {prevStep}}) => {
-    const { title, sizeType, animalType, ageYears, ageMonths, sexType, vaccinated, unprotected, castrated, description, image, resetForm, fileImage } = useFormStore();
+    const { title, sizeType, animalType, ageYears, ageMonths, sexType, vaccinated, unprotected, castrated, description, image, resetForm, fileImage } = useFormStoreAdopcion();
     
     const publicarAdopcion = async () => {
         const formData = new FormData();

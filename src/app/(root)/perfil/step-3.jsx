@@ -1,44 +1,44 @@
 "use client";
 import React, { useState } from 'react';
-import { useFormStoreAdopcion } from '../../../../store';
+import { useFormStorePerfil } from '../../store';
 import Image from 'next/image';
 import { CIcon } from '@coreui/icons-react';
 import { cilImagePlus } from '@coreui/icons';
 import { Textarea } from '@nextui-org/react';
 
 const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
-    const { description, setDescripcion, image, setImagen, nombreImagen, setNombreImagen, setFileImage } = useFormStore();
+
     const [errors, setErrors] = useState('');
-    const imageHandler = (e) => {
+    const { description, setDescription, image, setImage, nameImage, setNameImage, setFileImage } = useFormStorePerfil();
+    const handleNextStep = () => {
+        let newErrors = {};
+        if (!description) {
+          newErrors.description = '* Este campo es obligatorio';
+        }
+        if (!image) {
+          newErrors.image = '* Este campo es obligatorio';
+        }
+        if (Object.keys(newErrors).length > 0) {
+          setErrors(newErrors);
+        } else {
+          nextStep();
+        }
+      }
+
+      const imageHandler = (e) => {
         const file = e.target.files[0];
         if (file) {
             setFileImage(file)
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImagen(reader.result); 
+                setImage(reader.result); 
             };
             reader.readAsDataURL(file); 
-            setNombreImagen(file.name);
+            setNameImage(file.name);
         }
     };
-    
-    const handleNextStep = () => {
-        let newErrors=[]
-        if (!description) {
-            newErrors.descripcion = '* Este campo es obligatorio';
-        }
-        if (!image) {
-            newErrors.image = '* Este campo es obligatorio';
-        }
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-        }
-        else {
-            nextStep();
-        }
-    }
 
-    return (
+      return (
         <div className='flex flex-grow justify-between flex-col ml-12 mb-4'>
             <div className='flex flex-row mt-4'>
                 <div className='flex flex-col'>
@@ -66,13 +66,13 @@ const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
                         text-black hover:bg-gray-200 cursor-pointer">
                             Elegir imagen
                         </label>
-                        <label className="text-sm text-slate-500">{nombreImagen ? nombreImagen : "Ningún archivo seleccionado"}</label>
+                        <label className="text-sm text-slate-500">{nameImage ? nameImage : "Ningún archivo seleccionado"}</label>
                     </div>
                     {errors.image && <p className='text-red-500 mt-2 text-xs'>{errors.image}</p>}
                 </div>
                 <div className='flex flex-col xl:ml-8 grow'>
                     <label htmlFor="descripcion" className="mb-2 text-primary-blue xl:text-lg 2xl:text-2xl font-medium">Agregá una descripción</label>
-                    <Textarea isRequired rows="3" value={description} className='w-2/3 text-lg' placeholder="Contanos sobre su personalidad, sus hábitos, su historia y cualquier detalle importante." onChange={e => setDescripcion(e.target.value)}/>
+                    <Textarea isRequired rows="3" value={description} className='w-2/3 text-lg' placeholder="Contanos sobre tu vida, tus mascotas, tus hobbies y cualquier detalle que te gustaría compartir con nuestra comunidad." onChange={e => setDescription(e.target.value)}/>
                     {errors.description && <p className='text-red-500 mt-2 text-xs'>{errors.description}</p>}
                 </div>
             </div>

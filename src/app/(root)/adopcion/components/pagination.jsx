@@ -8,7 +8,7 @@ export default function PaginationComponent({ totalPages, currentPage, onPageCha
       <Pagination
         loop
         showControls
-        color="success"
+        color="warning"
         total={totalPages}
         initialPage={currentPage}
         onChange={onPageChange}
