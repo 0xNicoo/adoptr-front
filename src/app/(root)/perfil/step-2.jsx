@@ -180,7 +180,7 @@ const Step2 = ({ nextStep, prevStep }) => {
           {errors.locality && <p className='text-red-500 mt-2 text-xs'>{errors.locality}</p>}
         </div>
       </div>
-      <div className="flex flex-row justify-end mb-4 mx-4">
+      <div className="flex flex-row justify-end xl:mb-4 xl:mx-4 2xl:mb-8 2xl:mx-8">
         <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>
           Siguiente
         </button>

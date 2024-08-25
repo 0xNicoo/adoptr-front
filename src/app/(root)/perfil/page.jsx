@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { NextUIProvider } from '@nextui-org/react';
 import Step2 from './step-2';
 import Step3 from './step-3';
@@ -10,11 +10,10 @@ import { useFormStorePerfil } from '../../store';
 const MultiStepForm = () => {
   
   const { step, nextStep, prevStep } = useFormStorePerfil();
-  const { firstName, lastName, description, image, locality } = useFormStorePerfil();
 
   const renderStepper = () => {
     return (
-      <Stepper currentStep={step} />
+      <Stepper currentStep={step+1} />
     )
   }
 
@@ -33,7 +32,7 @@ const renderStep = () => {
 
     return (
         <NextUIProvider>
-          <div className="bg-background-gray min-h-screen flex pt-2 px-5 pb-2 justify-center">
+          <div className="bg-background-gray flex xl:pt-2 xl:px-5 xl:pb-2 2xl:px-12 2xl:pt-8 justify-center">
             <div className="bg-white flex w-full border rounded-3xl drop-shadow-md flex-col">
                 {renderStepper()}
                 {renderStep()}

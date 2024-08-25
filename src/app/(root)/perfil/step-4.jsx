@@ -37,7 +37,7 @@ const Step4 = ({ prevStep }) => {
         <div className='flex flex-grow flex-col mb-4 ml-12 justify-between'>
             <div className='flex flex-col gap-2'>
                 <div className="flex items-center justify-center mt-2"> 
-                    <Image className='rounded-full xl:w-80 2xl:w-96 hover:scale-105 hover:shadow-xl'
+                    <Image className='rounded-full xl:w-76 2xl:w-96 hover:scale-105 hover:shadow-xl'
                     src={image}
                     alt='Imagen seleccionada'
                     width={200}
