@@ -13,6 +13,7 @@ export async function createProfile(data) {
         })
         if (!res.ok) {
             const errorData = await res.json()
+            console.log(errorData)
             throw new Error('Failed to fetch data', errorData)
         }
         return res.json()
