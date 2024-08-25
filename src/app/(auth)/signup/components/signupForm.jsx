@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import Link from 'next/link';
-import { registerUser } from './actions';
+import { registerUser, loginUser } from './actions';
 import { useRouter } from 'next/navigation';
 
 const SignupForm = () => {
@@ -13,6 +13,7 @@ const SignupForm = () => {
     const onSubmit = async (data) => {
         try {
             await registerUser(data);
+            await loginUser(data);
             router.push('/perfil');   
         } catch (error) {
             console.error('Error al registrar usuario:', error);
