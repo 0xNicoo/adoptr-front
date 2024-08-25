@@ -19,7 +19,7 @@ const Step4 = ({ prevStep }) => {
         formData.append('lastName', lastName);
         formData.append('genderType', genderType);
         formData.append('description', description);
-        formData.append('locality_id', 1);
+        formData.append('locality_id', locality.id);
         formData.append('image', fileImage); 
 
         try {
