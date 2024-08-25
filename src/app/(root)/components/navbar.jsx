@@ -13,7 +13,7 @@ const gentyDemo = localFont({
 
 const Navbar = () => {
   return (
-    <nav className="bg-white-800 text-white px-4 pt-4 pb-2 flex justify-between items-center border-b border-gray-300">
+    <nav className="bg-white text-white px-4 pt-4 pb-2 flex justify-between items-center border-b border-gray-300">
       <div className="ml-10">
         <Link href="/" className={`${gentyDemo.className} text-7xl shadow-gray-500 text-shadow-lg`}>
           <span className="text-primary-blue">Adop</span>
