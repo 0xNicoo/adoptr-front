@@ -1,25 +1,34 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PaginationComponent from "./components/pagination";
 import PublicationList from "./components/publicationList";
 import SectionAdop from "./components/sectionadop";
+import { getAdoption } from "./actions";
 
-const publications = [
-  { id: 1, name: "Pepito", age: "1 Año", sexo:"macho", image: "https://via.placeholder.com/300" },
-  { id: 2, name: "Juanito", age: "2 Años", sexo:"macho", image: "https://via.placeholder.com/300" },
-  { id: 3, name: "Luna", age: "3 Años", sexo:"hembra", image: "https://via.placeholder.com/300" },
-  { id: 4, name: "Mina", age: "4 Años", sexo:"hembra", image: "https://via.placeholder.com/300" },
-  { id: 5, name: "Nickito", age: "5 Años", sexo:"macho", image: "https://via.placeholder.com/300" },
-  { id: 6, name: "Cachi", age: "6 Años", sexo:"macho", image: "https://via.placeholder.com/300" },
-  { id: 7, name: "Sebas", age: "7 Años", sexo:"macho", image: "https://via.placeholder.com/300" },
-  { id: 8, name: "Die", age: "8 Años", sexo:"macho", image: "https://via.placeholder.com/300" },
-];
-
-const itemsPerPage = 6;
+const itemsPerPage = 3;
 
 export default function AdoptionPage() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [publications, setPublications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAdoptions = async () => {
+      setLoading(true);
+      try {
+        const data = await getAdoption();
+        setPublications(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdoptions();
+  }, []);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -28,6 +37,9 @@ export default function AdoptionPage() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div
