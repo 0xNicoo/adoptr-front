@@ -2,15 +2,21 @@
 
 import { useForm } from "react-hook-form";
 import Link from 'next/link';
+import { registerUser } from './actions';
+import { useRouter } from 'next/navigation';
 
 const SignupForm = () => {
-
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
-
     const password = watch('password');
+    const router = useRouter();
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        try {
+            await registerUser(data);
+            router.push('/perfil');   
+        } catch (error) {
+            console.error('Error al registrar usuario:', error);
+        }
     };
 
     return (
