@@ -1,15 +1,16 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NextUIProvider } from '@nextui-org/react';
-import Step1 from './step-1';
 import Step2 from './step-2';
 import Step3 from './step-3';
 import Step4 from './step-4';
 import Stepper from './stepper';
-import { useFormStoreAdopcion } from '../../../../store';
+import { useFormStorePerfil } from '../../store';
 
 const MultiStepForm = () => {
-  const { step, nextStep, prevStep } = useFormStoreAdopcion();
+  
+  const { step, nextStep, prevStep } = useFormStorePerfil();
+  const { firstName, lastName, description, image, locality } = useFormStorePerfil();
 
   const renderStepper = () => {
     return (
@@ -17,18 +18,16 @@ const MultiStepForm = () => {
     )
   }
 
-  const renderStep = () => {
+const renderStep = () => {
     switch (step) {
       case 1:
-        return <Step1 nextStep={nextStep}/>;
-      case 2:
         return <Step2 nextStep={nextStep} prevStep={prevStep} />;
-       case 3:
+       case 2:
         return <Step3 nextStep={nextStep} prevStep={prevStep}/>;   
-      case 4:
-        return <Step4 nextStep={nextStep} prevStep={prevStep}/>;
+        case 3:
+          return <Step4 prevStep={prevStep} />;
       default:
-        return <Step1 nextStep={nextStep} prevStep={prevStep}/>;
+        return <Step2 nextStep={nextStep} prevStep={prevStep} />;
     }
   };
 

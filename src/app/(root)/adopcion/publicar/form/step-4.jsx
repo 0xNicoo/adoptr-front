@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { useFormStore } from '../../../../store';
+import { useFormStoreAdopcion } from '../../../../store';
 import { Inter } from "next/font/google";
 import { Checkbox } from '@nextui-org/react';
 import Image from 'next/image';
@@ -8,7 +8,7 @@ import Image from 'next/image';
 const inter = Inter({ subsets: ["latin"] });
 
 const Step4 = ({prevStep = {prevStep}}) => {
-    const { nombre, tamanio, anios, meses, sexo, vacunado, desparasitado, castrado, descripcion, imagen } = useFormStore();
+    const { nombre, tamanio, anios, meses, sexo, vacunado, desparasitado, castrado, descripcion, imagen } = useFormStoreAdopcion();
     return (
         <div className='flex flex-grow flex-col mb-4 ml-12 justify-between'>
             <div className='flex flex-row gap-8 mt-4 items-start'>
