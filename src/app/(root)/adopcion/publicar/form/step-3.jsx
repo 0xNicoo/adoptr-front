@@ -7,7 +7,7 @@ import { cilImagePlus } from '@coreui/icons';
 import { Textarea } from '@nextui-org/react';
 
 const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
-    const { description, setDescripcion, image, setImagen, nombreImagen, setNombreImagen, setFileImage } = useFormStore();
+    const { description, setDescripcion, image, setImagen, nombreImagen, setNombreImagen, setFileImage } = useFormStoreAdopcion();
     const [errors, setErrors] = useState('');
     const imageHandler = (e) => {
         const file = e.target.files[0];
