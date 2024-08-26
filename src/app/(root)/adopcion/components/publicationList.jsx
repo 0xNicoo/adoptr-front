@@ -13,7 +13,8 @@ const mapSexType = (sexType) => {
 };
 
 //TODO: agregar para que se ajuste un poco a mas resoluciones
-//TODO: si tiene 0 años que directamente no aparezca
+//TODO: si tiene 0 años/meses que directamente no aparezca
+// ${pub.id}
 
 const PublicationList = ({ publications }) => {
   return (
@@ -21,7 +22,7 @@ const PublicationList = ({ publications }) => {
       {publications.length > 0 ? (
         publications.map((pub) => (
           <div key={pub.id} className="border-2 border-gray-300 p-4 rounded-lg shadow-md bg-white">
-            <Link href={`/publication/${pub.id}`} className="block">
+            <Link href={`/adopcion/${pub.id}`} className="block">
               <img
                 src={pub.s3Url} 
                 alt={pub.title}
