@@ -7,11 +7,13 @@ import { Textarea } from '@nextui-org/react';
 import { CIcon } from '@coreui/icons-react';
 import { cilLocationPin } from '@coreui/icons';
 import { handleCreatePerfil } from './actions';
+import { useRouter } from 'next/navigation';
 
 const inter = Inter({ subsets: ["latin"] });
 
 const Step4 = ({ prevStep }) => { 
     const { firstName, lastName, genderType, description, fileImage, image, locality, resetForm } = useFormStorePerfil();
+    const router = useRouter();
 
     const publicarPerfil = async () => {
         const formData = new FormData();
@@ -24,7 +26,7 @@ const Step4 = ({ prevStep }) => {
 
         try {
             await handleCreatePerfil(formData); 
-            resetForm(); 
+            router.push('/mi-perfil');
         } catch (error) {
             console.log('Error al crear perfil', error);
             for (let [key, value] of formData.entries()) {
