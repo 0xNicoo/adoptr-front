@@ -56,12 +56,12 @@ const PublicationDetail = ({ adoptionId }) => {
                 <p className='text-sm md:text-base'>{adoption.sexType}</p>
               </div>
               <div className='mt-2 mb-2'>
-                <p className={`${inter.className} text-md md:text-lg font-medium text-black`}>LOCALIDAD</p>
-                <p className='text-sm md:text-base'>{adoption.locality.name}</p>
-              </div>
-              <div className='mt-2 mb-2'>
                 <p className={`${inter.className} text-md md:text-lg font-medium text-black`}>PROVINCIA</p>
                 <p className='text-sm md:text-base'>{adoption.locality.province.name}</p>
+              </div>
+              <div className='mt-2 mb-2'>
+                <p className={`${inter.className} text-md md:text-lg font-medium text-black`}>LOCALIDAD</p>
+                <p className='text-sm md:text-base'>{adoption.locality.name}</p>
               </div>
               <div className='flex flex-wrap gap-4 mt-4'>
                 <Checkbox isSelected={adoption.vaccinated}>Vacunado</Checkbox>
