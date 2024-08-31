@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import { Inter } from "next/font/google";
 import {Card, CardHeader, CardBody, Image} from "@nextui-org/react";
 
@@ -33,6 +32,7 @@ const PublicationList = ({ publications }) => {
                   className="object-cover rounded-xl"
                   src={pub.s3Url}
                   width={270}
+                  height={300}
                   />
                 </CardBody>
                 <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
