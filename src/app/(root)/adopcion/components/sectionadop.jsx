@@ -2,9 +2,9 @@ import React from 'react';
 
 const SectionAdop = () => {
   return (
-    <div className="text-center mb-8 mt-16 p-6 bg-blue-100 border border-blue-300 rounded-3xl shadow-lg">
-      <h1 className="text-3xl font-bold text-blue-700">
-        Encuentra a tu mascota ideal
+    <div className="text-center mt-16">
+      <h1 className="xl:text-4xl font-bold text-primary-blue">
+        Encontrá tu mascota ideal
       </h1>
     </div>
   );
