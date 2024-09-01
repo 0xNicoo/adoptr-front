@@ -15,6 +15,8 @@ export const useFormStoreAdopcion = create(set => {
         description: '',
         image: '',
         nombreImagen: '',
+        locality: '',
+        province: '',
         adoptionStatusType: 'FOR_ADOPTION',
         fileImage: null,
         setAnimalType: (newType) => set({ animalType: newType }),
@@ -29,6 +31,8 @@ export const useFormStoreAdopcion = create(set => {
         setDescripcion: (newDescripcion) => set({ description: newDescripcion }),
         setFileImage: (newFileImage) => set({ fileImage: newFileImage }),
         setImagen: (newImagen) => set({ image: newImagen }),
+        setLocality: (newLocality) => set({ locality: newLocality }),
+        setProvince: (newProvince) => set({ province: newProvince }),
         setNombreImagen: (newNombreImagen) => set({ nombreImagen: newNombreImagen }),
         nextStep: () => set((state) => ({ step: state.step + 1 })),
         prevStep: () => set((state) => ({ step: state.step - 1 })),
@@ -46,6 +50,8 @@ export const useFormStoreAdopcion = create(set => {
             description: '',
             image: '',
             nombreImagen: '',
+            locality: '',
+            province: '',
             adoptionStatusType: 'FOR_ADOPTION',
         }))
     }
