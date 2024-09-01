@@ -1,5 +1,8 @@
+'use-client';
+
 import React from 'react';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 const mapSexType = (sexType) => {
   switch (sexType) {
@@ -12,11 +15,20 @@ const mapSexType = (sexType) => {
   }
 };
 
+
+
 //TODO: agregar para que se ajuste un poco a mas resoluciones
 //TODO: si tiene 0 años/meses que directamente no aparezca
 // ${pub.id}
 
 const PublicationList = ({ publications }) => {
+  const [list, setList] = useState(publications);
+
+    useEffect(() => {
+
+        setList(publications);
+    }, [publications]);
+
   return (
     <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
       {publications.length > 0 ? (
