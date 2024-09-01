@@ -2,7 +2,7 @@
 
 import { getAdoptions } from "@/lib/api/adoption";
 
-export async function getAdoption(filter) {
-  const data = await getAdoptions(filter, 0, 10)
+export async function getAdoption(filter, page) {
+  const data = await getAdoptions(filter, page-1, 10)
   return data;
 }
