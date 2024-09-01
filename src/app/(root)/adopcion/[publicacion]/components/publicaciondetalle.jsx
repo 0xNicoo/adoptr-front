@@ -2,10 +2,34 @@
 
 import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
-import { Checkbox } from '@nextui-org/react';
+import { Checkbox, Textarea } from '@nextui-org/react';
 import { getAdoptionDetail } from '../actions';
 
 const inter = Inter({ subsets: ["latin"] });
+
+const mapSexType = (sexType) => {
+  switch (sexType) {
+    case 'MALE':
+      return 'Macho';
+    case 'FEMALE':
+      return 'Hembra';
+    default:
+      return 'Indefinido'; 
+  }
+};
+
+const mapSizeType = (sizeType) => {
+  switch (sizeType) {
+    case 'SMALL':
+      return 'Pequeño';
+    case 'MEDIUM':
+      return 'Mediano';
+    case 'BIG':
+      return 'Grande';
+    default:
+      return 'Indefinido';
+  }
+};
 
 const PublicationDetail = ({ adoptionId }) => {
   const [adoption, setAdoption] = useState(null);
@@ -31,58 +55,44 @@ const PublicationDetail = ({ adoptionId }) => {
 
   return (
     <div className="bg-background-gray min-h-screen flex pt-4 px-4 pb-4 justify-center">
-      <div className='bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-4xl'>
-        <div className='flex flex-col md:flex-row p-6'>
-          <div className='flex flex-col md:flex-row gap-6 md:gap-8 items-start'>
-            <div className="flex-shrink-0">
-              <img 
-                className='rounded-xl w-full md:w-80 lg:w-96'
-                src={adoption.s3Url} 
-                alt='Imagen seleccionada'
-                width={200}
-                height={350}
-              />
-            </div>
-            <div className='flex flex-col w-full'>
-              <h1 className={`${inter.className} text-xl md:text-2xl font-bold text-primary-blue`}>{adoption.title}</h1>
-              <p className={`${inter.className} text-md md:text-lg font-medium text-black mt-2`}>TAMAÑO</p>
-              <p className='text-sm md:text-base'>{adoption.sizeType}</p>
-              <div className='mt-2'>
-                <p className={`${inter.className} text-md md:text-lg font-medium text-black`}>EDAD</p>
-                <p className='text-sm md:text-base'>{adoption.ageYears} Años {adoption.ageMonths} Meses</p>
-              </div>
-              <div className='mt-2 mb-2'>
-                <p className={`${inter.className} text-md md:text-lg font-medium text-black`}>SEXO</p>
-                <p className='text-sm md:text-base'>{adoption.sexType}</p>
-              </div>
-              <div className='mt-2 mb-2'>
-                <p className={`${inter.className} text-md md:text-lg font-medium text-black`}>PROVINCIA</p>
-                <p className='text-sm md:text-base'>{adoption.locality.province.name}</p>
-              </div>
-              <div className='mt-2 mb-2'>
-                <p className={`${inter.className} text-md md:text-lg font-medium text-black`}>LOCALIDAD</p>
-                <p className='text-sm md:text-base'>{adoption.locality.name}</p>
-              </div>
-              <div className='flex flex-wrap gap-4 mt-4'>
-                <Checkbox isSelected={adoption.vaccinated}>Vacunado</Checkbox>
-                <Checkbox isSelected={adoption.unprotected}>Desparasitado</Checkbox>
-                <Checkbox isSelected={adoption.castrated}>Castrado</Checkbox>
-              </div>
-              <div className='mt-8 relative'>
-                <p className={`${inter.className} text-md font-medium text-black`}>DESCRIPCIÓN</p>
-                <div className='bg-white border border-gray-300 p-4 rounded-md'>
-                  <p className='text-sm md:text-base'>{adoption.description}</p>
-                </div>
-              </div>
-              <div className='absolute bottom-4 right-4 flex gap-4'>
-                <button className="bg-primary-orange hover:bg-orange-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
-                  guardar
-                </button>
-                <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
-                  adoptar
-                </button>
-              </div>
-            </div>
+      <div className='flex flex-col md:flex-row p-6 gap-6 md:gap-8 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-4xl'>
+        <div className="flex-shrink-0">
+          <img 
+          className='rounded-xl w-full md:w-80 lg:w-96'
+          src={adoption.s3Url} 
+          alt='Imagen seleccionada'
+          width={250}
+          height={300}
+          />
+        </div>
+        <div className='flex flex-col w-full'>
+          <h1 className={`${inter.className} xl:text-2xl 2xl:text-3xl md:text-lg font-medium text-primary-blue`}>{adoption.title}</h1>
+          <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>TAMAÑO</p>
+          <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{mapSizeType(adoption.sizeType)}</p>
+          <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>EDAD</p>
+          <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{adoption.ageYears} años {adoption.ageMonths} meses</p>
+          <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>SEXO</p>
+          <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{mapSexType(adoption.sexType)}</p>
+          <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>UBICACIÓN</p>
+          <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{adoption.locality.name}, {adoption.locality.province.name}</p>
+          <div className='flex flex-wrap gap-4 mt-2'>
+            <Checkbox isSelected={adoption.vaccinated} className='xl:text-sm 2xl:text-md md:text-sm text-black'>Vacunado</Checkbox>
+            <Checkbox isSelected={adoption.unprotected} className='xl:text-sm 2xl:text-md md:text-sm text-black'>Desparasitado</Checkbox>
+            <Checkbox isSelected={adoption.castrated} className='xl:text-sm 2xl:text-md md:text-sm text-black'>Castrado</Checkbox>
+          </div>
+            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2 mb-1`}>DESCRIPCIÓN</p>
+            <Textarea
+                isReadOnly
+                defaultValue={adoption.description}
+                className="max-w-xs"
+                />
+          <div className='absolute bottom-4 right-4 flex gap-4'>
+            <button className="bg-primary-orange hover:bg-orange-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
+              Guardar
+            </button>
+            <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
+              Adoptar
+            </button>
           </div>
         </div>
       </div>
