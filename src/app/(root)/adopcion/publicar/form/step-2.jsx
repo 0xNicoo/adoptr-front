@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormStoreAdopcion } from '../../../../store';
 import { Radio, RadioGroup, Checkbox, Select, SelectItem, Input } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import Image from 'next/image';
+import { getProvince, getLocality } from './actions';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,9 +29,15 @@ const generarMeses = (min, max) => {
 const mesesConst = generarMeses(0, 11);
 
 const Step2 = ({nextStep, prevStep}) => {
-  const [selected, setSelected] = React.useState(null);
-  const [errors, setErrors] = React.useState('');
-  const { animalType, title, ageYears, ageMonths, sexType, sizeType, vaccinated, unprotected, castrated, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado } = useFormStoreAdopcion();
+
+  const { animalType, title, ageYears, ageMonths, sexType, sizeType, vaccinated, unprotected, castrated, locality, province, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado, setLocality, setProvince } = useFormStoreAdopcion();
+  const [errors, setErrors] = useState('');
+  const [provinces, setProvinces] = useState([]);
+  const [localities, setLocalities] = useState([]);
+  const [loadingProvinces, setLoadingProvinces] = useState(true);
+  const [loadingLocalities, setLoadingLocalities] = useState(false);
+  const [error, setError] = useState(null);
+  const [selected, setSelected] = useState('');
   
   const sexoAnimales = [
     { label: 'Masculino', 
@@ -49,23 +56,21 @@ const Step2 = ({nextStep, prevStep}) => {
   const handleCastradoChange = (e) => setCastrado(e.target.checked);
   const handleSexoChange = (value) => {
     setSexo(value);  
-    console.log(value);
+
   };
   const handleTamanioChange = (value) => {
     setSelected(value); 
     setTamanio(value);
-    console.log(sizeType);
   }
   const handleAniosChange = (value) => { 
     const numero = value.split(' ')[0];
     setAnios(numero);
-    console.log(ageYears);
   };
   const handleMesesChange = (value) => {
     const numero = value.split(' ')[0];
     setMeses(numero);
-    console.log(ageMonths);
   };
+ 
   useEffect(() => {
     setSelected(sizeType);
     setVacunado(vaccinated);
@@ -91,6 +96,12 @@ const Step2 = ({nextStep, prevStep}) => {
     if (!sizeType) {
       newErrors.sizeType = '* Este campo es obligatorio';
     }
+    if (!province) {
+      newErrors.province = '* Este campo es obligatorio';
+    }
+    if (!locality) {
+      newErrors.locality = '* Este campo es obligatorio';
+    }
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
@@ -98,10 +109,45 @@ const Step2 = ({nextStep, prevStep}) => {
     }
   }
 
+  useEffect(() => {
+    async function fetchProvinces() {
+      try {
+        const provincesData = await getProvince();
+        setProvinces(provincesData || []);
+        setLoadingProvinces(false);
+      } catch (error) {
+        console.error("Error fetching provinces:", error);
+        setError('Error al cargar las provincias');
+        setLoadingProvinces(false);
+      }
+    }
+    fetchProvinces();
+  }, []);
+
+  useEffect(() => {
+    async function fetchLocalities() {
+      if (province) {
+        setLoadingLocalities(true);
+        try {
+          const localitiesData = await getLocality(province);
+          setLocalities(localitiesData || []);
+          setLoadingLocalities(false);
+        } catch (error) {
+          console.error("Error fetching localities:", error);
+          setError('Error al cargar las localidades');
+          setLoadingLocalities(false);
+        }
+      } else {
+        setLocalities([]);
+      }
+    }
+    fetchLocalities();
+  }, [province]);
+
   return (
     <div className='flex flex-grow flex-col mb-4 ml-12'>
       <div className='flex flex-row gap-12'>
-        <div className='flex flex-col'>
+        <div className='flex flex-col w-1/6'>
           <label htmlFor="nombre" className="block xl:text-md 2xl:text-xl font-medium">Nombre</label>
           <div className="flex mt-2 gap-4">
             <Input isRequired aria-label="Seleccionar nombre" value={title} onChange={e => setNombre(e.target.value)} id="nombre" name="nombre" type="text" placeholder="Juan"/>
@@ -109,54 +155,9 @@ const Step2 = ({nextStep, prevStep}) => {
           {errors.title && <p className='text-red-500 mt-2 text-xs'>{errors.title}</p>}
         </div>
 
-        <div className='flex flex-col'>
-          <label htmlFor="edad" className="block xl:text-md 2xl:text-xl font-medium">Edad</label>
-          <div className='flex flex-row gap-4 mt-2'>
-            <div className='flex flex-col w-full'>
-              <div className='flex'>
-                <Select 
-                isRequired 
-                placeholder='Seleccionar año' 
-                aria-label="Seleccionar año"
-                selectedKeys={ageYears ? [ageYears] : []}  
-                onSelectionChange={(keys) => handleAniosChange(keys.values().next().value)}
-                className= "w-full min-w-[10rem]"
-                >
-                  {aniosConst.map((anio) => (
-                    <SelectItem key={anio.key} value={anio.key}>
-                      {anio.label}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
-              {errors.ageYears && <p className='text-red-500 mt-2 text-xs'>{errors.ageYears}</p>}
-          </div>
-          <div className='flex flex-col w-full'>
-            <div className='flex'>
-              <Select 
-              isRequired 
-              placeholder='Seleccionar mes' 
-              aria-label="Seleccionar mes"
-              selectedKeys={ageMonths ? [ageMonths] : []}  
-              onSelectionChange={(keys) => handleMesesChange(keys.values().next().value)}
-              className= "w-full min-w-[10rem]"
-              >
-                {mesesConst.map((mes) => (
-                  <SelectItem key={mes.key} value={mes.key}>
-                    {mes.label}
-                  </SelectItem>
-                ))}
-              </Select>
-            </div>
-            {errors.ageMonths && <p className='text-red-500 mt-2 text-xs'>{errors.ageMonths}</p>}
-          </div>
-        </div>
-      </div>
-
-      <div className='flex flex-col'>
+      <div className='flex flex-col w-1/6'>
         <label htmlFor="sexo" className='block mb-2 xl:text-md 2xl:text-xl font-medium'>Sexo</label>
         <Select isRequired placeholder='Seleccionar' aria-label="Seleccionar sexo"
-        className= "w-full min-w-[10rem]"
         selectedKeys={sexType ? [sexType] : []}  
         onSelectionChange={(keys) => handleSexoChange(keys.values().next().value)}
         >
@@ -169,6 +170,111 @@ const Step2 = ({nextStep, prevStep}) => {
         {errors.sexType && <p className='text-red-500 mt-2 text-xs'>{errors.sexType}</p>}
       </div>
     </div>
+
+    <div className='flex flex-col mt-8'>
+      <div className='flex flex-col'>
+        <label htmlFor="edad" className="block xl:text-md 2xl:text-xl font-medium">Edad</label>
+        <div className='flex flex-row gap-12 mt-2'>
+          <div className='flex flex-col w-1/6'>
+            <div className='flex'>
+              <Select 
+              isRequired 
+              placeholder='Seleccionar año' 
+              aria-label="Seleccionar año"
+              selectedKeys={ageYears ? [ageYears] : []}  
+              onSelectionChange={(keys) => handleAniosChange(keys.values().next().value)}
+              >
+                {aniosConst.map((anio) => (
+                  <SelectItem key={anio.key} value={anio.key}>
+                    {anio.label}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+            {errors.ageYears && <p className='text-red-500 mt-2 text-xs'>{errors.ageYears}</p>}
+          </div>
+          <div className='flex flex-col w-1/6'>
+            <div className='flex'>
+              <Select 
+              isRequired 
+              placeholder='Seleccionar mes' 
+              aria-label="Seleccionar mes"
+              selectedKeys={ageMonths ? [ageMonths] : []}  
+              onSelectionChange={(keys) => handleMesesChange(keys.values().next().value)}
+              >
+                {mesesConst.map((mes) => (
+                  <SelectItem key={mes.key} value={mes.key}>
+                    {mes.label}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+            {errors.ageMonths && <p className='text-red-500 mt-2 text-xs'>{errors.ageMonths}</p>}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className='flex flex-col mt-8'>
+      <div className='flex flex-row gap-12'>
+        <div className='flex flex-col w-1/6'>
+        <label htmlFor="provincia" className='block xl:text-md 2xl:text-xl font-medium'>Provincia</label>
+          <div className='flex flex-col mt-2 gap-4 w-1/6'>
+            {loadingProvinces ? (
+              <p>Cargando provincias...</p>
+            ) : error ? (
+              <p>{error}</p>
+            ) : (
+              <Select className="w-full min-w-[12rem]"
+                placeholder='Seleccionar'
+                isRequired
+                aria-label="Seleccionar provincia"
+                value={province}
+                onChange={e => {
+                  setProvince(e.target.value);
+                  console.log(province);
+                }}
+              >
+                {provinces.map((prov) => (
+                  <SelectItem key={prov.id} value={prov.id}>
+                    {prov.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
+          </div>
+          {errors.province && <p className='text-red-500 mt-2 text-xs'>{errors.province}</p>}
+        </div>
+        <div className='flex flex-col w-1/6'>
+          <label htmlFor="localidad" className='block xl:text-md 2xl:text-xl font-medium'>Localidad</label>
+          <div className='flex mt-2 gap-4 w-1/6'>
+            {loadingLocalities ? (
+              <p>Cargando localidades...</p>
+            ) : error ? (
+              <p>{error}</p>
+            ) : (
+              <Select className="w-full min-w-[12rem]"
+                placeholder='Seleccionar'
+                isRequired
+                aria-label="Seleccionar localidad"
+                value={locality}
+                onChange={e => {
+                  const selectedLoc = localities.find(loc => loc.id == e.target.value);
+                  setLocality(selectedLoc);  
+                }}
+              >
+                {localities.map((loc) => (
+                  <SelectItem key={loc.id} value={loc.id}>
+                    {loc.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
+          </div>
+          {errors.locality && <p className='text-red-500 mt-2 text-xs'>{errors.locality}</p>}
+        </div>
+    </div>
+  </div>
 
       <div className='flex flex-col mt-8'>
         <label htmlFor="tamanio" className="block xl:text-md 2xl:text-xl font-medium">Tamaño</label>
