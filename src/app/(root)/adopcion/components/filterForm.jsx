@@ -9,7 +9,7 @@ const FilterForm = ({updateData}) => {
     const { register, handleSubmit } = useForm();
 
     const onSubmit = async (data) => {
-        const filteredList = await getAdoption(data)
+        const {total, filteredList} = await getAdoption(data, 1)
         updateData(filteredList)
     };
 

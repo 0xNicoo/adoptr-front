@@ -2,11 +2,8 @@ import 'server-only';
 import { getToken } from '../session';
 
 export async function getAdoptions(filter, page, size) {
-
   const queryParams = getQueryParams(filter, page, size)
   const token = await getToken()
-
-  console.log("Token:", token);
   const res = await fetch(`http://localhost:8080/adoption?${queryParams}`, {
     method: 'GET',
     headers: {
@@ -18,7 +15,7 @@ export async function getAdoptions(filter, page, size) {
   if (!res.ok) {
     throw new Error('Failed to fetch adoptions');
   }
-  return res.json(); 
+  return res; 
 }
 
 function getQueryParams(filter, page, size){

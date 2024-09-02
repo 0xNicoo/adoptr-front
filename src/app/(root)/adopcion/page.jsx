@@ -1,13 +1,6 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
 import AdoptionContainter from "./components/adoptionContainer";
-import PublicationList from "./components/publicationList";
+
 import SectionAdop from "./components/sectionadop";
-import { getAdoption } from "./actions";
-import FilterForm from "./components/filterForm";
-
-
 
 export default function AdoptionPage() {
 
