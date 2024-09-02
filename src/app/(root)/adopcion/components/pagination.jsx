@@ -1,7 +1,9 @@
 import React from "react";
 import { Pagination } from "@nextui-org/react";
+import { useEffect } from "react";
 
 export default function PaginationComponent({ totalPages, currentPage, onPageChange }) {
+
   return (
     <div className="mt-4">
       <Pagination
@@ -9,7 +11,7 @@ export default function PaginationComponent({ totalPages, currentPage, onPageCha
         showControls
         color="warning"
         total={totalPages}
-        initialPage={currentPage}
+        initialPage={currentPage} 
         onChange={(page) => onPageChange(page)}
       />
     </div>

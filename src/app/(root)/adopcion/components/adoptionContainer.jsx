@@ -20,12 +20,16 @@ const AdoptionContainer = () => {
     }, []);
 
     const handlePageChange = async (page) => {
-        console.log("PAGE DE ADOPTION CONTAINER", page)
         setCurrentPage(page);
         const {total, data} = await getAdoption(null, page);
-        setTotalPage(Math.ceil(total / itemsPerPage))
+        changeTotalPage(total)
         setPublications(data);
     };
+
+    const changeTotalPage = (total) => {
+        setCurrentPage(1)
+        setTotalPage(Math.ceil(total / itemsPerPage))
+    }
 
     const fetchAdoptions = async () => {
         setLoading(true);
@@ -44,13 +48,14 @@ const AdoptionContainer = () => {
     if (error) return <p>Error: {error}</p>;
     return (
         <>
-            <FilterForm updateData={setPublications} />
+            <FilterForm updateData={setPublications} updateTotalPage={changeTotalPage} updateCurrentPage={setCurrentPage}/>
             <PublicationList 
                 publications={publicaciones} 
             />
             <div className="mt-8 mb-12">
                 <PaginationComponent
                     totalPages={totalPage}
+                    initialPage={1}
                     currentPage={currentPage}
                     onPageChange={handlePageChange}
                 />

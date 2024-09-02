@@ -4,13 +4,14 @@ import { getAdoption } from '../actions';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-const FilterForm = ({updateData}) => {
+const FilterForm = ({updateData, updateTotalPage, updateCurrentPage}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { register, handleSubmit } = useForm();
 
-    const onSubmit = async (data) => {
-        const {total, filteredList} = await getAdoption(data, 1)
-        updateData(filteredList)
+    const onSubmit = async (filter) => {
+        const {total, data} = await getAdoption(filter, 1)
+        updateTotalPage(total)
+        updateData(data)
     };
 
     return (
