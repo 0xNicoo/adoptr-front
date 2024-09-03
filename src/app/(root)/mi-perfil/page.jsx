@@ -18,7 +18,6 @@ const miPerfil = () => {
             try {
                 const profileData = await handleGetProfile();
                 setProfile(profileData);
-                console.log(profileData);
             } catch (err) {
                 setError('Error al obtener el perfil');
             } finally {
@@ -33,9 +32,10 @@ const miPerfil = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className='flex items-start justify-center bg-white rounded-xl drop-shadow-lg w-1/3 mx-4 mt-4 mb-4'>
+        <div className='relative flex items-start justify-center bg-white rounded-b-xl drop-shadow-lg w-1/3 mx-4 mb-4'>
+            <div className='absolute top-0 flex items-center w-3/4 h-1/3 bg-primary-orange z-0 rounded-b-[30px]'></div>
             {profile ? (
-                <div className='flex flex-col gap-2 items-center justify-center mt-2 mb-2'>
+                <div className='relative flex flex-col gap-2 items-center justify-center mt-2 mb-2'>
                     <img src={profile.s3Url} alt="foto" className='rounded-full xl:w-40 2xl:w-42 hover:scale-105 hover:shadow-xl'/>
                     <h1 className={`${inter.className} text-2xl text-primary-blue xl:text-xl 2xl:text-2xl`}>{profile.firstName} {profile.lastName}</h1>
                     <div className='flex items-center justify-center'>
