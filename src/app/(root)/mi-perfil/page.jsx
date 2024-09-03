@@ -1,16 +1,28 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { handleGetProfile } from './actions';
-import { Textarea, Tabs, Tab, Card, CardBody } from '@nextui-org/react';
+import { handleGetProfile, handleGetAdoptions } from './actions';
+import { Textarea, Tabs, Tab, Card, CardBody, CardHeader, Image } from '@nextui-org/react';
 import { CIcon } from '@coreui/icons-react';
 import { cilLocationPin } from '@coreui/icons';
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const mapSexType = (sexType) => {
+    switch (sexType) {
+      case 'MALE':
+        return 'Macho';
+      case 'FEMALE':
+        return 'Hembra';
+      default:
+        return 'Indefinido'; 
+    }
+  };
+
 const miPerfil = () => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [adoptions, setAdoptions] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -18,6 +30,11 @@ const miPerfil = () => {
             try {
                 const profileData = await handleGetProfile();
                 setProfile(profileData);
+                console.log(profileData);
+                const adoptionsData = await handleGetAdoptions();
+                const filteredAdoptions = adoptionsData.filter(adoption => adoption.user.id === profileData.user.id);
+                setAdoptions(filteredAdoptions);
+                console.log(adoptionsData);
             } catch (err) {
                 setError('Error al obtener el perfil');
             } finally {
@@ -63,11 +80,33 @@ const miPerfil = () => {
                         </Card>  
                     </Tab>
                     <Tab key="publicaciones" title="Publicaciones de mascotas">
-                        <Card>
-                            <CardBody>
-                            <p>No se encontraron publicaciones de mascotas</p>
-                            </CardBody>
-                        </Card>  
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                {adoptions.length > 0 ? (
+                                    adoptions.map((adoption) => (
+                                        <div key={adoption.id}>
+                                            <Card className="py-4 items-center justify-content mb-2">
+                                                <CardBody className="overflow-visible py-2">
+                                                    <Image
+                                                    alt="Animal en adopción"
+                                                    className="object-cover rounded-xl"
+                                                    src={adoption.s3Url}
+                                                    width={270}
+                                                    height={300}
+                                                    />
+                                                </CardBody>
+                                                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                                                    <p className={`${inter.className} text-xs uppercase font-bold`}>{mapSexType(adoption.sexType)}</p>
+                                                    <small className={`${inter.className} xl:text-default-500`}>{adoption.ageYears} años {adoption.ageMonths} meses</small>
+                                                    <h4 className={`${inter.className} text-lg`}>{adoption.title}</h4>
+                                                </CardHeader>
+                                                <a href={`/adopcion/${adoption.id}`} className={`${inter.className} text-primary-blue text-sm hover:text-blue-hover`}>Ver más</a>
+                                            </Card>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No se encontraron publicaciones de mascotas</p>
+                                )} 
+                        </div>
                     </Tab>
                     <Tab key="servicios" title="Servicios">
                         <Card>
