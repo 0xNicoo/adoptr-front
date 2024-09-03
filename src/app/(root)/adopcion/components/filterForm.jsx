@@ -43,6 +43,43 @@ const FilterForm = ({updateData, updateTotalPage, updateCurrentPage}) => {
                             </label>
                         </div>
 
+                        <div className="relative z-0 w-full md:w-1/4">
+                            <select
+                                id="animalType"
+                                {...register('animalType')}
+                                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            >
+                                <option value="">Seleccione un tipo</option>
+                                <option value="CAT">Gato</option>
+                                <option value="DOG">Perro</option>
+                            </select>
+                            <label
+                                htmlFor="type"
+                                className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                            >
+                                Tipo
+                            </label>
+                        </div>
+
+                        <div className="relative z-0 w-full md:w-1/4">
+                            <select
+                                id="sizeType"
+                                {...register('sizeType')}
+                                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            >
+                                <option value="">Seleccione un tipo</option>
+                                <option value="SMALL">Pequeño</option>
+                                <option value="MEDIUM">Mediano</option>
+                                <option value="BIG">Grande</option>
+                            </select>
+                            <label
+                                htmlFor="type"
+                                className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                            >
+                                Tipo
+                            </label>
+                        </div>
+
 
                         <button
                             type="submit"
