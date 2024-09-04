@@ -2,8 +2,8 @@ import 'server-only';
 import { getToken } from '../session';
 
 export async function getAdoptions(filter, page, size) {
-  const queryParams = getQueryParams(filter, page, size)
-  const token = await getToken()
+  const queryParams = getQueryParams(filter, page, size);
+  const token = await getToken();
   const res = await fetch(`http://localhost:8080/adoption?${queryParams}`, {
     method: 'GET',
     headers: {
@@ -15,23 +15,24 @@ export async function getAdoptions(filter, page, size) {
   if (!res.ok) {
     throw new Error('Failed to fetch adoptions');
   }
-  return res; 
+  return res;
 }
 
-function getQueryParams(filter, page, size){
+function getQueryParams(filter, page, size) {
   const filteredParams = Object.entries({
-      ...filter,
-      page,
-      size
+    ...filter,
+    page: page - 1, // El backend utiliza índice de página 0
+    size,
   }).reduce((acc, [key, value]) => {
-      if (value !== "" && value !== null && value !== undefined) {
-          acc[key] = value;
-      }
-      return acc;
+    if (value !== "" && value !== null && value !== undefined) {
+      acc[key] = value;
+    }
+    return acc;
   }, {});
 
   return new URLSearchParams(filteredParams).toString();
 }
+
 
 export async function createAdoption(data){
 

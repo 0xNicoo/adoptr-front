@@ -1,41 +1,41 @@
 'use client'
 
-import { getAdoption } from '../actions';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'; // Importa useRouter
+import { getAdoption } from '../actions';
 import FilterForm from './filterForm';
 import PublicationList from './publicationList';
 import PaginationComponent from './pagination';
 
-const itemsPerPage = 6
+const itemsPerPage = 6;
 
 const AdoptionContainer = () => { 
+    const router = useRouter();
     const [publicaciones, setPublications] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [totalPage, setTotalPage] = useState(0);
 
     useEffect(() => {
-        fetchAdoptions();
+        // Extrae la página actual de la URL
+        const pageFromUrl = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+        fetchAdoptions(pageFromUrl);
     }, []);
 
     const handlePageChange = async (page) => {
-        setCurrentPage(page);
-        const {total, data} = await getAdoption(null, page);
-        changeTotalPage(total)
-        setPublications(data);
+        router.push(`?page=${page}`, undefined, { shallow: true }); // Actualiza la URL sin recargar la página
+        fetchAdoptions(page);
     };
 
     const changeTotalPage = (total) => {
-        setCurrentPage(1)
-        setTotalPage(Math.ceil(total / itemsPerPage))
+        setTotalPage(Math.ceil(total / itemsPerPage));
     }
 
-    const fetchAdoptions = async () => {
+    const fetchAdoptions = async (page) => {
         setLoading(true);
         try {
-            const {total, data} = await getAdoption(null, currentPage);
-            setTotalPage(Math.ceil(total / itemsPerPage))
+            const {total, data} = await getAdoption(null, page);
+            changeTotalPage(total);
             setPublications(data);
         } catch (error) {
             setError(error.message);
@@ -48,7 +48,7 @@ const AdoptionContainer = () => {
     if (error) return <p>Error: {error}</p>;
     return (
         <>
-            <FilterForm updateData={setPublications} updateTotalPage={changeTotalPage} updateCurrentPage={setCurrentPage}/>
+            <FilterForm updateData={setPublications} updateTotalPage={changeTotalPage}/>
             <PublicationList 
                 publications={publicaciones} 
             />
@@ -56,7 +56,7 @@ const AdoptionContainer = () => {
                 <PaginationComponent
                     totalPages={totalPage}
                     initialPage={1}
-                    currentPage={currentPage}
+                    currentPage={parseInt(new URLSearchParams(window.location.search).get('page')) || 1}
                     onPageChange={handlePageChange}
                 />
             </div>
