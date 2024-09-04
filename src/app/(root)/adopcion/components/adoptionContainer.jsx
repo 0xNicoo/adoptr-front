@@ -1,42 +1,56 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // Importa useRouter
+import { useRouter } from 'next/navigation';
 import { getAdoption } from '../actions';
 import FilterForm from './filterForm';
 import PublicationList from './publicationList';
 import PaginationComponent from './pagination';
 
-const itemsPerPage = 6;
+const itemsPerPage = 3;
 
-const AdoptionContainer = () => { 
+const AdoptionContainer = () => {
     const router = useRouter();
     const [publicaciones, setPublications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [totalPage, setTotalPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filters, setFilters] = useState({}); // Almacena filtros
 
     useEffect(() => {
-        // Extrae la página actual de la URL
-        const pageFromUrl = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
-        fetchAdoptions(pageFromUrl);
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageFromUrl = parseInt(urlParams.get('page')) || 1;
+
+        // Usa los filtros de la URL
+        const currentFilters = {};
+        for (const [key, value] of urlParams.entries()) {
+            if (key !== 'page') {
+                currentFilters[key] = value;
+            }
+        }
+        setFilters(currentFilters); 
+        fetchAdoptions(currentFilters, pageFromUrl);
     }, []);
 
     const handlePageChange = async (page) => {
-        router.push(`?page=${page}`, undefined, { shallow: true }); // Actualiza la URL sin recargar la página
-        fetchAdoptions(page);
+        // Mantiene los filtros en la URL al cambiar de página
+        const query = new URLSearchParams({ ...filters, page });
+        router.push(`?${query.toString()}`, undefined, { shallow: true });
+        fetchAdoptions(filters, page);
     };
 
     const changeTotalPage = (total) => {
         setTotalPage(Math.ceil(total / itemsPerPage));
-    }
+    };
 
-    const fetchAdoptions = async (page) => {
+    const fetchAdoptions = async (filters, page) => {
         setLoading(true);
         try {
-            const {total, data} = await getAdoption(null, page);
+            const { total, data } = await getAdoption(filters, page);
             changeTotalPage(total);
             setPublications(data);
+            setCurrentPage(page);
         } catch (error) {
             setError(error.message);
         } finally {
@@ -44,19 +58,31 @@ const AdoptionContainer = () => {
         }
     };
 
+    const updateFilters = (newFilters) => {
+        setFilters(newFilters);
+        const query = new URLSearchParams({ ...newFilters, page: 1 });
+        router.push(`?${query.toString()}`, undefined, { shallow: true });
+        fetchAdoptions(newFilters, 1);
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
+
     return (
         <>
-            <FilterForm updateData={setPublications} updateTotalPage={changeTotalPage}/>
-            <PublicationList 
-                publications={publicaciones} 
+            <FilterForm
+                updateData={setPublications}
+                updateTotalPage={changeTotalPage}
+                updateCurrentPage={setCurrentPage}
+                updateFilters={updateFilters} 
+                initialFilters={filters} 
             />
+            <PublicationList publications={publicaciones} />
             <div className="mt-8 mb-12">
                 <PaginationComponent
                     totalPages={totalPage}
                     initialPage={1}
-                    currentPage={parseInt(new URLSearchParams(window.location.search).get('page')) || 1}
+                    currentPage={currentPage}
                     onPageChange={handlePageChange}
                 />
             </div>
