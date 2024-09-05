@@ -52,7 +52,7 @@ const ChatList = () => {
 
   return (
     <div className='flex flex-col items-center justify-center bg-white rounded-xl drop-shadow-lg w-full p-4'>
-      <h1 className={`${inter.className} w-full border-4 text-center text-blond text-white border-primary-orange bg-primary-orange rounded-lg p-4`}>Mis Mensajes</h1>
+      <h1 className={`${inter.className} w-full border-4 text-center text-blond text-white border-primary-orange bg-primary-orange rounded-lg p-4 mb-3`}>Mis Mensajes</h1>
       <div className='w-full'>
         {contacts.length > 0 ? (
           contacts.map((contact) => {
