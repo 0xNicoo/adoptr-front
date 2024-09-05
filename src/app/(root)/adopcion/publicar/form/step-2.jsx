@@ -128,15 +128,11 @@ const Step2 = ({nextStep, prevStep}) => {
   }, []);
 
   useEffect(() => {
-    console.log('Efecto de provincia ejecutándose. Provincia actual:', province);
-  
     async function fetchLocalities() {
       if (province) {
-        console.log('Cargando localidades para la provincia:', province);
         setLoadingLocalities(true);
         try {
           const localitiesData = await getLocality(province);
-          console.log('Datos de localidades recibidos:', localitiesData);
           setLocalities(localitiesData || []);
           setLoadingLocalities(false);
         } catch (error) {
@@ -145,7 +141,6 @@ const Step2 = ({nextStep, prevStep}) => {
           setLoadingLocalities(false);
         }
       } else {
-        console.log('No hay provincia seleccionada, limpiando localidades');
         setLocalities([]);
       }
     }
