@@ -40,10 +40,10 @@ const Step2 = ({nextStep, prevStep}) => {
   const [selected, setSelected] = useState('');
   
   const sexoAnimales = [
-    { label: 'Masculino', 
+    { label: 'Macho', 
       key: 'MALE'},
     {
-      label: 'Femenino',
+      label: 'Hembra',
       key: 'FEMALE'},
     {
       label: 'Indeterminado',
