@@ -67,6 +67,5 @@ export async function getAdoptionById(id) {
   if (!res.ok) {
     throw new Error(`Failed to fetch adoption`);
   }
-
   return res.json();
 }

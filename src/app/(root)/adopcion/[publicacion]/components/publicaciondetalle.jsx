@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
 import { getAdoptionDetail } from '../actions';
+import { useRouter } from 'next/navigation';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,7 @@ const mapSizeType = (sizeType) => {
 const PublicationDetail = ({ adoptionId }) => {
   const [adoption, setAdoption] = useState(null);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchAdoption = async () => {
@@ -52,6 +54,10 @@ const PublicationDetail = ({ adoptionId }) => {
 
   if (error) return <div>Error: {error}</div>;
   if (!adoption) return <div>Loading...</div>;
+
+  const handleAdoptClick = () => {
+    router.push('/chat');
+  };
 
   return (
     <div className="bg-background-gray min-h-screen flex pt-4 px-4 pb-4 justify-center">
@@ -90,7 +96,8 @@ const PublicationDetail = ({ adoptionId }) => {
             <button className="bg-primary-orange hover:bg-orange-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
               Guardar
             </button>
-            <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
+            <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
+             onClick={handleAdoptClick}>
               Adoptar
             </button>
           </div>
