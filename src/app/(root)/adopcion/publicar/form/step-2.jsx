@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormStoreAdopcion } from '../../../../store';
-import { Radio, RadioGroup, Checkbox, Select, SelectItem, Input } from '@nextui-org/react';
+import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input, Button } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import Image from 'next/image';
+import { getProvince, getLocality } from './actions';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,15 +29,21 @@ const generarMeses = (min, max) => {
 const mesesConst = generarMeses(0, 11);
 
 const Step2 = ({nextStep, prevStep}) => {
-  const [selected, setSelected] = React.useState(null);
-  const [errors, setErrors] = React.useState('');
-  const { animalType, title, ageYears, ageMonths, sexType, sizeType, vaccinated, unprotected, castrated, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado } = useFormStoreAdopcion();
+
+  const { animalType, title, ageYears, ageMonths, sexType, sizeType, vaccinated, unprotected, castrated, locality, province, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado, setLocality, setProvince } = useFormStoreAdopcion();
+  const [errors, setErrors] = useState('');
+  const [provinces, setProvinces] = useState([]);
+  const [localities, setLocalities] = useState([]);
+  const [loadingProvinces, setLoadingProvinces] = useState(true);
+  const [loadingLocalities, setLoadingLocalities] = useState(false);
+  const [error, setError] = useState(null);
+  const [selected, setSelected] = useState('');
   
   const sexoAnimales = [
-    { label: 'Masculino', 
+    { label: 'Macho', 
       key: 'MALE'},
     {
-      label: 'Femenino',
+      label: 'Hembra',
       key: 'FEMALE'},
     {
       label: 'Indeterminado',
@@ -49,23 +56,29 @@ const Step2 = ({nextStep, prevStep}) => {
   const handleCastradoChange = (e) => setCastrado(e.target.checked);
   const handleSexoChange = (value) => {
     setSexo(value);  
-    console.log(value);
+
   };
   const handleTamanioChange = (value) => {
     setSelected(value); 
     setTamanio(value);
-    console.log(sizeType);
   }
   const handleAniosChange = (value) => { 
-    const numero = value.split(' ')[0];
-    setAnios(numero);
-    console.log(ageYears);
+    if (value) {
+      const numero = value.split(' ')[0];
+      setAnios(numero);
+    } else {
+      setAnios(''); 
+    }
   };
   const handleMesesChange = (value) => {
-    const numero = value.split(' ')[0];
-    setMeses(numero);
-    console.log(ageMonths);
+    if (value) {
+      const numero = value.split(' ')[0];
+      setMeses(numero);
+    } else {
+      setMeses('');
+    }
   };
+ 
   useEffect(() => {
     setSelected(sizeType);
     setVacunado(vaccinated);
@@ -76,21 +89,22 @@ const Step2 = ({nextStep, prevStep}) => {
 
   const handleNextStep = () => {
     let newErrors = {}
-    if (!title) {
-      newErrors.title = '* Este campo es obligatorio';
-    }
-    if (!ageYears) {
-      newErrors.ageYears = '* Este campo es obligatorio';
-    }
-    if (!ageMonths) {
-      newErrors.ageMonths = '* Este campo es obligatorio';
-    }
-    if (!sexType) {
-      newErrors.sexType = '* Este campo es obligatorio';
-    }
-    if (!sizeType) {
-      newErrors.sizeType = '* Este campo es obligatorio';
-    }
+    const fields = {
+      title,
+      ageYears,
+      ageMonths,
+      sexType,
+      sizeType,
+      province,
+      locality,
+    };
+    
+    Object.entries(fields).forEach(([key, value]) => {
+      if (!value) {
+        newErrors[key] = '* Este campo es obligatorio';
+      }
+    });
+    
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
@@ -98,10 +112,46 @@ const Step2 = ({nextStep, prevStep}) => {
     }
   }
 
+  useEffect(() => {
+    async function fetchProvinces() {
+      try {
+        const provincesData = await getProvince();
+        setProvinces(provincesData || []);
+        setLoadingProvinces(false);
+      } catch (error) {
+        console.error("Error fetching provinces:", error);
+        setError('Error al cargar las provincias');
+        setLoadingProvinces(false);
+      }
+    }
+    fetchProvinces();
+  }, []);
+
+  useEffect(() => {
+    async function fetchLocalities() {
+      if (province) {
+        setLoadingLocalities(true);
+        try {
+          const localitiesData = await getLocality(province);
+          setLocalities(localitiesData || []);
+          setLoadingLocalities(false);
+        } catch (error) {
+          console.error("Error al cargar localidades:", error);
+          setError('Error al cargar las localidades');
+          setLoadingLocalities(false);
+        }
+      } else {
+        setLocalities([]);
+      }
+    }
+  
+    fetchLocalities();
+  }, [province]);
+
   return (
     <div className='flex flex-grow flex-col mb-4 ml-12'>
       <div className='flex flex-row gap-12'>
-        <div className='flex flex-col'>
+        <div className='flex flex-col w-1/6'>
           <label htmlFor="nombre" className="block xl:text-md 2xl:text-xl font-medium">Nombre</label>
           <div className="flex mt-2 gap-4">
             <Input isRequired aria-label="Seleccionar nombre" value={title} onChange={e => setNombre(e.target.value)} id="nombre" name="nombre" type="text" placeholder="Juan"/>
@@ -109,66 +159,125 @@ const Step2 = ({nextStep, prevStep}) => {
           {errors.title && <p className='text-red-500 mt-2 text-xs'>{errors.title}</p>}
         </div>
 
-        <div className='flex flex-col'>
-          <label htmlFor="edad" className="block xl:text-md 2xl:text-xl font-medium">Edad</label>
-          <div className='flex flex-row gap-4 mt-2'>
-            <div className='flex flex-col w-full'>
-              <div className='flex'>
-                <Select 
-                isRequired 
-                placeholder='Seleccionar año' 
-                aria-label="Seleccionar año"
-                selectedKeys={ageYears ? [ageYears] : []}  
-                onSelectionChange={(keys) => handleAniosChange(keys.values().next().value)}
-                className= "w-full min-w-[10rem]"
-                >
-                  {aniosConst.map((anio) => (
-                    <SelectItem key={anio.key} value={anio.key}>
-                      {anio.label}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
-              {errors.ageYears && <p className='text-red-500 mt-2 text-xs'>{errors.ageYears}</p>}
-          </div>
-          <div className='flex flex-col w-full'>
+      <div className='flex flex-col w-1/6'>
+        <label htmlFor="sexo" className='block mb-2 xl:text-md 2xl:text-xl font-medium'>Sexo</label>
+        <Autocomplete isRequired placeholder='Seleccionar' aria-label="Seleccionar sexo"
+        selectedKey={sexType || ''}  
+        onSelectionChange={(key) => handleSexoChange(key)}
+        >
+          {sexoAnimales.map((sexoAnimal) => (
+            <AutocompleteItem key={sexoAnimal.key} value={sexoAnimal.key}>
+              {sexoAnimal.label}
+            </AutocompleteItem>
+          ))}
+        </Autocomplete>
+        {errors.sexType && <p className='text-red-500 mt-2 text-xs'>{errors.sexType}</p>}
+      </div>
+    </div>
+
+    <div className='flex flex-col mt-8'>
+      <div className='flex flex-col'>
+        <label htmlFor="edad" className="block xl:text-md 2xl:text-xl font-medium">Edad</label>
+        <div className='flex flex-row gap-12 mt-2'>
+          <div className='flex flex-col w-1/6'>
             <div className='flex'>
-              <Select 
+              <Autocomplete 
+              isRequired 
+              placeholder='Seleccionar año' 
+              aria-label="Seleccionar año"
+              selectedKey={ageYears || ''}  
+              onSelectionChange={(key) => handleAniosChange(key)}
+              >
+                {aniosConst.map((anio) => (
+                  <AutocompleteItem key={anio.key} value={anio.key}>
+                    {anio.label}
+                  </AutocompleteItem>
+                ))}
+              </Autocomplete>
+            </div>
+            {errors.ageYears && <p className='text-red-500 mt-2 text-xs'>{errors.ageYears}</p>}
+          </div>
+          <div className='flex flex-col w-1/6'>
+            <div className='flex'>
+              <Autocomplete 
               isRequired 
               placeholder='Seleccionar mes' 
               aria-label="Seleccionar mes"
-              selectedKeys={ageMonths ? [ageMonths] : []}  
-              onSelectionChange={(keys) => handleMesesChange(keys.values().next().value)}
-              className= "w-full min-w-[10rem]"
+              selectedKey={ageMonths || ''}  
+              onSelectionChange={(key) => handleMesesChange(key)}
               >
                 {mesesConst.map((mes) => (
-                  <SelectItem key={mes.key} value={mes.key}>
+                  <AutocompleteItem key={mes.key} value={mes.key}>
                     {mes.label}
-                  </SelectItem>
+                  </AutocompleteItem>
                 ))}
-              </Select>
+              </Autocomplete>
             </div>
             {errors.ageMonths && <p className='text-red-500 mt-2 text-xs'>{errors.ageMonths}</p>}
           </div>
         </div>
       </div>
-
-      <div className='flex flex-col'>
-        <label htmlFor="sexo" className='block mb-2 xl:text-md 2xl:text-xl font-medium'>Sexo</label>
-        <Select isRequired placeholder='Seleccionar' aria-label="Seleccionar sexo"
-        className= "w-full min-w-[10rem]"
-        selectedKeys={sexType ? [sexType] : []}  
-        onSelectionChange={(keys) => handleSexoChange(keys.values().next().value)}
-        >
-          {sexoAnimales.map((sexoAnimal) => (
-            <SelectItem key={sexoAnimal.key} value={sexoAnimal.key}>
-              {sexoAnimal.label}
-            </SelectItem>
-          ))}
-        </Select>
-        {errors.sexType && <p className='text-red-500 mt-2 text-xs'>{errors.sexType}</p>}
-      </div>
     </div>
+
+    <div className='flex flex-col mt-8'>
+      <div className='flex flex-row gap-12'>
+        <div className='flex flex-col w-1/6'>
+        <label htmlFor="provincia" className='block xl:text-md 2xl:text-xl font-medium'>Provincia</label>
+          <div className='flex flex-col mt-2 gap-4 w-1/6'>
+            {loadingProvinces ? (
+              <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
+            ) : error ? (
+              <p>{error}</p>
+            ) : (
+              <Autocomplete
+              className="w-full min-w-[12rem]"
+              placeholder="Seleccionar"
+              isRequired
+              aria-label="Seleccionar provincia"
+              selectedKey={province || ''}
+              onSelectionChange={(key) => {
+              setProvince(key);
+              }}
+              >
+                {provinces.map((prov) => (
+                  <AutocompleteItem key={prov.id} value={prov.id}>
+                    {prov.name}
+                  </AutocompleteItem>
+                ))}
+              </Autocomplete>
+            )}
+          </div>
+          {errors.province && <p className='text-red-500 mt-2 text-xs'>{errors.province}</p>}
+        </div>
+        <div className='flex flex-col w-1/6'>
+          <label htmlFor="localidad" className='block xl:text-md 2xl:text-xl font-medium'>Localidad</label>
+          <div className='flex mt-2 gap-4 w-1/6'>
+            {loadingLocalities ? (
+               <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
+            ) : error ? (
+              <p>{error}</p>
+            ) : (
+              <Autocomplete className="w-full min-w-[12rem]"
+                placeholder='Seleccionar'
+                isRequired
+                aria-label="Seleccionar localidad"
+                selectedKey={locality || ''}
+                onSelectionChange={(key) => setLocality(key
+                )}
+                value={locality}
+              >
+                {localities.map((loc) => (
+                  <AutocompleteItem key={loc.id} value={loc.id}>
+                    {loc.name}
+                  </AutocompleteItem>
+                ))}
+              </Autocomplete>
+            )}
+          </div>
+          {errors.locality && <p className='text-red-500 mt-2 text-xs'>{errors.locality}</p>}
+        </div>
+    </div>
+  </div>
 
       <div className='flex flex-col mt-8'>
         <label htmlFor="tamanio" className="block xl:text-md 2xl:text-xl font-medium">Tamaño</label>

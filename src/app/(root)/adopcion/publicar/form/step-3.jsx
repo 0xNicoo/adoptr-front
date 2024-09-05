@@ -23,20 +23,24 @@ const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
     };
     
     const handleNextStep = () => {
-        let newErrors=[]
-        if (!description) {
-            newErrors.descripcion = '* Este campo es obligatorio';
-        }
-        if (!image) {
-            newErrors.image = '* Este campo es obligatorio';
-        }
+        let newErrors = {}
+        const fields = {
+          description,
+          image
+        };
+        
+        Object.entries(fields).forEach(([key, value]) => {
+          if (!value) {
+            newErrors[key] = '* Este campo es obligatorio';
+          }
+        });
+        
         if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+          setErrors(newErrors);
+        } else {
+          nextStep();
         }
-        else {
-            nextStep();
-        }
-    }
+      }
 
     return (
         <div className='flex flex-grow justify-between flex-col ml-12 mb-4'>

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useFormStorePerfil } from '../../store';
-import { Select, SelectItem, Input } from '@nextui-org/react';
+import { Select, SelectItem, Input, Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import { getProvince, getLocality } from './actions';
 
@@ -31,21 +31,18 @@ const Step2 = ({ nextStep, prevStep }) => {
 
   const handleNextStep = () => {
     let newErrors = {};
-    if (!firstName) {
-      newErrors.firstName = '* Este campo es obligatorio';
-    }
-    if (!lastName) {
-      newErrors.lastName = '* Este campo es obligatorio';
-    }
-    if (!genderType) {
-      newErrors.genderType = '* Este campo es obligatorio';
-    }
-    if (!province) {
-      newErrors.province = '* Este campo es obligatorio';
-    }
-    if (!locality) {
-      newErrors.locality = '* Este campo es obligatorio';
-    }
+    const fields = {
+      firstName,
+      lastName,
+      genderType,
+      province,
+      locality
+    };
+    Object.entries(fields).forEach(([key, value]) => {
+      if (!value) {
+        newErrors[key] = '* Este campo es obligatorio';
+      }
+    });
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
@@ -77,7 +74,7 @@ const Step2 = ({ nextStep, prevStep }) => {
           setLocalities(localitiesData || []);
           setLoadingLocalities(false);
         } catch (error) {
-          console.error("Error fetching localities:", error);
+          console.error("Error al cargar localidades:", error);
           setError('Error al cargar las localidades');
           setLoadingLocalities(false);
         }
@@ -85,6 +82,7 @@ const Step2 = ({ nextStep, prevStep }) => {
         setLocalities([]);
       }
     }
+  
     fetchLocalities();
   }, [province]);
 
@@ -108,17 +106,17 @@ const Step2 = ({ nextStep, prevStep }) => {
         <div className='flex flex-col'>
           <label htmlFor="genero" className='block xl:text-md 2xl:text-xl font-medium'>Género</label>
           <div className="flex mt-2 gap-4">
-            <Select isRequired placeholder='Seleccionar' aria-label="Seleccionar género"
+            <Autocomplete isRequired placeholder='Seleccionar' aria-label="Seleccionar género"
             className= "w-full min-w-[10rem]"
-            selectedKeys={genderType ? [genderType] : []}  
-            onSelectionChange={(keys) => handleGenderChange(keys.values().next().value)}
+            selectedKey={genderType || ''}
+            onSelectionChange={(key) => handleGenderChange(key)}
             >
               {generoPersonas.map((generoPersona) => (
-                <SelectItem key={generoPersona.key} value={generoPersona.key}>
+                <AutocompleteItem key={generoPersona.key} value={generoPersona.key}>
                   {generoPersona.label}
-                </SelectItem>
+                </AutocompleteItem>
               ))}
-            </Select>
+            </Autocomplete>
           </div>
           {errors.genderType && <p className='text-red-500 mt-2 text-xs'>{errors.genderType}</p>}
         </div>
@@ -128,25 +126,26 @@ const Step2 = ({ nextStep, prevStep }) => {
           <label htmlFor="provincia" className='block xl:text-md 2xl:text-xl font-medium'>Provincia</label>
           <div className='flex mt-2 gap-4'>
             {loadingProvinces ? (
-              <p>Cargando provincias...</p>
+               <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
             ) : error ? (
               <p>{error}</p>
             ) : (
-              <Select className= "w-full min-w-[10rem]"
-                placeholder='Seleccionar'
-                isRequired
-                aria-label="Seleccionar provincia"
-                value={province}
-                onChange={e => {
-                  setProvince(e.target.value);
-                }}
+              <Autocomplete
+              className="w-full min-w-[12rem]"
+              placeholder="Seleccionar"
+              isRequired
+              aria-label="Seleccionar provincia"
+              selectedKey={province || ''}
+              onSelectionChange={(key) => {
+              setProvince(key);
+              }}
               >
                 {provinces.map((prov) => (
-                  <SelectItem key={prov.id} value={prov.id}>
+                  <AutocompleteItem key={prov.id} value={prov.id}>
                     {prov.name}
-                  </SelectItem>
+                  </AutocompleteItem>
                 ))}
-              </Select>
+              </Autocomplete>
             )}
           </div>
           {errors.province && <p className='text-red-500 mt-2 text-xs'>{errors.province}</p>}
@@ -155,26 +154,25 @@ const Step2 = ({ nextStep, prevStep }) => {
           <label htmlFor="localidad" className='block xl:text-md 2xl:text-xl font-medium'>Localidad</label>
           <div className='flex mt-2 gap-4'>
             {loadingLocalities ? (
-              <p>Cargando localidades...</p>
+               <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
             ) : error ? (
               <p>{error}</p>
             ) : (
-              <Select className= "w-full min-w-[10rem]"
+              <Autocomplete className="w-full min-w-[12rem]"
                 placeholder='Seleccionar'
                 isRequired
                 aria-label="Seleccionar localidad"
+                selectedKey={locality || ''}
+                onSelectionChange={(key) => setLocality(key
+                )}
                 value={locality}
-                onChange={e => {
-                  const selectedLoc = localities.find(loc => loc.id == e.target.value);
-                  setLocality(selectedLoc);  
-                }}
               >
                 {localities.map((loc) => (
-                  <SelectItem key={loc.id} value={loc.id}>
+                  <AutocompleteItem key={loc.id} value={loc.id}>
                     {loc.name}
-                  </SelectItem>
+                  </AutocompleteItem>
                 ))}
-              </Select>
+              </Autocomplete>
             )}
           </div>
           {errors.locality && <p className='text-red-500 mt-2 text-xs'>{errors.locality}</p>}

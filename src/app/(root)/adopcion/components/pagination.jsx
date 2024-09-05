@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Pagination } from "@nextui-org/react";
 
@@ -10,8 +9,8 @@ export default function PaginationComponent({ totalPages, currentPage, onPageCha
         showControls
         color="warning"
         total={totalPages}
-        initialPage={currentPage}
-        onChange={onPageChange}
+        initialPage={currentPage} 
+        onChange={(page) => onPageChange(page)}
       />
     </div>
   );
