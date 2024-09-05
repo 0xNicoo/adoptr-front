@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useFormStoreAdopcion } from '../../../../store';
-import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input } from '@nextui-org/react';
+import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input, Button } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import Image from 'next/image';
 import { getProvince, getLocality } from './actions';
@@ -225,7 +225,7 @@ const Step2 = ({nextStep, prevStep}) => {
         <label htmlFor="provincia" className='block xl:text-md 2xl:text-xl font-medium'>Provincia</label>
           <div className='flex flex-col mt-2 gap-4 w-1/6'>
             {loadingProvinces ? (
-              <p>Cargando provincias...</p>
+              <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
             ) : error ? (
               <p>{error}</p>
             ) : (
@@ -253,7 +253,7 @@ const Step2 = ({nextStep, prevStep}) => {
           <label htmlFor="localidad" className='block xl:text-md 2xl:text-xl font-medium'>Localidad</label>
           <div className='flex mt-2 gap-4 w-1/6'>
             {loadingLocalities ? (
-              <p>Cargando localidades...</p>
+               <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
             ) : error ? (
               <p>{error}</p>
             ) : (

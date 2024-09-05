@@ -126,7 +126,7 @@ const Step2 = ({ nextStep, prevStep }) => {
           <label htmlFor="provincia" className='block xl:text-md 2xl:text-xl font-medium'>Provincia</label>
           <div className='flex mt-2 gap-4'>
             {loadingProvinces ? (
-              <p>Cargando provincias...</p>
+               <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
             ) : error ? (
               <p>{error}</p>
             ) : (
@@ -154,7 +154,7 @@ const Step2 = ({ nextStep, prevStep }) => {
           <label htmlFor="localidad" className='block xl:text-md 2xl:text-xl font-medium'>Localidad</label>
           <div className='flex mt-2 gap-4'>
             {loadingLocalities ? (
-              <p>Cargando localidades...</p>
+               <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
             ) : error ? (
               <p>{error}</p>
             ) : (
