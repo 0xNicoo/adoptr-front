@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
 import { useRouter } from 'next/navigation';
 import { getChatList, getUserId } from "../actions";
+import { useChatStore } from '@/app/store';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,6 +13,8 @@ const ChatList = () => {
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
   const router = useRouter();
+
+  const {setChatId} = useChatStore();
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -45,7 +48,8 @@ const ChatList = () => {
   if (error) return <p>{error}</p>;
 
   const handleClick = (contactId) => {
-    router.push(`/chat/${contactId}`);
+    setChatId(contactId)
+    router.push(`/chat`);
   };
 
   //TODO: AGREGAR A DONDE QUIERO QUE VAYA

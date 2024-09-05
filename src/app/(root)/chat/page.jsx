@@ -1,5 +1,5 @@
 'use client';
-import Chatt from './components/chatt';
+import Chatt from './components/chat';
 
 export default function Home() {
   return (

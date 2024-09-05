@@ -1,66 +1,120 @@
-import { useEffect, useState } from 'react';
-import { Client, StompSubscription } from '@stomp/stompjs';
+'use client';
+import React, { useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
+import { getAccessToken } from '../actions';
+import { useChatStore } from '@/app/store';
 
-const Chat = () => {
+const Chatt = ({}) => {
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
   const [client, setClient] = useState(null);
+  const [connected, setConnected] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const username = 'Usuario'; 
+  const {chatId} = useChatStore()
 
   useEffect(() => {
-    const stompClient = new Client({
-      brokerURL: 'http://localhost:8080/ws', // Cambia esto a tu URL del backend
-      connectHeaders: {
-        Authorization: `Bearer ${yourTokenHere}` // Agrega el token si es necesario
-      },
-      debug: function (str) {
-        console.log(str);
-      },
-      onConnect: () => {
-        stompClient.subscribe('/user/topic', (msg) => {
-          const message = JSON.parse(msg.body);
-          setMessages((prevMessages) => [...prevMessages, message]);
-        });
-      },
-      onDisconnect: () => {
-        console.log('Disconnected');
-      },
-    });
+    
+    const connectWebSocket = async () => {
+      const token = await getAccessToken()
 
-    stompClient.activate();
-    setClient(stompClient);
+      const sock = new SockJS('http://localhost:8080/ws');
+      const stompClient = new Client({
+        webSocketFactory: () => sock,
+        connectHeaders: {
+          Authorization: `Bearer ${token}`, 
+        },
+        onConnect: () => {
+          console.log('Connected');
+          setConnected(true);
+          stompClient.subscribe('/user/queue', (message) => {
+            const body = JSON.parse(message.body);
+            setMessages((prevMessages) => [...prevMessages, body]);
+          });
+        },
+        onDisconnect: () => {
+          console.log('Disconnected');
+          setConnected(false);
+        },
+        onStompError: (frame) => {
+          console.error('Error:', frame.headers['message']);
+        },
+      });
 
-    return () => stompClient.deactivate();
+      stompClient.activate();
+      setClient(stompClient);
+    };
+
+    connectWebSocket();
+
+    return () => {
+      if (client) {
+        client.deactivate();
+      }
+    };
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    client.publish({
-      destination: '/app/chat',
-      body: JSON.stringify({ username: 'User', message })
-    });
-    setMessage('');
+  const sendMessage = (e) => {
+    e.preventDefault()
+    if (client && connected) {
+      client.publish({
+        destination: '/app/chat', 
+        body: JSON.stringify({ 
+          recipientId: 3,
+          content: message,
+          senderId: 1,
+          chatId: 1, 
+        }),
+      });
+    }
   };
 
   return (
-    <div>
-      <div>
-        <ul>
+    <div className="flex flex-col h-screen max-w-4xl mx-auto bg-gray-100 rounded-lg shadow-lg">
+      {/* Encabezado del Chat */}
+      <div className="bg-primary-orange p-4 text-white text-xl rounded-t-lg font-bold">
+        {username}
+      </div>
+
+      <div
+        className="flex-1 p-4 overflow-y-auto bg-cover bg-center"
+        style={{ backgroundImage: 'url(/images/chat-background.png)' }}
+      >
+        <ul className="space-y-2">
           {messages.map((msg, index) => (
-            <li key={index}>{msg.username}: {msg.message}</li>
+            <li key={index} className={`flex ${msg.username === 'User' ? 'justify-end' : 'justify-start'} mb-2`}>
+              <div
+                className={`bg-blue-500 text-white p-3 rounded-full max-w-max ${msg.username === 'User' ? 'ml-2' : 'mr-2'}`}
+              >
+                <span className="font-bold">{msg.username}:</span> {msg.message}
+              </div>
+            </li>
           ))}
         </ul>
       </div>
-      <form onSubmit={handleSubmit}>
+
+      <form onSubmit={sendMessage} className="p-4 flex items-center border-t-0">
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          placeholder="Escribe tu mensaje..."
+          className="flex-1 p-2 rounded-full border-none"
         />
-        <button type="submit">Send</button>
+        <button
+          type="submit"
+          className={` flex items-center justify-center p-2 rounded-full`}
+        >
+          <img
+            src="/images/send.png"
+            alt="Send"
+            className="w-6 h-6"
+          />
+        </button>
       </form>
     </div>
   );
 };
 
-export default Chat;
+export default Chatt;
+
