@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormStoreAdopcion } from '../../../../store';
 import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
@@ -31,10 +31,11 @@ const mapSexType = (sexType) => {
         return 'Indefinido';
     }
   };
+
   
 const Step4 = ({prevStep = {prevStep}}) => {
     const { title, sizeType, animalType, ageYears, ageMonths, sexType, vaccinated, unprotected, castrated, description, image, locality, province, resetForm, fileImage } = useFormStoreAdopcion();
-    
+
     const publicarAdopcion = async () => {
         const formData = new FormData();
         formData.append('title', title);
