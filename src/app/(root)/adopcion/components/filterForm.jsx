@@ -2,7 +2,7 @@ import { getAdoption } from '../actions';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation'; // Importa useRouter para manejar la redirección
-import { Checkbox } from '@nextui-org/react';
+import { Checkbox, Button, Select, SelectItem, Input } from '@nextui-org/react';
 
 const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilters, initialFilters }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -72,19 +72,19 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
 
     return (
         <div className="w-full">
-            <button
+            <Button
                 onClick={() => setIsOpen(!isOpen)}
-                className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mb-4"
+                className="w-full sm:w-auto ml-4 mt-4 bg-primary-orange text-white"
             >
-                {isOpen ? 'Ocultar Filtro' : 'Mostrar Filtro'}
-            </button>
+                {isOpen ? 'Ocultar filtro' : 'Mostrar filtro'}
+            </Button>
 
             {isOpen && (
                 <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-md w-full">
                     <div className="flex flex-col">
                         <div className="flex flex-item-center gap-4">
                             <div className="relative z-0 w-full md:w-1/4">
-                                <input
+                                <Input
                                     type="text"
                                     id="title"
                                     {...register('title')}
@@ -100,15 +100,15 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                             </div>
 
                             <div className="relative z-0 w-full md:w-1/4">
-                                <select
+                                <Select
+                                    placeholder='Seleccione un tipo'
                                     id="animalType"
                                     {...register('animalType')}
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 >
-                                    <option value="">Seleccione un tipo</option>
-                                    <option value="CAT">Gato</option>
-                                    <option value="DOG">Perro</option>
-                                </select>
+                                    <SelectItem value="CAT">Gato</SelectItem>
+                                    <SelectItem value="DOG">Perro</SelectItem>
+                                </Select>
                                 <label
                                     htmlFor="type"
                                     className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -118,16 +118,16 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                             </div>
 
                             <div className="relative z-0 w-full md:w-1/4">
-                                <select
+                                <Select
+                                    placeholder='Seleccione un tamaño'
                                     id="sizeType"
                                     {...register('sizeType')}
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 >
-                                    <option value="">Seleccione un tamaño</option>
-                                    <option value="SMALL">Pequeño</option>
-                                    <option value="MEDIUM">Mediano</option>
-                                    <option value="BIG">Grande</option>
-                                </select>
+                                    <SelectItem value="SMALL">Pequeño</SelectItem>
+                                    <SelectItem value="MEDIUM">Mediano</SelectItem>
+                                    <SelectItem value="BIG">Grande</SelectItem>
+                                </Select>
                                 <label
                                     htmlFor="sizeType"
                                     className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -135,21 +135,12 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                                     Tamaño
                                 </label>
                             </div>
-
-                            <button
-                                type="submit"
-                                className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full md:w-auto"
-                            >
+                            <Button className="w-full sm:w-auto bg-primary-blue text-white mt-4">
                                 Filtrar
-                            </button>
-                            <button
-                                type="button"  
-                                onClick={() => handleClearFilters()}  
-                                className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full md:w-auto"
-                            >
+                            </Button>
+                            <Button className="w-full sm:w-auto bg-red-700 text-white mt-4" onClick={() => handleClearFilters()}>
                                 Limpiar filtro
-                            </button>
-
+                            </Button>
                         </div>
                         <div className='flex mt-8 gap-8'>
                                 <Checkbox

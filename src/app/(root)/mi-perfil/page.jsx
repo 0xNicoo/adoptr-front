@@ -111,7 +111,7 @@ const miPerfil = () => {
                     <CardHeader className="flex-col items-start p-4">
                       <p className={`${inter.className} text-xs uppercase font-bold`}>{mapSexType(adoption.sexType)}</p>
                       <small className={`${inter.className} text-default-500`}>{adoption.ageYears} años {adoption.ageMonths} meses</small>
-                      <h4 className={`${inter.className} text-lg font-semibold mt-1`}>{adoption.title}</h4>
+                      <h4 className={`${inter.className} text-lg mt-1`}>{adoption.title}</h4>
                       <a href={`/adopcion/${adoption.id}`} className={`${inter.className} text-primary-blue text-sm hover:text-blue-hover mt-2`}>Ver más</a>
                     </CardHeader>
                   </Card>
