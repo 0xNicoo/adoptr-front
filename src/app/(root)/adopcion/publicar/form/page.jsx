@@ -34,7 +34,7 @@ const MultiStepForm = () => {
 
     return (
         <NextUIProvider>
-          <div className="bg-background-gray min-h-screen flex pt-2 px-5 pb-2 justify-center">
+          <div className="bg-background-gray flex pt-2 px-5 pb-2 justify-center">
             <div className="bg-white flex w-full border rounded-3xl drop-shadow-md flex-col">
                 {renderStepper()}
                 {renderStep()}
