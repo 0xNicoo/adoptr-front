@@ -2,34 +2,30 @@ import { getAdoption } from '../actions';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation'; // Importa useRouter para manejar la redirección
-import { Checkbox, Button, Select, SelectItem, Input } from '@nextui-org/react';
+import { Checkbox, Button } from '@nextui-org/react';
 
 const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilters, initialFilters }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { register, handleSubmit, setValue, reset } = useForm(); // Agrega watch para observar los cambios
     const router = useRouter(); // Inicializa useRouter para redireccionar
-
     // Guarda el estado de los checkboxes
     const [filters, setFilters] = useState({
         vaccinated: initialFilters.vaccinated || false,
         unprotected: initialFilters.unprotected || false,
         castrated: initialFilters.castrated || false
     });
-
     useEffect(() => {
         // Sincroniza el estado inicial de los filtros con react-hook-form
         Object.entries(initialFilters).forEach(([key, value]) => {
             setValue(key, value);
         });
     }, [initialFilters, setValue]);
-
     useEffect(() => {
         // Sincroniza el estado de los checkboxes con react-hook-form
         setValue('vaccinated', filters.vaccinated);
         setValue('unprotected', filters.unprotected);
         setValue('castrated', filters.castrated);
     }, [filters, setValue]);
-
     // Actualiza el estado de los checkboxes
     const handleCheckboxChange = (event) => {
         const { name, checked } = event.target;
@@ -38,22 +34,18 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
             [name]: checked
         }));
     };
-
     const onSubmit = async (filter) => {
         // Agrega los valores de los checkboxes al filtro
         const combinedFilter = { ...filter, ...filters };
-
         const cleanFilter = Object.fromEntries(
             Object.entries(combinedFilter).filter(([_, value]) => value)
         );
-
         updateFilters(cleanFilter);
         const { total, data } = await getAdoption(cleanFilter, 1);
         updateTotalPage(total);
         updateData(data);
         updateCurrentPage(1);
     };
-
     const handleClearFilters = async () => {
         reset();
         setFilters({
@@ -74,7 +66,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
         <div className="w-full">
             <Button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full sm:w-auto ml-4 mt-4 bg-primary-orange text-white"
+                className="py-2 px-4 bg-primary-orange text-white mb-4 ml-4 mt-4"
             >
                 {isOpen ? 'Ocultar filtro' : 'Mostrar filtro'}
             </Button>
@@ -84,7 +76,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                     <div className="flex flex-col">
                         <div className="flex flex-item-center gap-4">
                             <div className="relative z-0 w-full md:w-1/4">
-                                <Input
+                                <input
                                     type="text"
                                     id="title"
                                     {...register('title')}
@@ -100,15 +92,15 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                             </div>
 
                             <div className="relative z-0 w-full md:w-1/4">
-                                <Select
-                                    placeholder='Seleccione un tipo'
+                                <select
                                     id="animalType"
                                     {...register('animalType')}
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 >
-                                    <SelectItem value="CAT">Gato</SelectItem>
-                                    <SelectItem value="DOG">Perro</SelectItem>
-                                </Select>
+                                    <option value="">Seleccione un tipo</option>
+                                    <option value="CAT">Gato</option>
+                                    <option value="DOG">Perro</option>
+                                </select>
                                 <label
                                     htmlFor="type"
                                     className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -118,16 +110,16 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                             </div>
 
                             <div className="relative z-0 w-full md:w-1/4">
-                                <Select
-                                    placeholder='Seleccione un tamaño'
+                                <select
                                     id="sizeType"
                                     {...register('sizeType')}
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 >
-                                    <SelectItem value="SMALL">Pequeño</SelectItem>
-                                    <SelectItem value="MEDIUM">Mediano</SelectItem>
-                                    <SelectItem value="BIG">Grande</SelectItem>
-                                </Select>
+                                    <option value="">Seleccione un tamaño</option>
+                                    <option value="SMALL">Pequeño</option>
+                                    <option value="MEDIUM">Mediano</option>
+                                    <option value="BIG">Grande</option>
+                                </select>
                                 <label
                                     htmlFor="sizeType"
                                     className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -135,12 +127,19 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                                     Tamaño
                                 </label>
                             </div>
-                            <Button className="w-full sm:w-auto bg-primary-blue text-white mt-4">
+
+                            <Button
+                                type="submit" className='bg-primary-blue text-white'
+                            >
                                 Filtrar
                             </Button>
-                            <Button className="w-full sm:w-auto bg-red-700 text-white mt-4" onClick={() => handleClearFilters()}>
+                            <Button
+                                type="button" className='bg-red-700 text-white'
+                                onClick={() => handleClearFilters()}  
+                            >
                                 Limpiar filtro
                             </Button>
+
                         </div>
                         <div className='flex mt-8 gap-8'>
                                 <Checkbox
@@ -171,6 +170,4 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
         </div>
     );
 };
-
 export default FilterForm;
-
