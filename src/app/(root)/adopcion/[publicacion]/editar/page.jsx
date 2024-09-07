@@ -1,7 +1,127 @@
+'use client'
+
+import { Inter } from "next/font/google";
+import { useAdoptionEditStore } from "@/app/store";
+import { getUserId } from "./actions";
+import { useRouter } from 'next/navigation';
+import { Checkbox, Textarea } from '@nextui-org/react';
+import React, { useEffect, useState } from 'react';
+
+const inter = Inter({ subsets: ["latin"] });
+
+const mapSexType = (sexType) => {
+  switch (sexType) {
+    case 'MALE':
+      return 'Macho';
+    case 'FEMALE':
+      return 'Hembra';
+    default:
+      return 'Indefinido'; 
+  }
+};
+
+const mapSizeType = (sizeType) => {
+  switch (sizeType) {
+    case 'SMALL':
+      return 'Pequeño';
+    case 'MEDIUM':
+      return 'Mediano';
+    case 'BIG':
+      return 'Grande';
+    default:
+      return 'Indefinido';
+  }
+};
+
 export default function EditPage() {
+  const {adoption} = useAdoptionEditStore()
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const userId = await getUserId()
+      if(userId != adoption.user.id){
+        router.push('/adopcion')
+      }else{
+        setLoading(false)
+      }
+    }
+
+    if (!adoption) {
+      router.push('/adopcion');
+      return;
+    }
+
+    checkUser()
+  }, [])
+
+  //TODO(nico): user el loading de next
+  if (loading) {
+    return <p>Loading...</p>
+  }
+
+  const handleCancel = (id) => {
+    router.push(`/adopcion/${id}`);
+  };
+
+  const handleEdit = () => {
+
+  };
+
   return (
-   <h1>
-    Editar
-   </h1>
+    <div className="bg-background-gray flex pt-4 px-4 pb-4 justify-center">
+      <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
+        <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full">
+          <div className="flex-shrink-0">
+            <img
+              className='rounded-xl w-full md:w-80 lg:w-96'
+              src={adoption.s3Url}
+              alt='Imagen seleccionada'
+              width={250}
+              height={300}
+            />
+          </div>
+          <div className='flex flex-col w-full'>
+            <h1 className={`${inter.className} xl:text-2xl 2xl:text-3xl md:text-lg font-medium text-primary-blue`}>{adoption.title}</h1>
+            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>TAMAÑO</p>
+            <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{mapSizeType(adoption.sizeType)}</p>
+            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>EDAD</p>
+            <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{adoption.ageYears} años {adoption.ageMonths} meses</p>
+            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>SEXO</p>
+            <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{mapSexType(adoption.sexType)}</p>
+            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>UBICACIÓN</p>
+            <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{adoption.locality.name}, {adoption.locality.province.name}</p>
+            <div className='flex flex-wrap gap-4 mt-2'>
+              <Checkbox isSelected={adoption.vaccinated} className='xl:text-sm 2xl:text-md md:text-sm text-black'>Vacunado</Checkbox>
+              <Checkbox isSelected={adoption.unprotected} className='xl:text-sm 2xl:text-md md:text-sm text-black'>Desparasitado</Checkbox>
+              <Checkbox isSelected={adoption.castrated} className='xl:text-sm 2xl:text-md md:text-sm text-black'>Castrado</Checkbox>
+            </div>
+            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2 mb-1`}>DESCRIPCIÓN</p>
+            <Textarea
+              isReadOnly
+              defaultValue={adoption.description}
+              className="max-w-xs"
+            />
+          </div>
+        </div>
+        
+        <div className="flex justify-between w-full items-center mt-6">
+            <button
+                onClick={() => handleCancel(adoption.id)}
+                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-700 rounded-3xl transition-colors duration-300"
+              >
+                Cancelar
+           </button>
+          <div className='flex gap-4'>
+            <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
+              onClick={() => handleEdit()}>
+              Guardar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+

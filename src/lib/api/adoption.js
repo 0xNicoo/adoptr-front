@@ -84,3 +84,20 @@ export async function deleteAdoption(id){
   }
   return
 }
+
+export async function editAdoption(id, data){
+  const res = await fetch(`http://localhost:8080/example/${id}`,{
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+  })
+
+  if(!res.ok){
+      throw new Error('Failed to fetch data')
+  }
+
+  return res.json()
+}
