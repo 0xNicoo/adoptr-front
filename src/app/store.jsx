@@ -93,3 +93,7 @@ export const useFormStorePerfil = create(set => {
         }))
     }
 })
+
+export const useAdoptionEditStore = create(set => {
+    
+})
