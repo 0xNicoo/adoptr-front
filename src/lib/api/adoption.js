@@ -69,3 +69,18 @@ export async function getAdoptionById(id) {
   }
   return res.json();
 }
+
+export async function deleteAdoption(id){
+  const token = await getToken();
+  const res = await fetch(`http://localhost:8080/adoption/${id}`,{
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+  })
+
+  if(!res.ok){
+      throw new Error('Failed to fetch data')
+  }
+  return
+}
