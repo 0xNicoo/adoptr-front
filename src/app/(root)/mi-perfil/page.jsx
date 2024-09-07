@@ -5,7 +5,7 @@ import { Textarea, Tabs, Tab, Card, CardBody, CardHeader, Image } from '@nextui-
 import { CIcon } from '@coreui/icons-react';
 import { cilLocationPin } from '@coreui/icons';
 import { Inter } from "next/font/google";
-import { deleteAdoptionAction } from './actions';
+import { deleteAdoptionAction, getUserId } from './actions';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,8 +25,12 @@ const miPerfil = () => {
     const [loading, setLoading] = useState(true);
     const [adoptions, setAdoptions] = useState(null);
     const [error, setError] = useState(null);
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
+        const fetchUserId = async () => {
+          setUserId(await getUserId())
+        }
         const fetchProfile = async () => {
             try {
                 const profileData = await handleGetProfile();
@@ -42,7 +46,7 @@ const miPerfil = () => {
                 setLoading(false);
             }
         };
-
+        fetchUserId()
         fetchProfile();
     }, []);
 
@@ -130,15 +134,20 @@ const miPerfil = () => {
                             href={`/adopcion/${adoption.id}`}
                             className={`${inter.className} text-primary-blue text-sm hover:text-blue-hover mt-2`}
                           >
-                            Ver
+                            Ver más
                           </a>
                         </div>
+                        {adoption.user.id == userId ? (
                           <button
                             onClick={() => handleDelete(adoption.id)}
                             className="bg-red-500 text-white px-4 py-2 rounded ml-4 hover:bg-red-700"
                           >
                             Eliminar
                           </button>
+                        ) : (
+                          <></>
+                        )}
+
                       </div>
                     </CardHeader>
                   </Card>
