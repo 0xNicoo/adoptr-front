@@ -5,6 +5,7 @@ import { Textarea, Tabs, Tab, Card, CardBody, CardHeader, Image } from '@nextui-
 import { CIcon } from '@coreui/icons-react';
 import { cilLocationPin } from '@coreui/icons';
 import { Inter } from "next/font/google";
+import { deleteAdoptionAction } from './actions';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,6 +45,13 @@ const miPerfil = () => {
 
         fetchProfile();
     }, []);
+
+    //TODO(nico): cuando se ejecuta, poner un loading en el boton de eliminar
+    const handleDelete = async (id) => {
+      await deleteAdoptionAction(id)
+      const updatedAdoptions = adoptions.filter(adoption => adoption.id !== id);
+      setAdoptions(updatedAdoptions);
+    };
 
     if (loading) return <p>Cargando perfil...</p>;
     if (error) return <p>{error}</p>;
@@ -109,10 +117,29 @@ const miPerfil = () => {
                         </div>
                     </CardBody>
                     <CardHeader className="flex-col items-start p-4">
-                      <p className={`${inter.className} text-xs uppercase font-bold`}>{mapSexType(adoption.sexType)}</p>
-                      <small className={`${inter.className} text-default-500`}>{adoption.ageYears} años {adoption.ageMonths} meses</small>
+                      <p className={`${inter.className} text-xs uppercase font-bold`}>
+                        {mapSexType(adoption.sexType)}
+                      </p>
+                      <small className={`${inter.className} text-default-500`}>
+                        {adoption.ageYears} años {adoption.ageMonths} meses
+                      </small>
                       <h4 className={`${inter.className} text-lg mt-1`}>{adoption.title}</h4>
-                      <a href={`/adopcion/${adoption.id}`} className={`${inter.className} text-primary-blue text-sm hover:text-blue-hover mt-2`}>Ver más</a>
+                      <div className="flex justify-between w-full items-center">
+                        <div>
+                            <a
+                            href={`/adopcion/${adoption.id}`}
+                            className={`${inter.className} text-primary-blue text-sm hover:text-blue-hover mt-2`}
+                          >
+                            Ver
+                          </a>
+                        </div>
+                          <button
+                            onClick={() => handleDelete(adoption.id)}
+                            className="bg-red-500 text-white px-4 py-2 rounded ml-4 hover:bg-red-700"
+                          >
+                            Eliminar
+                          </button>
+                      </div>
                     </CardHeader>
                   </Card>
                 ))
