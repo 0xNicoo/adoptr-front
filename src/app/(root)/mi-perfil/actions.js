@@ -16,7 +16,6 @@ export async function handleGetAdoptions(filter, page, size) {
   return res.json(); 
 }
 
-
 export async function deleteAdoptionAction(id){
   await deleteAdoption(id)
 }
