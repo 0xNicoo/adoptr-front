@@ -147,7 +147,6 @@ const miPerfil = () => {
                         ) : (
                           <></>
                         )}
-
                       </div>
                     </CardHeader>
                   </Card>

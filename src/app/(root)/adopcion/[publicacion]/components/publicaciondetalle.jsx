@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
 import { getAdoptionDetail } from '../actions';
 import { useRouter } from 'next/navigation';
-import { deleteAdoptionAction } from '@/app/(root)/mi-perfil/actions';
+import { deleteAdoptionAction, getUserId } from '../actions';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,8 +37,12 @@ const PublicationDetail = ({ adoptionId }) => {
   const [adoption, setAdoption] = useState(null);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
+    const fetchUserId = async () => {
+      setUserId(await getUserId())
+    }
     const fetchAdoption = async () => {
       try {
         const data = await getAdoptionDetail(adoptionId);
@@ -47,7 +51,7 @@ const PublicationDetail = ({ adoptionId }) => {
         setError(err.message);
       }
     };
-
+    fetchUserId()
     if (adoptionId) {
       fetchAdoption();
     }
@@ -104,12 +108,16 @@ const PublicationDetail = ({ adoptionId }) => {
         </div>
         
         <div className="flex justify-between w-full items-center mt-6">
-          <button
-            onClick={() => handleDelete(adoption.id)}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 rounded-3xl transition-colors duration-300"
-          >
-            Eliminar
-          </button>
+          {adoption.user.id == userId ? (
+            <button
+              onClick={() => handleDelete(adoption.id)}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 rounded-3xl transition-colors duration-300"
+            >
+              Eliminar
+            </button>
+            ) : (
+              <div></div>
+          )}
           <div className='flex gap-4'>
             <button className="bg-primary-orange hover:bg-orange-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
               Guardar
