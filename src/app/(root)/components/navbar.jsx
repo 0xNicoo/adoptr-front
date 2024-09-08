@@ -1,6 +1,7 @@
 import localFont from 'next/font/local';
 import DropdownAdoptar from './dropdownadoptar';
-
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon, BellIcon } from '@heroicons/react/24/outline';
 import "../../globals.css";
 import Link from 'next/link';
 import LoginBtn from './loginBtn';
@@ -10,29 +11,81 @@ const gentyDemo = localFont({
   display: 'swap',
 });
 
+const navigation = [
+  { name: 'Servicios', href: '#', current: false },
+  { name: 'Mascotas perdidas', href: '#', current: false },
+  { name: 'Novedades', href: '#', current: false },
+];
 
 const Navbar = () => {
   return (
-    <nav className="bg-white text-white px-4 pt-4 pb-2 flex justify-between items-center border-b border-gray-300">
-      <div className="ml-10">
-        <Link href="/" className={`${gentyDemo.className} text-7xl shadow-gray-500 text-shadow-lg`}>
-          <span className="text-primary-blue">Adop</span>
-          <span className="text-primary-orange">tr</span>
-        </Link>
-      </div>
+    <Disclosure as="nav" className="bg-white border-b border-gray-300 drop-shadow-md pb-2 pt-4">
+      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 ">
+        <div className="relative flex items-center justify-between">
+          {/* Mobile Menu Button */}
+          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-primary-blue focus:outline-none focus:ring-2 focus:ring-inset">
+              <span className="sr-only">Abrir menú</span>
+              <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden" />
+              <XMarkIcon aria-hidden="true" className="hidden h-6 w-6 group-data-[open]:block" />
+            </DisclosureButton>
+          </div>
+          {/* Logo */}
+          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+            <div className="flex items-center space-x-4 sm:space-x-16">
+              <Link href="/" className={`${gentyDemo.className} text-4xl sm:text-7xl shadow-gray-500 text-shadow-lg`}>
+                <span className="text-primary-blue">Adop</span>
+                <span className="text-primary-orange">tr</span>
+              </Link>
+            </div>
+          </div>
 
-      <div className="flex items-center space-x-24 mr-6">
-        <div className="space-x-20">
-          <DropdownAdoptar />
-          <Link href="/example" className="text-primary-blue">Servicios</Link>
-          <Link href="/perdidas" className="text-primary-blue">Mascotas perdidas</Link>
-          <Link href="/novedades" className="text-primary-blue">Novedades</Link>
+          {/* Menu Links */}
+          <div className="hidden sm:ml-6 sm:block flex items-center space-x-16">
+            {/* Dropdown "Adoptar" */}
+            <DropdownAdoptar />
+              {navigation.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  aria-current={item.current ? 'page' : undefined}
+                  className="text-primary-blue"
+                >
+                  {item.name}
+                </a>
+              ))}
+          </div>
+
+          {/* Right Side Icons */}
+          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <button
+              type="button"
+              className="relative rounded-full text-primary-blue space-x-16"
+            >
+              <span className="sr-only">Ver notificaciones</span>
+              <BellIcon aria-hidden="true" className="h-6 w-6" />
+            </button>
+            <LoginBtn />
+          </div>
         </div>
-
-        <LoginBtn />
-
       </div>
-    </nav>
+
+      {/* Mobile Menu */}
+      <DisclosurePanel className="sm:hidden flex flex-col space-y-1 px-2 pb-3 pt-2">
+        <DropdownAdoptar />
+        {navigation.map((item) => (
+          <DisclosureButton
+            key={item.name}
+            as="a"
+            href={item.href}
+            aria-current={item.current ? 'page' : undefined}
+            className="text-primary-blue"
+          >
+            {item.name}
+          </DisclosureButton>
+        ))}
+      </DisclosurePanel>
+    </Disclosure>
   );
 };
 
