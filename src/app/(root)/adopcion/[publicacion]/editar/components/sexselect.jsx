@@ -10,7 +10,13 @@ const mapSexType = (sexType) => {
       default:
         return 'Indefinido'; 
     }
-  };
+};
+
+const sexOptions = [
+    {label: "Macho", value: "MALE"},
+    {label: "Hembra", value: "FEMALE"},
+    {label: "Indefinido", value: "INDETERMINATE"}
+];
 
 const SexSelect = ({actualSex}) => {
     const { control, formState: { errors } } = useFormContext();
@@ -30,10 +36,13 @@ const SexSelect = ({actualSex}) => {
                             aria-label="Seleccionar sexo"
                             placeholder={mapSexType(actualSex)}
                             className="w-full min-w-[12rem]"
+                            items={sexOptions}
                         >
-                            <SelectItem value="MALE">Macho</SelectItem>
-                            <SelectItem value="FEMALE">Hembra</SelectItem>
-                            <SelectItem value="INDETERMINATE">Indeterminado</SelectItem>
+                            {
+                                (sexOption) => <SelectItem key={sexOption.value} value={sexOption.value}>
+                                    {sexOption.label}
+                                </SelectItem>
+                            }
                         </Select>
                     )}
                 />

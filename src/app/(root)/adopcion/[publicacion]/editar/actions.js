@@ -25,4 +25,4 @@ export async function getLocality(provinceId) {
 
 export async function editAdoptionAction(id, data) {
   return await editAdoption(id, data); 
-}
+} 

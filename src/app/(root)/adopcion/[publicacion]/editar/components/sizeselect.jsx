@@ -14,6 +14,13 @@ const mapSizeType = (sizeType) => {
     }
   };
 
+  const sizeOptions = [
+    {label: "Pequeño", value: "MALSMALLE"},
+    {label: "Mediano", value: "MEDIUM"},
+    {label: "Grande", value: "BIG"}
+];
+
+
 const SizeSelect = ({actualSize}) => {
     const { control, formState: { errors } } = useFormContext();
 
@@ -32,10 +39,13 @@ const SizeSelect = ({actualSize}) => {
                             aria-label="Seleccionar tamaño"
                             placeholder={mapSizeType(actualSize)}
                             className="w-full min-w-[12rem]"
+                            items={sizeOptions}
                         >
-                            <SelectItem value="SMALL">Chico</SelectItem>
-                            <SelectItem value="MEDIUM">Mediano</SelectItem>
-                            <SelectItem value="BIG">Grande</SelectItem>
+                            {
+                                (sizeOption) => <SelectItem key={sizeOption.value} value={sizeOption.value}>
+                                    {sizeOption.label}
+                                </SelectItem>
+                            }
                         </Select>
                     )}
                 />
