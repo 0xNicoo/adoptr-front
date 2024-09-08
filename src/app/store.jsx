@@ -95,5 +95,8 @@ export const useFormStorePerfil = create(set => {
 })
 
 export const useAdoptionEditStore = create(set => {
-    
+    return {
+        adoption: null,
+        setAdoptionStore: (adp) => set({adoption: adp})
+    }
 })

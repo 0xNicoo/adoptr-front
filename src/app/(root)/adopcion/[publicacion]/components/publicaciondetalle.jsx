@@ -6,6 +6,7 @@ import { Checkbox, Textarea } from '@nextui-org/react';
 import { getAdoptionDetail } from '../actions';
 import { useRouter } from 'next/navigation';
 import { deleteAdoptionAction, getUserId } from '../actions';
+import { useAdoptionEditStore } from '@/app/store';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ const PublicationDetail = ({ adoptionId }) => {
   const [error, setError] = useState(null);
   const router = useRouter();
   const [userId, setUserId] = useState(null);
+  const {setAdoptionStore} = useAdoptionEditStore()
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -57,14 +59,19 @@ const PublicationDetail = ({ adoptionId }) => {
     }
   }, [adoptionId]);
 
+  if (error) return <div>Error: {error}</div>;
+  if (!adoption) return <div>Loading...</div>;
+
   //TODO(nico): cuando se ejecuta, poner un loading en el boton de eliminar
   const handleDelete = async (id) => {
     await deleteAdoptionAction(id)
     router.push('/adopcion?page=1')
   };
 
-  if (error) return <div>Error: {error}</div>;
-  if (!adoption) return <div>Loading...</div>;
+  const handleEdit = () => {
+      setAdoptionStore(adoption)
+      router.push(`/adopcion/${adoption.id}/editar`)
+  };
 
   const handleAdoptClick = () => {
     router.push('/chat');
@@ -109,12 +116,19 @@ const PublicationDetail = ({ adoptionId }) => {
         
         <div className="flex justify-between w-full items-center mt-6">
           {adoption.user.id == userId ? (
-            <button
-              onClick={() => handleDelete(adoption.id)}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 rounded-3xl transition-colors duration-300"
-            >
-              Eliminar
-            </button>
+            <div className='flex gap-4'>
+              <button
+                onClick={() => handleDelete(adoption.id)}
+                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-700 rounded-3xl transition-colors duration-300"
+              >
+                Eliminar
+              </button>
+              <button 
+                onClick={() => handleEdit()}
+                className="bg-primary-orange hover:bg-orange-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
+                Editar
+              </button>
+            </div>
             ) : (
               <div></div>
           )}
