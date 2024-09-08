@@ -2,51 +2,24 @@
 import React, { useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
-import { getAccessToken } from '../actions';
-import { useChatStore } from '@/app/store';
+import { getAccessToken, getChatAction, getUserId, getProfileByUserIdAction } from '../actions';
+import { useSearchParams } from 'next/navigation'
 
-const Chatt = ({}) => {
+const Chat = ({}) => {
   const [message, setMessage] = useState('');
   const [client, setClient] = useState(null);
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [chat, setChat] = useState(null)
+  const [receiver, setReceiver] = useState(null)
+  const [userLogged, setUserLogged] = useState(null)
   const username = 'Usuario'; 
-  const {chatId} = useChatStore()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
-    
-    const connectWebSocket = async () => {
-      const token = await getAccessToken()
-
-      const sock = new SockJS('http://localhost:8080/ws');
-      const stompClient = new Client({
-        webSocketFactory: () => sock,
-        connectHeaders: {
-          Authorization: `Bearer ${token}`, 
-        },
-        onConnect: () => {
-          console.log('Connected');
-          setConnected(true);
-          stompClient.subscribe('/user/queue', (message) => {
-            const body = JSON.parse(message.body);
-            setMessages((prevMessages) => [...prevMessages, body]);
-          });
-        },
-        onDisconnect: () => {
-          console.log('Disconnected');
-          setConnected(false);
-        },
-        onStompError: (frame) => {
-          console.error('Error:', frame.headers['message']);
-        },
-      });
-
-      stompClient.activate();
-      setClient(stompClient);
-    };
-
+    const chatId = searchParams.get('chat')
+    getChat(chatId)
     connectWebSocket();
-
     return () => {
       if (client) {
         client.deactivate();
@@ -54,24 +27,73 @@ const Chatt = ({}) => {
     };
   }, []);
 
+  const connectWebSocket = async () => {
+    const token = await getAccessToken()
+
+    const sock = new SockJS('http://localhost:8080/ws');
+    const stompClient = new Client({
+      webSocketFactory: () => sock,
+      connectHeaders: {
+        Authorization: `Bearer ${token}`, 
+      },
+      onConnect: () => {
+        console.log('Connected');
+        setConnected(true);
+        stompClient.subscribe('/user/queue', (message) => {
+          const body = JSON.parse(message.body);
+          console.log(body)
+          setMessages((prevMessages) => [...prevMessages, body]);
+        });
+      },
+      onDisconnect: () => {
+        console.log('Disconnected');
+        setConnected(false);
+      },
+      onStompError: (frame) => {
+        console.error('Error:', frame.headers['message']);
+      },
+    });
+
+    stompClient.activate();
+    setClient(stompClient);
+  };
+
   const sendMessage = (e) => {
     e.preventDefault()
     if (client && connected) {
       client.publish({
         destination: '/app/chat', 
         body: JSON.stringify({ 
-          recipientId: 3,
+          recipientEmail: receiver.user.email,
+          recipientId: userLogged.user.id,
           content: message,
-          senderId: 1,
-          chatId: 1, 
+          senderEmail: userLogged.user.email,
+          senderId: userLogged.user.id,
+          chatId: chat.id, 
         }),
       });
     }
   };
 
+  const getChat = async (id) =>{
+    try{
+      const chat = await getChatAction(id)
+      setChat(chat)
+      const loggedUserId = await getUserId()
+      if(loggedUserId == chat.publicationUserId){
+        setUserLogged(await getProfileByUserIdAction(loggedUserId))
+        setReceiver(await getProfileByUserIdAction(chat.adopterUserId))
+      }else{
+        setUserLogged(await getProfileByUserIdAction(loggedUserId))
+        setReceiver(await getProfileByUserIdAction(chat.publicationUserId))
+      }
+    }catch{
+      console.log("ERROR AL OBTENER EL CHAT")
+    }
+  }
+  
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto bg-gray-100 rounded-lg shadow-lg">
-      {/* Encabezado del Chat */}
       <div className="bg-primary-orange p-4 text-white text-xl rounded-t-lg font-bold">
         {username}
       </div>
@@ -86,7 +108,7 @@ const Chatt = ({}) => {
               <div
                 className={`bg-blue-500 text-white p-3 rounded-full max-w-max ${msg.username === 'User' ? 'ml-2' : 'mr-2'}`}
               >
-                <span className="font-bold">{msg.username}:</span> {msg.message}
+                <span className="font-bold">Username:</span> {msg.content}
               </div>
             </li>
           ))}
@@ -116,5 +138,5 @@ const Chatt = ({}) => {
   );
 };
 
-export default Chatt;
+export default Chat;
 

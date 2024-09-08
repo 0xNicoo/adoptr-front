@@ -1,6 +1,7 @@
 'use server';
 
 import { getAdoptionById, deleteAdoption, editAdoption } from "@/lib/api/adoption";
+import { getChatByPublicationId } from "@/lib/api/chat";
 import { getToken } from "@/lib/session";
 import { jwtDecode } from "jwt-decode";
 
@@ -25,4 +26,8 @@ export async function getUserId() {
 
 export async function editAdoptionAction(id){
   await editAdoption(id)
+}
+
+export async function getChatByPublicationIdAction(publicationId){
+  return await getChatByPublicationId(publicationId)
 }

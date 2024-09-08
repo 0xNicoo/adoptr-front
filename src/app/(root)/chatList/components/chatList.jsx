@@ -49,7 +49,7 @@ const ChatList = () => {
 
   const handleClick = (contactId) => {
     setChatId(contactId)
-    router.push(`/chat`);
+    router.push(`/chat?chat=${contactId}`);
   };
 
   //TODO: AGREGAR A DONDE QUIERO QUE VAYA
