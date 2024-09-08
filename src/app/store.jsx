@@ -100,3 +100,10 @@ export const useChatStore = create(set => {
         setChatId: (id) => set({chatId: id})
     }
 })
+
+export const useAdoptionEditStore = create(set => {
+    return {
+        adoption: null,
+        setAdoptionStore: (adp) => set({adoption: adp})
+    }
+})

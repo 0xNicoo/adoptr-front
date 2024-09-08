@@ -35,7 +35,8 @@ function getQueryParams(filter, page, size) {
 
 
 export async function createAdoption(data){
-
+  console.log("DATA CREATE:")
+    console.log(data)
     const token = await getToken()
     const res = await fetch('http://localhost:8080/adoption',{
         headers: {
@@ -69,3 +70,38 @@ export async function getAdoptionById(id) {
   }
   return res.json();
 }
+
+export async function deleteAdoption(id){
+  const token = await getToken();
+  const res = await fetch(`http://localhost:8080/adoption/${id}`,{
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+  })
+
+  if(!res.ok){
+      throw new Error('Failed to fetch data')
+  }
+  return
+}
+
+export async function editAdoption(id, data) {
+  const token = await getToken();
+  const res = await fetch(`http://localhost:8080/adoption/${id}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    method: 'PUT',
+    body: data
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    console.log(errorData)
+    throw new Error(`Failed to fetch data: `, errorData)
+  }
+
+  return res.json();
+}
+

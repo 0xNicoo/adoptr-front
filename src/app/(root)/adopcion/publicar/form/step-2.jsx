@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useFormStoreAdopcion } from '../../../../store';
-import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input, Button } from '@nextui-org/react';
+import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input, Select, SelectItem } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import Image from 'next/image';
 import { getProvince, getLocality } from './actions';
@@ -38,7 +38,7 @@ const Step2 = ({nextStep, prevStep}) => {
   const [loadingLocalities, setLoadingLocalities] = useState(false);
   const [error, setError] = useState(null);
   const [selected, setSelected] = useState('');
-  
+
   const sexoAnimales = [
     { label: 'Macho', 
       key: 'MALE'},
@@ -225,26 +225,26 @@ const Step2 = ({nextStep, prevStep}) => {
         <label htmlFor="provincia" className='block xl:text-md 2xl:text-xl font-medium'>Provincia</label>
           <div className='flex flex-col mt-2 gap-4 w-1/6'>
             {loadingProvinces ? (
-              <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
+              <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Select>
             ) : error ? (
               <p>{error}</p>
             ) : (
-              <Autocomplete
-              className="w-full min-w-[12rem]"
-              placeholder="Seleccionar"
-              isRequired
-              aria-label="Seleccionar provincia"
-              selectedKey={province || ''}
-              onSelectionChange={(key) => {
-              setProvince(key);
-              }}
+              <Select className="w-full min-w-[12rem]"
+                placeholder='Seleccionar'
+                isRequired
+                aria-label="Seleccionar provincia"
+                value={province}
+                onChange={e => {
+                  setProvince(e.target.value);
+                  console.log(province);
+                }}
               >
                 {provinces.map((prov) => (
-                  <AutocompleteItem key={prov.id} value={prov.id}>
+                  <SelectItem key={prov.id} value={prov.id}>
                     {prov.name}
-                  </AutocompleteItem>
+                  </SelectItem>
                 ))}
-              </Autocomplete>
+              </Select>
             )}
           </div>
           {errors.province && <p className='text-red-500 mt-2 text-xs'>{errors.province}</p>}
@@ -253,25 +253,26 @@ const Step2 = ({nextStep, prevStep}) => {
           <label htmlFor="localidad" className='block xl:text-md 2xl:text-xl font-medium'>Localidad</label>
           <div className='flex mt-2 gap-4 w-1/6'>
             {loadingLocalities ? (
-               <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
+               <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Select>
             ) : error ? (
               <p>{error}</p>
             ) : (
-              <Autocomplete className="w-full min-w-[12rem]"
-                placeholder='Seleccionar'
-                isRequired
-                aria-label="Seleccionar localidad"
-                selectedKey={locality || ''}
-                onSelectionChange={(key) => setLocality(key
-                )}
-                value={locality}
-              >
-                {localities.map((loc) => (
-                  <AutocompleteItem key={loc.id} value={loc.id}>
-                    {loc.name}
-                  </AutocompleteItem>
-                ))}
-              </Autocomplete>
+              <Select className="w-full min-w-[12rem]"
+              placeholder='Seleccionar'
+              isRequired
+              aria-label="Seleccionar localidad"
+              value={locality}
+              onChange={e => {
+                const selectedLoc = localities.find(loc => loc.id == e.target.value);
+                setLocality(selectedLoc);  
+              }}
+            >
+              {localities.map((loc) => (
+                <SelectItem key={loc.id} value={loc.id}>
+                  {loc.name}
+                </SelectItem>
+              ))}
+            </Select>
             )}
           </div>
           {errors.locality && <p className='text-red-500 mt-2 text-xs'>{errors.locality}</p>}

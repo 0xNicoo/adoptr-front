@@ -1,41 +1,75 @@
-'use client'
-
 import { getAdoption } from '../actions';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation'; // Importa useRouter para manejar la redirección
+import { Checkbox, Button } from '@nextui-org/react';
 
 const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilters, initialFilters }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const { register, handleSubmit, setValue } = useForm();
-
+    const { register, handleSubmit, setValue, reset } = useForm(); // Agrega watch para observar los cambios
+    const router = useRouter(); // Inicializa useRouter para redireccionar
+    // Guarda el estado de los checkboxes
+    const [filters, setFilters] = useState({
+        vaccinated: initialFilters.vaccinated || false,
+        unprotected: initialFilters.unprotected || false,
+        castrated: initialFilters.castrated || false
+    });
     useEffect(() => {
-        // Valores iniciales del filtro
+        // Sincroniza el estado inicial de los filtros con react-hook-form
         Object.entries(initialFilters).forEach(([key, value]) => {
             setValue(key, value);
         });
     }, [initialFilters, setValue]);
-
+    useEffect(() => {
+        // Sincroniza el estado de los checkboxes con react-hook-form
+        setValue('vaccinated', filters.vaccinated);
+        setValue('unprotected', filters.unprotected);
+        setValue('castrated', filters.castrated);
+    }, [filters, setValue]);
+    // Actualiza el estado de los checkboxes
+    const handleCheckboxChange = (event) => {
+        const { name, checked } = event.target;
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [name]: checked
+        }));
+    };
     const onSubmit = async (filter) => {
+        // Agrega los valores de los checkboxes al filtro
+        const combinedFilter = { ...filter, ...filters };
         const cleanFilter = Object.fromEntries(
-            Object.entries(filter).filter(([_, value]) => value)
+            Object.entries(combinedFilter).filter(([_, value]) => value)
         );
-
         updateFilters(cleanFilter);
         const { total, data } = await getAdoption(cleanFilter, 1);
         updateTotalPage(total);
         updateData(data);
-        // Resetea a la primer pagina
-        updateCurrentPage(1); 
+        updateCurrentPage(1);
+    };
+    const handleClearFilters = async () => {
+        reset();
+        setFilters({
+            vaccinated: false,
+            unprotected: false,
+            castrated: false
+        });
+    
+        updateFilters({});
+        
+        const { total, data } = await getAdoption({}, 1);
+        updateTotalPage(total);
+        updateData(data);
+        updateCurrentPage(1);
     };
 
     return (
         <div className="w-full">
-            <button
+            <Button
                 onClick={() => setIsOpen(!isOpen)}
-                className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mb-4"
+                className="py-2 px-4 bg-primary-orange text-white mb-4 ml-4 mt-4"
             >
-                {isOpen ? 'Ocultar Filtro' : 'Mostrar Filtro'}
-            </button>
+                {isOpen ? 'Ocultar filtro' : 'Mostrar filtro'}
+            </Button>
 
             {isOpen && (
                 <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-md w-full">
@@ -94,19 +128,46 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                                 </label>
                             </div>
 
-                            <button
-                                type="submit"
-                                className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full md:w-auto"
+                            <Button
+                                type="submit" className='bg-primary-blue text-white'
                             >
                                 Filtrar
-                            </button>
+                            </Button>
+                            <Button
+                                type="button" className='bg-red-700 text-white'
+                                onClick={() => handleClearFilters()}  
+                            >
+                                Limpiar filtro
+                            </Button>
+
                         </div>
+                        <div className='flex mt-8 gap-8'>
+                                <Checkbox
+                                    name="vaccinated"
+                                    isSelected={filters.vaccinated} // Usamos isSelected para que el estado se refleje visualmente
+                                    onChange={() => setFilters(prev => ({ ...prev, vaccinated: !prev.vaccinated }))}
+                                >
+                                    Vacunado
+                                </Checkbox>
+                                <Checkbox
+                                    name="unprotected"
+                                    isSelected={filters.unprotected} // Usamos isSelected para que el estado se refleje visualmente
+                                    onChange={() => setFilters(prev => ({ ...prev, unprotected: !prev.unprotected }))}
+                                >
+                                    Desparasitado
+                                </Checkbox>
+                                <Checkbox
+                                    name="castrated"
+                                    isSelected={filters.castrated} // Usamos isSelected para que el estado se refleje visualmente
+                                    onChange={() => setFilters(prev => ({ ...prev, castrated: !prev.castrated }))}
+                                >
+                                    Castrado
+                                </Checkbox>
+                            </div>
                     </div>
                 </form>
             )}
         </div>
     );
 };
-
 export default FilterForm;
-

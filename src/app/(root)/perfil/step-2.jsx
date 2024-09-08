@@ -126,26 +126,26 @@ const Step2 = ({ nextStep, prevStep }) => {
           <label htmlFor="provincia" className='block xl:text-md 2xl:text-xl font-medium'>Provincia</label>
           <div className='flex mt-2 gap-4'>
             {loadingProvinces ? (
-               <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
-            ) : error ? (
-              <p>{error}</p>
-            ) : (
-              <Autocomplete
-              className="w-full min-w-[12rem]"
-              placeholder="Seleccionar"
-              isRequired
-              aria-label="Seleccionar provincia"
-              selectedKey={province || ''}
-              onSelectionChange={(key) => {
-              setProvince(key);
-              }}
-              >
-                {provinces.map((prov) => (
-                  <AutocompleteItem key={prov.id} value={prov.id}>
-                    {prov.name}
-                  </AutocompleteItem>
-                ))}
-              </Autocomplete>
+                             <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Select>
+                            ) : error ? (
+                              <p>{error}</p>
+                            ) : (
+                              <Select className="w-full min-w-[12rem]"
+                                placeholder='Seleccionar'
+                                isRequired
+                                aria-label="Seleccionar provincia"
+                                value={province}
+                                onChange={e => {
+                                  setProvince(e.target.value);
+                                  console.log(province);
+                                }}
+                              >
+                                {provinces.map((prov) => (
+                                  <SelectItem key={prov.id} value={prov.id}>
+                                    {prov.name}
+                                  </SelectItem>
+                                ))}
+                              </Select>
             )}
           </div>
           {errors.province && <p className='text-red-500 mt-2 text-xs'>{errors.province}</p>}
@@ -154,25 +154,26 @@ const Step2 = ({ nextStep, prevStep }) => {
           <label htmlFor="localidad" className='block xl:text-md 2xl:text-xl font-medium'>Localidad</label>
           <div className='flex mt-2 gap-4'>
             {loadingLocalities ? (
-               <Autocomplete placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Autocomplete>
-            ) : error ? (
-              <p>{error}</p>
-            ) : (
-              <Autocomplete className="w-full min-w-[12rem]"
+               <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Select>
+              ) : error ? (
+                <p>{error}</p>
+              ) : (
+                <Select className="w-full min-w-[12rem]"
                 placeholder='Seleccionar'
                 isRequired
                 aria-label="Seleccionar localidad"
-                selectedKey={locality || ''}
-                onSelectionChange={(key) => setLocality(key
-                )}
                 value={locality}
+                onChange={e => {
+                  const selectedLoc = localities.find(loc => loc.id == e.target.value);
+                  setLocality(selectedLoc);  
+                }}
               >
                 {localities.map((loc) => (
-                  <AutocompleteItem key={loc.id} value={loc.id}>
+                  <SelectItem key={loc.id} value={loc.id}>
                     {loc.name}
-                  </AutocompleteItem>
+                  </SelectItem>
                 ))}
-              </Autocomplete>
+              </Select>
             )}
           </div>
           {errors.locality && <p className='text-red-500 mt-2 text-xs'>{errors.locality}</p>}
