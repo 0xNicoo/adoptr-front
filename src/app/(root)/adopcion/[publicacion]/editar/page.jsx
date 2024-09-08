@@ -2,41 +2,26 @@
 
 import { Inter } from "next/font/google";
 import { useAdoptionEditStore } from "@/app/store";
-import { getUserId } from "./actions";
+import { getUserId, editAdoptionAction } from "./actions";
 import { useRouter } from 'next/navigation';
-import { Checkbox, Textarea } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react';
+import { useForm, FormProvider } from "react-hook-form";
+import Ubication from "./components/ubication";
+import TitleInput from "./components/title";
+import SizeSelect from "./components/sizeselect";
+import Checkboxes from "./components/checkboxes";
+import SexSelect from "./components/sexselect";
+import Description from "./components/description";
+import AgeSelect from "./components/ageselect";
+import ImageSelector from "./components/imageSelector";
 
 const inter = Inter({ subsets: ["latin"] });
-
-const mapSexType = (sexType) => {
-  switch (sexType) {
-    case 'MALE':
-      return 'Macho';
-    case 'FEMALE':
-      return 'Hembra';
-    default:
-      return 'Indefinido'; 
-  }
-};
-
-const mapSizeType = (sizeType) => {
-  switch (sizeType) {
-    case 'SMALL':
-      return 'Pequeño';
-    case 'MEDIUM':
-      return 'Mediano';
-    case 'BIG':
-      return 'Grande';
-    default:
-      return 'Indefinido';
-  }
-};
 
 export default function EditPage() {
   const {adoption} = useAdoptionEditStore()
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const methods = useForm()
 
   useEffect(() => {
     const checkUser = async () => {
@@ -47,12 +32,10 @@ export default function EditPage() {
         setLoading(false)
       }
     }
-
     if (!adoption) {
       router.push('/adopcion');
       return;
     }
-
     checkUser()
   }, [])
 
@@ -65,62 +48,70 @@ export default function EditPage() {
     router.push(`/adopcion/${id}`);
   };
 
-  const handleEdit = () => {
+  const onEdit = async (data) => {
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('sexType', data.sexType);
+    formData.append('vaccinated', data.vaccinated);
+    formData.append('unprotected', data.unprotected);
+    formData.append('castrated', data.castrated);
+    formData.append('sizeType', data.sizeType);
+    formData.append('ageYears', data.ageYears);
+    formData.append('ageMonths', data.ageMonths);
+    formData.append('image', data.image);
+    formData.append('locality_id', data.locality_id);
 
+    await editAdoptionAction(adoption.id, formData)
   };
 
   return (
     <div className="bg-background-gray flex pt-4 px-4 pb-4 justify-center">
-      <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
-        <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full">
-          <div className="flex-shrink-0">
-            <img
-              className='rounded-xl w-full md:w-80 lg:w-96'
-              src={adoption.s3Url}
-              alt='Imagen seleccionada'
-              width={250}
-              height={300}
-            />
-          </div>
-          <div className='flex flex-col w-full'>
-            <h1 className={`${inter.className} xl:text-2xl 2xl:text-3xl md:text-lg font-medium text-primary-blue`}>{adoption.title}</h1>
-            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>TAMAÑO</p>
-            <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{mapSizeType(adoption.sizeType)}</p>
-            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>EDAD</p>
-            <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{adoption.ageYears} años {adoption.ageMonths} meses</p>
-            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>SEXO</p>
-            <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{mapSexType(adoption.sexType)}</p>
-            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>UBICACIÓN</p>
-            <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{adoption.locality.name}, {adoption.locality.province.name}</p>
-            <div className='flex flex-wrap gap-4 mt-2'>
-              <Checkbox isSelected={adoption.vaccinated} className='xl:text-sm 2xl:text-md md:text-sm text-black'>Vacunado</Checkbox>
-              <Checkbox isSelected={adoption.unprotected} className='xl:text-sm 2xl:text-md md:text-sm text-black'>Desparasitado</Checkbox>
-              <Checkbox isSelected={adoption.castrated} className='xl:text-sm 2xl:text-md md:text-sm text-black'>Castrado</Checkbox>
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onEdit)}  className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
+          <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full">
+            <div className="flex-shrink-0">
+              <ImageSelector actualImage={adoption.s3Url}/>
             </div>
-            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2 mb-1`}>DESCRIPCIÓN</p>
-            <Textarea
-              isReadOnly
-              defaultValue={adoption.description}
-              className="max-w-xs"
-            />
+
+            <div className='flex flex-col w-full'>
+              <div className='flex'> 
+                <div className='flex-1'>
+                  <TitleInput actualTitle={adoption.title} />
+                  <SizeSelect actualSize={adoption.sizeType} />
+                  <SexSelect actualSex={adoption.sexType} />
+                </div>
+                <div className='flex-1'>
+                  <AgeSelect actualYears={adoption.ageYears} actualMonths={adoption.ageMonths} />
+                  <Ubication actualLocality={adoption.locality.name} actualLocalityId={adoption.locality.id} actualProvince={adoption.locality.province.name} />
+                </div>
+              </div>
+              <div className='mt-2'>
+                <Checkboxes 
+                  actualCastrated={adoption.castrated} 
+                  actualDewormed={adoption.unprotected} 
+                  actualVaccinated={adoption.vaccinated} 
+                />
+                <Description actualDescription={adoption.description} />
+              </div>
+            </div>
           </div>
-        </div>
-        
-        <div className="flex justify-between w-full items-center mt-6">
-            <button
-                onClick={() => handleCancel(adoption.id)}
-                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-700 rounded-3xl transition-colors duration-300"
-              >
-                Cancelar
-           </button>
-          <div className='flex gap-4'>
-            <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
-              onClick={() => handleEdit()}>
-              Guardar
+          
+          <div className="flex justify-between w-full items-center mt-6">
+              <button
+                  onClick={() => handleCancel(adoption.id)}
+                  className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-700 rounded-3xl transition-colors duration-300"
+                >
+                  Cancelar
             </button>
+            <div className='flex gap-4'>
+              <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
+                Guardar
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
+        </form>
+      </FormProvider>
     </div>
   );
 };
