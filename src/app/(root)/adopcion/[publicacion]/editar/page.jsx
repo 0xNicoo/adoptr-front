@@ -63,6 +63,7 @@ export default function EditPage() {
     formData.append('locality_id', data.locality_id);
 
     await editAdoptionAction(adoption.id, formData)
+    router.push(`/adopcion/${adoption.id}`)
   };
 
   return (
