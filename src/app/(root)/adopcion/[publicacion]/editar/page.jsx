@@ -100,13 +100,17 @@ export default function EditPage() {
           
           <div className="flex justify-between w-full items-center mt-6">
               <button
+                  type="button"
                   onClick={() => handleCancel(adoption.id)}
                   className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-700 rounded-3xl transition-colors duration-300"
                 >
                   Cancelar
             </button>
             <div className='flex gap-4'>
-              <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
+              <button 
+                className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
+                type="submit"
+              >
                 Guardar
               </button>
             </div>
