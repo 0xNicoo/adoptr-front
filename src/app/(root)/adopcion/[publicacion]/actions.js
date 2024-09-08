@@ -1,7 +1,6 @@
 'use server';
 
-import { getAdoptionById } from "@/lib/api/adoption";
-import { deleteAdoption } from "@/lib/api/adoption";
+import { getAdoptionById, deleteAdoption, editAdoption } from "@/lib/api/adoption";
 import { getToken } from "@/lib/session";
 import { jwtDecode } from "jwt-decode";
 
@@ -24,3 +23,6 @@ export async function getUserId() {
   throw new Error('No hay token')
 }
 
+export async function editAdoptionAction(id){
+  await editAdoption(id)
+}
