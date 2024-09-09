@@ -6,6 +6,10 @@ import { CIcon } from '@coreui/icons-react';
 import { cilLocationPin } from '@coreui/icons';
 import { Inter } from "next/font/google";
 import { deleteAdoptionAction, getUserId } from './actions';
+import { Cog6ToothIcon } from '@heroicons/react/24/solid';
+import { useRouter } from 'next/navigation';
+import { useProfileEditStore } from '@/app/store';
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +30,8 @@ const miPerfil = () => {
     const [adoptions, setAdoptions] = useState(null);
     const [error, setError] = useState(null);
     const [userId, setUserId] = useState(null);
+    const router = useRouter()
+    const {setProfileStore} = useProfileEditStore()
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -56,6 +62,11 @@ const miPerfil = () => {
       const updatedAdoptions = adoptions.filter(adoption => adoption.id !== id);
       setAdoptions(updatedAdoptions);
     };
+
+    const handleEdit = async () => {
+      setProfileStore(profile)
+      router.push('/mi-perfil/editar')
+    }
 
     if (loading) return <p>Cargando perfil...</p>;
     if (error) return <p>{error}</p>;
@@ -88,6 +99,11 @@ const miPerfil = () => {
                 defaultValue={profile.description}
                 className="max-w-xs lg:max-w-sm"
               />
+              <div className='mt-8'>
+                <button onClick={handleEdit}>
+                   <Cog6ToothIcon className="h-6 w-6 text-gray-500" />
+                </button>
+              </div>
             </div>
           ) : (
             <p>No se encontró el perfil</p>

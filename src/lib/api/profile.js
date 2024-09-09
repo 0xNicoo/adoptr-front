@@ -54,3 +54,21 @@ export async function getProfileByUserId(userId) {
         }
         return res.json()
 }
+
+export async function editProfile(id, data) {
+    const token = await getToken()
+    const res = await fetch(`http://localhost:8080/profile/${id}`,
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            method: 'PUT',
+            body: data,
+        })
+        if (!res.ok) {
+            const errorData = await res.json()
+            console.log(errorData)
+            throw new Error('Failed to fetch data', errorData)
+        }
+        return res.json()
+}
