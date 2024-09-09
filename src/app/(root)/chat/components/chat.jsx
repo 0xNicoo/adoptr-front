@@ -5,6 +5,8 @@ import { Client } from '@stomp/stompjs';
 import { getAccessToken, getChatAction, getUserId, getProfileByUserIdAction } from '../actions';
 import { useSearchParams } from 'next/navigation'
 
+// esto estaba en la linea 122 <span className="font-bold">Username:</span>
+
 const Chat = ({}) => {
   const [message, setMessage] = useState('');
   const [client, setClient] = useState(null);
@@ -57,7 +59,7 @@ const Chat = ({}) => {
   };
 
   const sendMessage = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const msg = { 
       userReceiverEmail: receiver.user.email,
       userReceiverId: receiver.user.id,
@@ -65,7 +67,7 @@ const Chat = ({}) => {
       userSenderEmail: userLogged.user.email,
       userSenderId: userLogged.user.id,
       chatId: chat.id, 
-    }
+    };
     setMessages((prevMessages) => [...prevMessages, msg]);
     if (client && connected) {
       client.publish({
@@ -80,7 +82,9 @@ const Chat = ({}) => {
         }),
       });
     }
+    setMessage('');
   };
+  
 
   const getChat = async (id) =>{
     try{
@@ -119,7 +123,7 @@ const Chat = ({}) => {
                         <div
                           className={`text-white p-3 rounded-full max-w-max ${msg.userSenderId == userLogged.user.id ? 'ml-2 bg-blue-500' : 'mr-2 bg-gray-500'}`}
                         >
-                          <span className="font-bold">Username:</span> {msg.content}
+                          {msg.content}
                         </div>
                       </li>
                     ))

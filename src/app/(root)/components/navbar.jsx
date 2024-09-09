@@ -19,7 +19,7 @@ const navigation = [
 
 const Navbar = () => {
   return (
-    <Disclosure as="nav" className="bg-white border-b border-gray-300 drop-shadow-md pb-2 pt-4">
+    <Disclosure as="nav" className="bg-white border-b border-gray-300 drop-shadow-md pb-2 pt-4 z-50">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 ">
         <div className="relative flex items-center justify-between">
           {/* Mobile Menu Button */}

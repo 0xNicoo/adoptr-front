@@ -4,9 +4,9 @@ import PublicationDetail from './components/publicaciondetalle';
 import { useParams } from 'next/navigation';
 
 export default function DetailPage() {
-  const { publicacion } = useParams(); // Aquí accedemos al parámetro de la ruta
+  const { publicacion } = useParams(); 
 
-  console.log(publicacion); // Imprime el parámetro de la ruta
+  console.log(publicacion); 
 
   return (
     <PublicationDetail adoptionId={publicacion} />
