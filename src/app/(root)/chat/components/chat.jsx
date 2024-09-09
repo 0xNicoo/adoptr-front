@@ -13,7 +13,6 @@ const Chat = ({}) => {
   const [chat, setChat] = useState(null)
   const [receiver, setReceiver] = useState(null)
   const [userLogged, setUserLogged] = useState(null)
-  const username = 'Usuario'; 
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -41,7 +40,6 @@ const Chat = ({}) => {
         setConnected(true);
         stompClient.subscribe('/user/queue', (message) => {
           const body = JSON.parse(message.body);
-          console.log(body)
           setMessages((prevMessages) => [...prevMessages, body]);
         });
       },
@@ -60,15 +58,24 @@ const Chat = ({}) => {
 
   const sendMessage = (e) => {
     e.preventDefault()
+    const msg = { 
+      userReceiverEmail: receiver.user.email,
+      userReceiverId: receiver.user.id,
+      content: message,
+      userSenderEmail: userLogged.user.email,
+      userSenderId: userLogged.user.id,
+      chatId: chat.id, 
+    }
+    setMessages((prevMessages) => [...prevMessages, msg]);
     if (client && connected) {
       client.publish({
         destination: '/app/chat', 
         body: JSON.stringify({ 
-          recipientEmail: receiver.user.email,
-          recipientId: userLogged.user.id,
+          userReceiverEmail: receiver.user.email,
+          userReceiverId: receiver.user.id,
           content: message,
-          senderEmail: userLogged.user.email,
-          senderId: userLogged.user.id,
+          userSenderEmail: userLogged.user.email,
+          userSenderId: userLogged.user.id,
           chatId: chat.id, 
         }),
       });
@@ -78,8 +85,10 @@ const Chat = ({}) => {
   const getChat = async (id) =>{
     try{
       const chat = await getChatAction(id)
-      setChat(chat)
       const loggedUserId = await getUserId()
+      setChat(chat)
+      console.log(chat)
+      setMessages(chat.messages);
       if(loggedUserId == chat.publicationUserId){
         setUserLogged(await getProfileByUserIdAction(loggedUserId))
         setReceiver(await getProfileByUserIdAction(chat.adopterUserId))
@@ -87,15 +96,15 @@ const Chat = ({}) => {
         setUserLogged(await getProfileByUserIdAction(loggedUserId))
         setReceiver(await getProfileByUserIdAction(chat.publicationUserId))
       }
-    }catch{
-      console.log("ERROR AL OBTENER EL CHAT")
+    }catch(err){
+      console.log("ERROR AL OBTENER EL CHAT:", err)
     }
   }
   
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto bg-gray-100 rounded-lg shadow-lg">
       <div className="bg-primary-orange p-4 text-white text-xl rounded-t-lg font-bold">
-        {username}
+        {receiver ? (receiver.firstName + " " + receiver.lastName) : ""}
       </div>
 
       <div
@@ -103,15 +112,19 @@ const Chat = ({}) => {
         style={{ backgroundImage: 'url(/images/chat-background.png)' }}
       >
         <ul className="space-y-2">
-          {messages.map((msg, index) => (
-            <li key={index} className={`flex ${msg.username === 'User' ? 'justify-end' : 'justify-start'} mb-2`}>
-              <div
-                className={`bg-blue-500 text-white p-3 rounded-full max-w-max ${msg.username === 'User' ? 'ml-2' : 'mr-2'}`}
-              >
-                <span className="font-bold">Username:</span> {msg.content}
-              </div>
-            </li>
-          ))}
+          {messages.length != 0 ? console.log(messages) : console.log("vacio")}
+          {userLogged && messages.length != 0  ?
+                    messages.map((msg, index) => (
+                      <li key={index} className={`flex ${msg.userSenderId == userLogged.user.id ? 'justify-end' : 'justify-start'} mb-2`}>
+                        <div
+                          className={`text-white p-3 rounded-full max-w-max ${msg.userSenderId == userLogged.user.id ? 'ml-2 bg-blue-500' : 'mr-2 bg-gray-500'}`}
+                        >
+                          <span className="font-bold">Username:</span> {msg.content}
+                        </div>
+                      </li>
+                    ))
+          : <div></div>}
+
         </ul>
       </div>
 
