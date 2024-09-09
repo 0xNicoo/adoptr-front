@@ -24,7 +24,7 @@ const mapSexType = (sexType) => {
     }
   };
 
-const miPerfil = () => {
+const MiPerfil = () => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [adoptions, setAdoptions] = useState(null);
@@ -190,4 +190,4 @@ const miPerfil = () => {
 };
 
 
-export default miPerfil;
+export default MiPerfil;
