@@ -1,20 +1,33 @@
 'use client'
 
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { login } from "../actions";
 import Link from 'next/link';
+import CustomToast from './toast';
 
 const LoginForm = () => {
     
     const { register, handleSubmit, formState: { errors } } = useForm();
     const router = useRouter();
 
-    const handleLogin = async (data) => {
-        await login(data)
-        router.push('/')
-    }
+    const [showToast, setShowToast] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
+    const handleLogin = async (data) => {
+        try {
+            await login(data);
+            setShowToast(false);  
+            router.push('/');
+        } catch (error) {
+            
+            setErrorMessage("Credenciales incorrectas. Inténtalo de nuevo."); 
+            setShowToast(true); 
+        }
+    };
+
+    const toggleShow = () => setShowToast(false); 
 
     return (
         <section className="bg-white p-8 rounded-3xl shadow-lg w-full max-w-md mx-auto min-h-[40vh]">
@@ -45,13 +58,14 @@ const LoginForm = () => {
                     />
                     {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
                 </div>
-
+                <CustomToast show={showToast} onClose={toggleShow} message={errorMessage} />
                 <button
                     type="submit"
                     className="mx-auto py-2 px-4 bg-primary-blue text-white rounded-full hover:bg-primary-blue-dark transition-colors duration-300"
                 >
                     Ingresar
                 </button>
+
                 <p className="text-center text-sm mt-4">
                     ¿Ya tenés una cuenta?{' '}
                     <Link href="/signup" className="text-primary-orange underline hover:text-primary-orange-dark transition-colors duration-300 font-semibold">

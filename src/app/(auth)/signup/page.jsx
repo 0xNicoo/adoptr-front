@@ -26,7 +26,7 @@ export default function Signup() {
                     <img src="/images/dog1.png" className="w-full max-w-[80px] md:max-w-[130px] h-auto mr-10" alt="Dog1" />
                 </div>
             </section>
-            <div className="bg-primary-orange w-full rounded-t-3xl h-[calc(100vh-25vh)] flex justify-center items-center">
+            <div className="bg-primary-orange w-full rounded-t-3xl min-h-screen flex flex justify-center items-center">
                 <div className="bg-primary-orange-light w-[80%] max-w-[1300px] h-[69vh] p-8 rounded-3xl shadow-lg flex justify-center items-center">
                     <SignupForm/>
                 </div>

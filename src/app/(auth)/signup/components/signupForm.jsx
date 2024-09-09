@@ -4,26 +4,33 @@ import { useForm } from "react-hook-form";
 import Link from 'next/link';
 import { registerUser, loginUser } from './actions';
 import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import CustomToast from './toast';
 
 const SignupForm = () => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
     const password = watch('password');
-    const router = useRouter();
+    const router = useRouter(); 
+    const [showToast, setShowToast] = useState(false);  
+    const [errorMessage, setErrorMessage] = useState(""); 
 
     const onSubmit = async (data) => {
         try {
-            await registerUser(data);
-            await loginUser(data);
+            await registerUser(data);  
+            await loginUser(data);  
             router.push('/perfil');   
         } catch (error) {
-            console.error('Error al registrar usuario:', error);
+            setErrorMessage("Se produjo un error. Inténtalo de nuevo."); 
+            setShowToast(true); 
         }
     };
 
+    const toggleShow = () => setShowToast(false); 
+
     return (
-        <section className="bg-white p-8 rounded-3xl shadow-lg w-full max-w-md mx-auto min-h-[60vh]">
+        <section className="bg-white p-8 rounded-3xl shadow-lg w-full max-w-md mx-auto min-h-[60vh]" style={{ position: 'relative' }}>
             <form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit)} 
                 className="flex flex-col space-y-4"
             >
                 <div>
@@ -37,7 +44,6 @@ const SignupForm = () => {
                     />
                     {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
                 </div>
-
                 <div>
                     <label htmlFor="password" className="block text-gray-700 text-sm font-medium">Contraseña</label>
                     <input
@@ -49,7 +55,6 @@ const SignupForm = () => {
                     />
                     {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
                 </div>
-
                 <div>
                     <label htmlFor="confirmPassword" className="block text-gray-700 text-sm font-medium">Confirmar Contraseña</label>
                     <input
@@ -64,13 +69,14 @@ const SignupForm = () => {
                     />
                     {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>}
                 </div>
-
+                <CustomToast show={showToast} onClose={toggleShow} message={errorMessage} />
                 <button
                     type="submit"
                     className="mx-auto py-2 px-4 bg-primary-blue text-white rounded-full hover:bg-primary-blue-dark transition-colors duration-300"
                 >
                     Registrarse
                 </button>
+
                 <p className="text-center text-sm mt-4">
                     ¿Ya tenés una cuenta?{' '}
                     <Link href="/login" className="text-primary-orange underline hover:text-primary-orange-dark transition-colors duration-300 font-semibold">
