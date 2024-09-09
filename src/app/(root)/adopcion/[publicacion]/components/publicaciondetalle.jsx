@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
 import { getAdoptionDetail } from '../actions';
 import { useRouter } from 'next/navigation';
-import { deleteAdoptionAction, getUserId } from '../actions';
+import { deleteAdoptionAction, getUserId, getChatByPublicationIdAction } from '../actions';
 import { useAdoptionEditStore } from '@/app/store';
 
 const inter = Inter({ subsets: ["latin"] });
@@ -73,8 +73,17 @@ const PublicationDetail = ({ adoptionId }) => {
       router.push(`/adopcion/${adoption.id}/editar`)
   };
 
-  const handleAdoptClick = () => {
-    router.push('/chat');
+  const handleAdoptClick = async () => {
+    console.log("USUARIO: ", userId)
+    console.log("USUARIO CREADOR: ", adoption.user.id)
+    if(userId == adoption.user.id){
+      router.push('/chatList')
+      return
+    }else{
+      const chat = await getChatByPublicationIdAction(adoption.id)
+      router.push(`/chat?chat=${chat.id}`);
+    }
+
   };
 
   return (

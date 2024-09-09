@@ -94,6 +94,13 @@ export const useFormStorePerfil = create(set => {
     }
 })
 
+export const useChatStore = create(set => {
+    return {
+        chatId: null,
+        setChatId: (id) => set({chatId: id})
+    }
+})
+
 export const useAdoptionEditStore = create(set => {
     return {
         adoption: null,
