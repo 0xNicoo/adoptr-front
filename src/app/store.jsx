@@ -107,3 +107,11 @@ export const useAdoptionEditStore = create(set => {
         setAdoptionStore: (adp) => set({adoption: adp})
     }
 })
+
+
+export const useProfileEditStore = create(set => {
+    return {
+        profile: null,
+        setProfileStore: (p) => set({profile: p})
+    }
+})
