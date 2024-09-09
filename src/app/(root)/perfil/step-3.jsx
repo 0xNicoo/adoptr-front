@@ -5,10 +5,12 @@ import Image from 'next/image';
 import { CIcon } from '@coreui/icons-react';
 import { cilImagePlus } from '@coreui/icons';
 import { Textarea } from '@nextui-org/react';
+import CustomToast from './toast';
 
 const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
 
     const [errors, setErrors] = useState('');
+    const [showToast, setShowToast] = useState(false)
     const { description, setDescription, image, setImage, nameImage, setNameImage, setFileImage } = useFormStorePerfil();
     const handleNextStep = () => {
         let newErrors = {};
@@ -20,6 +22,7 @@ const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
         }
         if (Object.keys(newErrors).length > 0) {
           setErrors(newErrors);
+          setShowToast(true);
         } else {
           nextStep();
         }
@@ -74,6 +77,15 @@ const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
                     <label htmlFor="descripcion" className="mb-2 text-primary-blue xl:text-lg 2xl:text-2xl font-medium">Agregá una descripción</label>
                     <Textarea isRequired rows="3" value={description} className='w-2/3 text-lg' placeholder="Contanos sobre tu vida, tus mascotas, tus hobbies y cualquier detalle que te gustaría compartir con nuestra comunidad." onChange={e => setDescription(e.target.value)}/>
                     {errors.description && <p className='text-red-500 mt-2 text-xs'>{errors.description}</p>}
+                    <div>
+                        {showToast && (
+                        <CustomToast
+                            message="Todos los campos son obligatorios"
+                            onClose={() => setShowToast(false)}
+                            className="fixed inset-0 flex items-center justify-center z-50"
+                        />
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="flex flex-row justify-between mt-4 mb-4 mr-4">

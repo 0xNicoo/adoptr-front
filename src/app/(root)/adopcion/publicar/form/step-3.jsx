@@ -5,10 +5,13 @@ import Image from 'next/image';
 import { CIcon } from '@coreui/icons-react';
 import { cilImagePlus } from '@coreui/icons';
 import { Textarea } from '@nextui-org/react';
+import CustomToast from './toast';
 
 const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
     const { description, setDescripcion, image, setImagen, nombreImagen, setNombreImagen, setFileImage } = useFormStoreAdopcion();
     const [errors, setErrors] = useState('');
+    const [showToast, setShowToast] = useState(false);  
+
     const imageHandler = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -37,6 +40,7 @@ const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
         
         if (Object.keys(newErrors).length > 0) {
           setErrors(newErrors);
+          setShowToast(true);
         } else {
           nextStep();
         }
@@ -78,6 +82,16 @@ const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
                     <label htmlFor="descripcion" className="mb-2 text-primary-blue xl:text-lg 2xl:text-2xl font-medium">Agregá una descripción</label>
                     <Textarea isRequired rows="3" value={description} className='w-2/3 text-lg' placeholder="Contanos sobre su personalidad, sus hábitos, su historia y cualquier detalle importante." onChange={e => setDescripcion(e.target.value)}/>
                     {errors.description && <p className='text-red-500 mt-2 text-xs'>{errors.description}</p>}
+                    <br />
+                    <div>
+                        {showToast && (
+                        <CustomToast
+                            message="Todos los campos son obligatorios"
+                            onClose={() => setShowToast(false)}
+                            className="fixed inset-0 flex items-center justify-center z-50"
+                        />
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="flex flex-row justify-between mt-4 mb-4 mr-4">

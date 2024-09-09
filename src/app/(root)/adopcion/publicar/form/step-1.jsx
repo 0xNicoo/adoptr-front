@@ -1,16 +1,18 @@
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Radio, RadioGroup } from '@nextui-org/react';
 import { useFormStoreAdopcion } from '../../../../store';
 import { Inter } from "next/font/google";
 import Image from "next/image";
+import CustomToast from './toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
 const Step1 = ({nextStep}) => {
   const [selected, setSelected] = React.useState(null);
   const { animalType, setAnimalType } = useFormStoreAdopcion();
-  const [error, setError] = React.useState('');
+  const [showToast, setShowToast] = useState(false);  
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     setSelected(animalType);
@@ -19,19 +21,20 @@ const Step1 = ({nextStep}) => {
   const handleAnimalChange = (value) => {
     setSelected(value);
     setAnimalType(value);
-    setError('');
   }
 
   const handleNextStep = () => {
 
     if (!animalType) {
-      setError('* Seleccioná el tipo de animal')
+      setErrorMessage("Seleccione el tipo de animal."); 
+      setShowToast(true); 
     }
     else {
       nextStep();
     }
-
   }
+
+  const toggleShow = () => setShowToast(false); 
 
   return (
     <div className='flex flex-grow flex-col mb-4 justify-between'>
@@ -65,7 +68,8 @@ const Step1 = ({nextStep}) => {
               </div>
             </div>
           </RadioGroup>
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          <br />
+          <CustomToast show={showToast} onClose={toggleShow} message={errorMessage} />
         </div>
         <div className="flex flex-row justify-end mb-4 mx-4">
           <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>

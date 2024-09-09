@@ -4,6 +4,7 @@ import { useFormStorePerfil } from '../../store';
 import { Select, SelectItem, Input, Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import { getProvince, getLocality } from './actions';
+import CustomToast from './toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,6 +15,7 @@ const Step2 = ({ nextStep, prevStep }) => {
   const [loadingProvinces, setLoadingProvinces] = useState(true);
   const [loadingLocalities, setLoadingLocalities] = useState(false);
   const [error, setError] = useState(null);
+  const [showToast, setShowToast] = useState(false)
 
   const { firstName, lastName, genderType, locality, province, setFirstName, setLastName, setGenderType, setLocality, setProvince } = useFormStorePerfil();
 
@@ -45,6 +47,7 @@ const Step2 = ({ nextStep, prevStep }) => {
     });
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setShowToast(true);
     } else {
       nextStep();
     }
@@ -119,6 +122,15 @@ const Step2 = ({ nextStep, prevStep }) => {
             </Autocomplete>
           </div>
           {errors.genderType && <p className='text-red-500 mt-2 text-xs'>{errors.genderType}</p>}
+        </div>
+        <div>
+          {showToast && (
+          <CustomToast
+            message="Todos los campos son obligatorios"
+            onClose={() => setShowToast(false)}
+            className="fixed inset-0 flex items-center justify-center z-50"
+          />
+          )}
         </div>
       </div>
       <div className='flex flex-row gap-12 mt-10'>

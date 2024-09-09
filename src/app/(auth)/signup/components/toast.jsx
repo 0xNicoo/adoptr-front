@@ -10,6 +10,8 @@ const CustomToast = ({ show, onClose, message }) => {
         show={show} 
         onClose={onClose} 
         className={`${inter.className} bg-danger text-white`}
+        delay={3000}
+        autohide
       >
         <Toast.Body className="d-flex justify-content-between align-items-center">
           <span>{message}</span>

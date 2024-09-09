@@ -5,6 +5,7 @@ import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input, Sel
 import { Inter } from "next/font/google";
 import Image from 'next/image';
 import { getProvince, getLocality } from './actions';
+import CustomToast from './toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ const Step2 = ({nextStep, prevStep}) => {
   const [loadingLocalities, setLoadingLocalities] = useState(false);
   const [error, setError] = useState(null);
   const [selected, setSelected] = useState('');
+  const [showToast, setShowToast] = useState(false)
 
   const sexoAnimales = [
     { label: 'Macho', 
@@ -107,6 +109,7 @@ const Step2 = ({nextStep, prevStep}) => {
     
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setShowToast(true);
     } else {
       nextStep();
     }
@@ -215,6 +218,20 @@ const Step2 = ({nextStep, prevStep}) => {
             </div>
             {errors.ageMonths && <p className='text-red-500 mt-2 text-xs'>{errors.ageMonths}</p>}
           </div>
+
+          <div>
+              {showToast && (
+              <CustomToast
+                message="Todos los campos son obligatorios"
+                onClose={() => setShowToast(false)}
+                className="fixed inset-0 flex items-center justify-center z-50"
+              />
+              )}
+        </div>
+
+
+
+
         </div>
       </div>
     </div>
