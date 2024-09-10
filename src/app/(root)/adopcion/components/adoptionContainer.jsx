@@ -7,7 +7,7 @@ import FilterForm from './filterForm';
 import PublicationList from './publicationList';
 import PaginationComponent from './pagination';
 
-const itemsPerPage = 4;
+const itemsPerPage = 8;
 
 const AdoptionContainer = () => {
     const router = useRouter();
