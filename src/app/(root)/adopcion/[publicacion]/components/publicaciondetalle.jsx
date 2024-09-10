@@ -5,8 +5,10 @@ import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
 import { getAdoptionDetail } from '../actions';
 import { useRouter } from 'next/navigation';
-import { deleteAdoptionAction, getUserId, getChatByPublicationIdAction } from '../actions';
+import { deleteAdoptionAction, getUserId, getChatByPublicationIdAction, setFavoriteAction, getFavoriteAction } from '../actions';
 import { useAdoptionEditStore } from '@/app/store';
+import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/react/24/solid';
+import { BookmarkIcon as OutlineBookmarkIcon } from '@heroicons/react/24/outline';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,6 +41,7 @@ const PublicationDetail = ({ adoptionId }) => {
   const [error, setError] = useState(null);
   const router = useRouter();
   const [userId, setUserId] = useState(null);
+  const [favorite, setFavorite] = useState(false);
   const {setAdoptionStore} = useAdoptionEditStore()
 
   useEffect(() => {
@@ -52,10 +55,18 @@ const PublicationDetail = ({ adoptionId }) => {
       } catch (err) {
         setError(err.message);
       }
-    };
+    }
+    const fetchFavorite = async () => {
+      const respFavorite = await getFavoriteAction(adoptionId)
+      if(respFavorite){
+        setFavorite(true)
+      }
+    }
     fetchUserId()
+
     if (adoptionId) {
       fetchAdoption();
+      fetchFavorite()
     }
   }, [adoptionId]);
 
@@ -74,8 +85,6 @@ const PublicationDetail = ({ adoptionId }) => {
   };
 
   const handleAdoptClick = async () => {
-    console.log("USUARIO: ", userId)
-    console.log("USUARIO CREADOR: ", adoption.user.id)
     if(userId == adoption.user.id){
       router.push('/chatList')
       return
@@ -85,6 +94,12 @@ const PublicationDetail = ({ adoptionId }) => {
     }
 
   };
+
+  const handleFavorite = async () => {
+    setFavorite(!favorite)
+    const resp = await setFavoriteAction(adoption.id)
+    resp ? setFavorite(true) : setFavorite(false)
+  }
 
   return (
     <div className="bg-background-gray flex pt-4 px-4 pb-4 justify-center">
@@ -121,6 +136,18 @@ const PublicationDetail = ({ adoptionId }) => {
               className="max-w-xs"
             />
           </div>
+          <div>
+            {/* TODO: Revisar el responsive de esto */}
+            {adoption.user.id != userId ? (
+              <button className=" py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
+                onClick={handleFavorite}
+              >
+                {favorite ? <SolidBookmarkIcon className="h-10 w-10 text-yellow-500" /> : <OutlineBookmarkIcon className="h-10 w-10 text-gray-500" />}
+              </button>
+            ): (
+              <div></div>
+            )}
+          </div>
         </div>
         
         <div className="flex justify-between w-full items-center mt-6">
@@ -142,9 +169,6 @@ const PublicationDetail = ({ adoptionId }) => {
               <div></div>
           )}
           <div className='flex gap-4'>
-            <button className="bg-primary-orange hover:bg-orange-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
-              Guardar
-            </button>
             <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
               onClick={handleAdoptClick}>
               Adoptar

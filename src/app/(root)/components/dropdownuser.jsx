@@ -57,6 +57,10 @@ const DropdownUser = () => {
             Perfil
           </Link>
 
+          <Link href="/adopcion/favoritas" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+            Favoritas
+          </Link>
+
           <Link href="/chatList" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
             Chats
           </Link>
