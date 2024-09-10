@@ -4,6 +4,7 @@ import { handleGetProfile, handleGetAdoptions } from './actions';
 import { Textarea, Tabs, Tab, Card, CardBody, CardHeader, Image } from '@nextui-org/react';
 import { CIcon } from '@coreui/icons-react';
 import { cilLocationPin } from '@coreui/icons';
+import { cilTrash } from '@coreui/icons';
 import { Inter } from "next/font/google";
 import { deleteAdoptionAction, getUserId } from './actions';
 import { Cog6ToothIcon } from '@heroicons/react/24/solid';
@@ -155,11 +156,13 @@ const MiPerfil = () => {
                         </div>
                         {adoption.user.id == userId ? (
                           <button
-                            onClick={() => handleDelete(adoption.id)}
-                            className="bg-red-500 text-white px-4 py-2 rounded ml-4 hover:bg-red-700"
-                          >
-                            Eliminar
-                          </button>
+                          onClick={() => handleDelete(adoption.id)}
+                          className="bg-red-500 text-white px-2 py-2 rounded ml-4 hover:bg-red-700 flex items-center justify-center"
+                        >
+                          <CIcon icon={cilTrash} className="w-4 h-4 text-white fill-current" />
+                        </button>
+                        
+                        
                         ) : (
                           <></>
                         )}
