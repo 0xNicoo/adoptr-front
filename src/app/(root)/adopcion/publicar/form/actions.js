@@ -13,5 +13,5 @@ export async function getLocality(provinceId) {
 }
 
 export async function handleCreateAdoption(data){
-  await createAdoption(data)
+  return await createAdoption(data)
 }

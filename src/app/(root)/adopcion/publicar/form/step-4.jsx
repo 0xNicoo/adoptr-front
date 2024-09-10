@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
 import Image from 'next/image';
 import { handleCreateAdoption } from './actions';
+import { useRouter } from 'next/navigation';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,7 +35,8 @@ const mapSexType = (sexType) => {
 
   
 const Step4 = ({prevStep = {prevStep}}) => {
-    const { title, sizeType, animalType, ageYears, ageMonths, sexType, vaccinated, unprotected, castrated, description, image, locality, province, resetForm, fileImage } = useFormStoreAdopcion();
+    const { title, sizeType, animalType, ageYears, ageMonths, sexType, vaccinated, unprotected, castrated, description, image, locality, province, fileImage } = useFormStoreAdopcion();
+    const router = useRouter()
 
     const publicarAdopcion = async () => {
         const formData = new FormData();
@@ -52,8 +54,8 @@ const Step4 = ({prevStep = {prevStep}}) => {
         formData.append('locality_id', locality.id);
 
         try {
-            await handleCreateAdoption(formData);
-            resetForm();
+            const resp = await handleCreateAdoption(formData);
+            router.push(`/adopcion/${resp.id}`)
         } catch (error) {
             console.log('Error al publicar', error);
         }

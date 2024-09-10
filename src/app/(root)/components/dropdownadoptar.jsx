@@ -3,12 +3,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useFormStoreAdopcion } from '@/app/store';
 
 const DropdownAdoptar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pathname = usePathname();
   const dropdownRef = useRef(null); 
+  const {resetForm} = useFormStoreAdopcion()
+  const router = useRouter()
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -32,6 +35,12 @@ const DropdownAdoptar = () => {
     };
   }, []);
 
+  const handlePublish = () => {
+    resetForm()
+    router.push('/adopcion/publicar/form')
+
+  }
+
   return (
     <div className="z-50 relative inline-block text-left" ref={dropdownRef}>
       <button
@@ -51,12 +60,12 @@ const DropdownAdoptar = () => {
             >
               Adoptar
             </Link>
-            <Link
-              href="/adopcion/publicar/form"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            <button
+              onClick={handlePublish}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
             >
               Poner en Adopción
-            </Link>
+            </button>
           </div>
         </div>
       )}

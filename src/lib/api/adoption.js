@@ -35,8 +35,6 @@ function getQueryParams(filter, page, size) {
 
 
 export async function createAdoption(data){
-  console.log("DATA CREATE:")
-    console.log(data)
     const token = await getToken()
     const res = await fetch('http://localhost:8080/adoption',{
         headers: {
