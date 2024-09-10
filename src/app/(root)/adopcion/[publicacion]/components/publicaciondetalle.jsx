@@ -57,11 +57,9 @@ const PublicationDetail = ({ adoptionId }) => {
       }
     }
     const fetchFavorite = async () => {
-      if(adoption){
-        const respFavorite = await getFavoriteAction(adoption.id)
-        if(respFavorite){
-          setFavorite(true)
-        }
+      const respFavorite = await getFavoriteAction(adoptionId)
+      if(respFavorite){
+        setFavorite(true)
       }
     }
     fetchUserId()
