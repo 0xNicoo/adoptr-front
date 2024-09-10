@@ -138,11 +138,15 @@ const PublicationDetail = ({ adoptionId }) => {
           </div>
           <div>
             {/* TODO: Revisar el responsive de esto */}
-            <button className=" py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
-              onClick={handleFavorite}
-            >
-              {favorite ? <SolidBookmarkIcon className="h-10 w-10 text-yellow-500" /> : <OutlineBookmarkIcon className="h-10 w-10 text-gray-500" />}
-            </button>
+            {adoption.user.id != userId ? (
+              <button className=" py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
+                onClick={handleFavorite}
+              >
+                {favorite ? <SolidBookmarkIcon className="h-10 w-10 text-yellow-500" /> : <OutlineBookmarkIcon className="h-10 w-10 text-gray-500" />}
+              </button>
+            ): (
+              <div></div>
+            )}
           </div>
         </div>
         
