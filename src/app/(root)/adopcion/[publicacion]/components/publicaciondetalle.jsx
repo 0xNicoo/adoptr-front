@@ -171,7 +171,7 @@ const PublicationDetail = ({ adoptionId }) => {
           <div className='flex gap-4'>
             <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
               onClick={handleAdoptClick}>
-              Adoptar
+              {adoption.user.id == userId ? (<>Chats</>) : (<>Adoptar</>)}
             </button>
           </div>
         </div>
