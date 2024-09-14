@@ -9,6 +9,9 @@ import { deleteAdoptionAction, getUserId, getChatByPublicationIdAction, setFavor
 import { useAdoptionEditStore } from '@/app/store';
 import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/react/24/solid';
 import { BookmarkIcon as OutlineBookmarkIcon } from '@heroicons/react/24/outline';
+import { CIcon } from '@coreui/icons-react';
+import { cilTrash } from '@coreui/icons';
+import { cilPencil } from '@coreui/icons';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -104,7 +107,7 @@ const PublicationDetail = ({ adoptionId }) => {
   return (
     <div className="bg-background-gray flex pt-4 px-4 pb-4 justify-center">
       <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
-        <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full">
+        <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full relative">
           <div className="flex-shrink-0">
             <img
               className='rounded-xl w-full md:w-80 lg:w-96'
@@ -136,7 +139,7 @@ const PublicationDetail = ({ adoptionId }) => {
               className="max-w-xs"
             />
           </div>
-          <div>
+          <div className='absolute top-0 right-0'>
             {/* TODO: Revisar el responsive de esto */}
             {adoption.user.id != userId ? (
               <button className=" py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
@@ -145,38 +148,29 @@ const PublicationDetail = ({ adoptionId }) => {
                 {favorite ? <SolidBookmarkIcon className="h-10 w-10 text-yellow-500" /> : <OutlineBookmarkIcon className="h-10 w-10 text-gray-500" />}
               </button>
             ): (
-              <div></div>
+                <div className='flex'>
+                  <button
+                  onClick={() => handleDelete(adoption.id)}
+                  className="bg-red-500 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-red-700 flex items-center justify-center"
+                  >
+                  <CIcon icon={cilTrash} className="w-4 h-4 text-white fill-current" />
+                  </button>
+                  <button 
+                    onClick={() => handleEdit()}
+                    className="bg-blue-700 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-secondary-blue flex items-center justify-center">
+                  <CIcon icon={cilPencil} className="w-4 h-4 text-white fill-current" />
+                  </button>
+                </div>
             )}
           </div>
         </div>
-        
-        <div className="flex justify-between w-full items-center mt-6">
-          {adoption.user.id == userId ? (
-            <div className='flex gap-4'>
-              <button
-                onClick={() => handleDelete(adoption.id)}
-                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-700 rounded-3xl transition-colors duration-300"
-              >
-                Eliminar
-              </button>
-              <button 
-                onClick={() => handleEdit()}
-                className="bg-primary-orange hover:bg-orange-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white">
-                Editar
-              </button>
-            </div>
-            ) : (
-              <div></div>
-          )}
-          <div className='flex gap-4'>
-            <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
-              onClick={handleAdoptClick}>
-              {adoption.user.id == userId ? (<>Chats</>) : (<>Adoptar</>)}
-            </button>
-          </div>
+        <div className='w-full flex justify-end mt-4'>
+          <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"
+          onClick={handleAdoptClick}>
+          {adoption.user.id == userId ? (<>Chats</>) : (<>Adoptar</>)}
+          </button>
         </div>
       </div>
-
     </div>
   );
 };
