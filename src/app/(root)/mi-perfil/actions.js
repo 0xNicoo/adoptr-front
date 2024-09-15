@@ -3,6 +3,8 @@
 import { getProfile } from "@/lib/api/profile";
 import { getAdoptions } from "@/lib/api/adoption";
 import { deleteAdoption } from "@/lib/api/adoption";
+import { getPosts } from "@/lib/api/post";
+import { createPost } from "@/lib/api/post";
 import { getToken } from "@/lib/session";
 import { jwtDecode } from "jwt-decode";
 
@@ -31,4 +33,13 @@ export async function getUserId() {
     return decoded.userId
   }
   throw new Error('No hay token')
+}
+
+
+export async function handleGetPosts() {
+  return await getPosts();
+}
+
+export async function handleCreatePost(FormData) {
+  await createPost(FormData);
 }
