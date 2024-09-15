@@ -42,7 +42,27 @@ const Step4 = ({prevStep = {prevStep}}) => {
 
     const publicarAdopcion = async () => {
         setPublishing(true)
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('sexType', sexType);
+        formData.append('vaccinated', vaccinated);
+        formData.append('unprotected', unprotected);
+        formData.append('castrated', castrated);
+        formData.append('animalType', animalType);
+        formData.append('sizeType', sizeType);
+        formData.append('ageYears', ageYears);
+        formData.append('ageMonths', ageMonths);
+        formData.append('image', fileImage);
+        formData.append('locality_id', locality.id);
 
+        try {
+            const resp = await handleCreateAdoption(formData);
+            router.push(`/adopcion/${resp.id}`)
+        } catch (error) {
+            console.log('Error al publicar', error);
+            setPublishing(false)
+        }
     }
     
     return (
@@ -98,7 +118,7 @@ const Step4 = ({prevStep = {prevStep}}) => {
                 {
                     publishing ? 
                     <div className='py-2 px-8'>
-                        <CustomLoading pColor={'primary-orange'} secondaryColor={'primary-blue'} />
+                        <CustomLoading />
                     </div>
                     :
                     <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" type="submit" onClick={publicarAdopcion}>Publicar</button>

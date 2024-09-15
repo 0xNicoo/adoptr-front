@@ -48,9 +48,6 @@ const AdoptionContainer = () => {
 
     const fetchAdoptions = async (filters, page) => {
         setLoading(true);
-
-        await awaitTest()
-
         try {
             const { total, data } = await getAdoption(filters, page);
             changeTotalPage(total);
@@ -59,17 +56,9 @@ const AdoptionContainer = () => {
         } catch (error) {
             setError(error.message);
         } finally {
-
-              
             setLoading(false);
         }
     };
-
-    const awaitTest = async () => {
-        setTimeout(() => {
-            console.log("Esperé 2 segundos");
-        },5000)
-    }
 
     const updateFilters = (newFilters) => {
         setFilters(newFilters);
@@ -81,7 +70,7 @@ const AdoptionContainer = () => {
     if (loading) return (
 
     <div role="status" className='flex items-center justify-center h-screen'>
-        <CustomLoading pColor={'primary-orange'} secondaryColor={'primary-blue'} />
+        <CustomLoading />
     </div>
     );
     if (error) return <p>Error: {error}</p>;
