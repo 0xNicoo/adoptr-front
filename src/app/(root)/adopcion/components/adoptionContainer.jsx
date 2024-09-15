@@ -6,6 +6,8 @@ import { getAdoption } from '../actions';
 import FilterForm from './filterForm';
 import PublicationList from './publicationList';
 import PaginationComponent from './pagination';
+import CustomLoading from '@/app/components/customLoading';
+
 
 const itemsPerPage = 8;
 
@@ -46,6 +48,9 @@ const AdoptionContainer = () => {
 
     const fetchAdoptions = async (filters, page) => {
         setLoading(true);
+
+        await awaitTest()
+
         try {
             const { total, data } = await getAdoption(filters, page);
             changeTotalPage(total);
@@ -54,9 +59,17 @@ const AdoptionContainer = () => {
         } catch (error) {
             setError(error.message);
         } finally {
+
+              
             setLoading(false);
         }
     };
+
+    const awaitTest = async () => {
+        setTimeout(() => {
+            console.log("Esperé 2 segundos");
+        },5000)
+    }
 
     const updateFilters = (newFilters) => {
         setFilters(newFilters);
@@ -65,7 +78,7 @@ const AdoptionContainer = () => {
         fetchAdoptions(newFilters, 1);
     };
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (<CustomLoading />);
     if (error) return <p>Error: {error}</p>;
 
     return (
