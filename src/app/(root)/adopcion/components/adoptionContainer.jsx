@@ -78,7 +78,12 @@ const AdoptionContainer = () => {
         fetchAdoptions(newFilters, 1);
     };
 
-    if (loading) return (<CustomLoading />);
+    if (loading) return (
+
+    <div role="status" className='flex items-center justify-center h-screen'>
+        <CustomLoading pColor={'primary-orange'} secondaryColor={'primary-blue'} />
+    </div>
+    );
     if (error) return <p>Error: {error}</p>;
 
     return (
