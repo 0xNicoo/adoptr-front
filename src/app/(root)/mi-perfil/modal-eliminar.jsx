@@ -2,7 +2,8 @@ import React from "react";
 import { deletePostAction } from "./actions";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Divider } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
-const PostModal = ({ isOpen, onOpenChange, postId }) => {
+
+const PostModal = ({ isOpen, onOpenChange, postId, removePost }) => {
 
     const router = useRouter();
 
@@ -10,6 +11,7 @@ const PostModal = ({ isOpen, onOpenChange, postId }) => {
         if (postId) {
             try {
                 await deletePostAction(postId);
+                removePost(postId)
                 onOpenChange(false); 
             } catch (error) {
                 console.error('Failed to delete post', error);

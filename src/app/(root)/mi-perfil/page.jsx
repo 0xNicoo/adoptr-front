@@ -38,6 +38,10 @@ const MiPerfil = () => {
     setPosts([...posts, post]) 
   }
 
+  const removePost = (postId) => {
+    setPosts(posts.filter(post => post.id !== postId));
+  };
+
   const handleEdit = () => {
     setProfileStore(profile);
     router.push('/mi-perfil/editar');
@@ -52,7 +56,7 @@ const MiPerfil = () => {
         <ProfileCard profile={profile} onEdit={handleEdit} />
       </div>
       <div className="mt-4 w-full lg:w-2/3 mr-4">
-        <MiPerfilTabs adoptions={adoptions} posts={posts} onPostsChange={onPostsChange} profile={profile} />
+        <MiPerfilTabs adoptions={adoptions} posts={posts} onPostsChange={onPostsChange} profile={profile} removePost={removePost}/>
       </div>
     </div>
   );

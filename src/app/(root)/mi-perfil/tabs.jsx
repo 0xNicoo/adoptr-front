@@ -6,7 +6,7 @@ import PostList from './post-list';
 import PostModal from './modal-eliminar';
 import { useState } from 'react';
 
-const MiPerfilTabs = ({ adoptions, posts, profile, onPostsChange}) => {
+const MiPerfilTabs = ({ adoptions, posts, profile, onPostsChange, removePost}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(null);
 
@@ -25,7 +25,7 @@ const MiPerfilTabs = ({ adoptions, posts, profile, onPostsChange}) => {
       <Tab key="novedades" title="Novedades">
         <Post onPostsChange={onPostsChange} />
         <PostList posts={posts} profile={profile} onOpen={handleOpen} />
-        <PostModal isOpen={isOpen} onOpenChange={handleClose} postId={selectedPostId}/>
+        <PostModal isOpen={isOpen} onOpenChange={handleClose} postId={selectedPostId} removePost={removePost}/>
       </Tab>
       <Tab key="publicaciones" title="Publicaciones de mascotas">
         <AdoptionList adoptions={adoptions} />
