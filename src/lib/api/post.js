@@ -1,7 +1,7 @@
 import 'server-only';
 import { getToken } from '../session';
 
-
+//TODO: paginar
 export async function getPosts() {
     const token = await getToken();
     const res = await fetch(`http://localhost:8080/post/all`, {

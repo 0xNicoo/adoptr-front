@@ -6,6 +6,8 @@ import { getAdoption } from '../actions';
 import FilterForm from './filterForm';
 import PublicationList from './publicationList';
 import PaginationComponent from './pagination';
+import CustomLoading from '@/app/components/customLoading';
+
 
 const itemsPerPage = 8;
 
@@ -65,7 +67,12 @@ const AdoptionContainer = () => {
         fetchAdoptions(newFilters, 1);
     };
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (
+
+    <div role="status" className='flex items-center justify-center h-screen'>
+        <CustomLoading />
+    </div>
+    );
     if (error) return <p>Error: {error}</p>;
 
     return (

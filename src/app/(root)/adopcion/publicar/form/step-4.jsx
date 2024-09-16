@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormStoreAdopcion } from '../../../../store';
 import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
 import Image from 'next/image';
 import { handleCreateAdoption } from './actions';
 import { useRouter } from 'next/navigation';
+import CustomLoading from '@/app/components/customLoading';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,8 +38,10 @@ const mapSexType = (sexType) => {
 const Step4 = ({prevStep = {prevStep}}) => {
     const { title, sizeType, animalType, ageYears, ageMonths, sexType, vaccinated, unprotected, castrated, description, image, locality, province, fileImage } = useFormStoreAdopcion();
     const router = useRouter()
+    const [publishing, setPublishing] = useState(false)
 
     const publicarAdopcion = async () => {
+        setPublishing(true)
         const formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
@@ -58,6 +61,7 @@ const Step4 = ({prevStep = {prevStep}}) => {
             router.push(`/adopcion/${resp.id}`)
         } catch (error) {
             console.log('Error al publicar', error);
+            setPublishing(false)
         }
     }
     
@@ -111,7 +115,15 @@ const Step4 = ({prevStep = {prevStep}}) => {
             </div>
             <div className="flex flex-row justify-between mt-4 mb-4 items-end mr-4">
                 <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
-                <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" type="submit" onClick={publicarAdopcion}>Publicar</button>
+                {
+                    publishing ? 
+                    <div className='py-2 px-8'>
+                        <CustomLoading />
+                    </div>
+                    :
+                    <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" type="submit" onClick={publicarAdopcion}>Publicar</button>
+                }
+
             </div>
         </div>
     )

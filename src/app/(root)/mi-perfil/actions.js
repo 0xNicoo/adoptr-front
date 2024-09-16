@@ -42,7 +42,7 @@ export async function handleGetPosts() {
 }
 
 export async function handleCreatePost(FormData) {
-  await createPost(FormData);
+    return await createPost(FormData);
 }
 
 export async function deletePostAction(id){
