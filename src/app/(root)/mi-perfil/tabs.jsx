@@ -4,11 +4,11 @@ import AdoptionList from './adoption-list';
 import Post from './post';
 import PostList from './post-list';
 
-const MiPerfilTabs = ({ adoptions, posts, profile }) => {
+const MiPerfilTabs = ({ adoptions, posts, profile, onPostsChange }) => {
   return (
     <Tabs aria-label="Options">
       <Tab key="novedades" title="Novedades">
-      <Post />
+      <Post onPostsChange={onPostsChange} />
       <PostList posts={posts} profile={profile} />
       </Tab>
       <Tab key="publicaciones" title="Publicaciones de mascotas">
