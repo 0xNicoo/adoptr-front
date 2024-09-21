@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { getAccessToken, getChatAction, getUserId, getProfileByUserIdAction } from '../actions';
@@ -108,8 +109,14 @@ const Chat = ({}) => {
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto bg-gray-100 rounded-lg shadow-lg">
       <div className="bg-primary-orange p-4 text-white text-xl rounded-t-lg font-bold">
-        {receiver ? (receiver.firstName + " " + receiver.lastName) : ""}
-      </div>
+  {receiver ? (
+    <Link href={`/perfiles?id=${receiver.user.id}`}>
+      <div className="hover:underline">{receiver.firstName + " " + receiver.lastName}</div>
+    </Link>
+  ) : (
+    ""
+  )}
+</div>
 
       <div
         className="flex-1 p-4 overflow-y-auto bg-cover bg-center"
