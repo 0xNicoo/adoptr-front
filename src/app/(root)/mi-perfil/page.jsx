@@ -1,8 +1,8 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { handleGetProfile, handleGetAdoptions, handleGetPosts } from './actions';
-import ProfileCard from './profile-card';
-import MiPerfilTabs from './tabs';
+import ProfileCard from './components/profile-card';
+import MiPerfilTabs from './components/tabs';
 import { useProfileEditStore } from '@/app/store';
 import { useRouter } from 'next/navigation';
 

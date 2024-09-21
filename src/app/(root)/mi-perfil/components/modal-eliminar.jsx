@@ -1,5 +1,5 @@
 import React from "react";
-import { deletePostAction } from "./actions";
+import { deletePostAction } from "../actions";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Divider } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
 

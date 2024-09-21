@@ -1,12 +1,12 @@
 "use client";
 import React from 'react';
-import { useFormStorePerfil } from '../../store';
+import { useFormStorePerfil } from '../../../store';
 import { Inter } from "next/font/google";
 import Image from 'next/image';
 import { Textarea } from '@nextui-org/react';
 import { CIcon } from '@coreui/icons-react';
 import { cilLocationPin } from '@coreui/icons';
-import { handleCreatePerfil } from './actions';
+import { handleCreatePerfil } from '../actions';
 import { useRouter } from 'next/navigation';
 
 const inter = Inter({ subsets: ["latin"] });

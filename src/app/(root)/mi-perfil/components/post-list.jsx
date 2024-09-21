@@ -1,5 +1,5 @@
 "use client"
-import { Card, CardHeader, CardBody, CardFooter, Divider, Image, Button } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, CardFooter, Divider, Image } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import { cilHeart } from '@coreui/icons';
 import { CIcon } from '@coreui/icons-react';

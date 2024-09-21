@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { useFormStorePerfil } from '../../store';
+import { useFormStorePerfil } from '../../../store';
 import { Select, SelectItem, Input, Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import { Inter } from "next/font/google";
-import { getProvince, getLocality } from './actions';
+import { getProvince, getLocality } from '../actions';
 
 const inter = Inter({ subsets: ["latin"] });
 
-const Step2 = ({ nextStep, prevStep }) => {
+const Step2 = ({ nextStep }) => {
   const [errors, setErrors] = useState('');
   const [provinces, setProvinces] = useState([]);
   const [localities, setLocalities] = useState([]);

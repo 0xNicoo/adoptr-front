@@ -1,10 +1,10 @@
 "use client";
 import React from 'react';
 import { NextUIProvider } from '@nextui-org/react';
-import Step2 from './step-2';
-import Step3 from './step-3';
-import Step4 from './step-4';
-import Stepper from './stepper';
+import Step2 from './components/step-2';
+import Step3 from './components/step-3';
+import Step4 from './components/step-4';
+import Stepper from './components/stepper';
 import { useFormStorePerfil } from '../../store';
 
 const MultiStepForm = () => {

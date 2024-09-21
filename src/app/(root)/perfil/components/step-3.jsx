@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { useFormStorePerfil } from '../../store';
+import { useFormStorePerfil } from '../../../store';
 import Image from 'next/image';
 import { CIcon } from '@coreui/icons-react';
 import { cilImagePlus } from '@coreui/icons';
