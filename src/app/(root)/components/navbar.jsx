@@ -13,7 +13,6 @@ const gentyDemo = localFont({
 });
 
 const navigation = [
-  { name: 'Servicios', href: '#', current: false },
   { name: 'Mascotas perdidas', href: '#', current: false },
   { name: 'Novedades', href: '#', current: false },
 ];
