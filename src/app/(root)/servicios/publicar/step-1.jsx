@@ -37,6 +37,9 @@ const Step1 = ({nextStep}) => {
       if (!value) {
         newErrors[key] = '* Este campo es obligatorio';
       }
+       else if (key === "number" && isNaN(Number(value))) {
+        newErrors[key] = '* El número debe ser un valor numérico';
+      }
     });
     
     if (Object.keys(newErrors).length > 0) {
@@ -200,7 +203,7 @@ const Step1 = ({nextStep}) => {
 
     </div>
 
-    <div className='flex flex-row gap-12'>
+    <div className='flex flex-row gap-12 mt-8'>
 
         <div className='flex flex-col w-1/6'>
           <label htmlFor="calle" className="block xl:text-md 2xl:text-xl font-medium">Calle</label>
@@ -220,7 +223,7 @@ const Step1 = ({nextStep}) => {
     </div>
   </div>
 
-    <div className="flex flex-row justify-between mt-4 items-end mr-4">
+    <div className="flex flex-row justify-between mt-4 items-end mr-4 mt-8">
         <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
     </div>
   </div>

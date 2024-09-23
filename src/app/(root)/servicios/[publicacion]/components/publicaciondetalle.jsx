@@ -2,13 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
-import { Checkbox, Textarea } from '@nextui-org/react';
+import { Textarea } from '@nextui-org/react';
 import { getServiceDetail } from '../actions';
 import { useRouter } from 'next/navigation';
-import { deleteAdoptionAction, getUserId, getChatByPublicationIdAction, setFavoriteAction, getFavoriteAction } from '../actions';
-import { useAdoptionEditStore } from '@/app/store';
-import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/react/24/solid';
-import { BookmarkIcon as OutlineBookmarkIcon } from '@heroicons/react/24/outline';
+import { getUserId } from '../actions';
 import { CIcon } from '@coreui/icons-react';
 import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
@@ -57,8 +54,11 @@ const PublicationDetail = ({ serviceId }) => {
           </div>
           <div className='flex flex-col w-full'>
             <h1 className={`${inter.className} xl:text-2xl 2xl:text-3xl md:text-lg font-medium text-primary-blue`}>{service.title}</h1>
+            <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-4`}>TIPO DE SERVICIO</p>
+            <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{service.serviceType.name}</p>
             <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>UBICACIÓN</p>
             <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{service.locality.name}, {service.locality.province.name}</p>
+            <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{"Calle " + service.street}, {service.number}</p>
             <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2 mb-1`}>DESCRIPCIÓN</p>
             <Textarea
               isReadOnly
@@ -85,7 +85,7 @@ const PublicationDetail = ({ serviceId }) => {
         </div>
         <div className='w-full flex justify-end mt-4'>
           <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white">
-          {service.user.id == userId ? (<>Chats</>) : (<>Adoptar</>)}
+          {service.user.id == userId ? (<>Chats</>) : (<>Contactar</>)}
           </button>
         </div>
       </div>
