@@ -1,5 +1,6 @@
 import localFont from 'next/font/local';
 import DropdownAdoptar from './dropdownadoptar';
+import DropdownServicios from './dropdownservicios';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import "../../globals.css";
@@ -44,6 +45,7 @@ const Navbar = () => {
           <div className="hidden sm:ml-6 sm:block flex items-center space-x-16">
             {/* Dropdown "Adoptar" */}
             <DropdownAdoptar />
+            <DropdownServicios />
               {navigation.map((item) => (
                 <a
                   key={item.name}
@@ -64,6 +66,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <DisclosurePanel className="sm:hidden flex flex-col space-y-1 px-2 pb-3 pt-2">
         <DropdownAdoptar />
+        <DropdownServicios />
         {navigation.map((item) => (
           <DisclosureButton
             key={item.name}
