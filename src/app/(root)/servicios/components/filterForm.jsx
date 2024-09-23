@@ -1,21 +1,84 @@
-import { getService } from '../actions';
+import { getService, getServiceType, getProvince, getLocality } from '../actions'; // Asegúrate de tener estas funciones
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { Button } from '@nextui-org/react';
+import { Button, Select, SelectItem } from '@nextui-org/react';
 
 const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilters, initialFilters }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const { register, handleSubmit, setValue, reset } = useForm(); 
+    const { register, handleSubmit, setValue, reset, watch } = useForm(); 
     const router = useRouter(); 
 
+    // Estados para los tipos de servicio, provincias, localidades, y estado de carga
+    const [serviceTypes, setServiceTypes] = useState([]);
+    const [provinces, setProvinces] = useState([]);
+    const [localities, setLocalities] = useState([]);
+    const [loadingServiceTypes, setLoadingServiceTypes] = useState(true);
+    const [loadingLocalities, setLoadingLocalities] = useState(false);
+    const [error, setError] = useState(null);
+
+    const selectedProvince = watch('province_id'); // Escuchar cambios en la provincia seleccionada
+
+    // Cargar los tipos de servicio al montar el componente
     useEffect(() => {
-        // Sincroniza el estado inicial de los filtros con react-hook-form
+        async function fetchServiceTypes() {
+            try {
+                const serviceTypeData = await getServiceType();
+                setServiceTypes(serviceTypeData || []);
+                setLoadingServiceTypes(false);
+            } catch (error) {
+                console.error("Error fetching service types:", error);
+                setError('Error al cargar los tipos de servicio');
+                setLoadingServiceTypes(false);
+            }
+        }
+        fetchServiceTypes();
+    }, []);
+
+    // Cargar provincias al montar el componente
+    useEffect(() => {
+        async function fetchProvinces() {
+            try {
+                const provincesData = await getProvince();
+                setProvinces(provincesData || []);
+            } catch (error) {
+                console.error("Error fetching provinces:", error);
+                setError('Error al cargar las provincias');
+            }
+        }
+        fetchProvinces();
+    }, []);
+
+    // Cargar localidades cuando cambia la provincia seleccionada
+    useEffect(() => {
+        async function fetchLocalities(provinceId) {
+            if (provinceId) {
+                setLoadingLocalities(true);
+                try {
+                    const localitiesData = await getLocality(provinceId);
+                    setLocalities(localitiesData || []);
+                } catch (error) {
+                    console.error("Error fetching localities:", error);
+                    setError('Error al cargar las localidades');
+                } finally {
+                    setLoadingLocalities(false);
+                }
+            } else {
+                setLocalities([]); // Limpiar localidades si no hay provincia seleccionada
+            }
+        }
+
+        fetchLocalities(selectedProvince);
+    }, [selectedProvince]);
+
+    // Sincronizar filtros iniciales
+    useEffect(() => {
         Object.entries(initialFilters).forEach(([key, value]) => {
             setValue(key, value);
         });
     }, [initialFilters, setValue]);
 
+    // Manejo del envío del formulario
     const onSubmit = async (filter) => {
         updateFilters(filter);
         const { total, data } = await getService(filter, 1);
@@ -24,6 +87,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
         updateCurrentPage(1);
     };
 
+    // Limpieza de filtros
     const handleClearFilters = async () => {
         reset(); 
         updateFilters({}); 
@@ -47,6 +111,8 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                 <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-md w-full">
                     <div className="flex flex-col">
                         <div className="flex flex-item-center gap-4">
+
+                            {/* Filtro por título */}
                             <div className="relative z-0 w-full md:w-1/4">
                                 <input
                                     type="text"
@@ -57,12 +123,69 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                                 />
                                 <label
                                     htmlFor="title"
-                                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0"
                                 >
                                     Título
                                 </label>
                             </div>
+                    
+                        
+                            {/* Filtro por tipo de servicio */}
+                            <div className="relative z-0 w-full md:w-1/4">
+                                {loadingServiceTypes ? (
+                                    <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading />
+                                ) : error ? (
+                                    <p>{error}</p>
+                                ) : (
+                                    <Select 
+                                        className="w-full min-w-[12rem]"
+                                        placeholder='Seleccionar tipo de servicio'
+                                        {...register('serviceType_id')}
+                                    >
+                                        {serviceTypes.map((serv) => (
+                                            <SelectItem key={serv.id} value={serv.id}>
+                                                {serv.name}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+                                )}
+                            </div>
+                        </div>
 
+                        <div className="flex flex-item-center gap-4 mt-8">
+                            {/* Filtro por provincia */}
+                            <div className="relative z-0 w-full md:w-1/4">
+                                <Select 
+                                    className="w-full min-w-[12rem]"
+                                    placeholder='Seleccionar provincia'
+                                    {...register('province_id')}
+                                >
+                                    {provinces.map((prov) => (
+                                        <SelectItem key={prov.id} value={prov.id}>
+                                            {prov.name}
+                                        </SelectItem>
+                                    ))}
+                                </Select>
+                            </div>
+
+                            {/* Filtro por localidad */}
+                            <div className="relative z-0 w-full md:w-1/4">
+                                <Select 
+                                    className="w-full min-w-[12rem]"
+                                    placeholder='Seleccionar localidad'
+                                    {...register('locality_id')}
+                                    isDisabled={!selectedProvince || loadingLocalities} // Deshabilitar si no hay provincia seleccionada
+                                >
+                                    {localities.map((loc) => (
+                                        <SelectItem key={loc.id} value={loc.id}>
+                                            {loc.name}
+                                        </SelectItem>
+                                    ))}
+                                </Select>
+                            </div>
+
+                        </div>
+                        <div className="flex justify-end gap-4 mt-4">
                             <Button
                                 type="submit" className='bg-primary-blue text-white'
                             >
@@ -70,7 +193,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                             </Button>
                             <Button
                                 type="button" className='bg-red-700 text-white'
-                                onClick={handleClearFilters}  
+                                onClick={() => handleClearFilters()}  
                             >
                                 Limpiar filtro
                             </Button>
