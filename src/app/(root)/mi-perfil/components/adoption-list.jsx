@@ -20,9 +20,9 @@ const AdoptionList = ({ adoptions, handleDelete }) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {adoptions.length > 0 ? (
         adoptions.map((adoption) => (
-          <Card key={adoption.id} className="overflow-hidden">
-            <CardBody className="px-2">
-              <div className="rounded-lg aspect-square w-full overflow-hidden">
+          <Card key={adoption.id} className="items-center justify-center p-4">
+            <CardBody className="overflow-hidden p-1 flex justify-center ">
+              <div className="">
                 <Image
                   alt="Animal en adopción"
                   src={adoption.s3Url}

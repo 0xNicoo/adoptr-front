@@ -9,11 +9,11 @@ const ServiceList = ({ services, handleDelete }) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {services?.length > 0 ? (
         services.map((service) => (
-          <Card key={service.id} className="overflow-hidden">
-            <CardBody className="px-2">
-              <div className="rounded-lg aspect-square w-full overflow-hidden">
+            <Card key={service.id} className="items-center justify-center p-4">
+            <CardBody className="overflow-hidden p-1 flex justify-center ">
+              <div className="">
                 <Image
-                  alt="Publicacion de servicio"
+                  alt="servicio"
                   src={service.s3Url}
                   width={270}
                   height={300}
