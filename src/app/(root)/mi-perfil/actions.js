@@ -38,8 +38,8 @@ export async function getUserId() {
 }
 
 
-export async function handleGetPosts() {
-  return await getPosts();
+export async function handleGetPosts(page = 0, size = 10) {
+  return await getPosts(page, size);
 }
 
 export async function handleCreatePost(FormData) {

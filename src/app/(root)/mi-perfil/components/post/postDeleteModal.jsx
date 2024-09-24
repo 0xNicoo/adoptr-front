@@ -1,9 +1,9 @@
 import React from "react";
-import { deletePostAction } from "../actions";
+import { deletePostAction } from "../../actions";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Divider } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
 
-const PostModal = ({ isOpen, onOpenChange, postId, removePost }) => {
+const PostDeleteModal = ({ isOpen, onOpenChange, postId, removePost }) => {
 
     const router = useRouter();
 
@@ -46,4 +46,4 @@ const PostModal = ({ isOpen, onOpenChange, postId, removePost }) => {
   );
 };
 
-export default PostModal;
+export default PostDeleteModal;

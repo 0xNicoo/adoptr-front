@@ -11,22 +11,14 @@ const MiPerfilTabs = ({ adoptions, posts, profile, services, onPostsChange, remo
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(null);
 
-  const handleOpen = (postId) => {
-    setSelectedPostId(postId);
-    setIsOpen(true);
-  };
 
-  const handleClose = () => {
-    setIsOpen(false);
-    setSelectedPostId(null);
-  };
+const MiPerfilTabs = ({ adoptions, profile}) => {
+
   
   return (
     <Tabs aria-label="Options">
       <Tab key="novedades" title="Novedades">
-        <Post onPostsChange={onPostsChange} />
-        <PostList posts={posts} profile={profile} onOpen={handleOpen} />
-        <PostModal isOpen={isOpen} onOpenChange={handleClose} postId={selectedPostId} removePost={removePost}/>
+        <PostConatiner profile={profile}/>
       </Tab>
       <Tab key="publicaciones" title="Publicaciones de mascotas">
         <AdoptionList adoptions={adoptions} />

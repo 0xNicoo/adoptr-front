@@ -1,13 +1,21 @@
-import { getAdoption } from '../actions';
+import { getAdoption, getProvince, getLocality } from '../actions';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation'; // Importa useRouter para manejar la redirección
-import { Checkbox, Button } from '@nextui-org/react';
+import { Checkbox, Button, Select, SelectItem } from '@nextui-org/react';
 
 const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilters, initialFilters }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const { register, handleSubmit, setValue, reset } = useForm(); // Agrega watch para observar los cambios
+    const { register, handleSubmit, setValue, reset, watch } = useForm(); // Agrega watch para observar los cambios
     const router = useRouter(); // Inicializa useRouter para redireccionar
+
+    const [provinces, setProvinces] = useState([]);
+    const [localities, setLocalities] = useState([]);
+    const [loadingServiceTypes, setLoadingServiceTypes] = useState(true);
+    const [loadingLocalities, setLoadingLocalities] = useState(false);
+
+    const selectedProvince = watch('province_id');
+
     // Guarda el estado de los checkboxes
     const [filters, setFilters] = useState({
         vaccinated: initialFilters.vaccinated || false,
@@ -34,6 +42,43 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
             [name]: checked
         }));
     };
+
+    // Cargar provincias al montar el componente
+    useEffect(() => {
+        async function fetchProvinces() {
+            try {
+                const provincesData = await getProvince();
+                setProvinces(provincesData || []);
+            } catch (error) {
+                console.error("Error fetching provinces:", error);
+                setError('Error al cargar las provincias');
+            }
+        }
+        fetchProvinces();
+    }, []);
+
+    // Cargar localidades cuando cambia la provincia seleccionada
+    useEffect(() => {
+        async function fetchLocalities(provinceId) {
+            if (provinceId) {
+                setLoadingLocalities(true);
+                try {
+                    const localitiesData = await getLocality(provinceId);
+                    setLocalities(localitiesData || []);
+                } catch (error) {
+                    console.error("Error fetching localities:", error);
+                    setError('Error al cargar las localidades');
+                } finally {
+                    setLoadingLocalities(false);
+                }
+            } else {
+                setLocalities([]); // Limpiar localidades si no hay provincia seleccionada
+            }
+        }
+
+        fetchLocalities(selectedProvince);
+    }, [selectedProvince]);
+
     const onSubmit = async (filter) => {
         // Agrega los valores de los checkboxes al filtro
         const combinedFilter = { ...filter, ...filters };
@@ -164,6 +209,40 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                                     Castrado
                                 </Checkbox>
                             </div>
+                            <div className="flex flex-item-center gap-4 mt-8">
+                            {/* Filtro por provincia */}
+                            <div className="relative z-0 w-full md:w-1/4">
+                                <Select 
+                                    className="w-full min-w-[12rem]"
+                                    placeholder='Seleccionar provincia'
+                                    {...register('province_id')}
+                                >
+                                    {provinces.map((prov) => (
+                                        <SelectItem key={prov.id} value={prov.id}>
+                                            {prov.name}
+                                        </SelectItem>
+                                    ))}
+                                </Select>
+                            </div>
+
+                            {/* Filtro por localidad */}
+                            <div className="relative z-0 w-full md:w-1/4">
+                                <Select 
+                                    className="w-full min-w-[12rem]"
+                                    placeholder='Seleccionar localidad'
+                                    {...register('locality_id')}
+                                    isDisabled={!selectedProvince || loadingLocalities} // Deshabilitar si no hay provincia seleccionada
+                                >
+                                    {localities.map((loc) => (
+                                        <SelectItem key={loc.id} value={loc.id}>
+                                            {loc.name}
+                                        </SelectItem>
+                                    ))}
+                                </Select>
+                            </div>
+
+                        </div>
+
                     </div>
                 </form>
             )}

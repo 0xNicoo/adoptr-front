@@ -5,6 +5,7 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { getAccessToken, getChatAction, getUserId, getProfileByUserIdAction } from '../actions';
 import { useSearchParams } from 'next/navigation'
+import { Image } from '@nextui-org/react';
 
 // esto estaba en la linea 122 <span className="font-bold">Username:</span>
 
@@ -106,17 +107,17 @@ const Chat = ({}) => {
     }
   }
   
-  return (
+return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto bg-gray-100 rounded-lg shadow-lg">
       <div className="bg-primary-orange p-4 text-white text-xl rounded-t-lg font-bold">
-  {receiver ? (
-    <Link href={`/perfiles?id=${receiver.user.id}`}>
-      <div className="hover:underline">{receiver.firstName + " " + receiver.lastName}</div>
-    </Link>
-  ) : (
-    ""
-  )}
-</div>
+        {receiver ? (
+          <Link href={`/perfiles?id=${receiver.user.id}`}>
+            <div className="hover:underline">{receiver.firstName + " " + receiver.lastName}</div>
+          </Link>
+        ) : (
+          ""
+        )}
+      </div>
 
       <div
         className="flex-1 p-4 overflow-y-auto bg-cover bg-center"
@@ -124,18 +125,28 @@ const Chat = ({}) => {
       >
         <ul className="space-y-2">
           {messages.length != 0 ? console.log(messages) : console.log("vacio")}
-          {userLogged && messages.length != 0  ?
-                    messages.map((msg, index) => (
-                      <li key={index} className={`flex ${msg.userSenderId == userLogged.user.id ? 'justify-end' : 'justify-start'} mb-2`}>
-                        <div
-                          className={`text-white p-3 rounded-full max-w-max ${msg.userSenderId == userLogged.user.id ? 'ml-2 bg-blue-500' : 'mr-2 bg-gray-500'}`}
-                        >
-                          {msg.content}
-                        </div>
-                      </li>
-                    ))
-          : <div></div>}
-
+          {userLogged && messages.length != 0 ?
+          messages.map((msg, index) => (
+            <li key={index} className={`flex items-center ${msg.userSenderId == userLogged.user.id ? 'justify-end' : 'justify-start'} mb-2`}>
+              {msg.userSenderId != userLogged.user.id && receiver && receiver.s3Url ? (
+                <div className='flex-shrink-0 mr-2'>
+                  <Image className='rounded-full'
+                    src={receiver.s3Url}
+                    alt="Foto de perfil del contacto"
+                    width={45}
+                    height={45}  
+                  />
+                </div>
+              ) : null}
+              <div
+                className={`text-white p-3 rounded-3xl max-w-[60%] min-w-[5%] break-words ${msg.userSenderId == userLogged.user.id ? 'ml-2 bg-blue-500' : 'mr-2 bg-gray-500 '}`}
+              >
+                {msg.content}
+              </div>
+            </li>
+          ))
+          : <div></div>
+          }
         </ul>
       </div>
 
@@ -149,7 +160,7 @@ const Chat = ({}) => {
         />
         <button
           type="submit"
-          className={` flex items-center justify-center p-2 rounded-full`}
+          className="flex items-center justify-center p-2 rounded-full"
         >
           <img
             src="/images/send.png"
@@ -163,4 +174,3 @@ const Chat = ({}) => {
 };
 
 export default Chat;
-

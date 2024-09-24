@@ -39,7 +39,6 @@ export default function EditPage() {
     checkUser()
   }, [])
 
-  //TODO(nico): user el loading de next
   if (loading) {
     return <p>Loading...</p>
   }

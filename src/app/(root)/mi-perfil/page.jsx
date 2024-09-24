@@ -30,6 +30,7 @@ const MiPerfil = () => {
         const filteredServices = servicesData.filter(service => service.user.id === profileData.user.id);
         setServices(filteredServices);
 
+
       } catch (err) {
         setError('Error al obtener el perfil');
       } finally {
@@ -38,14 +39,6 @@ const MiPerfil = () => {
     };
     fetchProfile();
   }, []);
-
-  const onPostsChange = (post) => {
-    setPosts([...posts, post]) 
-  }
-
-  const removePost = (postId) => {
-    setPosts(posts.filter(post => post.id !== postId));
-  };
 
   const handleEdit = () => {
     setProfileStore(profile);

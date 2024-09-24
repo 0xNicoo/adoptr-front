@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Textarea, Button } from '@nextui-org/react';
-import { handleCreatePost } from '../actions';
+import { handleCreatePost } from '../../actions';
 
 const Post = ({onPostsChange}) => {
   const [description, setDescription] = useState('');
