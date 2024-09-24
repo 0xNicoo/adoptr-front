@@ -1,20 +1,12 @@
 "use client"
 import { Tabs, Tab, Card, CardBody } from '@nextui-org/react';
 import AdoptionList from './adoption-list';
-import Post from './post';
-import PostList from './post-list';
-import PostModal from './modal-eliminar';
-import { useState } from 'react';
 import ServiceList from './serviceList';
-
-const MiPerfilTabs = ({ adoptions, posts, profile, services, onPostsChange, removePost}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedPostId, setSelectedPostId] = useState(null);
+import PostConatiner from './post/postContainer';
 
 
-const MiPerfilTabs = ({ adoptions, profile}) => {
+const MiPerfilTabs = ({ profile, adoptions, services}) => {
 
-  
   return (
     <Tabs aria-label="Options">
       <Tab key="novedades" title="Novedades">

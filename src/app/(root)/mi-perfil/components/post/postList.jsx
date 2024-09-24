@@ -67,12 +67,12 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
                       alt="Foto de perfil del usuario"
                       height={40}
                       width={40}
-                      src={profile.s3Url}
+                      src={post.s3Url}
                       className='rounded-full'
                     />
                   </div>
                   <div className="flex flex-col">
-                    <p className="text-md">{profile.firstName} {profile.lastName}</p>
+                    <p className="text-md">{post.firstName} {post.lastName}</p>
                     <p className="text-small text-default-500">{formatDate(post.date)}</p>
                   </div>
                 </div>

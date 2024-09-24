@@ -54,7 +54,7 @@ const MiPerfil = () => {
         <ProfileCard profile={profile} onEdit={handleEdit} />
       </div>
       <div className="mt-4 w-full lg:w-2/3 mr-4">
-        <MiPerfilTabs adoptions={adoptions} posts={posts} services={services} onPostsChange={onPostsChange} profile={profile} removePost={removePost}/>
+        <MiPerfilTabs adoptions={adoptions} posts={posts} services={services} />
       </div>
     </div>
   );
