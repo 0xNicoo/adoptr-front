@@ -83,3 +83,39 @@ export async function getServiceById(id) {
   }
   return res.json();
 }
+
+export async function deleteService(id){
+  const token = await getToken();
+  const res = await fetch(`http://localhost:8080/service/${id}`,{
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+  })
+
+  if(!res.ok){
+      throw new Error('Failed to fetch data')
+  }
+  return
+}
+
+export async function editService(id, data) {
+  console.log(data);
+  console.log(id);
+  const token = await getToken();
+  const res = await fetch(`http://localhost:8080/service/${id}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    method: 'PUT',
+    body: data
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    console.log(errorData)
+    throw new Error(`Failed to fetch data: `, errorData)
+  }
+
+  return res.json();
+}

@@ -1,10 +1,9 @@
 import 'server-only';
 import { getToken } from '../session';
 
-//TODO: paginar
-export async function getPosts() {
+export async function getPosts(page, size) {
     const token = await getToken();
-    const res = await fetch(`http://localhost:8080/post/all`, {
+    const res = await fetch(`http://localhost:8080/post/all?page=${page}&size=${size}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       },

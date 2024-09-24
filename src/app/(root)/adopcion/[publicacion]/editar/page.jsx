@@ -49,6 +49,8 @@ export default function EditPage() {
   };
 
   const onEdit = async (data) => {
+    console.log('Datos enviados al editar:', data);
+
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);

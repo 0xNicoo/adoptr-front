@@ -5,11 +5,11 @@ import { Inter } from "next/font/google";
 import { Textarea } from '@nextui-org/react';
 import { getServiceDetail } from '../actions';
 import { useRouter } from 'next/navigation';
-import { getUserId } from '../actions';
+import { getUserId, deleteServiceAction } from '../actions';
 import { CIcon } from '@coreui/icons-react';
 import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
-
+import { useServiceEditStore } from '@/app/store';
 const inter = Inter({ subsets: ["latin"] });
 
 const PublicationDetail = ({ serviceId }) => {
@@ -17,7 +17,7 @@ const PublicationDetail = ({ serviceId }) => {
   const [error, setError] = useState(null);
   const router = useRouter();
   const [userId, setUserId] = useState(null);
-  //const {setAdoptionStore} = useAdoptionEditStore()
+  const {setServiceStore} = useServiceEditStore()
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -38,6 +38,17 @@ const PublicationDetail = ({ serviceId }) => {
 
   if (error) return <div>Error: {error}</div>;
   if (!service) return <div>Loading...</div>;
+
+  const handleDelete = async (id) => {
+    await deleteServiceAction(id)
+    router.push('/servicios?page=1')
+  };
+
+  const handleEdit = () => {
+    setServiceStore(service)
+    router.push(`/servicios/${service.id}/editar`)
+};
+
 
   return (
     <div className="bg-background-gray flex pt-4 px-4 pb-4 justify-center">
@@ -70,7 +81,7 @@ const PublicationDetail = ({ serviceId }) => {
             {/* TODO: Revisar el responsive de esto */}
                 <div className='flex'>
                   <button
-                  onClick={() => handleDelete(adoption.id)}
+                  onClick={() => handleDelete(service.id)}
                   className="bg-red-500 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-red-700 flex items-center justify-center"
                   >
                   <CIcon icon={cilTrash} className="w-4 h-4 text-white fill-current" />
