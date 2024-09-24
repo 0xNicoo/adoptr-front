@@ -24,7 +24,7 @@ const SectionE = () =>{
                     <br/>
                     Cada aporte nos ayuda a hacer de nuestra comunidad un lugar aún más especial para los amantes de los animales.
                     </p>
-                    <div className="relative xl:ml-10 2xl:ml-40"> {/*TODO: Redimensionar las imagenes para que queden todas del mismo tamaño*/}
+                    <div className="relative xl:ml-10 2xl:ml-40">
                         <Image className="xl:w-48 2xl:w-72"
                             src="/images/sectionE.png"
                             width={180}
