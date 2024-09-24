@@ -10,30 +10,12 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
     const router = useRouter(); 
 
     // Estados para los tipos de servicio, provincias, localidades, y estado de carga
-    const [serviceTypes, setServiceTypes] = useState([]);
     const [provinces, setProvinces] = useState([]);
     const [localities, setLocalities] = useState([]);
-    const [loadingServiceTypes, setLoadingServiceTypes] = useState(true);
     const [loadingLocalities, setLoadingLocalities] = useState(false);
     const [error, setError] = useState(null);
 
     const selectedProvince = watch('province_id'); // Escuchar cambios en la provincia seleccionada
-
-    // Cargar los tipos de servicio al montar el componente
-    useEffect(() => {
-        async function fetchServiceTypes() {
-            try {
-                const serviceTypeData = await getServiceType();
-                setServiceTypes(serviceTypeData || []);
-                setLoadingServiceTypes(false);
-            } catch (error) {
-                console.error("Error fetching service types:", error);
-                setError('Error al cargar los tipos de servicio');
-                setLoadingServiceTypes(false);
-            }
-        }
-        fetchServiceTypes();
-    }, []);
 
     // Cargar provincias al montar el componente
     useEffect(() => {
@@ -89,10 +71,22 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
 
     // Limpieza de filtros
     const handleClearFilters = async () => {
-        reset(); 
-        updateFilters({}); 
+        const currentFilters = watch(); // Obtiene los filtros actuales
 
-        const { total, data } = await getService({}, 1); 
+        // Mantener solo el serviceType_id
+        const filtersToReset = { 
+            title: '', 
+            province_id: '', 
+            locality_id: '' 
+        };
+
+        reset(filtersToReset); // Resetea los filtros
+
+        // Actualiza los filtros manteniendo serviceType_id
+        const updatedFilters = { ...currentFilters, ...filtersToReset };
+        updateFilters(updatedFilters); 
+
+        const { total, data } = await getService(updatedFilters, 1); 
         updateTotalPage(total);
         updateData(data);
         updateCurrentPage(1);
@@ -129,27 +123,6 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                                 </label>
                             </div>
                     
-                        
-                            {/* Filtro por tipo de servicio */}
-                            <div className="relative z-0 w-full md:w-1/4">
-                                {loadingServiceTypes ? (
-                                    <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading />
-                                ) : error ? (
-                                    <p>{error}</p>
-                                ) : (
-                                    <Select 
-                                        className="w-full min-w-[12rem]"
-                                        placeholder='Seleccionar tipo de servicio'
-                                        {...register('serviceType_id')}
-                                    >
-                                        {serviceTypes.map((serv) => (
-                                            <SelectItem key={serv.id} value={serv.id}>
-                                                {serv.name}
-                                            </SelectItem>
-                                        ))}
-                                    </Select>
-                                )}
-                            </div>
                         </div>
 
                         <div className="flex flex-item-center gap-4 mt-8">
