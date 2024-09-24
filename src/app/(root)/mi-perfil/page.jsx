@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { handleGetProfile, handleGetAdoptions, handleGetPosts } from './actions';
+import { handleGetProfile, handleGetAdoptions, handleGetServices, handleGetPosts } from './actions';
 import ProfileCard from './components/profile-card';
 import MiPerfilTabs from './components/tabs';
 import { useProfileEditStore } from '@/app/store';
@@ -10,6 +10,8 @@ const MiPerfil = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [adoptions, setAdoptions] = useState(null);
+  const [services, setServices] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const { setProfileStore } = useProfileEditStore();
   const router = useRouter();
@@ -22,6 +24,13 @@ const MiPerfil = () => {
         const adoptionsData = await handleGetAdoptions();
         const filteredAdoptions = adoptionsData.filter(adoption => adoption.user.id === profileData.user.id);
         setAdoptions(filteredAdoptions);
+        const postsData = await handleGetPosts(); 
+        setPosts(postsData); 
+        const servicesData = await handleGetServices();
+        const filteredServices = servicesData.filter(service => service.user.id === profileData.user.id);
+        setServices(filteredServices);
+
+
       } catch (err) {
         setError('Error al obtener el perfil');
       } finally {
@@ -45,7 +54,7 @@ const MiPerfil = () => {
         <ProfileCard profile={profile} onEdit={handleEdit} />
       </div>
       <div className="mt-4 w-full lg:w-2/3 mr-4">
-        <MiPerfilTabs adoptions={adoptions} profile={profile}/>
+        <MiPerfilTabs adoptions={adoptions} posts={posts} services={services} onPostsChange={onPostsChange} profile={profile} removePost={removePost}/>
       </div>
     </div>
   );

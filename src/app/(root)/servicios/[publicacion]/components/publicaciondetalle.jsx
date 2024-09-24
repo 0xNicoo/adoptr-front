@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import { Textarea } from '@nextui-org/react';
 import { getServiceDetail } from '../actions';
 import { useRouter } from 'next/navigation';
-import { getUserId, deleteServiceAction } from '../actions';
+import { getUserId, deleteServiceAction, getChatByPublicationIdAction } from '../actions';
 import { CIcon } from '@coreui/icons-react';
 import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
@@ -34,10 +34,22 @@ const PublicationDetail = ({ serviceId }) => {
     if (serviceId) {
       fetchService();
     }
+    fetchUserId()
   }, [serviceId]);
 
   if (error) return <div>Error: {error}</div>;
   if (!service) return <div>Loading...</div>;
+
+  const handleServClick = async () => {
+    if(userId == service.user.id){
+      router.push('/chatList')
+      return
+    }else{
+      const chat = await getChatByPublicationIdAction(service.id)
+      router.push(`/chat?chat=${chat.id}`);
+    }
+
+  };
 
   const handleDelete = async (id) => {
     await deleteServiceAction(id)
@@ -95,7 +107,8 @@ const PublicationDetail = ({ serviceId }) => {
           </div>
         </div>
         <div className='w-full flex justify-end mt-4'>
-          <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white">
+          <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"
+          onClick={handleServClick}>
           {service.user.id == userId ? (<>Chats</>) : (<>Contactar</>)}
           </button>
         </div>

@@ -8,6 +8,7 @@ import { deletePost } from "@/lib/api/post";
 import { createPost } from "@/lib/api/post";
 import { getToken } from "@/lib/session";
 import { jwtDecode } from "jwt-decode";
+import { getServices } from "@/lib/api/service";
 
 
 export async function handleGetProfile() {
@@ -47,4 +48,12 @@ export async function handleCreatePost(FormData) {
 
 export async function deletePostAction(id){
   await deletePost(id)
+}
+
+export async function handleGetServices(filter, page, size) {
+  const res = await getServices(filter, page, size);
+  if (!res.ok) {
+    throw new Error('Failed to fetch services');
+  }
+  return res.json(); 
 }
