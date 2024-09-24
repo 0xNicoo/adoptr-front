@@ -1,6 +1,6 @@
 'use server';
 
-import { getServiceById} from "@/lib/api/service";
+import { getServiceById, deleteService} from "@/lib/api/service";
 import { getToken } from "@/lib/session";
 
 export async function getServiceDetail(serviceId) {
@@ -14,7 +14,11 @@ export async function getUserId() {
       return decoded.userId
     }
     throw new Error('No hay token')
-  }
+}
+
+export async function deleteServiceAction(id){
+  await deleteService(id)
+}
 
 
 
