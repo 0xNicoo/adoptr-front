@@ -1,4 +1,5 @@
 "use client"
+
 import { Card, CardHeader, CardBody, CardFooter, Divider, Image } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import { cilHeart } from '@coreui/icons';
@@ -35,23 +36,23 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
   const PAGE_SIZE = 10
   const [ref, inView] = useInView()
   const [currentPage, setPage] = useState(0)
+  const [endOfList, setEndOfList] = useState(false)
 
   const onScroll = async () => {
     const nextPage = currentPage + 1
     const postsData = await handleGetPosts(nextPage, PAGE_SIZE)
-    console.log(postsData)
+    if(postsData.length < 10){
+      setEndOfList(true)
+    }
     setPage(nextPage)
     setPosts([...posts, ...postsData])
   }
 
   useEffect(() => {
-    console.log("CURRENT POSTs: ", posts)
     if(inView){
       onScroll()
     }
   }, [inView])
-
-
 
   return (
     <div className="flex flex-col gap-3">
@@ -91,8 +92,15 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
               </CardFooter>
             </Card>
           ))}
-          <div ref={ref}>
-            <CustomLoading />
+          <div className="flex justify-center items-center my-4 w-4/5">
+            {endOfList ? 
+              <p className='text-gray-600'>Ya no hay mas post para cargar :c</p> 
+            : 
+            (
+              <div ref={ref}>
+                <CustomLoading />
+              </div>
+            )}
           </div>
         </>
       ) : (
@@ -102,7 +110,6 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
           </CardBody>
         </Card>
       )}
-
     </div>
   );
 };
