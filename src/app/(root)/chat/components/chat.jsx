@@ -5,6 +5,7 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { getAccessToken, getChatAction, getUserId, getProfileByUserIdAction } from '../actions';
 import { useSearchParams } from 'next/navigation'
+import { Image } from '@nextui-org/react';
 
 // esto estaba en la linea 122 <span className="font-bold">Username:</span>
 
@@ -124,19 +125,30 @@ const Chat = ({}) => {
       >
         <ul className="space-y-2">
           {messages.length != 0 ? console.log(messages) : console.log("vacio")}
-          {userLogged && messages.length != 0  ?
-                    messages.map((msg, index) => (
-                      <li key={index} className={`flex ${msg.userSenderId == userLogged.user.id ? 'justify-end' : 'justify-start'} mb-2`}>
-                        <div
-                          className={`text-white p-3 rounded-full max-w-max ${msg.userSenderId == userLogged.user.id ? 'ml-2 bg-blue-500' : 'mr-2 bg-gray-500'}`}
-                        >
-                          {msg.content}
-                        </div>
-                      </li>
-                    ))
-          : <div></div>}
+          {userLogged && messages.length != 0 ?
+          messages.map((msg, index) => (
+            <li key={index} className={`flex items-center ${msg.userSenderId == userLogged.user.id ? 'justify-end' : 'justify-start'} mb-2`}>
+              {msg.userSenderId != userLogged.user.id && receiver && receiver.s3Url ? (
+                <div className='flex-shrink-0 mr-2'>
+                  <Image className='rounded-full'
+                    src={receiver.s3Url}
+                    alt="Foto de perfil del contacto"
+                    width={40}
+                    height={40}  
+                  />
+                </div>
+              ) : null}
+              <div
+                className={`text-white p-3 rounded-full max-w-max ${msg.userSenderId == userLogged.user.id ? 'ml-2 bg-blue-500' : 'mr-2 bg-gray-500'}`}
+              >
+              {msg.content}
+              </div>
+            </li>
+          ))
+    : <div></div>
+    }
+    </ul>
 
-        </ul>
       </div>
 
       <form onSubmit={sendMessage} className="p-4 flex items-center border-t-0">
