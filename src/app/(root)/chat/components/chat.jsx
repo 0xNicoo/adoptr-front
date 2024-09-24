@@ -107,17 +107,17 @@ const Chat = ({}) => {
     }
   }
   
-  return (
+return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto bg-gray-100 rounded-lg shadow-lg">
       <div className="bg-primary-orange p-4 text-white text-xl rounded-t-lg font-bold">
-  {receiver ? (
-    <Link href={`/perfiles?id=${receiver.user.id}`}>
-      <div className="hover:underline">{receiver.firstName + " " + receiver.lastName}</div>
-    </Link>
-  ) : (
-    ""
-  )}
-</div>
+        {receiver ? (
+          <Link href={`/perfiles?id=${receiver.user.id}`}>
+            <div className="hover:underline">{receiver.firstName + " " + receiver.lastName}</div>
+          </Link>
+        ) : (
+          ""
+        )}
+      </div>
 
       <div
         className="flex-1 p-4 overflow-y-auto bg-cover bg-center"
@@ -133,22 +133,21 @@ const Chat = ({}) => {
                   <Image className='rounded-full'
                     src={receiver.s3Url}
                     alt="Foto de perfil del contacto"
-                    width={40}
-                    height={40}  
+                    width={45}
+                    height={45}  
                   />
                 </div>
               ) : null}
               <div
-                className={`text-white p-3 rounded-full max-w-max ${msg.userSenderId == userLogged.user.id ? 'ml-2 bg-blue-500' : 'mr-2 bg-gray-500'}`}
+                className={`text-white p-3 rounded-3xl max-w-[60%] min-w-[5%] break-words ${msg.userSenderId == userLogged.user.id ? 'ml-2 bg-blue-500' : 'mr-2 bg-gray-500 '}`}
               >
-              {msg.content}
+                {msg.content}
               </div>
             </li>
           ))
-    : <div></div>
-    }
-    </ul>
-
+          : <div></div>
+          }
+        </ul>
       </div>
 
       <form onSubmit={sendMessage} className="p-4 flex items-center border-t-0">
@@ -161,7 +160,7 @@ const Chat = ({}) => {
         />
         <button
           type="submit"
-          className={` flex items-center justify-center p-2 rounded-full`}
+          className="flex items-center justify-center p-2 rounded-full"
         >
           <img
             src="/images/send.png"
@@ -175,4 +174,3 @@ const Chat = ({}) => {
 };
 
 export default Chat;
-
