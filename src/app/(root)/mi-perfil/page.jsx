@@ -10,7 +10,6 @@ const MiPerfil = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [adoptions, setAdoptions] = useState(null);
-  const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const { setProfileStore } = useProfileEditStore();
   const router = useRouter();
@@ -23,8 +22,6 @@ const MiPerfil = () => {
         const adoptionsData = await handleGetAdoptions();
         const filteredAdoptions = adoptionsData.filter(adoption => adoption.user.id === profileData.user.id);
         setAdoptions(filteredAdoptions);
-        const postsData = await handleGetPosts(); 
-        setPosts(postsData); 
       } catch (err) {
         setError('Error al obtener el perfil');
       } finally {
@@ -33,14 +30,6 @@ const MiPerfil = () => {
     };
     fetchProfile();
   }, []);
-
-  const onPostsChange = (post) => {
-    setPosts([...posts, post]) 
-  }
-
-  const removePost = (postId) => {
-    setPosts(posts.filter(post => post.id !== postId));
-  };
 
   const handleEdit = () => {
     setProfileStore(profile);
@@ -56,7 +45,7 @@ const MiPerfil = () => {
         <ProfileCard profile={profile} onEdit={handleEdit} />
       </div>
       <div className="mt-4 w-full lg:w-2/3 mr-4">
-        <MiPerfilTabs adoptions={adoptions} posts={posts} onPostsChange={onPostsChange} profile={profile} removePost={removePost}/>
+        <MiPerfilTabs adoptions={adoptions} profile={profile}/>
       </div>
     </div>
   );
