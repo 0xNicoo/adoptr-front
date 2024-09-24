@@ -149,6 +149,12 @@ export const useAdoptionEditStore = create(set => {
     }
 })
 
+export const useServiceEditStore = create(set => {
+    return {
+        service: null,
+        setServiceStore: (serv) => set({ service: serv} )
+    }
+})
 
 export const useProfileEditStore = create(set => {
     return {
