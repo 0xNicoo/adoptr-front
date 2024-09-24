@@ -26,8 +26,8 @@ const AdoptionList = ({ adoptions, handleDelete }) => {
                 <Image
                   alt="Animal en adopción"
                   src={adoption.s3Url}
-                  width="100%"
-                  height="100%"
+                  width={270}
+                  height={300}
                   style={{ objectFit: 'cover' }}
                 />
               </div>

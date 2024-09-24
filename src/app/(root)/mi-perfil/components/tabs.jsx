@@ -5,8 +5,9 @@ import Post from './post';
 import PostList from './post-list';
 import PostModal from './modal-eliminar';
 import { useState } from 'react';
+import ServiceList from './serviceList';
 
-const MiPerfilTabs = ({ adoptions, posts, profile, onPostsChange, removePost}) => {
+const MiPerfilTabs = ({ adoptions, posts, profile, services, onPostsChange, removePost}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(null);
 
@@ -31,11 +32,7 @@ const MiPerfilTabs = ({ adoptions, posts, profile, onPostsChange, removePost}) =
         <AdoptionList adoptions={adoptions} />
       </Tab>
       <Tab key="servicios" title="Servicios">
-        <Card>
-          <CardBody>
-            <p>No se encontraron servicios</p>
-          </CardBody>
-        </Card>
+        <ServiceList services={services} />
       </Tab>
     </Tabs>
   );
