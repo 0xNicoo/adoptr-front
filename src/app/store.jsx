@@ -94,6 +94,47 @@ export const useFormStorePerfil = create(set => {
     }
 })
 
+export const useFormStoreServicio = create(set => {
+    return {
+        step: 1,
+        title: '',
+        description: '',
+        image: '',
+        nombreImagen: '',
+        locality: '',
+        province: '',
+        fileImage: null,
+        street: '',
+        number: '',
+        serviceType: '',
+        setNombre: (newNombre) => set({ title: newNombre }),
+        setDescripcion: (newDescripcion) => set({ description: newDescripcion }),
+        setFileImage: (newFileImage) => set({ fileImage: newFileImage }),
+        setImagen: (newImagen) => set({ image: newImagen }),
+        setLocality: (newLocality) => set({ locality: newLocality }),
+        setProvince: (newProvince) => set({ province: newProvince }),
+        setNombreImagen: (newNombreImagen) => set({ nombreImagen: newNombreImagen }),
+        setCalle: (newCalle) => set({ street: newCalle }),
+        setNumero: (newNumero) => set({ number: newNumero }),
+        setServiceType: (newServiceType) => set({ serviceType: newServiceType }),
+        nextStep: () => set((state) => ({ step: state.step + 1 })),
+        prevStep: () => set((state) => ({ step: state.step - 1 })),
+        resetForm: () => set(state => ({ 
+            title: '',
+            step: 1,
+            description: '',
+            image: '',
+            nombreImagen: '',
+            locality: '',
+            province: '',
+            street: '',
+            number: '',
+            serviceType: '',
+        }))
+    }
+})
+
+
 export const useChatStore = create(set => {
     return {
         chatId: null,
@@ -108,6 +149,12 @@ export const useAdoptionEditStore = create(set => {
     }
 })
 
+export const useServiceEditStore = create(set => {
+    return {
+        service: null,
+        setServiceStore: (serv) => set({ service: serv} )
+    }
+})
 
 export const useProfileEditStore = create(set => {
     return {
@@ -115,3 +162,4 @@ export const useProfileEditStore = create(set => {
         setProfileStore: (p) => set({profile: p})
     }
 })
+
