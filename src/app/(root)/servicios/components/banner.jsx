@@ -8,22 +8,20 @@ const roboto = Roboto({
 
 const Banner = ({ description, imageUrl }) => {
   return (
-    <div className="relative bg-gray-100 w-full h-64 md:h-80 flex items-center justify-center shadow-md rounded-lg overflow-hidden">
-      {imageUrl && (
-        <img 
-          src={imageUrl} 
-          alt="Banner background" 
-          className="absolute w-full h-full object-cover opacity-60" 
-        />
-      )}
+    <div className="relative bg-white-800 w-full h-80 md:h-[25rem] flex items-center justify-between shadow-md overflow-hidden">
       
-      <div className="relative z-10 text-center px-4">
-        <h1 className={`text-white text-2xl md:text-4xl font-bold mb-2 ${roboto.className}`}>
-          ¡Bienvenido a servicios!
+      <div className="relative z-10 text-left px-7">
+        <h1 className={`text-8xl md:text-9xl font-bold mb-2 ${roboto.className}`}>
+          <span className="text-primary-blue">Servi</span>
+          <span className="text-primary-orange">cios</span>
         </h1>
       </div>
 
-      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="relative z-10 w-1/3">
+        <img src='/images/Servicio-2.png' alt="Descripción de la imagen" className="h-full object-cover" />
+      </div>
+
+      <div className="absolute inset-0 bg-black opacity-5"></div>
     </div>
   );
 };

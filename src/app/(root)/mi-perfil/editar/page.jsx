@@ -26,7 +26,6 @@ export default function EditPage() {
     setLoading(false)
   }, [])
 
-  //TODO(nico): user el loading de next
   if (loading) {
     return <p>Loading...</p>
   }

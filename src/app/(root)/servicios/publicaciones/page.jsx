@@ -1,5 +1,4 @@
-import Banner from "./components/banner";
-import ServicesType from "./components/servicestype";
+import ServiceContainer from "./components/serviceContainer";
 
 export default function ServicePage() {
 
@@ -11,8 +10,7 @@ export default function ServicePage() {
         backgroundPosition: 'center',
       }}
     >
-      <Banner />
-      <ServicesType />
+      <ServiceContainer />
     </div>
   );
 }

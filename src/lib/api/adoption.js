@@ -18,22 +18,6 @@ export async function getAdoptions(filter, page, size) {
   return res;
 }
 
-function getQueryParams(filter, page, size) {
-  const filteredParams = Object.entries({
-    ...filter,
-    page: page - 1, // El backend utiliza índice de página 0
-    size,
-  }).reduce((acc, [key, value]) => {
-    if (value !== "" && value !== null && value !== undefined) {
-      acc[key] = value;
-    }
-    return acc;
-  }, {});
-
-  return new URLSearchParams(filteredParams).toString();
-}
-
-
 export async function createAdoption(data){
     const token = await getToken()
     const res = await fetch('http://localhost:8080/adoption',{
@@ -103,3 +87,17 @@ export async function editAdoption(id, data) {
   return res.json();
 }
 
+function getQueryParams(filter, page, size) {
+  const filteredParams = Object.entries({
+    ...filter,
+    page: page - 1, // El backend utiliza índice de página 0
+    size,
+  }).reduce((acc, [key, value]) => {
+    if (value !== "" && value !== null && value !== undefined) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+
+  return new URLSearchParams(filteredParams).toString();
+}

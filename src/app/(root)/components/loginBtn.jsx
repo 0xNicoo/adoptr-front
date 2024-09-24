@@ -20,7 +20,7 @@ const LoginBtn = async () => {
                 : 
                 (
                     <div className='flex items-center pl-16'>
-                        <Link href="/login" className="text-primary-blue font-bold">Iniciar Sesión</Link>
+                        <Link href="/login" className="text-primary-blue font-bold">Iniciar sesión</Link>
                     </div>
                 )
             }
