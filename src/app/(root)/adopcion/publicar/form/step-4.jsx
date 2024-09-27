@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { handleCreateAdoption } from './actions';
 import { useRouter } from 'next/navigation';
 import CustomLoading from '@/app/components/customLoading';
+import { successToast } from '@/util/toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -59,6 +60,7 @@ const Step4 = ({prevStep = {prevStep}}) => {
         try {
             const resp = await handleCreateAdoption(formData);
             router.push(`/adopcion/${resp.id}`)
+            successToast('Publicacion creada con exito!')
         } catch (error) {
             console.log('Error al publicar', error);
             setPublishing(false)

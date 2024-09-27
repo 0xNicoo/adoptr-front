@@ -5,6 +5,7 @@ import { useFormStoreAdopcion } from '../../../../store';
 import { Inter } from "next/font/google";
 import Image from "next/image";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 const Step1 = ({nextStep}) => {
@@ -23,7 +24,6 @@ const Step1 = ({nextStep}) => {
   }
 
   const handleNextStep = () => {
-
     if (!animalType) {
       setError('* Seleccioná el tipo de animal')
     }
