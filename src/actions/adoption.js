@@ -1,6 +1,7 @@
 'use server';
 
-import { getAdoptions } from "@/lib/api/adoption";
+import { createAdoption, getAdoptions } from "@/lib/api/adoption";
+import { getAllFavorites } from "@/lib/api/favorite";
 import { getProvinces } from "@/lib/api/location";
 import { getLocalities } from "@/lib/api/location";
 
@@ -17,4 +18,13 @@ export async function getProvinceAction() {
 
 export async function getLocalitiesAction(provinceId) {
   return await getLocalities(provinceId); 
+}
+
+
+export async function getAllFavoritesAction(){
+  return await getAllFavorites()
+}
+
+export async function createAdoptionAction(data){
+  return await createAdoption(data)
 }

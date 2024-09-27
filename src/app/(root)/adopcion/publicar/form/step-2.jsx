@@ -4,7 +4,7 @@ import { useFormStoreAdopcion } from '../../../../store';
 import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input, Select, SelectItem } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import Image from 'next/image';
-import { getProvince, getLocality } from './actions';
+import { getLocalitiesAction, getProvinceAction } from '@/actions/adoption';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -115,7 +115,7 @@ const Step2 = ({nextStep, prevStep}) => {
   useEffect(() => {
     async function fetchProvinces() {
       try {
-        const provincesData = await getProvince();
+        const provincesData = await getProvinceAction();
         setProvinces(provincesData || []);
         setLoadingProvinces(false);
       } catch (error) {
@@ -132,7 +132,7 @@ const Step2 = ({nextStep, prevStep}) => {
       if (province) {
         setLoadingLocalities(true);
         try {
-          const localitiesData = await getLocality(province);
+          const localitiesData = await getLocalitiesAction(province);
           setLocalities(localitiesData || []);
           setLoadingLocalities(false);
         } catch (error) {
