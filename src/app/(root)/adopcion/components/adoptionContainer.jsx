@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAdoption } from '../actions';
 import FilterForm from './filterForm';
 import PublicationList from './publicationList';
 import PaginationComponent from './pagination';
 import CustomLoading from '@/app/components/customLoading';
+import { getAdoptionAction } from '@/actions/adoption';
 
 
 const itemsPerPage = 8;
@@ -49,7 +49,7 @@ const AdoptionContainer = () => {
     const fetchAdoptions = async (filters, page) => {
         setLoading(true);
         try {
-            const { total, data } = await getAdoption(filters, page);
+            const { total, data } = await getAdoptionAction(filters, page);
             changeTotalPage(total);
             setPublications(data);
             setCurrentPage(page);

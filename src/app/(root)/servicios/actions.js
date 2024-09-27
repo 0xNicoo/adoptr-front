@@ -2,7 +2,7 @@
 
 import { getServices } from "@/lib/api/service";
 import { getProvinces } from "@/lib/api/location";
-import { getLocalitiesByProvince } from "@/lib/api/location";
+import { getLocalities } from "@/lib/api/location";
 import { getServiceTypes } from "@/lib/api/service";
 
 export async function getService(filter, page) {
@@ -17,7 +17,7 @@ export async function getProvince() {
 }
 
 export async function getLocality(provinceId) {
-  return await getLocalitiesByProvince(provinceId); 
+  return await getLocalities(provinceId); 
 }
 
 export async function getServiceType() {

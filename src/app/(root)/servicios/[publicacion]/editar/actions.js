@@ -2,7 +2,7 @@
 
 import { getToken } from "@/lib/session";
 import { jwtDecode } from "jwt-decode";
-import { getProvinces, getLocalitiesByProvince } from "@/lib/api/location";
+import { getProvinces, getLocalities } from "@/lib/api/location";
 import { editService } from "@/lib/api/service"; 
 import { getServiceTypes } from "@/lib/api/service";
 
@@ -21,7 +21,7 @@ export async function getProvince() {
 }
 
 export async function getLocality(provinceId) {
-  return await getLocalitiesByProvince(provinceId); 
+  return await getLocalities(provinceId); 
 }
 
 export async function editServiceAction(id, data) {

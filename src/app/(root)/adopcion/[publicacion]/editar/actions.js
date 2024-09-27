@@ -2,7 +2,7 @@
 
 import { getToken } from "@/lib/session";
 import { jwtDecode } from "jwt-decode";
-import { getProvinces, getLocalitiesByProvince } from "@/lib/api/location";
+import { getProvinces, getLocalities } from "@/lib/api/location";
 import { editAdoption } from "@/lib/api/adoption";
 
 //TODO(nico): este metodo se llama en varios actions, encontrar alguna forma de hacerlo global.
@@ -20,7 +20,7 @@ export async function getProvince() {
 }
 
 export async function getLocality(provinceId) {
-  return await getLocalitiesByProvince(provinceId); 
+  return await getLocalities(provinceId); 
 }
 
 export async function editAdoptionAction(id, data) {
