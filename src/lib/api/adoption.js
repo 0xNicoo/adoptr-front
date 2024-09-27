@@ -35,7 +35,7 @@ export async function createAdoption(data){
     return res.json()
 }
 
-export async function getAdoptionById(id) {
+export async function getAdoption(id) {
   const token = await getToken();
   console.log("Token:", token);
 

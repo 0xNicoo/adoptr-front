@@ -2,7 +2,7 @@
 
 import { getServiceById, deleteService} from "@/lib/api/service";
 import { getToken } from "@/lib/session";
-import { getChatByPublicationId } from "@/lib/api/chat";
+import { getChatByPublication } from "@/lib/api/chat";
 import { jwtDecode } from "jwt-decode";
 
 export async function getServiceDetail(serviceId) {
@@ -23,6 +23,6 @@ export async function deleteServiceAction(id){
 }
 
 export async function getChatByPublicationIdAction(publicationId){
-  return await getChatByPublicationId(publicationId)
+  return await getChatByPublication(publicationId)
 }
 

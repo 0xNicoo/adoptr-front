@@ -16,7 +16,7 @@ export async function handleGetChatList() {
   return res.json(); 
 }
 
-export async function getChatByPublicationId(publicationId) {
+export async function getChatByPublication(publicationId) {
   const token = await getToken()
   const res = await fetch(`http://localhost:8080/chat/publication/${publicationId}`, {
     method: 'GET',

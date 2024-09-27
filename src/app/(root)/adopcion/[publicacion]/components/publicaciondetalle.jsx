@@ -3,15 +3,17 @@
 import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
-import { getAdoptionDetail } from '../actions';
 import { useRouter } from 'next/navigation';
-import { deleteAdoptionAction, getUserId, getChatByPublicationIdAction, setFavoriteAction, getFavoriteAction } from '../actions';
 import { useAdoptionEditStore } from '@/app/store';
 import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/react/24/solid';
 import { BookmarkIcon as OutlineBookmarkIcon } from '@heroicons/react/24/outline';
 import { CIcon } from '@coreui/icons-react';
 import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
+import { getUserId } from '@/actions/global';
+import { deleteAdoptionAction, getAdoptionAction } from '@/actions/adoption';
+import { getChatByPublicationIdAction } from '@/actions/chat';
+import { getFavoriteAction, setFavoriteAction } from '@/actions/favorite';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,7 +55,7 @@ const PublicationDetail = ({ adoptionId }) => {
     }
     const fetchAdoption = async () => {
       try {
-        const data = await getAdoptionDetail(adoptionId);
+        const data = await getAdoptionAction(adoptionId);
         setAdoption(data);
       } catch (err) {
         setError(err.message);

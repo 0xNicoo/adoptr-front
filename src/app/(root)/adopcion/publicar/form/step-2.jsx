@@ -4,7 +4,7 @@ import { useFormStoreAdopcion } from '../../../../store';
 import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input, Select, SelectItem } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import Image from 'next/image';
-import { getLocalitiesAction, getProvinceAction } from '@/actions/adoption';
+import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
 
 const inter = Inter({ subsets: ["latin"] });
 

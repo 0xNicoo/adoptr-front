@@ -2,7 +2,6 @@
 
 import { Inter } from "next/font/google";
 import { useAdoptionEditStore } from "@/app/store";
-import { getUserId, editAdoptionAction } from "./actions";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm, FormProvider } from "react-hook-form";
@@ -14,6 +13,8 @@ import SexSelect from "./components/sexselect";
 import Description from "./components/description";
 import AgeSelect from "./components/ageselect";
 import ImageSelector from "./components/imageSelector";
+import { getUserId } from "@/actions/global";
+import { editAdoptionAction } from "@/actions/adoption";
 
 const inter = Inter({ subsets: ["latin"] });
 

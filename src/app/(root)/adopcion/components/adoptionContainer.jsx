@@ -6,7 +6,7 @@ import FilterForm from './filterForm';
 import PublicationList from './publicationList';
 import PaginationComponent from './pagination';
 import CustomLoading from '@/app/components/customLoading';
-import { getAdoptionAction } from '@/actions/adoption';
+import { getAdoptionsAction } from '@/actions/adoption';
 
 
 const itemsPerPage = 8;
@@ -49,7 +49,7 @@ const AdoptionContainer = () => {
     const fetchAdoptions = async (filters, page) => {
         setLoading(true);
         try {
-            const { total, data } = await getAdoptionAction(filters, page);
+            const { total, data } = await getAdoptionsAction(filters, page);
             changeTotalPage(total);
             setPublications(data);
             setCurrentPage(page);
