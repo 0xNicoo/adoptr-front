@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import Link from 'next/link';
-import { registerUser, loginUser } from './actions';
 import { useRouter } from 'next/navigation';
+import { loginAction, registerAction } from "@/actions/auth";
 
 const SignupForm = () => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
@@ -12,8 +12,8 @@ const SignupForm = () => {
 
     const onSubmit = async (data) => {
         try {
-            await registerUser(data);
-            await loginUser(data);
+            await registerAction(data);
+            await loginAction(data);
             router.push('/perfil');   
         } catch (error) {
             console.error('Error al registrar usuario:', error);

@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { useRouter } from 'next/navigation';
-import { login } from "../actions";
 import Link from 'next/link';
+import { loginAction } from "@/actions/auth";
 
 const LoginForm = () => {
     
@@ -11,7 +11,7 @@ const LoginForm = () => {
     const router = useRouter();
 
     const handleLogin = async (data) => {
-        await login(data)
+        await loginAction(data)
         router.push('/')
     }
 
