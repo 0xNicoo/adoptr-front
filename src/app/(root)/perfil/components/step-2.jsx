@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useFormStorePerfil } from '../../../store';
 import { Select, SelectItem, Input, Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import { Inter } from "next/font/google";
-import { getProvince, getLocality } from '../actions';
+import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,7 +53,7 @@ const Step2 = ({ nextStep }) => {
   useEffect(() => {
     async function fetchProvinces() {
       try {
-        const provincesData = await getProvince();
+        const provincesData = await getProvinceAction();
         setProvinces(provincesData || []);
         setLoadingProvinces(false);
       } catch (error) {
@@ -70,7 +70,7 @@ const Step2 = ({ nextStep }) => {
       if (province) {
         setLoadingLocalities(true);
         try {
-          const localitiesData = await getLocality(province);
+          const localitiesData = await getLocalitiesAction(province);
           setLocalities(localitiesData || []);
           setLoadingLocalities(false);
         } catch (error) {

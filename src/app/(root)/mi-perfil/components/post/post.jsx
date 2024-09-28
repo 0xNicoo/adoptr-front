@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Textarea, Button } from '@nextui-org/react';
-import { handleCreatePost } from '../../actions';
+import { createPostAction } from '@/actions/post';
 
 const Post = ({onPostsChange}) => {
   const [description, setDescription] = useState('');
@@ -14,7 +14,7 @@ const Post = ({onPostsChange}) => {
 
     try {
       setDescription('');
-      const post = await handleCreatePost(formData); 
+      const post = await createPostAction(formData); 
       onPostsChange(post)
     }catch (error) {
       console.log('Error al crear post', error);

@@ -4,9 +4,10 @@ import { useFormStoreAdopcion } from '../../../../store';
 import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
 import Image from 'next/image';
-import { handleCreateAdoption } from './actions';
 import { useRouter } from 'next/navigation';
 import CustomLoading from '@/app/components/customLoading';
+import { successToast } from '@/util/toast';
+import { createAdoptionAction } from '@/actions/adoption';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -57,8 +58,9 @@ const Step4 = ({prevStep = {prevStep}}) => {
         formData.append('locality_id', locality.id);
 
         try {
-            const resp = await handleCreateAdoption(formData);
+            const resp = await createAdoptionAction(formData);
             router.push(`/adopcion/${resp.id}`)
+            successToast('Publicacion creada con exito!')
         } catch (error) {
             console.log('Error al publicar', error);
             setPublishing(false)

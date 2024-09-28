@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
-import { getAllFavoritesAction } from '../actions';
+import { getAllFavoritesAction } from '@/actions/favorite';
+
 
 const inter = Inter({ subsets: ["latin"] });
 

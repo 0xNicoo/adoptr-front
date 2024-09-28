@@ -3,9 +3,12 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
-import { getAccessToken, getChatAction, getUserId, getProfileByUserIdAction } from '../actions';
 import { useSearchParams } from 'next/navigation'
 import { Image } from '@nextui-org/react';
+import { getAccessTokenAction } from '@/actions/auth';
+import { getChatAction } from '@/actions/chat';
+import { getUserIdAction } from '@/actions/global';
+import { getProfilByUserIdAction } from '@/actions/profile';
 
 // esto estaba en la linea 122 <span className="font-bold">Username:</span>
 
@@ -31,7 +34,7 @@ const Chat = ({}) => {
   }, []);
 
   const connectWebSocket = async () => {
-    const token = await getAccessToken()
+    const token = await getAccessTokenAction()
 
     const sock = new SockJS('http://localhost:8080/ws');
     const stompClient = new Client({
@@ -91,16 +94,16 @@ const Chat = ({}) => {
   const getChat = async (id) =>{
     try{
       const chat = await getChatAction(id)
-      const loggedUserId = await getUserId()
+      const loggedUserId = await getUserIdAction()
       setChat(chat)
       console.log(chat)
       setMessages(chat.messages);
       if(loggedUserId == chat.publicationUserId){
-        setUserLogged(await getProfileByUserIdAction(loggedUserId))
-        setReceiver(await getProfileByUserIdAction(chat.adopterUserId))
+        setUserLogged(await getProfilByUserIdAction(loggedUserId))
+        setReceiver(await getProfilByUserIdAction(chat.adopterUserId))
       }else{
-        setUserLogged(await getProfileByUserIdAction(loggedUserId))
-        setReceiver(await getProfileByUserIdAction(chat.publicationUserId))
+        setUserLogged(await getProfilByUserIdAction(loggedUserId))
+        setReceiver(await getProfilByUserIdAction(chat.publicationUserId))
       }
     }catch(err){
       console.log("ERROR AL OBTENER EL CHAT:", err)
@@ -124,7 +127,6 @@ return (
         style={{ backgroundImage: 'url(/images/chat-background.png)' }}
       >
         <ul className="space-y-2">
-          {messages.length != 0 ? console.log(messages) : console.log("vacio")}
           {userLogged && messages.length != 0 ?
           messages.map((msg, index) => (
             <li key={index} className={`flex items-center ${msg.userSenderId == userLogged.user.id ? 'justify-end' : 'justify-start'} mb-2`}>

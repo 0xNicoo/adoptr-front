@@ -1,7 +1,7 @@
 import 'server-only';
 import { getToken } from '../session';
 
-export async function handleGetChatList() {
+export async function getChatList() {
   const token = await getToken()
   const res = await fetch('http://localhost:8080/chat/all', {
     method: 'GET',
@@ -16,7 +16,7 @@ export async function handleGetChatList() {
   return res.json(); 
 }
 
-export async function getChatByPublicationId(publicationId) {
+export async function getChatByPublication(publicationId) {
   const token = await getToken()
   const res = await fetch(`http://localhost:8080/chat/publication/${publicationId}`, {
     method: 'GET',

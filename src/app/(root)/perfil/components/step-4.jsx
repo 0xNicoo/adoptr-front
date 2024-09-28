@@ -6,8 +6,8 @@ import { Image } from '@nextui-org/react';
 import { Textarea } from '@nextui-org/react';
 import { CIcon } from '@coreui/icons-react';
 import { cilLocationPin } from '@coreui/icons';
-import { handleCreatePerfil } from '../actions';
 import { useRouter } from 'next/navigation';
+import { createProfileAction } from '@/actions/profile';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +25,7 @@ const Step4 = ({ prevStep }) => {
         formData.append('image', fileImage); 
 
         try {
-            await handleCreatePerfil(formData); 
+            await createProfileAction(formData); 
             router.push('/mi-perfil');
         } catch (error) {
             console.log('Error al crear perfil', error);

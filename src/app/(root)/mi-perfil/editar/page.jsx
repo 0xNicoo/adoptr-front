@@ -9,7 +9,7 @@ import NameLabel from "./components/namelable";
 import Description from "./components/description";
 import Ubication from "./components/ubication";
 import SexSelect from "./components/sexselect";
-import { editProfileAction } from "./action";
+import { editProfileAction } from "@/actions/profile";
 
 
 export default function EditPage() {

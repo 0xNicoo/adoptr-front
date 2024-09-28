@@ -3,13 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
 import { Textarea } from '@nextui-org/react';
-import { getServiceDetail } from '../actions';
 import { useRouter } from 'next/navigation';
-import { getUserId, deleteServiceAction, getChatByPublicationIdAction } from '../actions';
 import { CIcon } from '@coreui/icons-react';
 import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
 import { useServiceEditStore } from '@/app/store';
+import { deleteServiceAction, getServiceAction } from '@/actions/service';
+import { getUserIdAction } from '@/actions/global';
+import { getChatByPublicationIdAction } from '@/actions/chat';
 const inter = Inter({ subsets: ["latin"] });
 
 const PublicationDetail = ({ serviceId }) => {
@@ -21,11 +22,11 @@ const PublicationDetail = ({ serviceId }) => {
 
   useEffect(() => {
     const fetchUserId = async () => {
-      setUserId(await getUserId())
+      setUserId(await getUserIdAction())
     }
     const fetchService = async () => {
       try {
-        const data = await getServiceDetail(serviceId);
+        const data = await getServiceAction(serviceId);
         setService(data);
       } catch (err) {
         setError(err.message);

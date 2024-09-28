@@ -15,7 +15,7 @@ export async function getProvinces() {
   return res.json(); 
 }
 
-export async function getLocalitiesByProvince(provinceId) {
+export async function getLocalities(provinceId) {
   const res = await fetch(`http://localhost:8080/locality?provinceId=${provinceId}&size=10000`, {
     method: 'GET',
     headers: {

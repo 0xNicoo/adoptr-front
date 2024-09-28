@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
 import { useRouter } from 'next/navigation';
-import { getChatList, getUserId } from "../actions";
 import { useChatStore } from '@/app/store';
+import { getChatListAction } from '@/actions/chat';
+import { getUserIdAction } from '@/actions/global';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +20,11 @@ const ChatList = () => {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const userProfile = await getUserId();
-        const userId = userProfile.user.id;
+        const userId = await getUserIdAction();
         setUserId(userId);
         console.log("User ID:", userId);
 
-        const data = await getChatList();
+        const data = await getChatListAction();
 
         if (Array.isArray(data)) {
           setContacts(data);

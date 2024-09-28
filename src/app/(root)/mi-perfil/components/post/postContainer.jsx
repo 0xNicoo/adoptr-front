@@ -2,7 +2,7 @@ import Post from './post';
 import PostList from './postList';
 import PostDeleteModal from './postDeleteModal';
 import React, { useEffect, useState } from 'react';
-import { handleGetPosts } from '../../actions';
+import { getPostsAction } from '@/actions/post';
 
 const PostConatiner = ({profile}) => {
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ const PostConatiner = ({profile}) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const postsData = await handleGetPosts(); 
+        const postsData = await getPostsAction(); 
         setPosts(postsData); 
       } catch (err) {
         setError('Error al obtener los posts');

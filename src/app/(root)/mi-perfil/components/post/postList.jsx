@@ -8,7 +8,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useInView } from 'react-intersection-observer'
 import CustomLoading from '@/app/components/customLoading';
 import { useEffect, useState } from 'react';
-import { handleGetPosts } from '../../actions';
+import { getPostsAction } from '@/actions/post';
 
 const formatDate = (dateString) => {
   const postDate = new Date(dateString);
@@ -40,7 +40,7 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
 
   const onScroll = async () => {
     const nextPage = currentPage + 1
-    const postsData = await handleGetPosts(nextPage, PAGE_SIZE)
+    const postsData = await getPostsAction(nextPage, PAGE_SIZE)
     if(postsData.length < 10){
       setEndOfList(true)
     }
@@ -67,12 +67,12 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
                       alt="Foto de perfil del usuario"
                       height={40}
                       width={40}
-                      src={post.s3Url}
+                      src={profile.s3Url}
                       className='rounded-full'
                     />
                   </div>
                   <div className="flex flex-col">
-                    <p className="text-md">{post.firstName} {post.lastName}</p>
+                    <p className="text-md">{profile.firstName} {profile.lastName}</p>
                     <p className="text-small text-default-500">{formatDate(post.date)}</p>
                   </div>
                 </div>

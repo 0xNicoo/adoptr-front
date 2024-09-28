@@ -1,8 +1,9 @@
-import { getAdoption, getProvince, getLocality } from '../actions';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation'; // Importa useRouter para manejar la redirección
 import { Checkbox, Button, Select, SelectItem } from '@nextui-org/react';
+import { getAdoptionsAction } from '@/actions/adoption';
+import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
 
 const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilters, initialFilters }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +48,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
     useEffect(() => {
         async function fetchProvinces() {
             try {
-                const provincesData = await getProvince();
+                const provincesData = await getProvinceAction();
                 setProvinces(provincesData || []);
             } catch (error) {
                 console.error("Error fetching provinces:", error);
@@ -63,7 +64,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
             if (provinceId) {
                 setLoadingLocalities(true);
                 try {
-                    const localitiesData = await getLocality(provinceId);
+                    const localitiesData = await getLocalitiesAction(provinceId);
                     setLocalities(localitiesData || []);
                 } catch (error) {
                     console.error("Error fetching localities:", error);
@@ -86,7 +87,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
             Object.entries(combinedFilter).filter(([_, value]) => value)
         );
         updateFilters(cleanFilter);
-        const { total, data } = await getAdoption(cleanFilter, 1);
+        const { total, data } = await getAdoptionsAction(cleanFilter, 1, 8);
         updateTotalPage(total);
         updateData(data);
         updateCurrentPage(1);
@@ -101,7 +102,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
     
         updateFilters({});
         
-        const { total, data } = await getAdoption({}, 1);
+        const { total, data } = await getAdoptionsAction({}, 1, 8);
         updateTotalPage(total);
         updateData(data);
         updateCurrentPage(1);
