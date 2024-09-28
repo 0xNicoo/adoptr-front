@@ -1,9 +1,11 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { handleGetProfile, handleGetPosts, handleGetAdoptions } from './actions';
 import ProfileCard from './components/profile-card';
 import MiPerfilTabs from './components/tabs';
+import { getPostsByUserIdAction } from '@/actions/post';
+import { getAdoptionsAction } from '@/actions/adoption';
+import { getProfilByUserIdAction } from '@/actions/profile';
 
 export default function PerfilesPage() {
     const searchParams = useSearchParams();
@@ -23,12 +25,12 @@ export default function PerfilesPage() {
       }
 
       try {
-        const profileData = await handleGetProfile(userId);
+        const profileData = await getProfilByUserIdAction(userId);
         setProfile(profileData);
         console.log('profile', profileData);
-        const postsData = await handleGetPosts(userId); 
+        const postsData = await getPostsByUserIdAction(userId); 
         setPosts(postsData); 
-        const adoptionsData = await handleGetAdoptions();
+        const adoptionsData = await getAdoptionsAction();
         const filteredAdoptions = adoptionsData.filter(adoption => adoption.user.id === profileData.user.id);
         setAdoptions(filteredAdoptions);
       } catch (err) {

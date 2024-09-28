@@ -13,7 +13,7 @@ import SexSelect from "./components/sexselect";
 import Description from "./components/description";
 import AgeSelect from "./components/ageselect";
 import ImageSelector from "./components/imageSelector";
-import { getUserId } from "@/actions/global";
+import { getUserIdAction } from "@/actions/global";
 import { editAdoptionAction } from "@/actions/adoption";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,7 +26,7 @@ export default function EditPage() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const userId = await getUserId()
+      const userId = await getUserIdAction()
       if(userId != adoption.user.id){
         router.push('/adopcion')
       }else{

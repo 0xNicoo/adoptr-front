@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Card } from "@nextui-org/react";
 import { useRouter } from "next/navigation"; 
-import { getServiceType } from "../actions";
+import { getServiceTypesAction } from "@/actions/service";
 
 const ServiceType = () => {
   const [servicesTypes, setServiceTypes] = useState([]);
@@ -14,7 +14,7 @@ const ServiceType = () => {
   useEffect(() => {
     async function fetchServiceTypes() {
       try {
-        const serviceTypeData = await getServiceType();
+        const serviceTypeData = await getServiceTypesAction();
         console.log(serviceTypeData);
         setServiceTypes(serviceTypeData || []);
         setLoadingServiceTypes(false);

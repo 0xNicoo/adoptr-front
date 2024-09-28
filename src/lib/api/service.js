@@ -15,7 +15,10 @@ export async function getServices(filter, page, size) {
   if (!res.ok) {
     throw new Error('Failed to fetch adoptions');
   }
-  return res;
+  
+  const total  = res.headers.get('x-total-count');
+  const data = await res.json();
+  return { total, data };
 }
 
 function getQueryParams(filter, page, size) {

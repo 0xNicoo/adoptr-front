@@ -87,7 +87,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
             Object.entries(combinedFilter).filter(([_, value]) => value)
         );
         updateFilters(cleanFilter);
-        const { total, data } = await getAdoptionsAction(cleanFilter, 1);
+        const { total, data } = await getAdoptionsAction(cleanFilter, 1, 8);
         updateTotalPage(total);
         updateData(data);
         updateCurrentPage(1);
@@ -102,7 +102,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
     
         updateFilters({});
         
-        const { total, data } = await getAdoptionsAction({}, 1);
+        const { total, data } = await getAdoptionsAction({}, 1, 8);
         updateTotalPage(total);
         updateData(data);
         updateCurrentPage(1);

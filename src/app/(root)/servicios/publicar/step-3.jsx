@@ -1,12 +1,12 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useFormStoreServicio } from '@/app/store';
 import { Inter } from "next/font/google";
-import { Checkbox, Textarea } from '@nextui-org/react';
+import { Textarea } from '@nextui-org/react';
 import Image from 'next/image';
-import { handleCreateService } from './actions';
 import { useRouter } from 'next/navigation';
 import CustomLoading from '@/app/components/customLoading';
+import { createServiceAction } from '@/actions/service';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,7 +27,7 @@ const Step3 = ({prevStep = {prevStep}}) => {
         formData.append('serviceType_id', serviceType.id);
 
         try {
-            const resp = await handleCreateService(formData);
+            const resp = await createServiceAction(formData);
             console.log(serviceType.name)
             router.push(`/servicios/${resp.id}`)
         } catch (error) {

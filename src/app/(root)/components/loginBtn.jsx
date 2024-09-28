@@ -1,12 +1,11 @@
 import Link from 'next/link';
     
-
-import { isLoggedIn } from '../actions';
 import DropdownUser from './dropdownuser';
 import Notifications from './notifications';
+import { isLoggedInAction } from '@/actions/auth';
 
 const LoginBtn = async () => {
-    const isAuthenticated = await isLoggedIn()
+    const isAuthenticated = await isLoggedInAction()
 
     return (
         <div className="relative">

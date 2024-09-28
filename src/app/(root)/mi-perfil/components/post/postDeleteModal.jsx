@@ -1,7 +1,7 @@
 import React from "react";
-import { deletePostAction } from "../../actions";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Divider } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
+import { deletePostAction } from "@/actions/post";
 
 const PostDeleteModal = ({ isOpen, onOpenChange, postId, removePost }) => {
 

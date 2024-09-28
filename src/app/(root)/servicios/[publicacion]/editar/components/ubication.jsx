@@ -3,8 +3,7 @@
 import { useFormContext, Controller } from 'react-hook-form';
 import { Select, SelectItem } from '@nextui-org/react';
 import { useState, useEffect } from 'react';
-import { getProvince } from '../actions'; 
-import { getLocality } from '../actions';
+import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
 
 const Ubication = ({ actualLocality, actualLocalityId, actualProvince }) => {
     const { formState: { errors }, control } = useFormContext();
@@ -18,7 +17,7 @@ const Ubication = ({ actualLocality, actualLocalityId, actualProvince }) => {
     useEffect(() => {
         const fetchProvinces = async () => {
             try {
-                const provincesData = await getProvince();
+                const provincesData = await getProvinceAction();
                 setProvinces(provincesData || []);
                 setLoadingProvinces(false);
             } catch (error) {
@@ -36,7 +35,7 @@ const Ubication = ({ actualLocality, actualLocalityId, actualProvince }) => {
             if (province) {
                 setLoadingLocalities(true);
                 try {
-                    const localitiesData = await getLocality(province);
+                    const localitiesData = await getLocalitiesAction(province);
                     setLocalities(localitiesData || []);
                     setLoadingLocalities(false);
                 } catch (error) {

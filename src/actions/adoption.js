@@ -2,9 +2,9 @@
 
 import { createAdoption, deleteAdoption, editAdoption, getAdoption, getAdoptions } from "@/lib/api/adoption";
 
-export async function getAdoptionsAction(filter, page) {
-  const resp = await getAdoptions(filter, page, 8); 
-  const total  = resp.headers.get('x-total-count');
+export async function getAdoptionsAction(filter, page, size) {
+  const resp = await getAdoptions(filter, page, size); 
+  const total = resp.headers.get('x-total-count');
   const data = await resp.json();
   return { total, data };
 }

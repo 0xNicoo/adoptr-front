@@ -3,7 +3,7 @@
 import { getToken } from "@/lib/session"
 import { jwtDecode } from "jwt-decode"
 
-export async function getUserId() {
+export async function getUserIdAction() {
     const token = await getToken()
     if (token) {
       const decoded = jwtDecode(token)

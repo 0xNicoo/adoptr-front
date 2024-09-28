@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getService } from '../actions';
 import FilterForm from './filterForm';
 import PublicationServiceList from './publicationServiceList';
 import PaginationComponent from './pagination';
 import CustomLoading from '@/app/components/customLoading';
+import { getServicesAction } from '@/actions/service';
 
 
 const itemsPerPage = 8;
@@ -49,7 +49,7 @@ const ServiceContainer = () => {
     const fetchServices = async (filters, page) => {
         setLoading(true);
         try {
-            const { total, data } = await getService(filters, page);
+            const { total, data } = await getServicesAction(filters, page, 8);
             changeTotalPage(total);
             setPublications(data);
             setCurrentPage(page);

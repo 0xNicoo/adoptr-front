@@ -1,10 +1,13 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { handleGetProfile, handleGetAdoptions, handleGetServices, handleGetPosts } from './actions';
 import ProfileCard from './components/profile-card';
 import MiPerfilTabs from './components/tabs';
 import { useProfileEditStore } from '@/app/store';
 import { useRouter } from 'next/navigation';
+import { getProfileAction } from '@/actions/profile';
+import { getAdoptionsAction } from '@/actions/adoption';
+import { getPostsAction } from '@/actions/post';
+import { getServicesAction } from '@/actions/service';
 
 const MiPerfil = () => {
   const [profile, setProfile] = useState(null);
@@ -19,18 +22,16 @@ const MiPerfil = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const profileData = await handleGetProfile();
+        const profileData = await getProfileAction();
         setProfile(profileData);
-        const adoptionsData = await handleGetAdoptions();
-        const filteredAdoptions = adoptionsData.filter(adoption => adoption.user.id === profileData.user.id);
+        var { total, data } = await getAdoptionsAction();
+        const filteredAdoptions = data.filter(adoption => adoption.user.id === profileData.user.id); //TODO: deberiamos crear un endpoint para obtener las adopciones del usuario
         setAdoptions(filteredAdoptions);
-        const postsData = await handleGetPosts(); 
+        const postsData = await getPostsAction(); 
         setPosts(postsData); 
-        const servicesData = await handleGetServices();
-        const filteredServices = servicesData.filter(service => service.user.id === profileData.user.id);
+        var { total, data } = await getServicesAction();
+        const filteredServices = data.filter(service => service.user.id === profileData.user.id); //TODO: deberiamos crear un endpoint para obtener los servicios de usuario
         setServices(filteredServices);
-
-
       } catch (err) {
         setError('Error al obtener el perfil');
       } finally {
@@ -54,7 +55,7 @@ const MiPerfil = () => {
         <ProfileCard profile={profile} onEdit={handleEdit} />
       </div>
       <div className="mt-4 w-full lg:w-2/3 mr-4">
-        <MiPerfilTabs adoptions={adoptions} posts={posts} services={services} />
+        <MiPerfilTabs profile={profile} adoptions={adoptions} posts={posts} services={services} />
       </div>
     </div>
   );

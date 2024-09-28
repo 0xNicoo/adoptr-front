@@ -2,7 +2,6 @@
 
 import { Inter } from "next/font/google";
 import { useServiceEditStore } from "@/app/store";
-import { getUserId, getServiceType, editServiceAction } from "./actions"; 
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm, FormProvider } from "react-hook-form";
@@ -13,6 +12,8 @@ import Number from "./components/number";
 import Description from "./components/description";
 import ImageSelector from "./components/imageSelector";
 import ServiceTypeSelector from "./components/serviceselect";
+import { getUserIdAction } from "@/actions/global";
+import { editServiceAction, getServiceTypesAction } from "@/actions/service";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +27,7 @@ export default function EditPage() {
   useEffect(() => {
     const fetchServiceTypes = async () => {
       try {
-        const types = await getServiceType(); 
+        const types = await getServiceTypesAction(); 
         setServiceType(types); 
       } catch (error) {
         console.error('Error fetching service types:', error);
@@ -34,7 +35,7 @@ export default function EditPage() {
     };
 
     const checkUser = async () => {
-      const userId = await getUserId();
+      const userId = await getUserIdAction();
       if (userId !== service.user.id) {
         router.push('/servicios');
       } else {

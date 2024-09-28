@@ -10,7 +10,7 @@ import { BookmarkIcon as OutlineBookmarkIcon } from '@heroicons/react/24/outline
 import { CIcon } from '@coreui/icons-react';
 import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
-import { getUserId } from '@/actions/global';
+import { getUserIdAction } from '@/actions/global';
 import { deleteAdoptionAction, getAdoptionAction } from '@/actions/adoption';
 import { getChatByPublicationIdAction } from '@/actions/chat';
 import { getFavoriteAction, setFavoriteAction } from '@/actions/favorite';
@@ -51,7 +51,7 @@ const PublicationDetail = ({ adoptionId }) => {
 
   useEffect(() => {
     const fetchUserId = async () => {
-      setUserId(await getUserId())
+      setUserId(await getUserIdAction())
     }
     const fetchAdoption = async () => {
       try {

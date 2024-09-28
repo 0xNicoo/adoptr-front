@@ -49,7 +49,7 @@ const AdoptionContainer = () => {
     const fetchAdoptions = async (filters, page) => {
         setLoading(true);
         try {
-            const { total, data } = await getAdoptionsAction(filters, page);
+            const { total, data } = await getAdoptionsAction(filters, page, 8);
             changeTotalPage(total);
             setPublications(data);
             setCurrentPage(page);
