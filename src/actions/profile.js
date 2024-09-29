@@ -3,18 +3,22 @@
 import { createProfile, editProfile, getProfile, getProfileByUserId } from "@/lib/api/profile";
 
 export async function getProfilByUserIdAction(userId) {
-    return await getProfileByUserId(userId);
+    const {data, headers} = await getProfileByUserId(userId)
+    return data
 }
 
-export async function editProfileAction(id, data) {
-    return await editProfile(id, data); 
+export async function editProfileAction(id, fromData) {
+    const {data, headers} = await editProfile(id, fromData)
+    return data
 }
 
 export async function getProfileAction() {
-    return await getProfile();
+    const {data, headers} = await getProfile()
+    return data
 }
 
-export async function createProfileAction(data) {
-    await createProfile(data); 
+export async function createProfileAction(fromData) {
+    const {data, headers} = await createProfile(fromData)
+    return data
 }
   

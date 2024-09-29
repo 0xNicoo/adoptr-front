@@ -3,17 +3,21 @@
 import { createPost, deletePost, getPosts, getPostsByUserId } from "@/lib/api/post";
 
 export async function getPostsAction(page = 0, size = 10) {
-  return await getPosts(page, size);
+  const {data, headers} = await getPosts(page, size)
+  return data
 }
 
 export async function createPostAction(FormData) {
-  return await createPost(FormData);
+  const {data, headers} =  await createPost(FormData)
+  return data
 }
 
 export async function deletePostAction(id){
-  await deletePost(id)
+  const {data, headers} = deletePost(id)
+  return data
 }
 
 export async function getPostsByUserIdAction(userId) {
-  return await getPostsByUserId(userId);
+  const {data, headers} = await getPostsByUserId(userId);
+  return data
 }
