@@ -1,12 +1,14 @@
 'use server';
 
-import { getProvinces } from "@/lib/api/location";
-import { getLocalities } from "@/lib/api/location";
+import { getProvinces } from "@/lib/api/location"
+import { getLocalities } from "@/lib/api/location"
 
 export async function getProvinceAction() {
-    return await getProvinces(); 
+    const {data, headers} = await getProvinces()
+    return data
 }
   
 export async function getLocalitiesAction(provinceId) {
-    return await getLocalities(provinceId); 
+    const {data, headers} = await getLocalities(provinceId)
+    return data
 }

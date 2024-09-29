@@ -3,13 +3,16 @@
 import { getChat, getChatByPublication, getChatList } from "@/lib/api/chat";
 
 export async function getChatByPublicationIdAction(publicationId){
-  return await getChatByPublication(publicationId)
+  const {data, headers} = await getChatByPublication(publicationId)
+  return data
 }
 
 export async function getChatAction(id){
-  return await getChat(id)
+  const {data, headers} = await getChat(id)
+  return data
 }
 
 export async function getChatListAction() {
-  return await getChatList();
+  const {data, headers} = await getChatList()
+  return data
 }

@@ -3,24 +3,26 @@
 import { createAdoption, deleteAdoption, editAdoption, getAdoption, getAdoptions } from "@/lib/api/adoption";
 
 export async function getAdoptionsAction(filter, page, size) {
-  const resp = await getAdoptions(filter, page, size); 
-  const total = resp.headers.get('x-total-count');
-  const data = await resp.json();
-  return { total, data };
+  const {data, headers} = await getAdoptions(filter, page, size); 
+  return { total: headers.totalCount, data };
 }
 
-export async function createAdoptionAction(data){
-  return await createAdoption(data)
+export async function createAdoptionAction(formData){
+  const {data, headers} = await createAdoption(formData);
+  return data
 }
 
-export async function editAdoptionAction(id, data) {
-  return await editAdoption(id, data); 
+export async function editAdoptionAction(id, formData) {
+  const {data, headers} = await editAdoption(id, formData)
+  return data; 
 } 
 
 export async function deleteAdoptionAction(id){
-  await deleteAdoption(id)
+  const {data, headers} = await deleteAdoption(id)
+  return data 
 }
 
 export async function getAdoptionAction(adoptionId) {
-  return await getAdoption(adoptionId); 
+  const {data, headers} = await getAdoption(adoptionId); 
+  return data
 }

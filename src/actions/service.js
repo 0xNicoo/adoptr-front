@@ -3,26 +3,32 @@
 import { createService, deleteService, editService, getServiceById, getServiceTypes, getServices } from "@/lib/api/service";
 
 export async function getServicesAction(filter, page, size) {
-  return await getServices(filter, page, size);
+  const {data, headers} = await getServices(filter, page, size)
+  return { total: headers.totalCount, data }
 }
 
-export async function editServiceAction(id, data) {
-  return await editService(id, data); 
+export async function editServiceAction(id, formData) {
+  const {data, headers} = await editService(id, formData)
+  return data
 }
 
 export async function getServiceTypesAction() {
-  return await getServiceTypes(); 
+  const {data, headers} = await getServiceTypes()
+  return data
 }
 
 export async function getServiceAction(serviceId) {
-  return await getServiceById(serviceId); 
+  const {data, headers} = await getServiceById(serviceId)
+  return data
 }
 
 export async function deleteServiceAction(id){
-  await deleteService(id)
+  const {data, headers} = await deleteService(id)
+  return data
 }
 
 
-export async function createServiceAction(data){
-  return await createService(data)
+export async function createServiceAction(formData){
+  const {data, headers} = await createService(formData)
+  return data
 }

@@ -1,31 +1,10 @@
 import 'server-only';
+import { apiRequest } from '../apiRequest';
 
 export async function getProvinces() {
-  const res = await fetch('http://localhost:8080/province?page=0&size=25', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch provinces');
-  }
-
-  return res.json(); 
+  return await apiRequest(`/province?page=0&size=25`, 'GET', null, 'application/json', false)
 }
 
 export async function getLocalities(provinceId) {
-  const res = await fetch(`http://localhost:8080/locality?provinceId=${provinceId}&size=10000`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch localities');
-  }
-
-  return res.json(); 
+  return await apiRequest(`/locality?provinceId=${provinceId}&size=10000`, 'GET', null, 'application/json', false)
 }
