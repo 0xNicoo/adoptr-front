@@ -1,9 +1,14 @@
 'use server'
 
-import { createPost, deletePost, getPosts, getPostsByUserId } from "@/lib/api/post";
+import { createPost, deletePost, getPosts, getPost, getPostsByUserId } from "@/lib/api/post";
 
 export async function getPostsAction(page = 0, size = 10) {
   const {data, headers} = await getPosts(page, size)
+  return data
+}
+
+export async function getPostAction(id) {
+  const {data, headers} = await getPost(id)
   return data
 }
 

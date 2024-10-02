@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardHeader, CardBody, CardFooter, Divider, Image } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, CardFooter, Divider, Image, useDisclosure } from '@nextui-org/react';
 import { Inter } from "next/font/google";
 import { cilHeart } from '@coreui/icons';
 import { CIcon } from '@coreui/icons-react';
@@ -9,6 +9,7 @@ import { useInView } from 'react-intersection-observer'
 import CustomLoading from '@/app/components/customLoading';
 import { useEffect, useState } from 'react';
 import { getPostsAction } from '@/actions/post';
+import PostImageModal from './postImageModal';
 
 const formatDate = (dateString) => {
   const postDate = new Date(dateString);
@@ -37,6 +38,14 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
   const [ref, inView] = useInView()
   const [currentPage, setPage] = useState(0)
   const [endOfList, setEndOfList] = useState(false)
+  const { isOpen, onOpen: openModal, onClose } = useDisclosure();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
+
+  const handleImageLoad = (e) => {
+    const { naturalWidth, naturalHeight } = e.target;
+    setImageDimensions({ width: naturalWidth, height: naturalHeight });
+  };
 
   const onScroll = async () => {
     const nextPage = currentPage + 1
@@ -53,6 +62,11 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
       onScroll()
     }
   }, [inView])
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    openModal();
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -85,6 +99,17 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
               <Divider />
               <CardBody>
                 <p>{post.description}</p>
+                { post.s3Url ?
+                  <div className="w-[300px] h-[400px] overflow-hidden mt-2 rounded-lg flex justify-center">
+                  <img
+                    alt="Imagen del post"
+                    src={post.s3Url}
+                    className="w-full h-full object-cover"
+                    onClick={() => handleImageClick(post.s3Url)}
+                  />
+                </div>
+                  : null
+                }
               </CardBody>
               <Divider />
               <CardFooter>
@@ -110,7 +135,9 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
           </CardBody>
         </Card>
       )}
+       <PostImageModal isOpen={isOpen} onClose={onClose} imageUrl={selectedImage} />
     </div>
+    
   );
 };
 
