@@ -6,6 +6,10 @@ export async function getPosts(page, size) {
   return await apiRequest(`/post/all?page=${page}&size=${size}`, 'GET', null, 'application/json', true)
 }
 
+export async function getPost(id) {
+  return await apiRequest(`/post/${id}`, 'GET', null, 'application/json', true)
+}
+
 export async function getPostsByUserId(userId) {
   return await apiRequest(`/post/user/${userId}`, 'GET', null, 'application/json', true)
 }
