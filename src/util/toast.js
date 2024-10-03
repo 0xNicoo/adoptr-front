@@ -23,6 +23,5 @@ export const errorToast = (message) => {
         draggable: true,
         progress: undefined,
         theme: "light",
-        transition: Bounce,
         });
 }

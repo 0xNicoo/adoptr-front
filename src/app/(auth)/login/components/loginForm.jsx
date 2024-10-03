@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { loginAction } from "@/actions/auth";
+import { errorToast } from "@/util/toast";
 
 const LoginForm = () => {
     
@@ -11,8 +12,12 @@ const LoginForm = () => {
     const router = useRouter();
 
     const handleLogin = async (data) => {
-        await loginAction(data)
-        router.push('/')
+        try{
+            await loginAction(data)
+            router.push('/')
+        }catch(error){
+            errorToast(error.message)
+        }
     }
 
 

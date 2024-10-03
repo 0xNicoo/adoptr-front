@@ -6,7 +6,7 @@ export async function apiRequest(endpoint, method = 'GET', body = null, contentT
     let token;
 
     if (requiresAuth) {
-        token = await getValidToken();
+      token = await getValidToken();
     }
 
     const url = new URL(`http://localhost:8080${endpoint}`)
@@ -33,7 +33,7 @@ export async function apiRequest(endpoint, method = 'GET', body = null, contentT
     if (!res.ok) {
       const errorData = await res.json()
       console.log(errorData)
-      throw new Error(`Failed to fetch data: ${errorData.message || 'Unknown error'}`)
+      throw new Error(`Error: ${errorData.message || 'Error desconocido'}`)
     }
   
     const isJson = res.headers.get('content-type')?.includes('application/json')
@@ -47,4 +47,3 @@ export async function apiRequest(endpoint, method = 'GET', body = null, contentT
       },
     }
   }
-  

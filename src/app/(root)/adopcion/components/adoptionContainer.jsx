@@ -7,6 +7,7 @@ import PublicationList from './publicationList';
 import PaginationComponent from './pagination';
 import CustomLoading from '@/app/components/customLoading';
 import { getAdoptionsAction } from '@/actions/adoption';
+import { errorToast } from '@/util/toast';
 
 
 const itemsPerPage = 8;
@@ -55,6 +56,7 @@ const AdoptionContainer = () => {
             setCurrentPage(page);
         } catch (error) {
             setError(error.message);
+            errorToast(error.message)
         } finally {
             setLoading(false);
         }
