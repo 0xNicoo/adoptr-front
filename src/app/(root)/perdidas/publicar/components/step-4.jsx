@@ -37,7 +37,7 @@ const mapSexType = (sexType) => {
 
   
 const Step4 = ({prevStep = {prevStep}}) => {
-    const { title, sizeType, animalType, ageYears, ageMonths, sexType, vaccinated, unprotected, castrated, description, image, locality, province, fileImage, longitude, latitude } = useFormStoreLost();
+    const { title, sizeType, animalType, ageYears, ageMonths, sexType, description, image, locality, province, fileImage, longitude, latitude } = useFormStoreLost();
     const router = useRouter()
     const [publishing, setPublishing] = useState(false)
 
@@ -47,9 +47,6 @@ const Step4 = ({prevStep = {prevStep}}) => {
         formData.append('title', title);
         formData.append('description', description);
         formData.append('sexType', sexType);
-        formData.append('vaccinated', vaccinated);
-        formData.append('unprotected', unprotected);
-        formData.append('castrated', castrated);
         formData.append('animalType', animalType);
         formData.append('sizeType', sizeType);
         formData.append('ageYears', ageYears);
@@ -61,7 +58,7 @@ const Step4 = ({prevStep = {prevStep}}) => {
 
         try {
             const resp = await createLostAction(formData);
-            //router.push(`/adopcion/${resp.id}`)
+            router.push(`/perdidas/${resp.id}`)
             successToast('Publicacion creada con exito!')
         } catch (error) {
             console.log('Error al publicar', error);
@@ -95,17 +92,6 @@ const Step4 = ({prevStep = {prevStep}}) => {
                     <div className='mt-2 mb-2'>                 
                         <p className={`${inter.className} xl:text-md 2xl:text-xl font-medium text-black`}>UBICACIÓN</p>
                         <p className='xl:text-sm 2xl:text-lg'>{locality.name}, {locality.province.name}</p>
-                    </div>
-                    <div className='flex flex-row'>
-                        <div>
-                            {vaccinated && <Checkbox aria-label='Vacunado' className='text-black xl:text-sm 2xl:text-lg mr-2' defaultSelected isSelected>Vacunado</Checkbox>}
-                        </div>
-                        <div>
-                            {unprotected && <Checkbox aria-label='Desparasitado' className='text-black xl:text-sm 2xl:text-lg mr-2'  defaultSelected isSelected>Desparasitado</Checkbox>}
-                        </div>
-                        <div>
-                            {castrated && <Checkbox aria-label='Castrado' className='text-black xl:text-sm 2xl:text-lg mr-2'  defaultSelected isSelected>Castrado</Checkbox>} 
-                        </div>
                     </div>
                     <div className='mt-2'>
                         <p className={`${inter.className} text-md font-medium text-black`}>DESCRIPCIÓN</p>

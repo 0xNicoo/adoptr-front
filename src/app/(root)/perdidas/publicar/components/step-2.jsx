@@ -32,7 +32,7 @@ const mesesConst = generarMeses(0, 11);
 const Step2 = ({nextStep, prevStep}) => {
   //const [latitude, setLatitude] = useState(0);
   //const [longitude, setLongitude] = useState(0);
-  const { animalType, title, ageYears, ageMonths, sexType, sizeType, vaccinated, unprotected, castrated, locality, province, longitude, latitude, setNombre, setAnios, setMeses, setSexo, setTamanio, setVacunado, setDesparasitado, setCastrado, setLocality, setProvince, setLongitude, setLatitude } = useFormStoreLost();
+  const { animalType, title, ageYears, ageMonths, sexType, sizeType, locality, province, longitude, latitude, setNombre, setAnios, setMeses, setSexo, setTamanio, setLocality, setProvince, setLongitude, setLatitude } = useFormStoreLost();
   const [errors, setErrors] = useState('');
   const [provinces, setProvinces] = useState([]);
   const [localities, setLocalities] = useState([]);
@@ -53,9 +53,6 @@ const Step2 = ({nextStep, prevStep}) => {
     }
   ]
 
-  const handleVacunadoChange = (e) => setVacunado(e.target.checked);
-  const handleDesparasitadoChange = (e) => setDesparasitado(e.target.checked);
-  const handleCastradoChange = (e) => setCastrado(e.target.checked);
   const handleSexoChange = (value) => {
     setSexo(value);  
 
@@ -83,11 +80,8 @@ const Step2 = ({nextStep, prevStep}) => {
  
   useEffect(() => {
     setSelected(sizeType);
-    setVacunado(vaccinated);
     setSexo(sexType);
-    setDesparasitado(unprotected);
-    setCastrado(castrated);
-  }, [sizeType, vaccinated, unprotected, castrated, sexType]);
+  }, [sizeType, sexType]);
 
   const handleNextStep = () => {
     let newErrors = {}
@@ -331,16 +325,8 @@ const Step2 = ({nextStep, prevStep}) => {
         {errors.sizeType && <p className='text-red-500 mt-2 text-xs'>{errors.sizeType}</p>}
       </div>
 
-      <div className='flex mt-8 gap-8'>
-          <Checkbox isSelected={vaccinated} onChange={handleVacunadoChange} checked={vaccinated}>Vacunado</Checkbox>
-          <Checkbox isSelected={unprotected} onChange={handleDesparasitadoChange} checked={unprotected}>Desparasitado</Checkbox>
-          <Checkbox isSelected={castrated} onChange={handleCastradoChange} checked={castrated}>Castrado</Checkbox>
-      </div>
-
-      <div className="flex w-full">
-        <div className="flex flex-col w-1/2">
-          <MapForm setLatitude={setLatitude} setLongitude={setLongitude} />
-        </div>
+      <div className='flex w-1/3'> {/* Ajusta el ancho según sea necesario */}
+          <MapForm longitude={longitude} latitude={latitude} setLongitude={setLongitude} setLatitude={setLatitude} />
       </div>
 
       <div className="flex flex-row justify-between mt-4 items-end mr-4">
