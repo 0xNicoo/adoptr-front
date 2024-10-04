@@ -14,7 +14,7 @@ const gentyDemo = localFont({
 
 const navigation = [
   { name: 'Mascotas perdidas', href: '#', current: false },
-  { name: 'Novedades', href: '#', current: false },
+  { name: 'Comunidad', href: '/comunidad', current: false },
 ];
 
 const Navbar = () => {

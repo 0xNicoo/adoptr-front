@@ -1,10 +1,9 @@
 "use client"
 import React, { useState } from 'react';
-import {Image, Button, Card, CardFooter, CardBody} from "@nextui-org/react";
+import {Image, Button, Card} from "@nextui-org/react";
 import ClearIcon from '@mui/icons-material/Clear';
 import { createPostAction } from '@/actions/post';
 import CollectionsIcon from '@mui/icons-material/Collections';
-import Clear from '@mui/icons-material/Clear';
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,7 +17,6 @@ const Post = ({onPostsChange}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Lógica para manejar la publicación del contenido
     console.log('Contenido publicado:', content);
   };
 
@@ -39,7 +37,7 @@ const Post = ({onPostsChange}) => {
 
     const formData = new FormData();
     formData.append('description', description);
-    formData.append('image', fileImage); // Enviar el archivo crudo
+    formData.append('image', fileImage); 
     formData.append('date', new Date().toISOString());
 
     try {
