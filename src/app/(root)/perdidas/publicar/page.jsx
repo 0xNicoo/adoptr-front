@@ -1,15 +1,15 @@
 "use client";
 import React from 'react';
 import { NextUIProvider } from '@nextui-org/react';
-import Step1 from './step-1';
-import Step2 from './step-2';
-import Step3 from './step-3';
-import Step4 from './step-4';
-import Stepper from './stepper';
-import { useFormStoreAdopcion } from '../../../../store';
+import Step1 from './components/step-1';
+import Step2 from './components/step-2';
+import Step3 from './components/step-3';
+import Step4 from './components/step-4';
+import Stepper from './components/stepper';
+import { useFormStoreLost } from './../../../store';
 
 const MultiStepForm = () => {
-  const { step, nextStep, prevStep } = useFormStoreAdopcion();
+  const { step, nextStep, prevStep } = useFormStoreLost();
 
   const renderStepper = () => {
     return (
@@ -45,4 +45,3 @@ const MultiStepForm = () => {
 };
 
 export default MultiStepForm;
-
