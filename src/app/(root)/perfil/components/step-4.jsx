@@ -19,6 +19,7 @@ const Step4 = ({ prevStep }) => {
     const [publishing, setPublishing] = useState(false)
 
     const publicarPerfil = async () => {
+        setPublishing(true)
         const formData = new FormData();
         formData.append('firstName', firstName);
         formData.append('lastName', lastName);
@@ -32,7 +33,7 @@ const Step4 = ({ prevStep }) => {
             router.push('/mi-perfil');
             successToast('Perfil creado con exito!')
         } catch (error) {
-            setEditing(false)
+            setPublishing(false)
             errorToast("Error: ", error.message)
             for (let [key, value] of formData.entries()) {
                 console.log(key, value);
@@ -69,7 +70,7 @@ const Step4 = ({ prevStep }) => {
             <div className="flex flex-row justify-between mt-4 mb-4 items-end mr-4">
                 <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
                 {
-                    editing ? 
+                    publishing ? 
                     <div className='py-2 px-8'>
                         <CustomLoading />
                     </div>
