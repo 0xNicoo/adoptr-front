@@ -6,6 +6,7 @@ import MiPerfilTabs from './components/tabs';
 import { getPostsByUserIdAction } from '@/actions/post';
 import { getAdoptionsAction } from '@/actions/adoption';
 import { getProfilByUserIdAction } from '@/actions/profile';
+import CustomLoading from '@/app/components/customLoading';
 
 export default function PerfilesPage() {
     const searchParams = useSearchParams();
@@ -43,7 +44,7 @@ export default function PerfilesPage() {
     fetchProfileAndPosts();
   }, [userId]);
 
-  if (loading) return <div>Cargando perfil...</div>;
+  if (loading) return <CustomLoading />;
   if (error) return <div>{error}</div>;
   if (!profile) return <div>No se encontró el perfil</div>;
 

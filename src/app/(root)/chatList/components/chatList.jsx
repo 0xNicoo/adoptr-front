@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useChatStore } from '@/app/store';
 import { getChatListAction } from '@/actions/chat';
 import { getUserIdAction } from '@/actions/global';
+import CustomLoading from '@/app/components/customLoading';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,7 +45,7 @@ const ChatList = () => {
     fetchContacts();
   }, []);
 
-  if (loading) return <p>Cargando contactos...</p>;
+  if (loading) return <CustomLoading />;
   if (error) return <p>{error}</p>;
 
   const handleClick = (contactId) => {
