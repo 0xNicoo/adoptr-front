@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card } from "@nextui-org/react";
 import { useRouter } from "next/navigation"; 
 import { getServiceTypesAction } from "@/actions/service";
+import CustomLoading from "@/app/components/customLoading";
 
 const ServiceType = () => {
   const [servicesTypes, setServiceTypes] = useState([]);
@@ -29,7 +30,7 @@ const ServiceType = () => {
   
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <CustomLoading />;
   }
 
   if (error) {

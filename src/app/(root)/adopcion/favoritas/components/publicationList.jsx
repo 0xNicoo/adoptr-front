@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 import { getAllFavoritesAction } from '@/actions/favorite';
+import CustomLoading from "@/app/components/customLoading";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -34,7 +35,7 @@ const PublicationFavoriteList = () => {
   },[])
 
   if (loading) {
-    return <p>Loading...</p>
+    return <CustomLoading />
   }
 
   return (

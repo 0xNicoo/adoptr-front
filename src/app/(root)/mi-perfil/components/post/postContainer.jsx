@@ -3,6 +3,7 @@ import PostList from './postList';
 import PostDeleteModal from './postDeleteModal';
 import React, { useEffect, useState } from 'react';
 import { getPostsAction } from '@/actions/post';
+import CustomLoading from '@/app/components/customLoading';
 
 const PostConatiner = ({profile}) => {
   const [loading, setLoading] = useState(true);
@@ -43,7 +44,7 @@ const PostConatiner = ({profile}) => {
     setSelectedPostId(null);
   };
 
-  if (loading) return <p>Cargando posts...</p>;
+  if (loading) return <CustomLoading />
   if (error) return <p>{error}</p>;
 
 
