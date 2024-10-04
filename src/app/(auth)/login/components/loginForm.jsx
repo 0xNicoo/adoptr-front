@@ -58,7 +58,7 @@ const LoginForm = () => {
                     Ingresar
                 </button>
                 <p className="text-center text-sm mt-4">
-                    ¿Ya tenés una cuenta?{' '}
+                    ¿No tenés una cuenta?{' '}
                     <Link href="/signup" className="text-primary-orange underline hover:text-primary-orange-dark transition-colors duration-300 font-semibold">
                         Registrarse
                     </Link>
