@@ -6,7 +6,7 @@ import { Checkbox, Textarea } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import CustomLoading from '@/app/components/customLoading';
-import { successToast } from '@/util/toast';
+import { errorToast, successToast } from '@/util/toast';
 import { createAdoptionAction } from '@/actions/adoption';
 
 const inter = Inter({ subsets: ["latin"] });
@@ -62,8 +62,8 @@ const Step4 = ({prevStep = {prevStep}}) => {
             router.push(`/adopcion/${resp.id}`)
             successToast('Publicacion creada con exito!')
         } catch (error) {
-            console.log('Error al publicar', error);
             setPublishing(false)
+            errorToast("Error: ", error.message)
         }
     }
     
