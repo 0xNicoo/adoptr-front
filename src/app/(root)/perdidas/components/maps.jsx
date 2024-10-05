@@ -122,7 +122,7 @@ const MapComponent = () => {
       <MapContainer
         center={userLocation}
         zoom={15}
-        style={{ height: "700px", width: "100%" }}
+        style={{ height: "500px", width: "100%" }}
         ref={mapRef}
       >
         <TileLayer

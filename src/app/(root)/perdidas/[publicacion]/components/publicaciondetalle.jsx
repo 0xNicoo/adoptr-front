@@ -8,7 +8,7 @@ import { useFormStoreLost } from '@/app/store';
 import { getUserIdAction } from '@/actions/global';
 import { getLostAction } from '@/actions/lost';
 import { getChatByPublicationIdAction } from '@/actions/chat';
-
+import MapPreview from './mapPreview';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -105,6 +105,7 @@ const PublicationDetail = ({ lostId }) => {
               className="max-w-xs"
             />
           </div>
+          <MapPreview latitude={lost.latitude} longitude={lost.longitude}/>
         </div>
         <div className='w-full flex justify-end mt-4'>
           <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"
