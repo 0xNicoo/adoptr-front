@@ -14,7 +14,6 @@ const gentyDemo = localFont({
 });
 
 const navigation = [
-  { name: 'Mascotas perdidas', href: '#', current: false },
   { name: 'Comunidad', href: '/comunidad', current: false },
 ];
 
@@ -66,7 +65,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <DisclosurePanel className="sm:hidden flex flex-col space-y-1 px-2 pb-3 pt-2">
-        <DropdownAdoptar />
+        <DropdownAdoptar/>
         <DropdownServicios />
         <DropdownPerdidas />
         {navigation.map((item) => (
