@@ -13,7 +13,7 @@ import { useLostEditStore } from '@/app/store';
 import { CIcon } from '@coreui/icons-react';
 import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
-
+import MapPreview from './mapPreview';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -137,6 +137,7 @@ const PublicationDetail = ({ lostId }) => {
                   </button>
                 </div>
           </div>
+          <MapPreview latitude={lost.latitude} longitude={lost.longitude}/>
         </div>
         <div className='w-full flex justify-end mt-4'>
           <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"

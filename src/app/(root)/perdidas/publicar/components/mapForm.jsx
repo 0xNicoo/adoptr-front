@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
 // Asegúrate de que la ruta de tu imagen sea correcta
 const customIcon = L.icon({
@@ -13,38 +14,86 @@ const customIcon = L.icon({
 const MapForm = ({ setLatitude, setLongitude }) => {
   const mapRef = useRef(null);
   const markerRef = useRef(null); // Referencia para el marcador
+  const [map, setMap] = useState(null); // Estado para el mapa
 
   useEffect(() => {
-    const map = L.map(mapRef.current).setView([-34.9011, -56.1645], 15);
+    const newMap = L.map(mapRef.current).setView([-34.9011, -56.1645], 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap'
-    }).addTo(map);
+    }).addTo(newMap);
 
-    map.on('click', (e) => {
+    // Inicializa el proveedor de búsqueda
+    const provider = new OpenStreetMapProvider();
+    const searchControl = new GeoSearchControl({
+      provider,
+      style: 'bar',
+      autoComplete: true,
+      autoCompleteDelay: 250,
+      resultItem: {
+        render: (result) => {
+          return `<div>${result.label}</div>`;
+        },
+      },
+      // Manejar la selección de una ubicación de búsqueda
+      onResult: (result) => {
+        const { latitude, longitude } = result.location;
+        setLatitude(latitude);
+        setLongitude(longitude);
+
+        // Mueve el mapa a la ubicación seleccionada
+        newMap.setView([latitude, longitude], 15);
+
+        // Mueve o crea el marcador
+        if (markerRef.current) {
+          markerRef.current.setLatLng([latitude, longitude]);
+        } else {
+          markerRef.current = L.marker([latitude, longitude], { icon: customIcon }).addTo(newMap);
+        }
+      }
+    });
+
+    // Agrega el control de búsqueda al mapa, pero mantén el input separado
+    newMap.addControl(searchControl);
+
+    newMap.on('click', (e) => {
       const { lat, lng } = e.latlng;
-      
       setLatitude(lat);
       setLongitude(lng);
-      console.log(lat)  
+
       // Si el marcador ya existe, lo movemos; si no, lo creamos
       if (markerRef.current) {
         markerRef.current.setLatLng([lat, lng]);
       } else {
-        markerRef.current = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+        markerRef.current = L.marker([lat, lng], { icon: customIcon }).addTo(newMap);
       }
     });
 
+    setMap(newMap); // Establece el mapa en el estado
+
     return () => {
-      map.off('click'); // Elimina el evento 'click'
-      map.remove(); // Elimina el mapa
+      newMap.off('click'); // Elimina el evento 'click'
+      newMap.remove(); // Elimina el mapa
     };
   }, [setLatitude, setLongitude]);
 
   return (
-    <div ref={mapRef} style={{ height: '400px', width: '100%' }} />
+    <div className="relative">
+      {/* Contenedor para el mapa */}
+      <div ref={mapRef} className="h-96 w-full" />
+
+      {/* Buscador sobre el mapa */}
+      <div className="absolute z-10 p-2 bg-white rounded shadow-lg top-4 left-4">
+        <input
+          type="text"
+          placeholder="Buscar ubicación..."
+          className="border border-gray-300 rounded px-2 py-1 w-64"
+        />
+      </div>
+    </div>
   );
 };
 
 export default MapForm;
+

@@ -138,7 +138,7 @@ const Step1 = ({nextStep}) => {
             </Select>
             )}
           </div>
-          {errors.locality && <p className='text-red-500 mt-2 text-xs'>{errors.locality}</p>}
+          {errors.serviceType && <p className='text-red-500 mt-2 text-xs'>{errors.serviceType}</p>}
         </div>
     </div>
 

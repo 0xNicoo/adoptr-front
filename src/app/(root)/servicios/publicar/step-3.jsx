@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormStoreServicio } from '@/app/store';
 import { Inter } from "next/font/google";
 import { Textarea } from '@nextui-org/react';
@@ -12,9 +12,15 @@ import { createServiceAction } from '@/actions/service';
 const inter = Inter({ subsets: ["latin"] });
 
 const Step3 = ({prevStep = {prevStep}}) => {
-    const { title, description, street, number, serviceType, image, locality, province, fileImage } = useFormStoreServicio();
+    const { title, description, street, number, serviceType, image, locality, province, fileImage, resetForm } = useFormStoreServicio();
     const router = useRouter()
     const [publishing, setPublishing] = useState(false)
+
+     useEffect(() => {
+        return () => {
+            resetForm();
+        };
+    }, [resetForm]);
 
     const publicarServicio = async () => {
         setPublishing(true)
@@ -24,13 +30,18 @@ const Step3 = ({prevStep = {prevStep}}) => {
         formData.append('street', street);
         formData.append('number', number);
         formData.append('image', fileImage);
-        formData.append('locality_id', locality.id);
-        formData.append('serviceType_id', serviceType.id);
+        formData.append('locality_id', locality?.id);
+        formData.append('serviceType_id', serviceType?.id);
 
         try {
             const resp = await createServiceAction(formData);
-            router.push(`/servicios/${resp.id}`)
-            successToast('Publicacion creada con exito!')
+            resetForm();
+
+            router.push(`/servicios/${resp.id}`);
+
+            
+            successToast('Publicación creada con éxito!');
+
         } catch (error) {
             setPublishing(false)
             errorToast("Error: ", error.message)
@@ -41,28 +52,30 @@ const Step3 = ({prevStep = {prevStep}}) => {
         <div className='flex flex-grow flex-col mb-4 ml-12 justify-between'>
             <div className='flex flex-row gap-8 mt-4 items-start'>
                 <div className="flex items-center"> 
-                    <Image className='rounded-xl xl:w-80 2xl:w-96'
-                    src={image}
-                    alt='Imagen seleccionada'
-                    width={200}
-                    height={350}
-                    />
+                    {image && (
+                        <Image className='rounded-xl xl:w-80 2xl:w-96'
+                        src={image}
+                        alt='Imagen seleccionada'
+                        width={200}
+                        height={350}
+                        />
+                    )}
                 </div> 
                 <div className='flex flex-col'>
                     <h1 className={`${inter.className} xl:text-xl 2xl:text-2xl font-bold text-primary-blue`}>{title}</h1>
                     <div className='mt-2 mb-2'>                 
                         <p className={`${inter.className} xl:text-md 2xl:text-xl font-medium text-black`}>Tipo de servicio</p>
-                        <p className='xl:text-sm 2xl:text-lg'>{serviceType.name}</p>
+                        <p className='xl:text-sm 2xl:text-lg'>{serviceType?.name || 'No especificado'}</p>
                     </div>
                     <div className='mt-2 mb-2'>                 
                         <p className={`${inter.className} xl:text-md 2xl:text-xl font-medium text-black`}>UBICACIÓN</p>
-                        <p className='xl:text-sm 2xl:text-lg'>{locality.name}, {locality.province.name}</p>
+                        <p className='xl:text-sm 2xl:text-lg'>{locality?.name || 'No especificada'}, {province?.name || ''}</p>
                     </div>
                     <div className='mt-2'>
                         <p className={`${inter.className} text-md font-medium text-black`}>DESCRIPCIÓN</p>
                         <Textarea
                         isReadOnly
-                        defaultValue={description}
+                        value={description}
                         className="max-w-xs"
                         />
                     </div>
@@ -78,7 +91,6 @@ const Step3 = ({prevStep = {prevStep}}) => {
                     :
                     <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" type="submit" onClick={publicarServicio}>Publicar</button>
                 }
-
             </div>
         </div>
     )
