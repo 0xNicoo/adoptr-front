@@ -1,5 +1,6 @@
 "use client";
 
+import Link from 'next/link';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Image, useDisclosure } from '@nextui-org/react';
 import { cilHeart } from '@coreui/icons';
 import { CIcon } from '@coreui/icons-react';
@@ -114,7 +115,9 @@ const PostList = ({ posts, setPosts }) => {
                     )}
                   </div>
                   <div className="flex flex-col">
-                    <p className="text-md">{profiles[post.user.id]?.firstName || 'Nombre'} {profiles[post.user.id]?.lastName || 'Apellido'}</p>
+                  <Link href={`/perfiles?id=${post.user.id}`}>
+                    <p className="text-md hover:underline underline-offset-4 text-secondary-blue font-medium">{profiles[post.user.id]?.firstName || 'Nombre'} {profiles[post.user.id]?.lastName || 'Apellido'}</p>
+                  </Link>
                     <p className="text-small text-default-500">{formatDate(post.date)}</p>
                   </div>
                 </div>

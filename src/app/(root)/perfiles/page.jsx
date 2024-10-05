@@ -31,8 +31,8 @@ export default function PerfilesPage() {
         console.log('profile', profileData);
         const postsData = await getPostsByUserIdAction(userId); 
         setPosts(postsData); 
-        const adoptionsData = await getAdoptionsAction();
-        const filteredAdoptions = adoptionsData.filter(adoption => adoption.user.id === profileData.user.id);
+        var { total, data } = await getAdoptionsAction();
+        const filteredAdoptions = data.filter(adoption => adoption.user.id === profileData.user.id);
         setAdoptions(filteredAdoptions);
       } catch (err) {
         setError('Error al obtener el perfil ');
