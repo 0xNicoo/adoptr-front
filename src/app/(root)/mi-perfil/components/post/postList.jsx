@@ -40,12 +40,6 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
   const [endOfList, setEndOfList] = useState(false)
   const { isOpen, onOpen: openModal, onClose } = useDisclosure();
   const [selectedImage, setSelectedImage] = useState(null);
-  const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
-
-  const handleImageLoad = (e) => {
-    const { naturalWidth, naturalHeight } = e.target;
-    setImageDimensions({ width: naturalWidth, height: naturalHeight });
-  };
 
   const onScroll = async () => {
     const nextPage = currentPage + 1
