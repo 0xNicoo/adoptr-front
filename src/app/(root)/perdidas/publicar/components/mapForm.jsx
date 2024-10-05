@@ -1,8 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Asegúrate de que la ruta de tu imagen sea correcta
 const customIcon = L.icon({
   iconUrl: '/images/5737612.png', // Ruta a tu imagen
   iconSize: [32, 32], // Tamaño del ícono
@@ -10,41 +9,50 @@ const customIcon = L.icon({
   popupAnchor: [0, -32] // Punto desde donde se abrirá el popup
 });
 
-const MapForm = ({ setLatitude, setLongitude }) => {
+const MapForm = ({ setLatitude, setLongitude, latitude, longitude }) => {
   const mapRef = useRef(null);
-  const markerRef = useRef(null); // Referencia para el marcador
+  const markerRef = useRef(null);
+  const [map, setMap] = useState(null);
 
   useEffect(() => {
-    const map = L.map(mapRef.current).setView([-34.9011, -56.1645], 15);
+    const newMap = L.map(mapRef.current).setView([latitude || -34.9011, longitude || -56.1645], 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap'
-    }).addTo(map);
+    }).addTo(newMap);
 
-    map.on('click', (e) => {
+    // Evento de click en el mapa
+    newMap.on('click', (e) => {
       const { lat, lng } = e.latlng;
-      
       setLatitude(lat);
       setLongitude(lng);
-      console.log(lat)  
-      // Si el marcador ya existe, lo movemos; si no, lo creamos
+
       if (markerRef.current) {
         markerRef.current.setLatLng([lat, lng]);
       } else {
-        markerRef.current = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+        markerRef.current = L.marker([lat, lng], { icon: customIcon }).addTo(newMap);
       }
     });
 
+    setMap(newMap);
+
     return () => {
-      map.off('click'); // Elimina el evento 'click'
-      map.remove(); // Elimina el mapa
+      newMap.off('click');
+      newMap.remove();
     };
   }, [setLatitude, setLongitude]);
 
-  return (
-    <div ref={mapRef} style={{ height: '400px', width: '100%' }} />
-  );
+  // Este efecto escucha los cambios en latitude y longitude y actualiza el marcador
+  useEffect(() => {
+    if (markerRef.current && latitude && longitude) {
+      markerRef.current.setLatLng([latitude, longitude]);
+      map.setView([latitude, longitude], 15); // Centra el mapa en la nueva ubicación
+    }
+  }, [latitude, longitude, map]);
+
+  return <div ref={mapRef} className="h-64 w-full sm:h-80 md:h-96 lg:h-[500px]"></div>;
 };
 
 export default MapForm;
+

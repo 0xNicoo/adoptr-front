@@ -7,12 +7,11 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { getLostsAction } from "@/actions/lost";
 
-// Componente para mover el mapa a una posición específica
 const MoveMapToLocation = ({ position }) => {
   const map = useMap(); 
   useEffect(() => {
     if (position) {
-      map.setView(position, 15); // Mueve el mapa a la ubicación del usuario
+      map.setView(position, 15);
     }
   }, [position, map]);
 
@@ -29,29 +28,28 @@ const MapComponent = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // Crea un icono de huella
-      L.Icon.Default.mergeOptions({
-        iconUrl: "/images/cat-big.png",
-        shadowUrl: null,
-        iconSize: [30, 30],
-        iconAnchor: [15, 30],
-        popupAnchor: [0, -30],
+      const pawIcon = new L.Icon({
+        iconUrl: "/images/iconMap.png", 
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        popupAnchor: [0, -50],
       });
+      
+      L.Marker.prototype.options.icon = pawIcon; 
 
-      // Obtener la ubicación del usuario
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            setUserLocation([latitude, longitude]); // Actualiza la ubicación del usuario
+            setUserLocation([latitude, longitude]);
           },
           (error) => {
             console.error("Error al obtener la ubicación del usuario:", error);
-            setUserLocation([-34.6037, -58.3816]); // Buenos Aires como fallback
+            setUserLocation([-34.92145, -57.95453]);
           }
         );
       } else {
-        setUserLocation([-34.6037, -58.3816]); // Fallback si no se admite la geolocalización
+        setUserLocation([-34.92145, -57.95453]);
       }
     }
 
@@ -68,7 +66,6 @@ const MapComponent = () => {
     fetchLostPets();
   }, []);
 
-  // Función para buscar una ubicación en Nominatim
   const handleSearch = async (e) => {
     e.preventDefault();
 
@@ -82,7 +79,7 @@ const MapComponent = () => {
 
       if (data.length > 0) {
         const { lat, lon } = data[0];
-        setSearchLocation([parseFloat(lat), parseFloat(lon)]); // Actualiza la ubicación de búsqueda
+        setSearchLocation([parseFloat(lat), parseFloat(lon)]);
       } else {
         alert("No se encontró la ubicación.");
       }
@@ -101,8 +98,7 @@ const MapComponent = () => {
   }
 
   return (
-    <div className="map-container w-full h-full p-4">
-      {/* Formulario de búsqueda */}
+    <div className="map-container w-full h-full p-4 flex flex-col">
       <form onSubmit={handleSearch} className="flex items-center mb-4">
         <input
           type="text"
@@ -122,8 +118,9 @@ const MapComponent = () => {
       <MapContainer
         center={userLocation}
         zoom={15}
-        style={{ height: "700px", width: "100%" }}
+        style={{ height: "80vh", width: "100%" }}
         ref={mapRef}
+        className="rounded-lg shadow-lg"
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -131,7 +128,6 @@ const MapComponent = () => {
         />
         <MoveMapToLocation position={searchLocation || userLocation} />
 
-        {/* Marcadores para cada mascota perdida */}
         {lostPets.map((pet) => (
           <Marker
             key={pet.id}
