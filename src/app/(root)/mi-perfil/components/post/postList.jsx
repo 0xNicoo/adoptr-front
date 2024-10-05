@@ -67,7 +67,7 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
       {posts.length > 0 ? (
         <>
           {posts.map((post) => (
-            <Card className="w-4/5" key={post.id}>
+            <Card key={post.id}>
               <CardHeader className="flex flex-row justify-between">
                 <div className='flex flex-row gap-2'>
                   <div className='flex flex-col'>
@@ -92,18 +92,17 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
               </CardHeader>
               <Divider />
               <CardBody>
-                <p>{post.description}</p>
-                { post.s3Url ?
-                  <div className="w-[300px] h-[400px] overflow-hidden mt-2 rounded-lg flex justify-center">
-                  <img
-                    alt="Imagen del post"
-                    src={post.s3Url}
-                    className="w-full h-full object-cover"
-                    onClick={() => handleImageClick(post.s3Url)}
-                  />
-                </div>
-                  : null
-                }
+                <p className='flex items-start break-words'>{post.description}</p>
+                {post.s3Url ? (
+                  <div className="w-full h-[500px] overflow-hidden mt-2 rounded-lg mx-auto flex items-center justify-center">
+                    <img
+                      alt="Imagen del post"
+                      src={post.s3Url}
+                      className="w-full h-full object-cover"
+                      onClick={() => handleImageClick(post.s3Url)}
+                    />
+                  </div>
+                ) : null}
               </CardBody>
               <Divider />
               <CardFooter>

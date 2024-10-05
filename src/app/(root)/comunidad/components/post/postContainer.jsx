@@ -32,10 +32,10 @@ const PostContainer = () => {
   return(
     <div className='flex flex-col w-full items-center justify-center'>
       <div className='max-w-4xl w-full px-4 flex flex-col items-center'>
-        <div className='w-3/5 mt-4'>
+        <div className='w-2/3 mt-4'>
           <Post onPostsChange={onPostsChange} />
         </div>
-        <div className='w-3/5 mt-4'>
+        <div className='w-2/3 mt-4'>
           <PostList posts={posts} setPosts={setPosts} />
         </div>  
       </div>

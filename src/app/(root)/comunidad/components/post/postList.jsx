@@ -124,7 +124,7 @@ const PostList = ({ posts, setPosts }) => {
                 <p className='break-words'>{post.description}</p>
                 {post.s3Url ? (
                   <div className="w-full flex justify-center mt-2">
-                    <div className="w-[500px] h-[500px] overflow-hidden rounded-md">
+                    <div className="w-full h-[500px] overflow-hidden rounded-md">
                       <img
                         alt="Imagen del post"
                         src={post.s3Url}

@@ -42,7 +42,7 @@ const Navbar = () => {
           </div>
 
           {/* Menu Links */}
-          <div className="hidden sm:ml-6 sm:block flex items-center space-x-16">
+          <div className="hidden sm:ml-6 sm:block flex items-center space-x-12">
             {/* Dropdown "Adoptar" */}
             <DropdownAdoptar />
             <DropdownServicios />

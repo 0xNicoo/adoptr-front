@@ -1,43 +1,38 @@
-"use client"
-import React, { useState } from 'react';
-import {Image, Button, Card} from "@nextui-org/react";
+"use client";
+import React, { useEffect, useState, useRef } from 'react';
+import { Image, Button, Card } from "@nextui-org/react";
 import ClearIcon from '@mui/icons-material/Clear';
 import { createPostAction } from '@/actions/post';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import { Inter } from "next/font/google";
+import { getProfileAction } from '@/actions/profile';
 
 const inter = Inter({ subsets: ["latin"] });
 
-const Post = ({onPostsChange}) => {
+const Post = ({ onPostsChange, profile }) => {
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
   const [nameImage, setNameImage] = useState('');
   const [fileImage, setFileImage] = useState(null);
-  const [content, setContent] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Contenido publicado:', content);
-  };
+  const textareaRef = useRef(null);  
 
   const imageHandler = (e) => {
     const file = e.target.files[0];
     if (file) {
-        setFileImage(file);
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImage(reader.result); 
-        };
-        reader.readAsDataURL(file); 
-        setNameImage(file.name);
+      setFileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+      setNameImage(file.name);
     }
   };
 
   const postNew = async () => {
-
     const formData = new FormData();
     formData.append('description', description);
-    formData.append('image', fileImage); 
+    formData.append('image', fileImage);
     formData.append('date', new Date().toISOString());
 
     try {
@@ -45,50 +40,54 @@ const Post = ({onPostsChange}) => {
       setImage('');
       setNameImage('');
       setFileImage(null);
-      const post = await createPostAction(formData); 
+      const post = await createPostAction(formData);
       onPostsChange(post);
     } catch (error) {
       console.log('Error al crear post', error);
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
     }
-  }
+  };
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";  
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;  
+    }
+  }, [description]); 
+
+  const isSingleLine = description.split('\n').length == 1;
 
   return (
-    <div className='w-4/5'>
-    <form onSubmit={handleSubmit}>
-      <div className="w-full mb-4 border border-gray-200 rounded-xl bg-white">
-        <div className="px-2 py-2 bg-white rounded-t-xl border-b grid
-        text-sm
-        [&>textarea]:text-inherit
-        after:text-inherit
-        [&>textarea]:resize-none
-        [&>textarea]:overflow-hidden
-        [&>textarea]:[grid-area:1/1/2/2]
-        after:[grid-area:1/1/2/2]
-        after:whitespace-pre-wrap
-        after:invisible
-        after:content-[attr(data-cloned-val)_'_']
-        after:border"
-        data-cloned-val={description}
-      >
-        <label htmlFor="editor" className="sr-only">Publicar</label>
-          <textarea
-            id="editor"
-            rows="2"
-            className={`${inter.className} w-full text-black bg-white focus:outline-none`}
-            placeholder="Compartí tu experiencia"
-            required
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            onInput={(e) => e.target.parentNode.dataset.clonedVal = e.target.value}
-          />
-          {image ? (
-            <>
+    <div>
+      <form>
+      <div className="w-full border border-gray-200 rounded-xl bg-white">
+          <div className={`px-2 py-2 bg-white rounded-t-xl text-sm border-b flex space-x-2 ${isSingleLine ? 'items-start' : 'items-center'}`}>
+            <div className='flex-shrink-0'>
+              <Image
+                alt="Foto de perfil del usuario"
+                height={40}
+                width={40}
+                src={profile.s3Url}
+                className='rounded-full'
+              />
+            </div>
+            <div className="w-full">
+              <textarea
+                id="editor"
+                ref={textareaRef}  
+                rows="2"
+                className={`${inter.className} w-full text-black bg-white focus:outline-none resize-none overflow-hidden break-words`}
+                placeholder="Compartí tu experiencia"
+                required
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+          </div>
+          {image && (
+            <div className="px-2 py-2">
               <Card
                 radius="md"
-                className="relative border border-gray-100 shadow-none mt-2" 
+                className="relative border border-gray-100 shadow-none mt-2"
                 style={{ width: "fit-content" }}
               >
                 <Image
@@ -102,28 +101,24 @@ const Post = ({onPostsChange}) => {
                   onClick={() => setImage('')}
                 />
               </Card>
-            </>
-          ) : (
-            <div></div>
+            </div>
           )}
-        </div>
-        <div className="flex items-center justify-between px-3 py-2 border-b">
-          <div className="flex flex-wrap items-center divide-gray-200 sm:divide-x sm:rtl:divide-x-reverse">
-            <div className="flex items-center space-x-1 rtl:space-x-reverse sm:pe-4">
+          <div className="flex items-center justify-between rounded-lg px-1 py-1 border-b">
+            <div className="flex items-center space-x-1 hover:bg-gray-100 rounded-lg px-2 py-2">
               <input type="file" id="custom-input" onChange={imageHandler} hidden />
-              <label htmlFor="custom-input">
-                <CollectionsIcon className="text-secondary-blue" />
+              <label htmlFor="custom-input" className='flex flex-row items-center cursor-pointer gap-1 text-secondary-blue'>
+                <CollectionsIcon/>
+                <p className={`${inter.className} text-xs cursor-pointer`}>Foto/Vídeo</p>
               </label>
             </div>
           </div>
         </div>
-      </div>
-      <div className='rounded-lg mb-4 mt-2'>
-        <Button isDisabled={description === ''} onClick={postNew} className="w-full bg-primary-blue py-2 px-4 rounded-3xl transition-colors duration-300 text-white" auto>
-          Publicar
-        </Button>
-      </div>
-    </form>
+        <div className='rounded-lg mb-2 mt-2'>
+          <Button isDisabled={description === ''} onClick={postNew} className="w-full bg-primary-blue py-2 px-4 rounded-3xl transition-colors duration-300 text-white" auto>
+            Publicar
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }
