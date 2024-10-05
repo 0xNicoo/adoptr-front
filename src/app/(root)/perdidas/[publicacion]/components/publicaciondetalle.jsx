@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
-import { Checkbox, Textarea } from '@nextui-org/react';
+import { Textarea } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useFormStoreLost } from '@/app/store';
 import { getUserIdAction } from '@/actions/global';
@@ -121,23 +121,24 @@ const PublicationDetail = ({ lostId }) => {
               className="max-w-xs"
             />
           </div>
-          <div className='absolute top-0 right-0'>
-            {/* TODO: Revisar el responsive de esto */}
-                <div className='flex'>
-                  <button
-                  onClick={() => handleDelete(lost.id)}
-                  className="bg-red-500 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-red-700 flex items-center justify-center"
-                  >
-                  <CIcon icon={cilTrash} className="w-4 h-4 text-white fill-current" />
-                  </button>
-                  <button 
-                    onClick={() => handleEdit()}
-                    className="bg-blue-700 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-secondary-blue flex items-center justify-center">
-                  <CIcon icon={cilPencil} className="w-4 h-4 text-white fill-current" />
-                  </button>
-                </div>
+          <div className='flex flex-col items-end gap-4'>
+            <div className='flex'>
+              <button
+              onClick={() => handleDelete(lost.id)}
+              className="bg-red-500 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-red-700 flex items-center justify-center"
+              >
+              <CIcon icon={cilTrash} className="w-4 h-4 text-white fill-current" />
+              </button>
+              <button 
+                onClick={() => handleEdit()}
+                className="bg-blue-700 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-secondary-blue flex items-center justify-center">
+              <CIcon icon={cilPencil} className="w-4 h-4 text-white fill-current" />
+              </button>
+            </div>
+            <div className='w-full md:w-96'>
+              <MapPreview latitude={lost.latitude} longitude={lost.longitude}/>
+            </div>
           </div>
-          <MapPreview latitude={lost.latitude} longitude={lost.longitude}/>
         </div>
         <div className='w-full flex justify-end mt-4'>
           <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"
