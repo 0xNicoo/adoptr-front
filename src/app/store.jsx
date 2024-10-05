@@ -119,18 +119,18 @@ export const useFormStoreServicio = create(set => {
         setServiceType: (newServiceType) => set({ serviceType: newServiceType }),
         nextStep: () => set((state) => ({ step: state.step + 1 })),
         prevStep: () => set((state) => ({ step: state.step - 1 })),
-        resetForm: () => set(state => ({ 
+        resetForm: () => set({
+            step:1,
             title: '',
-            step: 1,
             description: '',
-            image: '',
-            nombreImagen: '',
-            locality: '',
-            province: '',
             street: '',
             number: '',
-            serviceType: '',
-        }))
+            serviceType: null,
+            image: null,
+            locality: null,
+            province: null,
+            fileImage: null
+        })
     }
 })
 
