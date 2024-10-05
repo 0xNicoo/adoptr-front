@@ -61,7 +61,7 @@ const ChatList = () => {
           contacts.map((contact) => {
             let displayText;
             if (Number(userId) === Number(contact.publicationUserId)) {
-              displayText = `Adoptante: ${contact.adopterUserName}`;
+              displayText = `Interesado: ${contact.adopterUserName}`;
             } else {
               displayText = `Publicado por: ${contact.publicationUserName}`;
             }
