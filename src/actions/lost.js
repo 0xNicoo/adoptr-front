@@ -1,6 +1,6 @@
 'use server';
 
-import { createLost, getLosts, getLost } from "@/lib/api/lost";
+import { createLost, getLosts, getLost, deleteLost, editLost } from "@/lib/api/lost";
 
 export async function createLostAction(formData){
     const {data, headers} = await createLost(formData);
@@ -14,5 +14,15 @@ export async function createLostAction(formData){
 
   export async function getLostAction(lostId) {
     const {data, headers} = await getLost(lostId); 
+    return data
+  }
+
+  export async function deleteLostAction(id){
+    const {data, headers} = await deleteLost(id)
+    return data
+  }
+
+  export async function editLostAction(id, formData) {
+    const {data, headers} = await editLost(id, formData)
     return data
   }

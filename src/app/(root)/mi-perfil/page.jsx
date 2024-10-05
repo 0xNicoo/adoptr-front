@@ -8,6 +8,7 @@ import { getProfileAction } from '@/actions/profile';
 import { getAdoptionsAction } from '@/actions/adoption';
 import { getPostsAction } from '@/actions/post';
 import { getServicesAction } from '@/actions/service';
+import { getLostsAction } from '@/actions/lost';
 import CustomLoading from "@/app/components/customLoading";
 
 const MiPerfil = () => {
@@ -15,6 +16,7 @@ const MiPerfil = () => {
   const [loading, setLoading] = useState(true);
   const [adoptions, setAdoptions] = useState(null);
   const [services, setServices] = useState([]);
+  const [lost, setLost] = useState([]);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const { setProfileStore } = useProfileEditStore();
@@ -35,6 +37,9 @@ const MiPerfil = () => {
         var { total, data } = await getServicesAction();
         const filteredServices = data.filter(service => service.user.id === profileData.user.id); //TODO: deberiamos crear un endpoint para obtener los servicios de usuario
         setServices(filteredServices);
+        var { total, data } = await getLostsAction();
+        const filteredLost = data.filter(lost => lost.user.id === profileData.user.id); 
+        setLost(filteredLost);
       } catch (err) {
         setError('Error al obtener el perfil');
       } finally {
@@ -58,7 +63,7 @@ const MiPerfil = () => {
         <ProfileCard profile={profile} onEdit={handleEdit} />
       </div>
       <div className="mt-4 w-full lg:w-2/3 mr-4">
-        <MiPerfilTabs profile={profile} adoptions={adoptions} posts={posts} services={services} />
+        <MiPerfilTabs profile={profile} adoptions={adoptions} posts={posts} services={services} lost={lost} />
       </div>
     </div>
   );
