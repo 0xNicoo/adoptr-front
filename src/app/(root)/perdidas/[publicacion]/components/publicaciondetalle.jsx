@@ -6,8 +6,13 @@ import { Checkbox, Textarea } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useFormStoreLost } from '@/app/store';
 import { getUserIdAction } from '@/actions/global';
-import { getLostAction } from '@/actions/lost';
+import { getLostAction, deleteLostAction } from '@/actions/lost';
 import { getChatByPublicationIdAction } from '@/actions/chat';
+import CustomLoading from '@/app/components/customLoading';
+import { useLostEditStore } from '@/app/store'; 
+import { CIcon } from '@coreui/icons-react';
+import { cilTrash } from '@coreui/icons';
+import { cilPencil } from '@coreui/icons';
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -41,6 +46,7 @@ const PublicationDetail = ({ lostId }) => {
   const [error, setError] = useState(null);
   const router = useRouter();
   const [userId, setUserId] = useState(null);
+  const {setLostStore} = useLostEditStore()
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -61,7 +67,7 @@ const PublicationDetail = ({ lostId }) => {
   }, [lostId]);
 
   if (error) return <div>Error: {error}</div>;
-  if (!lost) return <div>Loading...</div>;
+  if (!lost) return <CustomLoading />;
 
 
   const handleLostClick = async () => {
@@ -74,6 +80,16 @@ const PublicationDetail = ({ lostId }) => {
     }
 
   };
+
+  const handleDelete = async (id) => {
+    await deleteLostAction(id)
+    router.push('/perdidas?page=1')
+  };
+
+  const handleEdit = () => {
+    setLostStore(lost)
+    router.push(`/perdidas/${lost.id}/editar`)
+};
 
   return (
     <div className="bg-background-gray flex pt-4 px-4 pb-4 justify-center">
@@ -104,6 +120,22 @@ const PublicationDetail = ({ lostId }) => {
               defaultValue={lost.description}
               className="max-w-xs"
             />
+          </div>
+          <div className='absolute top-0 right-0'>
+            {/* TODO: Revisar el responsive de esto */}
+                <div className='flex'>
+                  <button
+                  onClick={() => handleDelete(lost.id)}
+                  className="bg-red-500 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-red-700 flex items-center justify-center"
+                  >
+                  <CIcon icon={cilTrash} className="w-4 h-4 text-white fill-current" />
+                  </button>
+                  <button 
+                    onClick={() => handleEdit()}
+                    className="bg-blue-700 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-secondary-blue flex items-center justify-center">
+                  <CIcon icon={cilPencil} className="w-4 h-4 text-white fill-current" />
+                  </button>
+                </div>
           </div>
         </div>
         <div className='w-full flex justify-end mt-4'>

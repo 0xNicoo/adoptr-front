@@ -215,3 +215,9 @@ export const useProfileEditStore = create(set => {
     }
 })
 
+export const useLostEditStore = create(set => {
+    return {
+        lost: null,
+        setLostStore: (l) => set({ lost: l} )
+    }
+})

@@ -27,7 +27,6 @@ export async function deleteServiceAction(id){
   return data
 }
 
-
 export async function createServiceAction(formData){
   const {data, headers} = await createService(formData)
   return data
