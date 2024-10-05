@@ -327,12 +327,16 @@ const Step2 = ({nextStep, prevStep}) => {
           </div>
         </div>  
 
-      <div className='w-1/3 p-4'> {/* Ajusta el ancho según sea necesario */}
-          <MapForm isRequired longitude={longitude} latitude={latitude} setLongitude={setLongitude} setLatitude={setLatitude} />
+        <div className='w-1/3 p-4'>
+          <MapForm
+            longitude={longitude}
+            latitude={latitude}
+            setLongitude={setLongitude}
+            setLatitude={setLatitude}
+          />
           {errors.latitude && <p className='text-red-500 mt-2 text-xs'>{errors.latitude}</p>}
           {errors.longitude && <p className='text-red-500 mt-2 text-xs'>{errors.longitude}</p>}
-          
-      </div>
+    </div>
 
       <div className="flex flex-row justify-between mt-4 items-end mr-4">
         <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
