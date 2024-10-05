@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { loginAction } from "@/actions/auth";
+import { errorToast } from "@/util/toast";
 
 const LoginForm = () => {
     
@@ -11,8 +12,12 @@ const LoginForm = () => {
     const router = useRouter();
 
     const handleLogin = async (data) => {
-        await loginAction(data)
-        router.push('/')
+        try{
+            await loginAction(data)
+            router.push('/')
+        }catch(error){
+            errorToast(error.message)
+        }
     }
 
 
@@ -53,7 +58,7 @@ const LoginForm = () => {
                     Ingresar
                 </button>
                 <p className="text-center text-sm mt-4">
-                    ¿Ya tenés una cuenta?{' '}
+                    ¿No tenés una cuenta?{' '}
                     <Link href="/signup" className="text-primary-orange underline hover:text-primary-orange-dark transition-colors duration-300 font-semibold">
                         Registrarse
                     </Link>

@@ -6,6 +6,7 @@ import { Textarea } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import CustomLoading from '@/app/components/customLoading';
+import { errorToast, successToast } from '@/util/toast';
 import { createServiceAction } from '@/actions/service';
 
 const inter = Inter({ subsets: ["latin"] });
@@ -28,11 +29,11 @@ const Step3 = ({prevStep = {prevStep}}) => {
 
         try {
             const resp = await createServiceAction(formData);
-            console.log(serviceType.name)
             router.push(`/servicios/${resp.id}`)
+            successToast('Publicacion creada con exito!')
         } catch (error) {
-            console.log('Error al publicar', error);
             setPublishing(false)
+            errorToast("Error: ", error.message)
         }
     }
     

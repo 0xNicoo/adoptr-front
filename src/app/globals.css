@@ -67,3 +67,11 @@
   .custom-shape-divider-bottom-1723517902 .shape-fill {
     fill: var(--shape-fill-color);
   }
+
+  /* En tu archivo CSS o estilos globales */
+  .map-container {
+    height: 500px; /* o cualquier altura que desees */
+    width: 100%;   /* o cualquier ancho que desees */
+    position: relative; /* Asegúrate de que la posición sea relativa */
+  }
+  

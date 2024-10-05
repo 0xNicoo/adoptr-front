@@ -8,14 +8,18 @@ import { CIcon } from '@coreui/icons-react';
 import { cilLocationPin } from '@coreui/icons';
 import { useRouter } from 'next/navigation';
 import { createProfileAction } from '@/actions/profile';
+import CustomLoading from "@/app/components/customLoading";
+import { errorToast, successToast } from '@/util/toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
 const Step4 = ({ prevStep }) => { 
     const { firstName, lastName, genderType, description, fileImage, image, locality, resetForm } = useFormStorePerfil();
     const router = useRouter();
+    const [publishing, setPublishing] = useState(false)
 
     const publicarPerfil = async () => {
+        setPublishing(true)
         const formData = new FormData();
         formData.append('firstName', firstName);
         formData.append('lastName', lastName);
@@ -27,8 +31,10 @@ const Step4 = ({ prevStep }) => {
         try {
             await createProfileAction(formData); 
             router.push('/mi-perfil');
+            successToast('Perfil creado con exito!')
         } catch (error) {
-            console.log('Error al crear perfil', error);
+            setPublishing(false)
+            errorToast("Error: ", error.message)
             for (let [key, value] of formData.entries()) {
                 console.log(key, value);
             }
@@ -63,7 +69,14 @@ const Step4 = ({ prevStep }) => {
             </div>
             <div className="flex flex-row justify-between mt-4 mb-4 items-end mr-4">
                 <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
-                <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" type="submit" onClick={publicarPerfil}>Finalizar</button>
+                {
+                    publishing ? 
+                    <div className='py-2 px-8'>
+                        <CustomLoading />
+                    </div>
+                    :
+                    <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" type="submit" onClick={publicarPerfil}>Finalizar</button>
+                }
             </div>
         </div>
     )

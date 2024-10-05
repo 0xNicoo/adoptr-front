@@ -15,6 +15,8 @@ import AgeSelect from "./components/ageselect";
 import ImageSelector from "./components/imageSelector";
 import { getUserIdAction } from "@/actions/global";
 import { editAdoptionAction } from "@/actions/adoption";
+import CustomLoading from "@/app/components/customLoading";
+import { errorToast, successToast } from '@/util/toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +25,7 @@ export default function EditPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const methods = useForm()
+  const [editing, setEditing] = useState(false)
 
   useEffect(() => {
     const checkUser = async () => {
@@ -41,7 +44,7 @@ export default function EditPage() {
   }, [])
 
   if (loading) {
-    return <p>Loading...</p>
+    return <CustomLoading />
   }
 
   const handleCancel = (id) => {
@@ -49,8 +52,7 @@ export default function EditPage() {
   };
 
   const onEdit = async (data) => {
-    console.log('Datos enviados al editar:', data);
-
+    setEditing(true)
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);
@@ -64,8 +66,14 @@ export default function EditPage() {
     formData.append('image', data.image);
     formData.append('locality_id', data.locality_id);
 
-    await editAdoptionAction(adoption.id, formData)
-    router.push(`/adopcion/${adoption.id}`)
+    try{
+      await editAdoptionAction(adoption.id, formData)
+      router.push(`/adopcion/${adoption.id}`)
+      successToast('Publicacion editada con exito!')
+    }catch{
+      setEditing(false)
+      errorToast("Error: ", error.message)
+    }
   };
 
   return (
@@ -109,12 +117,14 @@ export default function EditPage() {
                   Cancelar
             </button>
             <div className='flex gap-4'>
-              <button 
-                className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
-                type="submit"
-              >
-                Guardar
-              </button>
+              {
+                  editing ? 
+                  <div className='py-2 px-8'>
+                      <CustomLoading />
+                  </div>
+                  :
+                  <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white" type="submit"> Guardar </button>
+              }
             </div>
           </div>
         </form>

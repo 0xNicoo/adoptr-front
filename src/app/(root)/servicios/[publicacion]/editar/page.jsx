@@ -14,6 +14,8 @@ import ImageSelector from "./components/imageSelector";
 import ServiceTypeSelector from "./components/serviceselect";
 import { getUserIdAction } from "@/actions/global";
 import { editServiceAction, getServiceTypesAction } from "@/actions/service";
+import CustomLoading from "@/app/components/customLoading";
+import { errorToast, successToast } from '@/util/toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +25,7 @@ export default function EditPage() {
   const [loading, setLoading] = useState(true);
   const [serviceTypes, setServiceType] = useState([]); 
   const methods = useForm();
+  const [editing, setEditing] = useState(false)
 
   useEffect(() => {
     const fetchServiceTypes = async () => {
@@ -53,7 +56,7 @@ export default function EditPage() {
   }, [service, router]); 
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <CustomLoading />
   }
 
   const handleCancel = (id) => {
@@ -61,9 +64,7 @@ export default function EditPage() {
   };
 
   const onEdit = async (data) => {
-    console.log('Datos enviados al editar:', data);
-
-
+    setEditing(true)
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);
@@ -73,8 +74,14 @@ export default function EditPage() {
     formData.append('serviceType_id', data.serviceType);
     formData.append('image', data.image);
 
-    await editServiceAction(service.id, formData);
-    router.push(`/servicios/${service.id}`);
+    try{
+      await editServiceAction(service.id, formData);
+      router.push(`/servicios/${service.id}`);
+      successToast('Publicacion editada con exito!')
+    }catch{
+      setEditing(false)
+      errorToast("Error: ", error.message)
+    }
   };
 
   return (
@@ -113,12 +120,14 @@ export default function EditPage() {
               Cancelar
             </button>
             <div className='flex gap-4'>
-              <button 
-                className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
-                type="submit"
-              >
-                Guardar
-              </button>
+              {
+                editing ? 
+                <div className='py-2 px-8'>
+                    <CustomLoading />
+                </div>
+                :
+                <button className="bg-primary-blue hover:bg-blue-700 py-1 px-4 rounded-3xl transition-colors duration-300 text-white" type="submit"> Guardar </button>
+              }
             </div>
           </div>
         </form>

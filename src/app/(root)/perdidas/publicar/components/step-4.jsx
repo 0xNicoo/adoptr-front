@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { useFormStoreAdopcion } from '../../../../store';
+import { useFormStoreLost } from '@/app/store';
 import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import CustomLoading from '@/app/components/customLoading';
-import { errorToast, successToast } from '@/util/toast';
-import { createAdoptionAction } from '@/actions/adoption';
+import { successToast } from '@/util/toast';
+import { createLostAction } from '@/actions/lost';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,33 +37,32 @@ const mapSexType = (sexType) => {
 
   
 const Step4 = ({prevStep = {prevStep}}) => {
-    const { title, sizeType, animalType, ageYears, ageMonths, sexType, vaccinated, unprotected, castrated, description, image, locality, province, fileImage } = useFormStoreAdopcion();
+    const { title, sizeType, animalType, ageYears, ageMonths, sexType, description, image, locality, province, fileImage, longitude, latitude } = useFormStoreLost();
     const router = useRouter()
     const [publishing, setPublishing] = useState(false)
 
-    const publicarAdopcion = async () => {
+    const publicarPerdida = async () => {
         setPublishing(true)
         const formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
         formData.append('sexType', sexType);
-        formData.append('vaccinated', vaccinated);
-        formData.append('unprotected', unprotected);
-        formData.append('castrated', castrated);
         formData.append('animalType', animalType);
         formData.append('sizeType', sizeType);
         formData.append('ageYears', ageYears);
         formData.append('ageMonths', ageMonths);
         formData.append('image', fileImage);
         formData.append('locality_id', locality.id);
+        formData.append('longitude', longitude);
+        formData.append('latitude', latitude);
 
         try {
-            const resp = await createAdoptionAction(formData);
-            router.push(`/adopcion/${resp.id}`)
+            const resp = await createLostAction(formData);
+            router.push(`/perdidas/${resp.id}`)
             successToast('Publicacion creada con exito!')
         } catch (error) {
+            console.log('Error al publicar', error);
             setPublishing(false)
-            errorToast("Error: ", error.message)
         }
     }
     
@@ -94,17 +93,6 @@ const Step4 = ({prevStep = {prevStep}}) => {
                         <p className={`${inter.className} xl:text-md 2xl:text-xl font-medium text-black`}>UBICACIÓN</p>
                         <p className='xl:text-sm 2xl:text-lg'>{locality.name}, {locality.province.name}</p>
                     </div>
-                    <div className='flex flex-row'>
-                        <div>
-                            {vaccinated && <Checkbox aria-label='Vacunado' className='text-black xl:text-sm 2xl:text-lg mr-2' defaultSelected isSelected>Vacunado</Checkbox>}
-                        </div>
-                        <div>
-                            {unprotected && <Checkbox aria-label='Desparasitado' className='text-black xl:text-sm 2xl:text-lg mr-2'  defaultSelected isSelected>Desparasitado</Checkbox>}
-                        </div>
-                        <div>
-                            {castrated && <Checkbox aria-label='Castrado' className='text-black xl:text-sm 2xl:text-lg mr-2'  defaultSelected isSelected>Castrado</Checkbox>} 
-                        </div>
-                    </div>
                     <div className='mt-2'>
                         <p className={`${inter.className} text-md font-medium text-black`}>DESCRIPCIÓN</p>
                         <Textarea
@@ -123,7 +111,7 @@ const Step4 = ({prevStep = {prevStep}}) => {
                         <CustomLoading />
                     </div>
                     :
-                    <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" type="submit" onClick={publicarAdopcion}>Publicar</button>
+                    <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" type="submit" onClick={publicarPerdida}>Publicar</button>
                 }
 
             </div>

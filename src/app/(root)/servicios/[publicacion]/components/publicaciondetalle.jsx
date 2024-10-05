@@ -11,6 +11,7 @@ import { useServiceEditStore } from '@/app/store';
 import { deleteServiceAction, getServiceAction } from '@/actions/service';
 import { getUserIdAction } from '@/actions/global';
 import { getChatByPublicationIdAction } from '@/actions/chat';
+import CustomLoading from "@/app/components/customLoading";
 const inter = Inter({ subsets: ["latin"] });
 
 const PublicationDetail = ({ serviceId }) => {
@@ -39,7 +40,7 @@ const PublicationDetail = ({ serviceId }) => {
   }, [serviceId]);
 
   if (error) return <div>Error: {error}</div>;
-  if (!service) return <div>Loading...</div>;
+  if (!service) return <CustomLoading />;
 
   const handleServClick = async () => {
     if(userId == service.user.id){

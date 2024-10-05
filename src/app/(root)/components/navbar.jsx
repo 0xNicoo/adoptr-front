@@ -6,6 +6,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import "../../globals.css";
 import Link from 'next/link';
 import LoginBtn from './loginBtn';
+import DropdownPerdidas from './dropdownperdidas';
 
 const gentyDemo = localFont({
   src: '../../../resources/font/GentyDemo-Regular.ttf',
@@ -45,6 +46,7 @@ const Navbar = () => {
             {/* Dropdown "Adoptar" */}
             <DropdownAdoptar />
             <DropdownServicios />
+            <DropdownPerdidas />
               {navigation.map((item) => (
                 <a
                   key={item.name}
@@ -66,6 +68,7 @@ const Navbar = () => {
       <DisclosurePanel className="sm:hidden flex flex-col space-y-1 px-2 pb-3 pt-2">
         <DropdownAdoptar />
         <DropdownServicios />
+        <DropdownPerdidas />
         {navigation.map((item) => (
           <DisclosureButton
             key={item.name}

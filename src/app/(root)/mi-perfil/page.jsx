@@ -8,6 +8,7 @@ import { getProfileAction } from '@/actions/profile';
 import { getAdoptionsAction } from '@/actions/adoption';
 import { getPostsAction } from '@/actions/post';
 import { getServicesAction } from '@/actions/service';
+import CustomLoading from "@/app/components/customLoading";
 
 const MiPerfil = () => {
   const [profile, setProfile] = useState(null);
@@ -18,6 +19,8 @@ const MiPerfil = () => {
   const [error, setError] = useState(null);
   const { setProfileStore } = useProfileEditStore();
   const router = useRouter();
+  
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -46,7 +49,7 @@ const MiPerfil = () => {
     router.push('/mi-perfil/editar');
   };
 
-  if (loading) return <p>Cargando perfil...</p>;
+  if (loading) return <CustomLoading />;
   if (error) return <p>{error}</p>;
 
   return (

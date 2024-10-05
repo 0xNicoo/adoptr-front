@@ -14,6 +14,7 @@ import { getUserIdAction } from '@/actions/global';
 import { deleteAdoptionAction, getAdoptionAction } from '@/actions/adoption';
 import { getChatByPublicationIdAction } from '@/actions/chat';
 import { getFavoriteAction, setFavoriteAction } from '@/actions/favorite';
+import CustomLoading from "@/app/components/customLoading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -76,7 +77,7 @@ const PublicationDetail = ({ adoptionId }) => {
   }, [adoptionId]);
 
   if (error) return <div>Error: {error}</div>;
-  if (!adoption) return <div>Loading...</div>;
+  if (!adoption) return <CustomLoading />;
 
   //TODO(nico): cuando se ejecuta, poner un loading en el boton de eliminar
   const handleDelete = async (id) => {
