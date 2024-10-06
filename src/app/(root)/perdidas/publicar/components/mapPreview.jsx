@@ -2,7 +2,16 @@
 
 import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet'; 
 import 'leaflet/dist/leaflet.css';
+
+
+const customIcon = new L.Icon({
+    iconUrl: '/images/iconMap.png', 
+    iconSize: [40, 40], 
+    iconAnchor: [20, 40], 
+    popupAnchor: [0, -40] 
+});
 
 const MapPreview = ({ latitude, longitude }) => {
     return (
@@ -16,7 +25,7 @@ const MapPreview = ({ latitude, longitude }) => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                <Marker position={[latitude, longitude]}>
+                <Marker position={[latitude, longitude]} icon={customIcon}> {/* Usar el icono personalizado */}
                     <Popup>
                         Aquí está la ubicación de la mascota perdida.
                     </Popup>
@@ -27,4 +36,5 @@ const MapPreview = ({ latitude, longitude }) => {
 };
 
 export default MapPreview;
+
 
