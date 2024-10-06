@@ -335,7 +335,6 @@ const Step2 = ({nextStep, prevStep}) => {
             setLatitude={setLatitude}
           />
           {errors.latitude && <p className='text-red-500 mt-2 text-xs'>{errors.latitude}</p>}
-          {errors.longitude && <p className='text-red-500 mt-2 text-xs'>{errors.longitude}</p>}
     </div>
 
       <div className="flex flex-row justify-between mt-4 items-end mr-4">
