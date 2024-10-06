@@ -110,15 +110,17 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
 
     return (
         <div className="w-full">
-            <Button
-                onClick={() => setIsOpen(!isOpen)}
-                className="py-2 px-4 bg-primary-orange text-white mb-4 ml-4 mt-4"
-            >
-                {isOpen ? 'Ocultar filtro' : 'Mostrar filtro'}
-            </Button>
+            <div className="flex justify-end mr-4 mt-8">
+                <Button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="py-2 px-4 bg-secondary-blue text-white"
+                >
+                    {isOpen ? 'Ocultar filtro' : 'Filtrar'}
+                </Button>
+            </div>
 
             {isOpen && (
-                <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-md w-full">
+                <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg w-full border border-gray-200 mt-2">
                     <div className="flex flex-col">
                         <div className="flex flex-item-center gap-4">
                             <div className="relative z-0 w-full md:w-1/4">

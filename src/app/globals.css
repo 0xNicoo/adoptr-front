@@ -75,3 +75,5 @@
     position: relative; /* Asegúrate de que la posición sea relativa */
   }
   
+  -webkit-text-stroke: 4px navy;
+  text-stroke: 4px navy;

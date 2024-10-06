@@ -42,11 +42,11 @@ const PublicationFavoriteList = () => {
     <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mb-10">
       {publications.map((pub) => (
         <div key={pub.id} className="w-full">
-          <Card className="items-center justify-center p-4">
+          <Card className="items-center justify-center pb-2">
             <CardBody className="overflow-hidden p-0 flex justify-center">
               <Image
                 alt="Animal en adopción"
-                className="object-cover rounded-xl"
+                className="object-cover rounded-none"
                 src={pub.s3Url}
                 width={270}
                 height={300}
