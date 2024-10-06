@@ -7,6 +7,7 @@ import PublicationServiceList from './publicationServiceList';
 import PaginationComponent from './pagination';
 import CustomLoading from '@/app/components/customLoading';
 import { getServicesAction } from '@/actions/service';
+import SectionService from './sectionService';
 
 
 const itemsPerPage = 8;
@@ -77,6 +78,7 @@ const ServiceContainer = () => {
 
     return (
         <>
+            <SectionService/>
             <FilterForm
                 updateData={setPublications}
                 updateTotalPage={changeTotalPage}

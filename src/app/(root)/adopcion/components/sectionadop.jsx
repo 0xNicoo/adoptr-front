@@ -13,8 +13,8 @@ const gladoliatwo = localFont({
 
 const SectionAdop = () => {
   return (
-    <div className="text-center mt-16">
-      <h1 className="relative text-6xl lg:text-6xl mb-2 left-10 flex justify-center items-center">
+    <div className="text-center mt-10">
+      <h1 className="relative text-6xl lg:text-6xl flex justify-center items-center">
         <span className={`${gladolia.className} text-primary-orange absolute right-0`}>
           Encontra tu mascota ideal
         </span>

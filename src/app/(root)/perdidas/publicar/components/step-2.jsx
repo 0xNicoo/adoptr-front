@@ -147,203 +147,175 @@ const Step2 = ({nextStep, prevStep}) => {
     fetchLocalities();
   }, [province]);
 
-  return (
-    <div className='flex flex-grow mb-4 ml-12'>
-      <div className='flex flex-col w-2/3 mb-4 ml-12'>
-          <div className='flex flex-row gap-12'>
-            <div className='flex flex-col w-1/6'>
-              <label htmlFor="nombre" className="block xl:text-md 2xl:text-xl font-medium">Nombre</label>
-              <div className="flex mt-2 gap-4">
-                <Input isRequired aria-label="Seleccionar nombre" value={title} onChange={e => setNombre(e.target.value)} id="nombre" name="nombre" type="text" placeholder="Juan"/>
-              </div>
+return (
+  <div className="flex flex-col w-full px-4 py-4">
+    <div className="flex mb-8">
+      <div className="w-2/3 pr-8">
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-row gap-12">
+            <div className="flex flex-col w-1/4">
+              <label htmlFor="nombre" className="block text-md font-medium mb-2">Nombre</label>
+              <Input
+                isRequired
+                aria-label="Seleccionar nombre"
+                value={title}
+                onChange={e => setNombre(e.target.value)}
+                id="nombre"
+                name="nombre"
+                type="text"
+                placeholder="Juan"
+              />
               {errors.title && <p className='text-red-500 mt-2 text-xs'>{errors.title}</p>}
             </div>
-          <div className='flex flex-col w-1/6'>
-            <label htmlFor="sexo" className='block mb-2 xl:text-md 2xl:text-xl font-medium'>Sexo</label>
-            <Autocomplete isRequired placeholder='Seleccionar' aria-label="Seleccionar sexo"
-            selectedKey={sexType || ''}  
-            onSelectionChange={(key) => handleSexoChange(key)}
-            >
-              {sexoAnimales.map((sexoAnimal) => (
-                <AutocompleteItem key={sexoAnimal.key} value={sexoAnimal.key}>
-                  {sexoAnimal.label}
-                </AutocompleteItem>
-              ))}
-            </Autocomplete>
-            {errors.sexType && <p className='text-red-500 mt-2 text-xs'>{errors.sexType}</p>}
+            <div className="flex flex-col w-1/4">
+              <label htmlFor="sexo" className='block mb-2 text-md font-medium'>Sexo</label>
+              <Autocomplete
+                isRequired
+                placeholder='Seleccionar'
+                aria-label="Seleccionar sexo"
+                selectedKey={sexType || ''}  
+                onSelectionChange={(key) => handleSexoChange(key)}
+              >
+                {sexoAnimales.map((sexoAnimal) => (
+                  <AutocompleteItem key={sexoAnimal.key} value={sexoAnimal.key}>
+                    {sexoAnimal.label}
+                  </AutocompleteItem>
+                ))}
+              </Autocomplete>
+              {errors.sexType && <p className='text-red-500 mt-2 text-xs'>{errors.sexType}</p>}
+            </div>
           </div>
-        </div>
 
-        <div className='flex flex-col mt-8'>
-          <div className='flex flex-col'>
-            <label htmlFor="edad" className="block xl:text-md 2xl:text-xl font-medium">Edad</label>
-            <div className='flex flex-row gap-12 mt-2'>
-              <div className='flex flex-col w-1/6'>
-                <div className='flex'>
-                  <Autocomplete 
+          <div className="flex flex-col">
+            <label htmlFor="edad" className="block text-md font-medium mb-2">Edad</label>
+            <div className='flex flex-row gap-12'>
+              <div className='flex flex-col w-1/4'>
+                <Autocomplete 
                   isRequired 
                   placeholder='Seleccionar año' 
                   aria-label="Seleccionar año"
                   selectedKey={ageYears || ''}  
                   onSelectionChange={(key) => handleAniosChange(key)}
-                  >
-                    {aniosConst.map((anio) => (
-                      <AutocompleteItem key={anio.key} value={anio.key}>
-                        {anio.label}
-                      </AutocompleteItem>
-                    ))}
-                  </Autocomplete>
-                </div>
+                >
+                  {aniosConst.map((anio) => (
+                    <AutocompleteItem key={anio.key} value={anio.key}>
+                      {anio.label}
+                    </AutocompleteItem>
+                  ))}
+                </Autocomplete>
                 {errors.ageYears && <p className='text-red-500 mt-2 text-xs'>{errors.ageYears}</p>}
               </div>
-              <div className='flex flex-col w-1/6'>
-                <div className='flex'>
-                  <Autocomplete 
+              <div className='flex flex-col w-1/4'>
+                <Autocomplete 
                   isRequired 
                   placeholder='Seleccionar mes' 
                   aria-label="Seleccionar mes"
                   selectedKey={ageMonths || ''}  
                   onSelectionChange={(key) => handleMesesChange(key)}
-                  >
-                    {mesesConst.map((mes) => (
-                      <AutocompleteItem key={mes.key} value={mes.key}>
-                        {mes.label}
-                      </AutocompleteItem>
-                    ))}
-                  </Autocomplete>
-                </div>
+                >
+                  {mesesConst.map((mes) => (
+                    <AutocompleteItem key={mes.key} value={mes.key}>
+                      {mes.label}
+                    </AutocompleteItem>
+                  ))}
+                </Autocomplete>
                 {errors.ageMonths && <p className='text-red-500 mt-2 text-xs'>{errors.ageMonths}</p>}
               </div>
             </div>
           </div>
-        </div>
 
-        <div className='flex flex-col mt-8'>
           <div className='flex flex-row gap-12'>
-            <div className='flex flex-col w-1/6'>
-            <label htmlFor="provincia" className='block xl:text-md 2xl:text-xl font-medium'>Provincia</label>
-              <div className='flex flex-col mt-2 gap-4 w-1/6'>
-                {loadingProvinces ? (
-                  <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Select>
-                ) : error ? (
-                  <p>{error}</p>
-                ) : (
-                  <Select className="w-full min-w-[12rem]"
-                    placeholder='Seleccionar'
-                    isRequired
-                    aria-label="Seleccionar provincia"
-                    value={province}
-                    onChange={e => {
-                      setProvince(e.target.value);
-                      console.log(province);
-                    }}
-                  >
-                    {provinces.map((prov) => (
-                      <SelectItem key={prov.id} value={prov.id}>
-                        {prov.name}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                )}
-              </div>
+            <div className='flex flex-col w-1/4'>
+              <label htmlFor="provincia" className='block text-md font-medium mb-2'>Provincia</label>
+              <Autocomplete
+                placeholder='Seleccionar'
+                isRequired
+                aria-label="Seleccionar provincia"
+                selectedKey={province || ''}
+                onSelectionChange={(key) => setProvince(key)}
+              >
+                {provinces.map((prov) => (
+                  <AutocompleteItem key={prov.id} value={prov.id}>
+                    {prov.name}
+                  </AutocompleteItem>
+                ))}
+              </Autocomplete>
               {errors.province && <p className='text-red-500 mt-2 text-xs'>{errors.province}</p>}
             </div>
-            <div className='flex flex-col w-1/6'>
-              <label htmlFor="localidad" className='block xl:text-md 2xl:text-xl font-medium'>Localidad</label>
-              <div className='flex mt-2 gap-4 w-1/6'>
-                {loadingLocalities ? (
-                  <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Select>
-                ) : error ? (
-                  <p>{error}</p>
-                ) : (
-                  <Select className="w-full min-w-[12rem]"
-                  placeholder='Seleccionar'
-                  isRequired
-                  aria-label="Seleccionar localidad"
-                  value={locality}
-                  onChange={e => {
-                    const selectedLoc = localities.find(loc => loc.id == e.target.value);
-                    setLocality(selectedLoc);  
-                  }}
-                >
-                  {localities.map((loc) => (
-                    <SelectItem key={loc.id} value={loc.id}>
-                      {loc.name}
-                    </SelectItem>
-                  ))}
-                </Select>
-                )}
-              </div>
+            <div className='flex flex-col w-1/4'>
+              <label htmlFor="localidad" className='block text-md font-medium mb-2'>Localidad</label>
+              {loadingLocalities ? (
+               <Select aria-label='Cargando' placeholder='Cargando...' isLoading></Select>
+            ) : error ? (
+              <p>{error}</p>
+            ) : (
+              <Select 
+              placeholder='Seleccionar'
+              isRequired
+              aria-label="Seleccionar localidad"
+              value={locality}
+              onChange={e => {
+                const selectedLoc = localities.find(loc => loc.id == e.target.value);
+                setLocality(selectedLoc);  
+              }}
+            >
+              {localities.map((loc) => (
+                <SelectItem key={loc.id} value={loc.id}>
+                  {loc.name}
+                </SelectItem>
+              ))}
+            </Select>
+            )}
               {errors.locality && <p className='text-red-500 mt-2 text-xs'>{errors.locality}</p>}
             </div>
+          </div>
+
+          <div className='flex flex-col'>
+            <label htmlFor="tamanio" className="block text-md font-medium mb-2">Tamaño</label>
+            <RadioGroup value={selected} onValueChange={handleTamanioChange} orientation='horizontal'>
+              <div className="flex flex-row gap-12 justify-center">
+                {['SMALL', 'MEDIUM', 'BIG'].map((size) => (
+                  <div key={size} className='flex flex-col justify-center items-center'>
+                    <Radio value={size} className="hidden" aria-label="Tamaño"/>
+                    <div className={`flex items-center justify-center w-48 h-48 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 ${selected === size ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange(size)}>
+                      <Image
+                        src={animalType === "DOG" ? `/images/dog-${size.toLowerCase()}.png` : `/images/cat-${size.toLowerCase()}.png`}
+                        width={80}
+                        height={80}
+                        alt={`${animalType === "DOG" ? "Perro" : "Gato"} ${size.toLowerCase()}`}
+                      />
+                    </div>
+                    <p className="mt-4 text-center text-black">{size === 'SMALL' ? 'Pequeño' : size === 'MEDIUM' ? 'Mediano' : 'Grande'}</p>
+                  </div>
+                ))}
+              </div>
+            </RadioGroup>
+            {errors.sizeType && <p className='text-red-500 mt-2 text-xs'>{errors.sizeType}</p>}
+          </div>
         </div>
       </div>
 
-          <div className='flex flex-col mt-8'>
-            <label htmlFor="tamanio" className="block xl:text-md 2xl:text-xl font-medium">Tamaño</label>
-            <div className='flex mt-4'>
-              <RadioGroup value={selected} onValueChange={handleTamanioChange} orientation='horizontal'>
-                <div className="flex flex-row gap-12 justify-center">
-                  <div className='flex flex-col justify-center items-center'>
-                    <Radio value="SMALL" className="hidden" aria-label="Tamaño"/>
-                      <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'SMALL' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('SMALL')}>
-                        <Image
-                        src={animalType == "DOG" ? "/images/dog-small.png" : "/images/cat-small.png" } 
-                        width={80}
-                        height={80}
-                        alt={animalType == "DOG" ? "Perro pequeño" : "Gato pequeño"}
-                        />
-                      </div>
-                      <p className={`${inter.className} mt-4 text-center text-black`}>Pequeño</p>
-                  </div>
-                  <div className='flex flex-col justify-center items-center'>
-                    <Radio value="MEDIUM" className="hidden" aria-label="Tamaño"/>
-                      <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'MEDIUM' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('MEDIUM')}>
-                        <Image
-                        src={animalType == "DOG" ? "/images/dog-medium.png" : "/images/cat-medium.png" }
-                        width={80}
-                        height={80}
-                        alt={animalType == "DOG" ? "Perro mediano" : "Gato mediano"}
-                        />
-                      </div>
-                    <p className={`${inter.className} mt-4 text-center text-black`}>Mediano</p>
-                  </div>
-                  <div className='flex flex-col justify-center items-center'>
-                    <Radio value="BIG" className="hidden" aria-label="Tamaño"/>
-                      <div className={`flex items-center justify-center xl:w-48 xl:h-48 2xl:w-52 2xl:h-52 p-8 drop-shadow-md border border-gray-50 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 ${selected === 'BIG' ? 'bg-gray-300' : 'bg-gray-100'}`} onClick={() => handleTamanioChange('BIG')}>
-                      <Image
-                      src={animalType == "DOG" ? "/images/dog-big.png" : "/images/cat-big.png" }
-                      width={80}
-                      height={80}
-                      alt={animalType == "DOG" ? "Perro grande" : "Gato grande"}
-                      />
-                      </div>
-                    <p className={`${inter.className} mt-4 text-center text-black`}>Grande</p>
-                  </div>
-                </div>
-              </RadioGroup>
-            </div>
-            {errors.sizeType && <p className='text-red-500 mt-2 text-xs'>{errors.sizeType}</p>}
-          </div>
-          <div className="flex flex-row justify-between mt-4 items-end mr-4">
-            <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
-          </div>
-        </div>  
-
-        <div className='w-1/3 p-4'>
-          <MapForm
-            longitude={longitude}
-            latitude={latitude}
-            setLongitude={setLongitude}
-            setLatitude={setLatitude}
-          />
-          {errors.latitude && <p className='text-red-500 mt-2 text-xs'>{errors.latitude}</p>}
-        </div>
-        <div className="flex flex-row justify-between items-end mr-4">
-            <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
-          </div>
+      <div className='w-1/3 p-4'>
+        <MapForm
+          longitude={longitude}
+          latitude={latitude}
+          setLongitude={setLongitude}
+          setLatitude={setLatitude}
+        />
+        {errors.latitude && <p className='text-red-500 mt-2 text-xs'>{errors.latitude}</p>}
+      </div>
     </div>
-  );
+
+    <div className='flex justify-between mt-8 w-full'>
+      <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>
+        Atrás
+      </button>
+      <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>
+        Siguiente
+      </button>
+    </div>
+  </div>
+);
 }
 
 export default Step2;

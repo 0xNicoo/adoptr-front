@@ -110,10 +110,10 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
 
     return (
         <div className="w-full">
-            <div className="flex justify-end mr-4 mt-8">
+            <div className="flex justify-end mr-4 mb-2 mt-2">
                 <Button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="py-2 px-4 bg-secondary-blue text-white"
+                    className="py-2 px-4 bg-primary-orange text-white outline-none"
                 >
                     {isOpen ? 'Ocultar filtro' : 'Filtrar'}
                 </Button>
