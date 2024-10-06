@@ -325,6 +325,9 @@ const Step2 = ({nextStep, prevStep}) => {
             </div>
             {errors.sizeType && <p className='text-red-500 mt-2 text-xs'>{errors.sizeType}</p>}
           </div>
+          <div className="flex flex-row justify-between mt-4 items-end mr-4">
+            <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
+          </div>
         </div>  
 
         <div className='w-1/3 p-4'>
@@ -336,11 +339,9 @@ const Step2 = ({nextStep, prevStep}) => {
           />
           {errors.latitude && <p className='text-red-500 mt-2 text-xs'>{errors.latitude}</p>}
         </div>
-
-      <div className="flex flex-row justify-between mt-6 items-end mr-6">
-        <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
-        <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
-      </div>
+        <div className="flex flex-row justify-between items-end mr-4">
+            <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
+          </div>
     </div>
   );
 }
