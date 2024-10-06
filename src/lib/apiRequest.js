@@ -33,7 +33,7 @@ export async function apiRequest(endpoint, method = 'GET', body = null, contentT
     if (!res.ok) {
       const errorData = await res.json()
       console.log(errorData)
-      throw new Error(`Error: ${errorData.message || 'Error desconocido'}`)
+      throw new Error(`${errorData.message || 'Error desconocido'}`)
     }
   
     const isJson = res.headers.get('content-type')?.includes('application/json')

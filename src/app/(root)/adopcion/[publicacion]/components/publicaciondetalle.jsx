@@ -97,11 +97,13 @@ const PublicationDetail = ({ adoptionId }) => {
       if(chats.length == 1){
         router.push(`/chat?chat=${chats[0].id}`);
       }else{
+       //redirigir a la lista de chat de esa publi
         router.push('/chat/lista')
         return
       }
     }catch(err){
-      errorToast("Error: ", err)
+      errorToast(err.message)
+      return
     }
 
 
