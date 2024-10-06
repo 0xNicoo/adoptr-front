@@ -103,12 +103,12 @@ const Step4 = ({prevStep = {prevStep}}) => {
                         />
                     </div>
                 </div>
-                <div className="w-1/3">
+                
+                <div className="flex justify-end w-1/3 ml-64">
                     <MapPreview latitude={latitude} longitude={longitude} />
                 </div>
 
             </div>
-          
             <div className="flex flex-row justify-between mt-4 mb-4 items-end mr-4">
                 <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
                 {
