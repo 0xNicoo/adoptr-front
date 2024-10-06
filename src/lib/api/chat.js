@@ -6,7 +6,7 @@ export async function getChatList() {
   return await apiRequest(`/chat/all`, 'GET', null, 'application/json', true)
 }
 
-export async function getChatByPublication(publicationId) {
+export async function getChatsByPublication(publicationId) {
   return await apiRequest(`/chat/publication/${publicationId}`, 'GET', null, 'application/json', true)
 }
 

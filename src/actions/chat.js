@@ -1,9 +1,9 @@
 'use server';
 
-import { getChat, getChatByPublication, getChatList } from "@/lib/api/chat";
+import { getChat, getChatsByPublication, getChatList } from "@/lib/api/chat";
 
-export async function getChatByPublicationIdAction(publicationId){
-  const {data, headers} = await getChatByPublication(publicationId)
+export async function getChatsByPublicationIdAction(publicationId){
+  const {data, headers} = await getChatsByPublication(publicationId)
   return data
 }
 

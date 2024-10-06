@@ -10,7 +10,7 @@ import { cilPencil } from '@coreui/icons';
 import { useServiceEditStore } from '@/app/store';
 import { deleteServiceAction, getServiceAction } from '@/actions/service';
 import { getUserIdAction } from '@/actions/global';
-import { getChatByPublicationIdAction } from '@/actions/chat';
+import { getChatsByPublicationIdAction } from '@/actions/chat';
 import CustomLoading from "@/app/components/customLoading";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,10 +44,10 @@ const PublicationDetail = ({ serviceId }) => {
 
   const handleServClick = async () => {
     if(userId == service.user.id){
-      router.push('/chatList')
+      router.push('/chat/lista')
       return
     }else{
-      const chat = await getChatByPublicationIdAction(service.id)
+      const chat = await getChatsByPublicationIdAction(service.id)
       router.push(`/chat?chat=${chat.id}`);
     }
 

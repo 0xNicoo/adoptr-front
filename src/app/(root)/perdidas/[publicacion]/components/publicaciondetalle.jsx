@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useFormStoreLost } from '@/app/store';
 import { getUserIdAction } from '@/actions/global';
 import { getLostAction } from '@/actions/lost';
-import { getChatByPublicationIdAction } from '@/actions/chat';
+import { getChatsByPublicationIdAction } from '@/actions/chat';
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -66,10 +66,10 @@ const PublicationDetail = ({ lostId }) => {
 
   const handleLostClick = async () => {
     if(userId == lost.user.id){
-      router.push('/chatList')
+      router.push('/chat/lista')
       return
     }else{
-      const chat = await getChatByPublicationIdAction(lost.id)
+      const chat = await getChatsByPublicationIdAction(lost.id)
       router.push(`/chat?chat=${chat.id}`);
     }
 

@@ -12,9 +12,10 @@ import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
 import { getUserIdAction } from '@/actions/global';
 import { deleteAdoptionAction, getAdoptionAction } from '@/actions/adoption';
-import { getChatByPublicationIdAction } from '@/actions/chat';
+import { getChatsByPublicationIdAction } from '@/actions/chat';
 import { getFavoriteAction, setFavoriteAction } from '@/actions/favorite';
 import CustomLoading from "@/app/components/customLoading";
+import { errorToast } from '@/util/toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -91,13 +92,18 @@ const PublicationDetail = ({ adoptionId }) => {
   };
 
   const handleAdoptClick = async () => {
-    if(userId == adoption.user.id){
-      router.push('/chatList')
-      return
-    }else{
-      const chat = await getChatByPublicationIdAction(adoption.id)
-      router.push(`/chat?chat=${chat.id}`);
+    try{
+      const chats = await getChatsByPublicationIdAction(adoption.id)
+      if(chats.length == 1){
+        router.push(`/chat?chat=${chats[0].id}`);
+      }else{
+        router.push('/chat/lista')
+        return
+      }
+    }catch(err){
+      errorToast("Error: ", err)
     }
+
 
   };
 
