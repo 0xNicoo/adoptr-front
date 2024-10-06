@@ -32,12 +32,34 @@ const Banner = ({ description, imageUrl }) => {
             </span>
           </h1>
         </div>
-        <div className="absolute bottom-0 left-0 w-full flex justify-center">
-          <img
-            src='/images/mascotas_servicios.png' 
-            className="h-24 object-contain" 
-          />
-        </div>
+
+        {/* Imágenes posicionadas en el banner */}
+        <img 
+          src="/images/BannerLostIzq.png" 
+          alt="Imagen 1" 
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 w-16 h-16"
+        />
+        <img 
+          src="/images/BannerLostEsqL.png" 
+          alt="Imagen 2" 
+          className="absolute left-0 bottom-0 w-16 h-16"
+        />
+        <img 
+          src="/images/BannerLostMid.png" 
+          alt="Imagen 3" 
+          className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-16"
+        />
+        <img 
+          src="/images/BannerLostEsqR.png" 
+          alt="Imagen 4" 
+          className="absolute right-0 bottom-0 w-16 h-16"
+        />
+        <img 
+          src="/images/BannerLostDer.png" 
+          alt="Imagen 5" 
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 w-16 h-16"
+        />
+
         <div className="absolute inset-0 bg-white opacity-5"></div>
       </div>
 
