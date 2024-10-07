@@ -27,3 +27,7 @@ export async function deleteService(id){
 export async function editService(id, data) {
   return await apiRequest(`/service/${id}`, 'PUT', data, 'multipart/form-data', true)
 }
+
+export async function getServiceTypeId(id) {
+  return await apiRequest(`/serviceType/${id}`, 'GET', null, 'application/json', true)
+}

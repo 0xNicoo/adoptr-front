@@ -31,3 +31,13 @@ export async function createServiceAction(formData){
   const {data, headers} = await createService(formData)
   return data
 }
+
+export async function getServiceTypeIdAction(serviceTypeId) {
+  try {
+    const { data, headers } = await getServiceTypeId(serviceTypeId); 
+    return data;
+  } catch (error) {
+    console.error("Error en getServiceTypeIdAction:", error); 
+    throw error;
+  }
+}

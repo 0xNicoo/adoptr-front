@@ -25,6 +25,9 @@ const ServiceContainer = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const pageFromUrl = parseInt(urlParams.get('page')) || 1;
 
+        // Obtener `serviceType_id` de la URL
+        const serviceType_id = urlParams.get('serviceType_id');
+
         // Usa los filtros de la URL
         const currentFilters = {};
         for (const [key, value] of urlParams.entries()) {
@@ -37,21 +40,16 @@ const ServiceContainer = () => {
     }, []);
 
     const handlePageChange = async (page) => {
-        // Mantiene los filtros en la URL al cambiar de página
         const query = new URLSearchParams({ ...filters, page });
         router.push(`?${query.toString()}`, undefined, { shallow: true });
         fetchServices(filters, page);
     };
 
-    const changeTotalPage = (total) => {
-        setTotalPage(Math.ceil(total / itemsPerPage));
-    };
-
     const fetchServices = async (filters, page) => {
         setLoading(true);
         try {
-            const { total, data } = await getServicesAction(filters, page, 8);
-            changeTotalPage(total);
+            const { total, data } = await getServicesAction(filters, page, itemsPerPage);
+            setTotalPage(Math.ceil(total / itemsPerPage));
             setPublications(data);
             setCurrentPage(page);
         } catch (error) {
@@ -69,28 +67,27 @@ const ServiceContainer = () => {
     };
 
     if (loading) return (
-
-    <div role="status" className='flex items-center justify-center h-screen'>
-        <CustomLoading />
-    </div>
+        <div role="status" className='flex items-center justify-center h-screen'>
+            <CustomLoading />
+        </div>
     );
     if (error) return <p>Error: {error}</p>;
 
+    // Pasa `serviceType_id` al componente `SectionService`
     return (
         <>
-            <SectionService/>
+            <SectionService serviceType_id={filters.serviceType_id} /> 
             <FilterForm
                 updateData={setPublications}
-                updateTotalPage={changeTotalPage}
+                updateTotalPage={setTotalPage}
                 updateCurrentPage={setCurrentPage}
-                updateFilters={updateFilters} 
-                initialFilters={filters} 
+                updateFilters={updateFilters}
+                initialFilters={filters}
             />
             <PublicationServiceList publications={publicaciones} />
             <div className="mt-8 mb-12">
                 <PaginationComponent
                     totalPages={totalPage}
-                    initialPage={1}
                     currentPage={currentPage}
                     onPageChange={handlePageChange}
                 />

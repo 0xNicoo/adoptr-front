@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import localFont from 'next/font/local';
-import { getServiceTypesAction } from '@/actions/service';
+import { getServiceTypeIdAction } from '@/actions/service';
 import CustomLoading from "@/app/components/customLoading";
 
 const gladolia = localFont({
@@ -13,26 +13,27 @@ const gladoliatwo = localFont({
   display: 'swap',
 });
 
-const SectionService = () => {
-  const [serviceTypes, setServiceTypes] = useState([]);
+const SectionService = ({ serviceType_id }) => {
+  const [serviceType, setServiceType] = useState(null);
   const [loading, setLoadingServiceType] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchServiceTypes() {
-      try {
-        const serviceTypeData = await getServiceTypesAction();
-        console.log(serviceTypeData);
-        setServiceTypes(serviceTypeData || []);
-        setLoadingServiceType(false);
-      } catch (error) {
-        console.error("Error fetching service type:", error);
-        setError('Error al cargar los tipos de servicios');
-        setLoadingServiceType(false);
+    if (serviceType_id) {
+      async function fetchServiceTypeId() {
+        try {
+          const serviceTypeData = await getServiceTypeIdAction(serviceType_id);
+          setServiceType(serviceTypeData);
+          setLoadingServiceType(false);
+        } catch (error) {
+          console.error("Error fetching service type:", error);
+          setError('Error al cargar el tipo de servicio');
+          setLoadingServiceType(false);
+        }
       }
+      fetchServiceTypeId();
     }
-    fetchServiceTypes();
-  }, []);
+  }, [serviceType_id]); // Escucha cambios en `serviceType_id`
 
   if (loading) {
     return <CustomLoading />;
@@ -42,18 +43,19 @@ const SectionService = () => {
     return <div>{error}</div>;
   }
 
-  const serviceName = serviceTypes.length > 0 
-    ? serviceTypes[0].name.replace(/[áéíóú]/g, match => {
-        switch (match) {
-          case 'á': return 'a';
-          case 'é': return 'e';
-          case 'í': return 'i';
-          case 'ó': return 'o';
-          case 'ú': return 'u';
-          default: return match;
-        }
-      })
-    : 'Nombre no disponible';
+  const serviceName = serviceType && serviceType.name
+  ? serviceType.name.replace(/[áéíóú]/g, match => {
+      switch (match) {
+        case 'á': return 'a';
+        case 'é': return 'e';
+        case 'í': return 'i';
+        case 'ó': return 'o';
+        case 'ú': return 'u';
+        default: return match;
+      }
+    })
+  : 'Nombre no disponible';
+
 
   return (
     <div className="text-center mt-10">
@@ -70,3 +72,5 @@ const SectionService = () => {
 };
 
 export default SectionService;
+
+
