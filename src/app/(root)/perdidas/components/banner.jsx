@@ -65,25 +65,38 @@ const Banner = ({ description, imageUrl }) => {
 
       {/* Banner para pantallas medianas y grandes */}
       <div
-        className="hidden md:flex relative w-full h-48 lg:h-[18rem] xl:h-[18rem] 2xl:h-[28rem] items-center justify-center shadow-md overflow-hidden"
-        style={{
-          backgroundImage: `url('/images/PerdidasBanner.png')`, 
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        <div className="relative z-10 text-center flex flex-col items-center justify-center">
-          <h1 className="relative text-6xl lg:text-8xl mb-2 flex justify-center items-center">
-            <span className={`${gladolia.className} text-custom-orange absolute left-0 right-0`}>
-              Mascotas perdidas
-            </span>
-            <span className={`${gladoliatwo.className} text-secondary-blue relative`}>
-              Mascotas perdidas
-            </span>
-          </h1>
+          className="hidden md:flex relative w-full h-48 lg:h-[18rem] xl:h-[18rem] 2xl:h-[28rem] items-center justify-center shadow-md overflow-hidden"
+          style={{
+            backgroundImage: `url('/images/PerdidasBanner.png')`, 
+            backgroundSize: 'cover', // Cambiado a cover para que la imagen de fondo cubra el área sin distorsionarse
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <img 
+            src="/images/Snoopy.png" 
+            alt="Imagen 1" 
+            className="absolute left-2 md:left-8 top-1/2 transform -translate-y-1/2 max-w-full max-h-40 md:max-h-60 w-auto h-auto" // Cambiado el tamaño máximo para mejor ajuste
+          />
+
+          <img 
+            src="/images/DogCrying.png" 
+            alt="Imagen 2" 
+            className="absolute right-2 md:right-8 top-1/2 transform -translate-y-1/2 max-w-full max-h-40 md:max-h-60 w-auto h-auto" // Cambiado el tamaño máximo para mejor ajuste
+          />
+
+          <div className="relative z-10 text-center flex flex-col items-center justify-center">
+            <h1 className="relative text-4xl md:text-6xl lg:text-8xl mb-2 flex justify-center items-center">
+              <span className={`${gladolia.className} text-custom-orange absolute left-0 right-0`}>
+                Mascotas perdidas
+              </span>
+              <span className={`${gladoliatwo.className} text-secondary-blue relative`}>
+                Mascotas perdidas
+              </span>
+            </h1>
+          </div>
         </div>
-      </div>
+
     </>
   );
 };
