@@ -13,11 +13,11 @@ import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
 import { getUserIdAction } from '@/actions/global';
 import { getProfilByUserIdAction } from '@/actions/profile';
-import { deleteAdoptionAction, getAdoptionAction } from '@/actions/adoption';
+import { changeAdoptionStatusAction, deleteAdoptionAction, getAdoptionAction } from '@/actions/adoption';
 import { getChatsByPublicationIdAction } from '@/actions/chat';
 import { getFavoriteAction, setFavoriteAction } from '@/actions/favorite';
 import CustomLoading from "@/app/components/customLoading";
-import { errorToast } from '@/util/toast';
+import { errorToast, successToast } from '@/util/toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -113,6 +113,16 @@ const PublicationDetail = ({ adoptionId }) => {
     }
   };
 
+  const handleAdoptedClick = async () => {
+    try{
+      const data = await changeAdoptionStatusAction(adoption.id, 'ADOPTED')
+      successToast("La mascota ha sido adoptada!")
+      router.refresh()
+    }catch(err){
+      errorToast(err.message)
+    }
+  }
+
   const handleFavorite = async () => {
     setFavorite(!favorite)
     const resp = await setFavoriteAction(adoption.id)
@@ -180,6 +190,12 @@ const PublicationDetail = ({ adoptionId }) => {
                     className="bg-blue-700 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-secondary-blue flex items-center justify-center">
                   <CIcon icon={cilPencil} className="w-4 h-4 text-white fill-current" />
                   </button>
+                  {adoption.user.id == userId ? (
+                    <button className="bg-primary-orange hover:bg-orange-700 py-1 px-5 ml-4 rounded-3xl transition-colors duration-300 text-white"
+                      onClick={handleAdoptedClick}>
+                      Adoptado
+                    </button>
+                  ) : (<></>)}
                 </div>
             )}
           </div>

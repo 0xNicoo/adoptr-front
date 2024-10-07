@@ -24,3 +24,10 @@ export async function editAdoption(id, data) {
   return await apiRequest(`/adoption/${id}`, 'PUT', data, 'multipart/form-data', true)
 }
 
+export async function changeAdoptionStatus(id, nextStatus){
+  const data = {
+    adoptionId: Number(id),
+    nextStatus: nextStatus
+  };
+  return await apiRequest(`/adoption/status`, 'POST', data, 'application/json', true)
+}
