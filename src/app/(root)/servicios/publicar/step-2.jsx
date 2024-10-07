@@ -47,18 +47,17 @@ const Step2 = ({nextStep, prevStep}) => {
             <div className='flex flex-row mt-4'>
                 <div className='flex flex-col'>
                     <div className='flex items-center'>
-                        {image ? (
-                            <div className="flex mb-4 items-center"> 
-                                <Image className='rounded-xl xl:w-80 2xl:w-96'
-                                src={image}
-                                alt='Imagen seleccionada'
-                                width={200}
-                                height={350}
-                                />
-                            </div>   
+                    {image ? (  
+                            <div className="xs:w-[250px] xs:h-[250px] sm:w-[300px] sm:h-[300px] overflow-hidden mb-4 flex items-center">
+                            <img
+                              alt="Imagen seleccionada"
+                              src={image}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          </div>
                         ): (
-                            <div className="flex mb-4 items-center pt-16 pb-16 px-16 bg-gray-100 rounded-xl">
-                                <CIcon icon={cilImagePlus} className='xl:w-32 xl:h-32 2xl:w-40 2xl:w-40 text-gray-500'/>
+                            <div className="flex xs:mb-0 md:mb-4 justify-center items-center sm:w-[300px] sm:h-[300px] bg-gray-100 rounded-xl">
+                                <CIcon icon={cilImagePlus} className='sm:w-[100px] sm:h-[100px] flex items-center justify-center text text-gray-500'/>
                             </div>
                         ) 
                         } 

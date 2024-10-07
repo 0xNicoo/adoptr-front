@@ -70,18 +70,18 @@ const PublicationList = ({ publications }) => {
   }
 
   return (
-    <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+    <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mx-8">
       {publications.map((pub) => (
         <div key={pub.id} className="w-full">
           <Card className="items-center justify-center pb-2">
             <CardBody className="overflow-hidden p-0 flex justify-center relative">
-              <Image
-                alt="Animal en adopción"
-                className="object-cover rounded-none"
+              <div className="w-full h-[300px] overflow-hidden">
+              <img
+                alt="Imagen del post"
                 src={pub.s3Url}
-                width={270}
-                height={300}
-              />
+                className="w-full h-full rounded-t-xl object-cover"    
+                />
+            </div>
               {pub.user.id !== userId && (
                 <button 
                   className="absolute top-2 right-2 z-10 bg-white bg-opacity-65 hover:bg-opacity-75 rounded-full p-1 transition-all duration-100 outline-none"

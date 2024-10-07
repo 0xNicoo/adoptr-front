@@ -71,12 +71,20 @@ const Step4 = ({prevStep = {prevStep}}) => {
         <div className='flex flex-grow flex-col mb-4 ml-12 justify-between'>
             <div className='flex flex-row gap-8 mt-4 items-start'>
                 <div className="flex items-center"> 
-                    <Image className='rounded-xl xl:w-80 2xl:w-96'
-                    src={image}
-                    alt='Imagen seleccionada'
-                    width={200}
-                    height={350}
-                    />
+                {image ? (  
+                            <div className="xs:w-[250px] xs:h-[250px] sm:w-[300px] sm:h-[300px] overflow-hidden mb-4 flex items-center">
+                            <img
+                              alt="Imagen seleccionada"
+                              src={image}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          </div>
+                        ): (
+                            <div className="flex xs:mb-0 md:mb-4 justify-center items-center sm:w-[300px] sm:h-[300px] bg-gray-100 rounded-xl">
+                                <CIcon icon={cilImagePlus} className='sm:w-[100px] sm:h-[100px] flex items-center justify-center text text-gray-500'/>
+                            </div>
+                        ) 
+                        } 
                 </div> 
                 <div className='flex flex-col'>
                     <h1 className={`${inter.className} xl:text-xl 2xl:text-2xl font-bold text-primary-blue`}>{title}</h1>

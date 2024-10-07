@@ -55,8 +55,8 @@ const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
                             />
                           </div>
                         ): (
-                            <div className="flex xs:mb-0 md:mb-4 items-center pt-16 pb-16 px-16 bg-gray-100 rounded-xl">
-                                <CIcon icon={cilImagePlus} className='xl:w-32 xl:h-32 2xl:w-40 2xl:w-40 text-gray-500'/>
+                            <div className="flex xs:mb-0 md:mb-4 justify-center items-center sm:w-[300px] sm:h-[300px] bg-gray-100 rounded-xl">
+                                <CIcon icon={cilImagePlus} className='sm:w-[100px] sm:h-[100px] flex items-center justify-center text text-gray-500'/>
                             </div>
                         ) 
                         } 

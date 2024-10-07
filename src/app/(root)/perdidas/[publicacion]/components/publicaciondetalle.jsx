@@ -101,21 +101,21 @@ const PublicationDetail = ({ lostId }) => {
 
   return (
     <div className="bg-background-gray flex pt-4 px-4 pb-4 justify-center">
-      <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
-        <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full relative">
+      <div className='flex flex-col p-4 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
+        <div className="flex flex-col md:flex-row w-full relative">
           <div className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
           <Link href={userId == lost.user.id ? `/mi-perfil` : `/perfiles?id=${lost?.user.id}`}>
             <p className='hover:underline underline-offset-4 text-gray-400 text-xs mb-1'>
               Publicado el {new Date(lost.creationDate).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' })} por {profile?.firstName + " " + profile?.lastName}
             </p>
           </Link>
+          <div className="xs:w-[250px] xs:h-[250px] sm:w-[350px] sm:h-[350px] overflow-hidden mb-4 flex items-center">
             <img
-              className='rounded-xl w-full h-auto'
-              src={lost.s3Url}
-              alt='Imagen seleccionada'
-              width={250}
-              height={300}
+            alt="Imagen seleccionada"
+            src={lost.s3Url}
+            className="w-full h-full object-cover rounded-lg"
             />
+          </div>            
           </div>
           <div className='flex flex-col w-full'>
             <h1 className={`${inter.className} text-lg md:text-xl lg:text-2xl font-medium text-primary-blue`}>{lost.title}</h1>
@@ -148,7 +148,7 @@ const PublicationDetail = ({ lostId }) => {
                 <CIcon icon={cilPencil} className="w-4 h-4 text-white fill-current" />
               </button>
             </div>
-            <div className='w-full md:w-96'>
+            <div className='w-full ml-4 md:w-96'>
               <MapPreview latitude={lost.latitude} longitude={lost.longitude} />
             </div>
           </div>
