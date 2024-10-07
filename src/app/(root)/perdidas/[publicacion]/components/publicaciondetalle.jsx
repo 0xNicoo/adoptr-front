@@ -104,7 +104,7 @@ const PublicationDetail = ({ lostId }) => {
       <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full relative">
           <div className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
-          <Link href={`/perfiles?id=${profile?.user.id}`}>
+          <Link href={userId == lost.user.id ? `/mi-perfil` : `/perfiles?id=${lost?.user.id}`}>
             <p className='hover:underline underline-offset-4 text-gray-400 text-xs mb-1'>
               Publicado el {new Date(lost.creationDate).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' })} por {profile?.firstName + " " + profile?.lastName}
             </p>

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Inter } from "next/font/google";
-import { Checkbox, Textarea } from '@nextui-org/react';
+import { Checkbox, Textarea, user } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useAdoptionEditStore } from '@/app/store';
 import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/react/24/solid';
@@ -53,6 +53,8 @@ const PublicationDetail = ({ adoptionId }) => {
   const [favorite, setFavorite] = useState(false);
   const {setAdoptionStore} = useAdoptionEditStore()
   const [profile, setProfile] = useState(null);
+
+
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -133,7 +135,7 @@ const PublicationDetail = ({ adoptionId }) => {
       <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full relative">
           <div className="flex-shrink-0">
-          <Link href={`/perfiles?id=${profile?.user.id}`}>
+          <Link href={userId == adoption.user.id ? `/mi-perfil` : `/perfiles?id=${profile?.user.id}`}>
             <p className='hover:underline underline-offset-4 text-gray-400 text-xs mb-1'>
               Publicado el {new Date(adoption.creationDate).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' })} por {profile?.firstName + " " + profile?.lastName}
             </p>

@@ -9,6 +9,7 @@ import CustomLoading from '@/app/components/customLoading';
 import { useEffect, useState } from 'react';
 import { getAllPostsAction } from '@/actions/post';
 import { getProfilByUserIdAction } from '@/actions/profile';
+import { getProfileAction } from '@/actions/profile';
 import PostImageModal from './postImageModal';
 
 const formatDate = (dateString) => {
@@ -32,7 +33,8 @@ const formatDate = (dateString) => {
 };
 
 const PostList = ({ posts, setPosts }) => {
-  const [profiles, setProfiles] = useState({}); 
+  const [profiles, setProfiles] = useState({});
+  const [profile, setProfile] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const PAGE_SIZE = 10;
@@ -43,6 +45,21 @@ const PostList = ({ posts, setPosts }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const profileLogged = await getProfileAction();
+        setProfile(profileLogged.user.id);
+      } catch (err) {
+        setError('Error al obtener el perfil');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+
     const fetchProfiles = async () => {
       try {
         const profileDataPromises = posts.map((post) =>
@@ -114,7 +131,7 @@ const PostList = ({ posts, setPosts }) => {
                     )}
                   </div>
                   <div className="flex flex-col">
-                  <Link href={`/perfiles?id=${post.user.id}`}>
+                  <Link href={profile == post.user.id ? `/mi-perfil` : `/perfiles?id=${post.user.id}`}>
                     <p className="text-md hover:underline underline-offset-4 text-secondary-blue font-medium">{profiles[post.user.id]?.firstName || 'Nombre'} {profiles[post.user.id]?.lastName || 'Apellido'}</p>
                   </Link>
                     <p className="text-small text-default-500">{formatDate(post.date)}</p>
