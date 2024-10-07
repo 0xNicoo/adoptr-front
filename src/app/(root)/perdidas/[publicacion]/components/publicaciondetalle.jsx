@@ -2,12 +2,19 @@
 
 import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
+import Link from 'next/link';
 import { Checkbox, Textarea } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import { useFormStoreLost } from '@/app/store';
+import { useFormStoreLost, useLostEditStore } from '@/app/store';
 import { getUserIdAction } from '@/actions/global';
-import { getLostAction } from '@/actions/lost';
-import { getChatByPublicationIdAction } from '@/actions/chat';
+import { deleteLostAction, getLostAction } from '@/actions/lost';
+import { getChatsByPublicationIdAction } from '@/actions/chat';
+import CustomLoading from '@/app/components/customLoading';
+import { getProfilByUserIdAction } from '@/actions/profile';
+import CIcon from '@coreui/icons-react';
+import { cilPencil } from '@coreui/icons';
+import { cilTrash } from '@coreui/icons';
+import MapPreview from './mapPreview';
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -42,6 +49,7 @@ const PublicationDetail = ({ lostId }) => {
   const router = useRouter();
   const [userId, setUserId] = useState(null);
   const { setLostStore } = useLostEditStore();
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -51,6 +59,8 @@ const PublicationDetail = ({ lostId }) => {
       try {
         const data = await getLostAction(lostId);
         setLost(data);
+        const profileData = await getProfilByUserIdAction(data.user.id);
+        setProfile(profileData);
       } catch (err) {
         setError(err.message);
       }
@@ -65,12 +75,17 @@ const PublicationDetail = ({ lostId }) => {
   if (!lost) return <CustomLoading />;
 
   const handleLostClick = async () => {
-    if(userId == lost.user.id){
-      router.push('/chat/publicaciones')
+    try{
+      const chats = await getChatsByPublicationIdAction(lost.id)
+      if(chats.length == 1){
+        router.push(`/chat?chat=${chats[0].id}`);
+      }else{
+        router.push(`/chat/publicaciones/${lost.id}`)
+        return
+      }
+    }catch(err){
+      errorToast(err.message)
       return
-    }else{
-      const chat = await getChatsByPublicationIdAction(lost.id)
-      router.push(`/chat?chat=${chat.id}`);
     }
   };
 
@@ -89,6 +104,11 @@ const PublicationDetail = ({ lostId }) => {
       <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full relative">
           <div className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
+          <Link href={`/perfiles?id=${profile?.user.id}`}>
+            <p className='hover:underline underline-offset-4 text-gray-400 text-xs mb-1'>
+              Publicado el {new Date(lost.creationDate).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' })} por {profile?.firstName + " " + profile?.lastName}
+            </p>
+          </Link>
             <img
               className='rounded-xl w-full h-auto'
               src={lost.s3Url}
@@ -134,10 +154,9 @@ const PublicationDetail = ({ lostId }) => {
           </div>
         </div>
         <div className='w-full flex justify-end mt-4'>
-          <button 
-            className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"
+          <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"
             onClick={handleLostClick}>
-            {lost.user.id == userId ? 'Chats' : 'Contactar'}
+            {lost.user.id == userId ? (<>Chats</>) : (<>Contactar</>)}
           </button>
         </div>
       </div>

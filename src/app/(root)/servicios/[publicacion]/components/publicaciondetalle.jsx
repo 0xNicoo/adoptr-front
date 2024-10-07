@@ -55,8 +55,7 @@ const PublicationDetail = ({ serviceId }) => {
       if(chats.length == 1){
         router.push(`/chat?chat=${chats[0].id}`);
       }else{
-       //redirigir a la lista de chat de esa publi
-        router.push('/chat/publicaciones')
+        router.push(`/chat/publicaciones/${service.id}`)
         return
       }
     }catch(err){
