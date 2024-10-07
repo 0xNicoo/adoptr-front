@@ -4,10 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import { useFormStoreLost } from '@/app/store';
+import { useFormStoreLost, useLostEditStore } from '@/app/store';
 import { getUserIdAction } from '@/actions/global';
-import { getLostAction } from '@/actions/lost';
-import { getChatByPublicationIdAction } from '@/actions/chat';
+import { deleteLostAction, getLostAction } from '@/actions/lost';
+import { getChatsByPublicationIdAction } from '@/actions/chat';
+import CustomLoading from '@/app/components/customLoading';
+import CIcon from '@coreui/icons-react';
+import { cilPencil } from '@coreui/icons';
+import { cilTrash } from '@coreui/icons';
+import MapPreview from './mapPreview';
 
 
 const inter = Inter({ subsets: ["latin"] });
