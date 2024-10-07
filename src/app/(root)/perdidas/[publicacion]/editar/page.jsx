@@ -28,8 +28,18 @@ export default function EditPage() {
   const [editing, setEditing] = useState(false);
   
   // Estado para latitud y longitud
-  const [latitude, setLatitude] = useState(lost.latitude);
-  const [longitude, setLongitude] = useState(lost.longitude);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
+  useEffect(() => {
+    if (!lost) {
+      router.push('/perdidas');
+      return;
+    }
+
+    setLatitude(lost.latitude);
+    setLongitude(lost.longitude);
+  }, [lost]);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -40,13 +50,13 @@ export default function EditPage() {
         setLoading(false);
       }
     };
-    
+
     if (!lost) {
       router.push('/perdidas');
       return;
     }
     checkUser();
-  }, []);
+  }, [lost]);
 
   if (loading) {
     return <CustomLoading />;
