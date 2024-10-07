@@ -52,11 +52,14 @@ const AdoptionList = ({ adoptions, handleDelete }) => {
           </Card>
         ))
       ) : (
-        <Card>
-          <CardBody>
-            <p>No se encontraron publicaciones de mascotas</p>
-          </CardBody>
-        </Card>
+        <div className="flex flex-col items-center justify-center">
+            <img 
+              src="/images/globito.png" 
+              alt="No hay publicaciones" 
+              className="w-48 h-48 object-cover" 
+            />
+            <p className="mt-4 text-gray-600 text-2xl">Aún no hay publicaciones</p>
+        </div>
       )}
     </div>
   );
