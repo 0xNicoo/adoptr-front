@@ -92,7 +92,20 @@ const PublicationList = ({ publications }) => {
               <small className={`${inter.className} text-gray-500`}>
                 {pub.ageYears} años {pub.ageMonths} meses
               </small>
-              <h4 className={`${inter.className} text-lg`}>{pub.title}</h4>
+
+              <div className="flex items-center"> 
+                <h4 className={`${inter.className} text-lg`}>{pub.title}</h4>
+                {pub.adoptionStatusType == "ADOPTED" ? (
+                  <button 
+                    className="bg-green-500 text-white py-1 px-3 ml-4 rounded-3xl items-end" 
+                    disabled 
+                  >
+                    ADOPTADO
+                  </button>
+                ) : (<></>)}
+              </div>
+
+      
             </CardHeader>
             <a 
               href={`/adopcion/${pub.id}`} 

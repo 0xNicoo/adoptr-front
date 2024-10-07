@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation'; // Importa useRouter para manejar la redirección
 import { Checkbox, Button, Select, SelectItem } from '@nextui-org/react';
 import { getAdoptionsAction } from '@/actions/adoption';
 import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
@@ -8,11 +7,9 @@ import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
 const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilters, initialFilters }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { register, handleSubmit, setValue, reset, watch } = useForm(); // Agrega watch para observar los cambios
-    const router = useRouter(); // Inicializa useRouter para redireccionar
 
     const [provinces, setProvinces] = useState([]);
     const [localities, setLocalities] = useState([]);
-    const [loadingServiceTypes, setLoadingServiceTypes] = useState(true);
     const [loadingLocalities, setLoadingLocalities] = useState(false);
 
     const selectedProvince = watch('province_id');
@@ -21,7 +18,8 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
     const [filters, setFilters] = useState({
         vaccinated: initialFilters.vaccinated || false,
         unprotected: initialFilters.unprotected || false,
-        castrated: initialFilters.castrated || false
+        castrated: initialFilters.castrated || false,
+        adopted: initialFilters.adopted || false
     });
     useEffect(() => {
         // Sincroniza el estado inicial de los filtros con react-hook-form
@@ -35,14 +33,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
         setValue('unprotected', filters.unprotected);
         setValue('castrated', filters.castrated);
     }, [filters, setValue]);
-    // Actualiza el estado de los checkboxes
-    const handleCheckboxChange = (event) => {
-        const { name, checked } = event.target;
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [name]: checked
-        }));
-    };
+
 
     // Cargar provincias al montar el componente
     useEffect(() => {
@@ -175,6 +166,15 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                                     Tamaño
                                 </label>
                             </div>
+
+                            <Checkbox
+                                    name="adopted"
+                                    isSelected={filters.adopted} 
+                                    onChange={() => setFilters(prev => ({ ...prev, adopted: !prev.adopted }))}
+                                >
+                                    Adoptados
+                            </Checkbox>
+
 
                             <Button
                                 type="submit" className='bg-primary-blue text-white'

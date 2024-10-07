@@ -23,7 +23,7 @@ export async function apiRequest(endpoint, method = 'GET', body = null, contentT
     if(contentType == 'application/json'){
       options.headers['Content-Type'] = 'application/json'
     }
-    console.log("BODY QUE LLEGA", body)
+
     if (body) {
       options.body = contentType === 'application/json' ? JSON.stringify(body) : body
     }

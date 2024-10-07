@@ -148,7 +148,19 @@ const PublicationDetail = ({ adoptionId }) => {
             />
           </div>
           <div className='flex flex-col w-full'>
-            <h1 className={`${inter.className} xl:text-2xl 2xl:text-3xl md:text-lg font-medium text-primary-blue`}>{adoption.title}</h1>
+            <div className="flex items-center"> 
+              <h1 className={`${inter.className} xl:text-2xl 2xl:text-3xl md:text-lg font-medium text-primary-blue`}>
+                {adoption.title}
+              </h1>
+              {adoption.adoptionStatusType == "ADOPTED" ? (
+                <button 
+                  className="bg-green-500 text-white py-1 px-5 ml-4 rounded-3xl" 
+                  disabled 
+                >
+                  ADOPTADO :D
+                </button>
+              ) : (<></>)}
+            </div>
             <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>TAMAÑO</p>
             <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{mapSizeType(adoption.sizeType)}</p>
             <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>EDAD</p>
@@ -200,12 +212,17 @@ const PublicationDetail = ({ adoptionId }) => {
             )}
           </div>
         </div>
-        <div className='w-full flex justify-end mt-4'>
-          <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"
-          onClick={handleAdoptClick}>
-          {adoption.user.id == userId ? (<>Chats</>) : (<>Adoptar</>)}
-          </button>
-        </div>
+        {adoption.adoptionStatusType == "ADOPTED" ? (
+              <></>
+              ) : (
+                <div className='w-full flex justify-end mt-4'>
+                  <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"
+                    onClick={handleAdoptClick}>
+                    {adoption.user.id == userId ? (<>Chats</>) : (<>Adoptar</>)}
+                  </button>
+                </div>
+              )}
+
       </div>
     </div>
   );
