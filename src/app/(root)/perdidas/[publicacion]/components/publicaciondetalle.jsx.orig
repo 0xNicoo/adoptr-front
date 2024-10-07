@@ -2,13 +2,23 @@
 
 import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
-import { Checkbox, Textarea } from '@nextui-org/react';
+import { Textarea } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import { useFormStoreLost } from '@/app/store';
+import { useLostEditStore } from '@/app/store';
 import { getUserIdAction } from '@/actions/global';
+<<<<<<< HEAD
 import { getLostAction } from '@/actions/lost';
-import { getChatByPublicationIdAction } from '@/actions/chat';
+import { getChatsByPublicationIdAction } from '@/actions/chat';
 
+=======
+import { getLostAction, deleteLostAction } from '@/actions/lost';
+import { getChatByPublicationIdAction } from '@/actions/chat';
+import CustomLoading from '@/app/components/customLoading';
+import { CIcon } from '@coreui/icons-react';
+import { cilTrash } from '@coreui/icons';
+import { cilPencil } from '@coreui/icons';
+import MapPreview from './mapPreview';
+>>>>>>> dev
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,8 +55,8 @@ const PublicationDetail = ({ lostId }) => {
 
   useEffect(() => {
     const fetchUserId = async () => {
-      setUserId(await getUserIdAction())
-    }
+      setUserId(await getUserIdAction());
+    };
     const fetchLost = async () => {
       try {
         const data = await getLostAction(lostId);
@@ -54,7 +64,7 @@ const PublicationDetail = ({ lostId }) => {
       } catch (err) {
         setError(err.message);
       }
-    }
+    };
 
     if (lostId) {
       fetchLost();
@@ -65,11 +75,18 @@ const PublicationDetail = ({ lostId }) => {
   if (!lost) return <CustomLoading />;
 
   const handleLostClick = async () => {
+<<<<<<< HEAD
     if(userId == lost.user.id){
       router.push('/chat/publicaciones')
       return
     }else{
       const chat = await getChatsByPublicationIdAction(lost.id)
+=======
+    if (userId == lost.user.id) {
+      router.push('/chatList');
+    } else {
+      const chat = await getChatByPublicationIdAction(lost.id);
+>>>>>>> dev
       router.push(`/chat?chat=${chat.id}`);
     }
   };
@@ -93,8 +110,6 @@ const PublicationDetail = ({ lostId }) => {
               className='rounded-xl w-full h-auto'
               src={lost.s3Url}
               alt='Imagen seleccionada'
-              width={250}
-              height={300}
             />
           </div>
           <div className='flex flex-col w-full'>

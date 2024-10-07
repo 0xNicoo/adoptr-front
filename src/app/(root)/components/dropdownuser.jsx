@@ -61,7 +61,7 @@ const DropdownUser = () => {
             Favoritas
           </Link>
 
-          <Link href="/chatList" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+          <Link href="/chat/publicaciones" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
             Chats
           </Link>
 

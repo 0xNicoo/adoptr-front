@@ -1,6 +1,6 @@
 'use server';
 
-import { createAdoption, deleteAdoption, editAdoption, getAdoption, getAdoptions } from "@/lib/api/adoption";
+import { changeAdoptionStatus, createAdoption, deleteAdoption, editAdoption, getAdoption, getAdoptions } from "@/lib/api/adoption";
 
 export async function getAdoptionsAction(filter, page, size) {
   const {data, headers} = await getAdoptions(filter, page, size); 
@@ -24,5 +24,10 @@ export async function deleteAdoptionAction(id){
 
 export async function getAdoptionAction(adoptionId) {
   const {data, headers} = await getAdoption(adoptionId); 
+  return data
+}
+
+export async function changeAdoptionStatusAction(id, nextStatus){
+  const {data, headers} = await changeAdoptionStatus(id, nextStatus);
   return data
 }

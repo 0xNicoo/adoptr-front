@@ -11,9 +11,11 @@ import { cilPencil } from '@coreui/icons';
 import { useServiceEditStore } from '@/app/store';
 import { deleteServiceAction, getServiceAction } from '@/actions/service';
 import { getUserIdAction } from '@/actions/global';
-import { getChatByPublicationIdAction } from '@/actions/chat';
+import { getChatsByPublicationIdAction } from '@/actions/chat';
 import { getProfilByUserIdAction } from '@/actions/profile';
 import CustomLoading from "@/app/components/customLoading";
+import { errorToast } from '@/util/toast';
+
 const inter = Inter({ subsets: ["latin"] });
 
 const PublicationDetail = ({ serviceId }) => {
@@ -48,14 +50,19 @@ const PublicationDetail = ({ serviceId }) => {
   if (!service) return <CustomLoading />;
 
   const handleServClick = async () => {
-    if(userId == service.user.id){
-      router.push('/chatList')
+    try{
+      const chats = await getChatsByPublicationIdAction(service.id)
+      if(chats.length == 1){
+        router.push(`/chat?chat=${chats[0].id}`);
+      }else{
+       //redirigir a la lista de chat de esa publi
+        router.push('/chat/publicaciones')
+        return
+      }
+    }catch(err){
+      errorToast(err.message)
       return
-    }else{
-      const chat = await getChatByPublicationIdAction(service.id)
-      router.push(`/chat?chat=${chat.id}`);
     }
-
   };
 
   const handleDelete = async (id) => {

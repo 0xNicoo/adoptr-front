@@ -1,11 +1,11 @@
 'use client';
-import ChatList from './components/chatList';
+import PublicationList from './components/publicationList';
 
 
 export default function Home() {
   return (
     <div>
-      <ChatList />
+      <PublicationList />
     </div>
   );
 }
