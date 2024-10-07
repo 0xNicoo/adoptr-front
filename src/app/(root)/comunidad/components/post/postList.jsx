@@ -90,7 +90,6 @@ const PostList = ({ posts, setPosts }) => {
     openModal();
   };
 
-  if (loading) return <p>Cargando posts...</p>;
   if (error) return <p>{error}</p>;
 
   return (
@@ -155,11 +154,14 @@ const PostList = ({ posts, setPosts }) => {
           </div>
         </>
       ) : (
-        <Card>
-          <CardBody>
-            <p>No se encontraron novedades</p>
-          </CardBody>
-        </Card>
+        <div className="flex flex-col items-center justify-center">
+          <img 
+            src="/images/globito.png" 
+            alt="No hay publicaciones" 
+            className="w-64 h-64 object-cover" 
+            />
+          <p className="mt-4 text-gray-600 text-3xl">Aún no hay publicaciones</p>
+        </div>
       )}
       <PostImageModal isOpen={isOpen} onClose={onClose} imageUrl={selectedImage} />
     </div>

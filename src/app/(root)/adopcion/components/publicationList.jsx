@@ -57,7 +57,16 @@ const PublicationList = ({ publications }) => {
   };
 
   if (!publications || publications.length === 0) {
-    return <p>No hay publicaciones</p>;
+    return(
+      <div className="flex flex-col items-center justify-center">
+          <img 
+            src="/images/globito.png" 
+            alt="No hay publicaciones" 
+            className="w-64 h-64 object-cover" 
+            />
+          <p className="mt-4 text-gray-600 text-3xl">Aún no hay publicaciones</p>
+      </div>
+      );
   }
 
   return (
