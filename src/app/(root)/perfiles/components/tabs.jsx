@@ -8,7 +8,7 @@ import LostList from './lostList';
 const MiPerfilTabs = ({ posts, profile, adoptions, services, lost }) => {
   return (
     <Tabs aria-label="Options">
-      <Tab key="novedades" title="Novedades">
+      <Tab key="comunidad" title="Comunidad">
         <PostList posts={posts} profile={profile}/>
       </Tab>
       <Tab key="publicaciones" title="Publicaciones de mascotas">

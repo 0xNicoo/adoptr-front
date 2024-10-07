@@ -10,7 +10,7 @@ const MiPerfilTabs = ({ profile, adoptions, services, lost}) => {
 
   return (
     <Tabs aria-label="Options">
-      <Tab key="novedades" title="Novedades">
+      <Tab key="comunidad" title="Comunidad">
         <PostConatiner profile={profile}/>
       </Tab>
       <Tab key="publicaciones" title="Publicaciones de mascotas">
