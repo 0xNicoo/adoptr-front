@@ -15,3 +15,11 @@ export async function getLosts(filter, page, size) {
 export async function getLost(id) {
   return await apiRequest(`/lost/${id}`, 'GET', null, 'application/json', true)
 }
+
+export async function deleteLost(id){
+  return await apiRequest(`/lost/${id}`, 'DELETE', null, 'application/json', true)
+}
+
+export async function editLost(id, data) {
+  return await apiRequest(`/lost/${id}`, 'PUT', data, 'multipart/form-data', true)
+}

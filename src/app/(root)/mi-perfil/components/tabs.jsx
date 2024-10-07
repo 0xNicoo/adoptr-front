@@ -3,9 +3,10 @@ import { Tabs, Tab, Card, CardBody } from '@nextui-org/react';
 import AdoptionList from './adoption-list';
 import ServiceList from './serviceList';
 import PostConatiner from './post/postContainer';
+import LostList from './lostList';
 
 
-const MiPerfilTabs = ({ profile, adoptions, services}) => {
+const MiPerfilTabs = ({ profile, adoptions, services, lost}) => {
 
   return (
     <Tabs aria-label="Options">
@@ -17,6 +18,9 @@ const MiPerfilTabs = ({ profile, adoptions, services}) => {
       </Tab>
       <Tab key="servicios" title="Servicios">
         <ServiceList services={services} />
+      </Tab>
+      <Tab key="perdidas" title="Mascotas Perdidas">
+        <LostList lost={lost} />
       </Tab>
     </Tabs>
   );

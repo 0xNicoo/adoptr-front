@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { Inter } from "next/font/google";
 import { Textarea } from '@nextui-org/react';
@@ -11,7 +12,10 @@ import { useServiceEditStore } from '@/app/store';
 import { deleteServiceAction, getServiceAction } from '@/actions/service';
 import { getUserIdAction } from '@/actions/global';
 import { getChatsByPublicationIdAction } from '@/actions/chat';
+import { getProfilByUserIdAction } from '@/actions/profile';
 import CustomLoading from "@/app/components/customLoading";
+import { errorToast } from '@/util/toast';
+
 const inter = Inter({ subsets: ["latin"] });
 
 const PublicationDetail = ({ serviceId }) => {
@@ -19,6 +23,7 @@ const PublicationDetail = ({ serviceId }) => {
   const [error, setError] = useState(null);
   const router = useRouter();
   const [userId, setUserId] = useState(null);
+  const [profile, setProfile] = useState(null);
   const {setServiceStore} = useServiceEditStore()
 
   useEffect(() => {
@@ -29,6 +34,8 @@ const PublicationDetail = ({ serviceId }) => {
       try {
         const data = await getServiceAction(serviceId);
         setService(data);
+        const profileData = await getProfilByUserIdAction(data.user.id);
+        setProfile(profileData);
       } catch (err) {
         setError(err.message);
       }
@@ -43,14 +50,19 @@ const PublicationDetail = ({ serviceId }) => {
   if (!service) return <CustomLoading />;
 
   const handleServClick = async () => {
-    if(userId == service.user.id){
-      router.push('/chat/publicaciones')
+    try{
+      const chats = await getChatsByPublicationIdAction(service.id)
+      if(chats.length == 1){
+        router.push(`/chat?chat=${chats[0].id}`);
+      }else{
+       //redirigir a la lista de chat de esa publi
+        router.push('/chat/publicaciones')
+        return
+      }
+    }catch(err){
+      errorToast(err.message)
       return
-    }else{
-      const chat = await getChatsByPublicationIdAction(service.id)
-      router.push(`/chat?chat=${chat.id}`);
     }
-
   };
 
   const handleDelete = async (id) => {
@@ -69,6 +81,11 @@ const PublicationDetail = ({ serviceId }) => {
       <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full relative">
           <div className="flex-shrink-0">
+          <Link href={`/perfiles?id=${profile?.user.id}`}>
+            <p className='hover:underline underline-offset-4 text-gray-400 text-xs mb-1'>
+              Publicado el {new Date(service.creationDate).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' })} por {profile?.firstName + " " + profile?.lastName}
+            </p>
+          </Link>
             <img
               className='rounded-xl w-full md:w-80 lg:w-96'
               src={service.s3Url}

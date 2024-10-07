@@ -1,10 +1,26 @@
 import React from 'react';
+import localFont from 'next/font/local';
+
+const gladolia = localFont({
+  src: '../../../../resources/font/GladoliademoRegular.otf',
+  display: 'swap',
+});
+
+const gladoliatwo = localFont({
+  src: '../../../../resources/font/GladoliademoShadow.otf',
+  display: 'swap',
+});
 
 const SectionAdop = () => {
   return (
-    <div className="text-center mt-16">
-      <h1 className="xl:text-4xl md:text-2xl sm:text-xl 2xl:text-4xl font-bold text-primary-blue">
-        Encontrá tu mascota ideal
+    <div className="text-center mt-10">
+      <h1 className="relative text-6xl lg:text-6xl flex justify-center items-center">
+        <span className={`${gladolia.className} text-primary-orange absolute right-0`}>
+          Encontra tu mascota ideal
+        </span>
+        <span className={`${gladoliatwo.className} text-primary-blue relative`}>
+          Encontra tu mascota ideal
+        </span>
       </h1>
     </div>
   );

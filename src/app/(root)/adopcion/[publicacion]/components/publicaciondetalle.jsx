@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { Inter } from "next/font/google";
 import { Checkbox, Textarea } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
@@ -11,6 +12,7 @@ import { CIcon } from '@coreui/icons-react';
 import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
 import { getUserIdAction } from '@/actions/global';
+import { getProfilByUserIdAction } from '@/actions/profile';
 import { deleteAdoptionAction, getAdoptionAction } from '@/actions/adoption';
 import { getChatsByPublicationIdAction } from '@/actions/chat';
 import { getFavoriteAction, setFavoriteAction } from '@/actions/favorite';
@@ -50,6 +52,7 @@ const PublicationDetail = ({ adoptionId }) => {
   const [userId, setUserId] = useState(null);
   const [favorite, setFavorite] = useState(false);
   const {setAdoptionStore} = useAdoptionEditStore()
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -59,6 +62,8 @@ const PublicationDetail = ({ adoptionId }) => {
       try {
         const data = await getAdoptionAction(adoptionId);
         setAdoption(data);
+        const profileData = await getProfilByUserIdAction(data.user.id);
+        setProfile(profileData);
       } catch (err) {
         setError(err.message);
       }
@@ -77,9 +82,10 @@ const PublicationDetail = ({ adoptionId }) => {
     }
   }, [adoptionId]);
 
+
   if (error) return <div>Error: {error}</div>;
   if (!adoption) return <CustomLoading />;
-
+  
   //TODO(nico): cuando se ejecuta, poner un loading en el boton de eliminar
   const handleDelete = async (id) => {
     await deleteAdoptionAction(id)
@@ -105,8 +111,6 @@ const PublicationDetail = ({ adoptionId }) => {
       errorToast(err.message)
       return
     }
-
-
   };
 
   const handleFavorite = async () => {
@@ -120,6 +124,11 @@ const PublicationDetail = ({ adoptionId }) => {
       <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full relative">
           <div className="flex-shrink-0">
+          <Link href={`/perfiles?id=${profile?.user.id}`}>
+            <p className='hover:underline underline-offset-4 text-gray-400 text-xs mb-1'>
+              Publicado el {new Date(adoption.creationDate).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' })} por {profile?.firstName + " " + profile?.lastName}
+            </p>
+          </Link>
             <img
               className='rounded-xl w-full md:w-80 lg:w-96'
               src={adoption.s3Url}

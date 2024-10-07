@@ -98,11 +98,6 @@ export default function EditPage() {
                 </div>
               </div>
               <div className='mt-2'>
-                <Checkboxes 
-                  actualCastrated={adoption.castrated} 
-                  actualDewormed={adoption.unprotected} 
-                  actualVaccinated={adoption.vaccinated} 
-                />
                 <Description actualDescription={adoption.description} />
               </div>
             </div>
