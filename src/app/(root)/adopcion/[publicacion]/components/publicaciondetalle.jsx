@@ -201,7 +201,7 @@ const PublicationDetail = ({ adoptionId }) => {
                     className="bg-blue-700 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-secondary-blue flex items-center justify-center">
                   <CIcon icon={cilPencil} className="w-4 h-4 text-white fill-current" />
                   </button>
-                  {adoption.user.id == userId ? (
+                  {adoption.user.id == userId && adoption.adoptionStatusType != "ADOPTED"  ? (
                     <button className="bg-primary-orange hover:bg-orange-700 py-1 px-5 ml-4 rounded-3xl transition-colors duration-300 text-white"
                       onClick={handleAdoptedClick}>
                       Adoptado
