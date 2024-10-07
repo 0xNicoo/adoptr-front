@@ -98,7 +98,7 @@ const PublicationDetail = ({ adoptionId }) => {
         router.push(`/chat?chat=${chats[0].id}`);
       }else{
        //redirigir a la lista de chat de esa publi
-        router.push('/chat/lista')
+        router.push('/chat/publicaciones')
         return
       }
     }catch(err){

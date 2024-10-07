@@ -44,7 +44,7 @@ const PublicationDetail = ({ serviceId }) => {
 
   const handleServClick = async () => {
     if(userId == service.user.id){
-      router.push('/chat/lista')
+      router.push('/chat/publicaciones')
       return
     }else{
       const chat = await getChatsByPublicationIdAction(service.id)

@@ -66,7 +66,7 @@ const PublicationDetail = ({ lostId }) => {
 
   const handleLostClick = async () => {
     if(userId == lost.user.id){
-      router.push('/chat/lista')
+      router.push('/chat/publicaciones')
       return
     }else{
       const chat = await getChatsByPublicationIdAction(lost.id)
