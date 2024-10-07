@@ -60,14 +60,11 @@ const MiPerfil = () => {
 
   return (
     <div className="flex flex-col lg:flex-row justify-center">
-      <div className="w-full lg:w-2/6 mb-8 lg:mb-0 lg:mr-8">
+      <div className="w-full lg:w-1/3 mb-8 lg:mb-0 lg:mr-8">
         <ProfileCard profile={profile} onEdit={handleEdit} />
       </div>
-      <div className="mt-4 w-full lg:w-3/6">
+      <div className="mt-4 w-full lg:w-2/3">
         <MiPerfilTabs profile={profile} adoptions={adoptions} posts={posts} services={services} lost={lost} />
-      </div>
-      <div className="lg:sticky lg:w-1/6 top-4 lg:h-screen">
-        <ChatList />
       </div>
     </div>
   );
