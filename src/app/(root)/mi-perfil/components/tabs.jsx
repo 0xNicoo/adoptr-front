@@ -19,7 +19,7 @@ const MiPerfilTabs = ({ profile, adoptions, services, lost}) => {
       <Tab key="servicios" title="Servicios">
         <ServiceList services={services} />
       </Tab>
-      <Tab key="perdidas" title="Mascotas Perdidas">
+      <Tab key="perdidas" title="Mascotas perdidas">
         <LostList lost={lost} />
       </Tab>
     </Tabs>
