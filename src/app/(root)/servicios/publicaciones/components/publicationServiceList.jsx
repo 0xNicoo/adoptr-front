@@ -22,18 +22,18 @@ const PublicationServiceList = ({ publications }) => {
   }
 
   return (
-    <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+    <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mx-8">
       {publications.map((pub) => (
         <div key={pub.id} className="w-full">
-          <Card className="items-center justify-center p-4">
+          <Card className="items-center justify-center">
             <CardBody className="overflow-hidden p-0 flex justify-center">
-              <Image
-                alt="Servicio"
-                className="object-cover rounded-xl"
+            <div className="w-full h-[300px] overflow-hidden">
+              <img
+                alt="Imagen del post"
                 src={pub.s3Url}
-                width={270}
-                height={300}
-              />
+                className="w-full h-full rounded-t-xl object-cover"    
+                />
+            </div>
             </CardBody>
             <CardHeader className="pb-2 pt-4 flex flex-col items-start">
               <p className={`${inter.className} text-xs uppercase font-bold`}>

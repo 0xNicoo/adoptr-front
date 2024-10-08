@@ -4,6 +4,7 @@ import PostDeleteModal from './postDeleteModal';
 import React, { useEffect, useState } from 'react';
 import { getPostsAction } from '@/actions/post';
 import CustomLoading from '@/app/components/customLoading';
+import ChatList from '../chatList';
 
 const PostConatiner = ({profile}) => {
   const [loading, setLoading] = useState(true);
@@ -48,21 +49,24 @@ const PostConatiner = ({profile}) => {
   if (error) return <p>{error}</p>;
 
 
-  return(
-      <>
-      <div className='flex flex-col w-full'>
-      <div className='max-w-4xl w-full flex flex-col'>
-        <div className='w-2/3'>
-          <Post onPostsChange={onPostsChange} profile={profile} />
+  return (
+    <>
+      <div className="flex w-full max-w-4xl">
+        <div className="flex flex-col w-full max-w-4xl">
+          <div className="w-full">
+            <Post onPostsChange={onPostsChange} profile={profile} />
+          </div>
+          <div className="w-full">
+            <PostList posts={posts} profile={profile} onOpen={handleOpen} setPosts={setPosts} />
+          </div>
+          <PostDeleteModal isOpen={isOpen} onOpenChange={handleClose} postId={selectedPostId} removePost={removePost} />
         </div>
-        <div className='w-2/3'>
-        <PostList posts={posts} profile={profile} onOpen={handleOpen} setPosts={setPosts} />
-        </div>  
-        <PostDeleteModal isOpen={isOpen} onOpenChange={handleClose} postId={selectedPostId} removePost={removePost}/>
+        <div className="hidden lg:block lg:w-1/4 lg:sticky top-4 lg:h-screen ml-8">
+          <ChatList />
+        </div>
       </div>
-    </div>
-      </>
-  )
+    </>
+  )  
 }
 
 export default PostConatiner

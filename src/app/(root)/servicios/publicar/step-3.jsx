@@ -33,6 +33,7 @@ const Step3 = ({prevStep = {prevStep}}) => {
         formData.append('locality_id', locality?.id);
         formData.append('serviceType_id', serviceType?.id);
 
+
         try {
             const resp = await createServiceAction(formData);
             resetForm();
@@ -69,7 +70,7 @@ const Step3 = ({prevStep = {prevStep}}) => {
                     </div>
                     <div className='mt-2 mb-2'>                 
                         <p className={`${inter.className} xl:text-md 2xl:text-xl font-medium text-black`}>UBICACIÓN</p>
-                        <p className='xl:text-sm 2xl:text-lg'>{locality?.name || 'No especificada'}, {province?.name || ''}</p>
+                        <p className='xl:text-sm 2xl:text-lg'>{locality.name}, {locality.province.name}</p>
                     </div>
                     <div className='mt-2'>
                         <p className={`${inter.className} text-md font-medium text-black`}>DESCRIPCIÓN</p>

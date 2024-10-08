@@ -40,7 +40,7 @@ const ChatList = () => {
   };
 
   return (
-    <div className='flex flex-col w-64 mr-4 mt-4'>
+    <div className='flex flex-col w-64 mr-4 mt-0'>
       <div className='bg-secondary-blue rounded-xl flex items-center justify-center py-4'>
       <h1 className={`${inter.className} text-center text-lg text-white`}>Mis mensajes</h1>
       </div>
