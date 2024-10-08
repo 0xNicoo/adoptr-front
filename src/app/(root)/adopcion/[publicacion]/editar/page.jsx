@@ -97,6 +97,9 @@ export default function EditPage() {
                   <Ubication actualLocality={adoption.locality.name} actualLocalityId={adoption.locality.id} actualProvince={adoption.locality.province.name} />
                 </div>
               </div>
+              <div className='flex-1'>
+                  <Checkboxes actualVaccinated={adoption.vaccinated} actualDewormed={adoption.unprotected} actualCastrated={adoption.castrated}/>
+                </div>
               <div className='mt-2'>
                 <Description actualDescription={adoption.description} />
               </div>
