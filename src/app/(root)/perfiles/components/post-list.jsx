@@ -62,14 +62,22 @@ const PostList = ({ posts, profile }) => {
           </Card>
         ))
       ) : (
-        <div className="flex flex-col items-center justify-center">
-          <img 
-            src="/images/globito.png" 
-            alt="No hay publicaciones" 
-            className="w-48 h-48 object-cover" 
-          />
+      <div className='flex flex-col w-full items-center justify-center'>
+        <div className='max-w-4xl w-full px-4 flex flex-col'>
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col justify-center mt-8">
+                <img 
+                  src="/images/globito.png" 
+                  alt="No hay publicaciones" 
+                  className="w-48 h-48 object-cover" 
+                />
+            </div>
+          </div>
+        </div>
+        <div className='max-w-custom w-full px-4 flex flex-col'>
           <p className="mt-4 text-gray-600 text-2xl">Aún no hay publicaciones</p>
-       </div>
+        </div>
+      </div>
       )}
     </div>
   );

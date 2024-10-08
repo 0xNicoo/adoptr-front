@@ -51,14 +51,14 @@ const AdoptionList = ({ adoptions }) => {
           </div>
       ))
      ) : (
-        <div className="flex flex-col items-center justify-center">
-            <img 
-              src="/images/globito.png" 
-              alt="No hay publicaciones" 
-              className="w-48 h-48 object-cover" 
-            />
-            <p className="mt-4 text-gray-600 text-2xl">Aún no hay publicaciones</p>
-        </div>
+      <div className='max-w-4xl flex flex-row items-center w-2/3 mt-16'>
+        <img 
+          src="/images/globito2.png" 
+          alt="No hay publicaciones" 
+          className="w-48 h-48 object-cover ml-auto" 
+        />
+        <p className="text-gray-600 text-2xl">Aún no hay publicaciones</p>
+      </div>
       )}
     </div>
   );
