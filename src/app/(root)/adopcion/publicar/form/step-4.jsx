@@ -110,7 +110,7 @@ const Step4 = ({prevStep = {prevStep}}) => {
                         <Textarea
                         isReadOnly
                         defaultValue={description}
-                        className="max-w-xs"
+                        className="xs:w-[200px] sm:w-[400px]"
                         rows="3"
                         />
                     </div>

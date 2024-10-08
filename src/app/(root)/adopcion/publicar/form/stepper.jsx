@@ -12,7 +12,7 @@ const Stepper = ({ currentStep }) => {
   };
 
   return (
-    <div className="ml-5 xs:ml-0 pt-4 pb-4">
+    <div className="px-4 xs:ml-0 pt-4 pb-4">
       {/*Pantallas chicas */}
       <div className="flex items-center justify-center text-xs sm:hidden text-primary-blue font-medium text-center">
         <li
@@ -31,7 +31,7 @@ const Stepper = ({ currentStep }) => {
       </div>
       
       {/* Pantallas grandes*/}
-      <ol className="hidden sm:flex items-center w-full text-xs sm:text-sm md:text-base text-gray-500 font-medium">
+      <ol className="hidden sm:flex items-center w-full text-xs sm:text-sm md:text-base text-gray-500 font-medium ">
         {[
           { step: 1, label: 'Seleccioná el animal' },
           { step: 2, label: 'Completá los datos' },

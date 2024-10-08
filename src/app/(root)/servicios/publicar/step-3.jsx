@@ -67,12 +67,12 @@ const Step3 = ({prevStep = {prevStep}}) => {
                         <p className={`${inter.className} xl:text-md 2xl:text-xl font-medium text-black`}>UBICACIÓN</p>
                         <p className='xl:text-sm 2xl:text-lg'>{locality.name}, {locality.province.name}</p>
                     </div>
-                    <div className='mt-2'>
+                    <div className='mt-2 mb-2'>
                         <p className={`${inter.className} text-md font-medium text-black`}>DESCRIPCIÓN</p>
                         <Textarea
                         isReadOnly
                         value={description}
-                        className="max-w-xs"
+                        className="xs:w-[200px] sm:w-[400px]"
                         />
                     </div>
                 </div>
