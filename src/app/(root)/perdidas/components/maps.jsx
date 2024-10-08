@@ -29,7 +29,7 @@ const MapComponent = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const pawIcon = new L.Icon({
-        iconUrl: "/images/iconMap.png", 
+        iconUrl: "/images/IconMap.png", 
         iconSize: [50, 50],
         iconAnchor: [25, 50],
         popupAnchor: [0, -50],
