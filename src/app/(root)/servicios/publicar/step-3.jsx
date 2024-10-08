@@ -36,13 +36,8 @@ const Step3 = ({prevStep = {prevStep}}) => {
 
         try {
             const resp = await createServiceAction(formData);
-            resetForm();
-
             router.push(`/servicios/${resp.id}`);
-
-            
             successToast('Publicación creada con éxito!');
-
         } catch (error) {
             setPublishing(false)
             errorToast("Error: ", error.message)
