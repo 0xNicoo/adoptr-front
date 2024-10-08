@@ -7,7 +7,7 @@ import 'leaflet/dist/leaflet.css';
 
 
 const customIcon = new L.Icon({
-    iconUrl: '/images/iconMap.png', 
+    iconUrl: '/images/IconMap.png', 
     iconSize: [40, 40], 
     iconAnchor: [20, 40], 
     popupAnchor: [0, -40] 
