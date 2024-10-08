@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormStoreLost } from '@/app/store';
 import { Inter } from "next/font/google";
 import { Textarea } from '@nextui-org/react';
@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import CustomLoading from '@/app/components/customLoading';
 import { successToast } from '@/util/toast';
 import { createLostAction } from '@/actions/lost';
-import MapPreview from './mapPreview';
 import CIcon from '@coreui/icons-react';
 
 const inter = Inter({ subsets: ["latin"] });
@@ -41,6 +40,14 @@ const Step4 = ({prevStep = {prevStep}}) => {
     const { title, sizeType, animalType, ageYears, ageMonths, sexType, description, image, locality, province, fileImage, longitude, latitude } = useFormStoreLost();
     const router = useRouter()
     const [publishing, setPublishing] = useState(false)
+    const [MapPreview, setMapPreview] = useState(null)
+
+    useEffect(() => [
+        (async () => {
+            const mp = (await import('./mapPreview')).default
+            setMapPreview(mp)
+          })()
+    ], [])
 
     const publicarPerdida = async () => {
         setPublishing(true)

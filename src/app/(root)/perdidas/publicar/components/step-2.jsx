@@ -5,7 +5,6 @@ import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input, Sel
 import { Inter } from "next/font/google";
 import Image from 'next/image';
 import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
-import MapForm from './mapForm';
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -41,6 +40,7 @@ const Step2 = ({nextStep, prevStep}) => {
   const [loadingLocalities, setLoadingLocalities] = useState(false);
   const [error, setError] = useState(null);
   const [selected, setSelected] = useState('');
+  const [MapForm, setMapForm] = useState(null)
 
   const sexoAnimales = [
     { label: 'Macho', 
@@ -80,6 +80,13 @@ const Step2 = ({nextStep, prevStep}) => {
   };
  
   useEffect(() => {
+
+    (async () => {
+      const mf = (await import('./mapForm')).default
+      setMapForm(mf)
+    })()
+
+
     setSelected(sizeType);
     setSexo(sexType);
   }, [sizeType, sexType]);
