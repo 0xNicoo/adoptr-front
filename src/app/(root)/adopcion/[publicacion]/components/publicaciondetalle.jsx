@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Inter } from "next/font/google";
-import { Checkbox, Textarea, user } from '@nextui-org/react';
+import { Checkbox, Textarea, Button, user } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useAdoptionEditStore } from '@/app/store';
 import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/react/24/solid';
@@ -170,7 +170,7 @@ const PublicationDetail = ({ adoptionId }) => {
                   className="bg-green-500 text-white py-1 px-5 ml-4 rounded-3xl" 
                   disabled 
                 >
-                  ADOPTADA :D
+                  ADOPTADO
                 </button>
               ) : (<></>)}
             </div>
@@ -216,10 +216,10 @@ const PublicationDetail = ({ adoptionId }) => {
                   <CIcon icon={cilPencil} className="w-4 h-4 text-white fill-current" />
                   </button>
                   {adoption.user.id == userId && adoption.adoptionStatusType != "ADOPTED"  ? (
-                    <button className="bg-primary-orange hover:bg-orange-700 py-1 px-5 ml-4 rounded-3xl transition-colors duration-300 text-white"
+                    <Button className="border border-xs border-primary-blue bg-white hover:bg-primary-orange py-1 px-5 ml-4 rounded-3xl transition-colors duration-300 text-primary-blue"
                       onClick={handleAdoptedClick}>
-                      Adoptada
-                    </button>
+                      Marcar como adoptada
+                    </Button>
                   ) : (<></>)}
                 </div>
             )}
