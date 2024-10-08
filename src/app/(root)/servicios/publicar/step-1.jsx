@@ -208,7 +208,7 @@ const Step1 = ({nextStep}) => {
         <div className='flex flex-col w-1/6'>
           <label htmlFor="calle" className="block xl:text-md 2xl:text-xl font-medium">Calle</label>
           <div className="flex mt-2 gap-4">
-            <Input isRequired aria-label="Seleccionar calle" value={street} onChange={e => setCalle(e.target.value)} id="calle" name="calle" type="text" placeholder="Juan"/>
+            <Input isRequired aria-label="Seleccionar calle" value={street} onChange={e => setCalle(e.target.value)} id="calle" name="calle" type="text" placeholder="Av.Corrientes"/>
           </div>
           {errors.street && <p className='text-red-500 mt-2 text-xs'>{errors.street}</p>}
         </div>
@@ -216,7 +216,7 @@ const Step1 = ({nextStep}) => {
         <div className='flex flex-col w-1/6'>
           <label htmlFor="numero" className="block xl:text-md 2xl:text-xl font-medium">Número</label>
           <div className="flex mt-2 gap-4">
-            <Input isRequired aria-label="Seleccionar número" value={number} onChange={e => setNumero(e.target.value)} id="numero" name="numero" type="text" placeholder="Juan"/>
+            <Input isRequired aria-label="Seleccionar número" value={number} onChange={e => setNumero(e.target.value)} id="numero" name="numero" type="text" placeholder="3247"/>
           </div>
           {errors.number && <p className='text-red-500 mt-2 text-xs'>{errors.number}</p>}
         </div>
