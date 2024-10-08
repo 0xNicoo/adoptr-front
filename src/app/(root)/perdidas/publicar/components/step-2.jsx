@@ -5,7 +5,7 @@ import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input, Sel
 import { Inter } from "next/font/google";
 import Image from 'next/image';
 import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
-import MapForm from './mapForm';
+import MapFormWrapper from './mapFormWrapper';
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -31,8 +31,6 @@ const generarMeses = (min, max) => {
 const mesesConst = generarMeses(0, 11);
 
 const Step2 = ({nextStep, prevStep}) => {
-  //const [latitude, setLatitude] = useState(0);
-  //const [longitude, setLongitude] = useState(0);
   const { animalType, title, ageYears, ageMonths, sexType, sizeType, locality, province, longitude, latitude, setNombre, setAnios, setMeses, setSexo, setTamanio, setLocality, setProvince, setLongitude, setLatitude } = useFormStoreLost();
   const [errors, setErrors] = useState('');
   const [provinces, setProvinces] = useState([]);
@@ -41,6 +39,7 @@ const Step2 = ({nextStep, prevStep}) => {
   const [loadingLocalities, setLoadingLocalities] = useState(false);
   const [error, setError] = useState(null);
   const [selected, setSelected] = useState('');
+
 
   const sexoAnimales = [
     { label: 'Macho', 
@@ -296,7 +295,7 @@ return (
       </div>
 
       <div className='xs:w-full sm:w-1/3 xs:mt-4 sm:mt-0'>
-        <MapForm
+        <MapFormWrapper
           longitude={longitude}
           latitude={latitude}
           setLongitude={setLongitude}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormStoreLost } from '@/app/store';
 import { Inter } from "next/font/google";
 import { Textarea } from '@nextui-org/react';
@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation';
 import CustomLoading from '@/app/components/customLoading';
 import { successToast } from '@/util/toast';
 import { createLostAction } from '@/actions/lost';
-import MapPreview from './mapPreview';
 import CIcon from '@coreui/icons-react';
+import MapPreviewWrapper from './mapPreviewWrapper';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -113,7 +113,7 @@ const Step4 = ({prevStep = {prevStep}}) => {
                 </div>
                 
                 <div className="flex justify-end xs:w-5/6 sm:w-1/3 ml-38">
-                    <MapPreview latitude={latitude} longitude={longitude} />
+                    <MapPreviewWrapper latitude={latitude} longitude={longitude} />
                 </div>
 
             </div>

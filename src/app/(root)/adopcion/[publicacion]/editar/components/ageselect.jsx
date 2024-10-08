@@ -24,7 +24,7 @@ const AgeSelect = ({ actualYears, actualMonths }) => {
                             <Select
                                 {...field} 
                                 aria-label="Seleccionar años"
-                                placeholder={actualYears + " Años"}
+                                placeholder={`${actualYears} ${actualYears === 1 ? 'año' : 'años'}`}
                                 className="w-full"
                             >
                                 {years.map(year => (
@@ -54,7 +54,7 @@ const AgeSelect = ({ actualYears, actualMonths }) => {
                                 {...field} 
                                 aria-label="Seleccionar meses"
                                 className="w-full"
-                                placeholder={actualMonths + " Meses"}
+                                placeholder={`${actualMonths} ${actualMonths === 1 ? 'mes' : 'meses'}`}
                             >
                                 {months.map(month => (
                                     <SelectItem 
