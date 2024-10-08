@@ -9,8 +9,8 @@ import CustomLoading from '@/app/components/customLoading';
 import { useEffect, useState } from 'react';
 import { getAllPostsAction } from '@/actions/post';
 import { getProfilByUserIdAction } from '@/actions/profile';
-import { getProfileAction } from '@/actions/profile';
 import PostImageModal from './postImageModal';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const formatDate = (dateString) => {
   const postDate = new Date(dateString);
@@ -32,9 +32,8 @@ const formatDate = (dateString) => {
   }
 };
 
-const PostList = ({ posts, setPosts }) => {
+const PostList = ({ posts, onOpen, setPosts, profile }) => {
   const [profiles, setProfiles] = useState({});
-  const [profile, setProfile] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const PAGE_SIZE = 10;
@@ -44,19 +43,6 @@ const PostList = ({ posts, setPosts }) => {
   const { isOpen, onOpen: openModal, onClose } = useDisclosure();
   const [selectedImage, setSelectedImage] = useState(null);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const profileLogged = await getProfileAction();
-        setProfile(profileLogged.user.id);
-      } catch (err) {
-        setError('Error al obtener el perfil');
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProfile();
-  }, []);
 
   useEffect(() => {
 
@@ -137,6 +123,12 @@ const PostList = ({ posts, setPosts }) => {
                     <p className="text-small text-default-500">{formatDate(post.date)}</p>
                   </div>
                 </div>
+                <div className='flex flex-col'>
+                  <button onClick={() => onOpen(post)}>
+                    <MoreVertIcon className='text-primary-blue'/>
+                  </button>
+                </div> 
+
               </CardHeader>
               <Divider />
               <CardBody>
