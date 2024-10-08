@@ -16,7 +16,7 @@ const ServiceType = () => {
   const [servicesTypes, setServiceTypes] = useState([]);
   const [loading, setLoadingServiceTypes] = useState(true);
   const [error, setError] = useState(null);
-  const router = useRouter(); // Inicializa useRouter
+  const router = useRouter(); 
 
   useEffect(() => {
     async function fetchServiceTypes() {
