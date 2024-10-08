@@ -15,6 +15,7 @@ import CIcon from '@coreui/icons-react';
 import { cilPencil } from '@coreui/icons';
 import { cilTrash } from '@coreui/icons';
 import MapPreview from './mapPreview';
+import { errorToast } from '@/util/toast';
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -65,10 +66,11 @@ const PublicationDetail = ({ lostId }) => {
         setError(err.message);
       }
     }
+    fetchUserId()
 
     if (lostId) {
       fetchLost();
-    }
+    } fetchUserId()
   }, [lostId]);
 
   if (error) return <div>Error: {error}</div>;
@@ -104,7 +106,7 @@ const PublicationDetail = ({ lostId }) => {
       <div className='flex flex-col p-4 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
         <div className="flex flex-col md:flex-row w-full relative">
           <div className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
-          <Link href={userId == lost.user.id ? `/mi-perfil` : `/perfiles?id=${lost?.user.id}`}>
+          <Link href={userId == lost.user.id ? `/mi-perfil` : `/perfiles?id=${profile?.user.id}`}>
             <p className='hover:underline underline-offset-4 text-gray-400 text-xs mb-1'>
               Publicado el {new Date(lost.creationDate).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' })} por {profile?.firstName + " " + profile?.lastName}
             </p>
@@ -135,6 +137,7 @@ const PublicationDetail = ({ lostId }) => {
             />
           </div>
           <div className='flex flex-col items-end gap-4 w-full md:w-auto'>
+          {userId === lost.user.id && (
             <div className='flex'>
               <button
                 onClick={() => handleDelete(lost.id)}
@@ -148,6 +151,7 @@ const PublicationDetail = ({ lostId }) => {
                 <CIcon icon={cilPencil} className="w-4 h-4 text-white fill-current" />
               </button>
             </div>
+          )}
             <div className='w-full ml-4 md:w-96'>
               <MapPreview latitude={lost.latitude} longitude={lost.longitude} />
             </div>

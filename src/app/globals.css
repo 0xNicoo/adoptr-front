@@ -74,6 +74,21 @@
     width: 100%;   /* o cualquier ancho que desees */
     position: relative; /* Asegúrate de que la posición sea relativa */
   }
+
   
-  -webkit-text-stroke: 4px navy;
-  text-stroke: 4px navy;
+  .custom-pagination-item {
+    color: #000000; 
+    border-color: #000000; 
+    background-color: #ffffff; 
+  }
+  
+  .custom-cursor-item {
+    color: #fff; 
+    border-color: #fff; 
+    background-color: #1C3EB2; 
+  }
+
+  
+  
+
+
