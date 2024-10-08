@@ -126,7 +126,6 @@ const Step4 = ({prevStep = {prevStep}}) => {
                     :
                     <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" type="submit" onClick={publicarAdopcion}>Publicar</button>
                 }
-
             </div>
         </div>
     )

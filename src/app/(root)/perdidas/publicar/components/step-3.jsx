@@ -42,12 +42,12 @@ const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
         }
       }
 
-    return (
-        <div className='flex flex-grow justify-between flex-col ml-12 mb-4'>
-            <div className='flex flex-row mt-4'>
+      return (
+        <div className='flex flex-grow justify-between flex-col xs:mx-4 md:ml-12 mb-4'>
+            <div className='flex md:flex-row xs:items-center md:items-start xs:flex-col mt-4'>
                 <div className='flex flex-col'>
-                    <div className='flex items-center'>
-                    {image ? (  
+                    <div className='flex items-center xs:justify-center md:justify-start'>
+                        {image ? (  
                             <div className="xs:w-[250px] xs:h-[250px] sm:w-[300px] sm:h-[300px] overflow-hidden mb-4 flex items-center">
                             <img
                               alt="Imagen seleccionada"
@@ -62,29 +62,34 @@ const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
                         ) 
                         } 
                     </div>
-                    <div className="flex flex-column mt-2 justify-content items-center">
+                    <div className="flex xs:flex-col md:flex-row mt-2 justify-content items-center">
+                        <div className='flex xs:flex-row'>
                         <input type="file" id="custom-input" onChange={imageHandler} hidden/>
-                        <label htmlFor="custom-input" className="block xl:text-md 2xl:text-lg mr-4 py-2 px-4
-                        rounded-xl text-sm bg-gray-100
+                        <label htmlFor="custom-input" className="block xs:text-xs md:text-md 2xl:text-lg md:mr-4 py-2 px-4
+                        rounded-xl bg-gray-100
                         text-black hover:bg-gray-200 cursor-pointer">
                             Elegir imagen
                         </label>
+                        </div>
+                        <div className='flex xs:flex-row xs:mt-2 md:mt-0'>
                         <label className="text-sm text-slate-500">{nombreImagen ? nombreImagen : "Ningún archivo seleccionado"}</label>
+                        </div>
                     </div>
                     {errors.image && <p className='text-red-500 mt-2 text-xs'>{errors.image}</p>}
                 </div>
-                <div className='flex flex-col xl:ml-8 grow'>
-                    <label htmlFor="descripcion" className="mb-2 text-primary-blue xl:text-lg 2xl:text-2xl font-medium">Agregá una descripción</label>
-                    <Textarea isRequired rows="3" value={description} className='w-2/3 text-lg' placeholder="Contanos características de la mascota, comportamiento, si hay recompensa, etc..." onChange={e => setDescripcion(e.target.value)}/>
+                <div className='flex flex-col xs:ml-0 md:ml-8 grow'>
+                    <label htmlFor="descripcion" className="xs:mt-2 md:mt-0 mb-2 text-primary-blue xl:text-lg 2xl:text-2xl font-medium">Agregá una descripción</label>
+                    <Textarea isRequired rows="3" value={description} className='xs:w-full md:w-2/3 xs:text-xs md:text-lg' placeholder="Contanos características de la mascota, comportamiento, si hay recompensa, etc..." onChange={e => setDescripcion(e.target.value)}/>
                     {errors.description && <p className='text-red-500 mt-2 text-xs'>{errors.description}</p>}
                 </div>
             </div>
-            <div className="flex flex-row justify-between mt-4 mb-4 mr-4">
-                <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
-                <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
+            <div className="flex flex-row justify-between mt-4 md:mr-4 xs:mr-0">
+              <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700 xs:px-4 py-2 md:px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
+              <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700 xs:px-4 py-2 md:px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
             </div>
         </div>
     )
 }
 
 export default Step3;
+

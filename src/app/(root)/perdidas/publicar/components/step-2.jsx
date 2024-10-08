@@ -149,11 +149,11 @@ const Step2 = ({nextStep, prevStep}) => {
 
 return (
   <div className="flex flex-col w-full px-4 py-4">
-    <div className="flex mb-8">
-      <div className="w-2/3 pr-8">
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-row gap-12">
-            <div className="flex flex-col w-1/4">
+    <div className="flex flex-col xs:flex-col sm:flex-row mb-8">
+      <div className="xs:w-full sm:w-2/3 sm:pr-8">
+        <div className="flex flex-col xs:gap-4 sm:gap-8">
+          <div className="flex xs:flex-col sm:flex-row xs:gap-4 sm:gap-12">
+            <div className="flex flex-col xs:w-5/6 sm:w-1/4">
               <label htmlFor="nombre" className="block text-md font-medium mb-2">Nombre</label>
               <Input
                 isRequired
@@ -167,7 +167,7 @@ return (
               />
               {errors.title && <p className='text-red-500 mt-2 text-xs'>{errors.title}</p>}
             </div>
-            <div className="flex flex-col w-1/4">
+            <div className="flex flex-col xs:w-5/6 sm:w-1/4">
               <label htmlFor="sexo" className='block mb-2 text-md font-medium'>Sexo</label>
               <Autocomplete
                 isRequired
@@ -188,8 +188,8 @@ return (
 
           <div className="flex flex-col">
             <label htmlFor="edad" className="block text-md font-medium mb-2">Edad</label>
-            <div className='flex flex-row gap-12'>
-              <div className='flex flex-col w-1/4'>
+            <div className='flex xs:flex-col sm:flex-row xs:gap-4 sm:gap-12'>
+              <div className='flex flex-col xs:w-5/6 sm:w-1/4'>
                 <Autocomplete 
                   isRequired 
                   placeholder='Seleccionar año' 
@@ -205,7 +205,7 @@ return (
                 </Autocomplete>
                 {errors.ageYears && <p className='text-red-500 mt-2 text-xs'>{errors.ageYears}</p>}
               </div>
-              <div className='flex flex-col w-1/4'>
+              <div className='flex flex-col xs:w-5/6 sm:w-1/4'>
                 <Autocomplete 
                   isRequired 
                   placeholder='Seleccionar mes' 
@@ -224,8 +224,8 @@ return (
             </div>
           </div>
 
-          <div className='flex flex-row gap-12'>
-            <div className='flex flex-col w-1/4'>
+          <div className='flex xs:flex-col sm:flex-row xs:gap-4 sm:gap-12'>
+            <div className='flex flex-col xs:w-5/6 sm:w-1/4'>
               <label htmlFor="provincia" className='block text-md font-medium mb-2'>Provincia</label>
               <Autocomplete
                 placeholder='Seleccionar'
@@ -242,7 +242,7 @@ return (
               </Autocomplete>
               {errors.province && <p className='text-red-500 mt-2 text-xs'>{errors.province}</p>}
             </div>
-            <div className='flex flex-col w-1/4'>
+            <div className='flex flex-col xs:w-5/6 sm:w-1/4'>
               <label htmlFor="localidad" className='block text-md font-medium mb-2'>Localidad</label>
               {loadingLocalities ? (
                <Select aria-label='Cargando' placeholder='Cargando...' isLoading></Select>
@@ -273,7 +273,7 @@ return (
           <div className='flex flex-col'>
             <label htmlFor="tamanio" className="block text-md font-medium mb-2">Tamaño</label>
             <RadioGroup value={selected} onValueChange={handleTamanioChange} orientation='horizontal'>
-              <div className="flex flex-row gap-12 justify-center">
+              <div className="flex xs:flex-col sm:flex-row xs:gap-4 sm:gap-12 justify-center">
                 {['SMALL', 'MEDIUM', 'BIG'].map((size) => (
                   <div key={size} className='flex flex-col justify-center items-center'>
                     <Radio value={size} className="hidden" aria-label="Tamaño"/>
@@ -295,7 +295,7 @@ return (
         </div>
       </div>
 
-      <div className='w-1/3 p-4'>
+      <div className='xs:w-full sm:w-1/3 xs:mt-4 sm:mt-0'>
         <MapForm
           longitude={longitude}
           latitude={latitude}
@@ -307,10 +307,10 @@ return (
     </div>
 
     <div className='flex justify-between mt-8 w-full'>
-      <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>
+      <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>
         Atrás
       </button>
-      <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>
+      <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>
         Siguiente
       </button>
     </div>

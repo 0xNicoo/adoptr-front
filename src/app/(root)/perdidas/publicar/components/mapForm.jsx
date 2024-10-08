@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Button } from '@nextui-org/react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -102,23 +103,23 @@ const MapForm = ({ setLatitude, setLongitude, latitude, longitude }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSearch} className="flex items-center mb-4" aria-label="Buscar ubicación">
+    <div className='mx-2'>
+      <form onSubmit={handleSearch} className="flex items-center mb-4 xs:flex-col sm:flex-row" aria-label="Buscar ubicación">
         <input
           type="text"
           placeholder="Buscar zona"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="border border-gray-300 rounded-l-md p-2 flex-grow focus:outline-none"
+          className="border border-gray-300 rounded-xl p-2 flex-grow xs:w-full sm:w-auto focus:outline-none"
           aria-label="Zona de búsqueda"
         />
-        <button
+        <Button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 transition-all"
+          className="bg-primary-blue text-white xs:w-full sm:w-auto xs:mt-2 sm:mt-0 px-4 py-2 rounded-xl hover:bg-blue-600 transition-all"
           aria-label="Buscar"
         >
           Buscar
-        </button>
+        </Button>
       </form>
 
       <div ref={mapRef} className="h-64 w-full sm:h-80 md:h-96 lg:h-[500px]"></div>
