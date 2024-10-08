@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, {useState} from 'react';
 import { useFormStorePerfil } from '../../../store';
 import { Inter } from "next/font/google";
 import { Image } from '@nextui-org/react';

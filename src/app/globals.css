@@ -88,7 +88,9 @@
     background-color: #1C3EB2; 
   }
 
-  
+  .max-w-custom {
+    max-width: 62rem; 
+  }
   
 
 
