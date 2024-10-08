@@ -2,7 +2,7 @@ import React from "react";
 
 const Stepper = ({ currentStep }) => {
   return (
-    <div className="ml-5 pt-4 pb-4">
+    <div className="px-4 xs:ml-0 pt-4 pb-4">
       <ol className="flex items-center w-full text-xs sm:text-sm md:text-base text-gray-500 font-medium">
         {[
           { step: 1, label: 'Seleccioná el animal' },

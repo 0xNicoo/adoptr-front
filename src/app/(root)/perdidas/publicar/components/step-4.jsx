@@ -107,12 +107,12 @@ const Step4 = ({prevStep = {prevStep}}) => {
                         <Textarea
                         isReadOnly
                         defaultValue={description}
-                        className="max-w-xs"
+                        className="xs:w-[200px] sm:w-[400px]"
                         />
                     </div>
                 </div>
                 
-                <div className="flex justify-end w-1/3 ml-64">
+                <div className="flex justify-end w-1/3 ml-38">
                     <MapPreview latitude={latitude} longitude={longitude} />
                 </div>
 
