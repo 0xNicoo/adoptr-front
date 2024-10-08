@@ -6,7 +6,6 @@ import { Inter } from "next/font/google";
 import Image from 'next/image';
 import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
 import MapForm from './mapForm';
-import { ErrorOutlineSharp } from '@mui/icons-material';
 
 
 const inter = Inter({ subsets: ["latin"] });
