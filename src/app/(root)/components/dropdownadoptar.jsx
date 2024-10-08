@@ -38,7 +38,6 @@ const DropdownAdoptar = () => {
   const handlePublish = () => {
     resetForm()
     router.push('/adopcion/publicar/form')
-
   }
 
   return (

@@ -4,14 +4,15 @@ import { useState, useEffect, useRef } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useFormStoreAdopcion } from '@/app/store';
+import { useFormStoreLost } from '@/app/store';
 
 const DropdownPerdidas = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pathname = usePathname();
   const dropdownRef = useRef(null); 
-  const {resetForm} = useFormStoreAdopcion()
+  const {resetForm} = useFormStoreLost()
   const router = useRouter()
+  
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
