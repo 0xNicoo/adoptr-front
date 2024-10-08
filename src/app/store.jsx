@@ -119,17 +119,69 @@ export const useFormStoreServicio = create(set => {
         setServiceType: (newServiceType) => set({ serviceType: newServiceType }),
         nextStep: () => set((state) => ({ step: state.step + 1 })),
         prevStep: () => set((state) => ({ step: state.step - 1 })),
+        resetForm: () => set({
+            step:1,
+            title: '',
+            description: '',
+            street: '',
+            number: '',
+            serviceType: null,
+            image: null,
+            locality: null,
+            province: null,
+            fileImage: null
+        })
+    }
+})
+
+export const useFormStoreLost = create(set => {
+    return {
+        step: 1,
+        animalType: '',
+        title: '',
+        sizeType: '',
+        ageYears: '',
+        ageMonths: '',
+        sexType: '',
+        description: '',
+        image: '',
+        nombreImagen: '',
+        locality: '',
+        province: '',
+        longitude: '',
+        latitude: '',
+        fileImage: null,
+        setAnimalType: (newType) => set({ animalType: newType }),
+        setNombre: (newNombre) => set({ title: newNombre }),
+        setTamanio: (newTamanio) => set({ sizeType: newTamanio }),
+        setAnios: (newAnios) => set({ ageYears: newAnios }),
+        setMeses: (newMeses) => set({ ageMonths: newMeses }),
+        setSexo: (newSexo) => set({ sexType: newSexo }),
+        setDescripcion: (newDescripcion) => set({ description: newDescripcion }),
+        setFileImage: (newFileImage) => set({ fileImage: newFileImage }),
+        setImagen: (newImagen) => set({ image: newImagen }),
+        setLocality: (newLocality) => set({ locality: newLocality }),
+        setProvince: (newProvince) => set({ province: newProvince }),
+        setLongitude: (newLongitude) => set({ longitude: newLongitude }),
+        setLatitude: (newLatitude) => set({ latitude: newLatitude }),
+        setNombreImagen: (newNombreImagen) => set({ nombreImagen: newNombreImagen }),
+        nextStep: () => set((state) => ({ step: state.step + 1 })),
+        prevStep: () => set((state) => ({ step: state.step - 1 })),
         resetForm: () => set(state => ({ 
+            animalType: '',
             title: '',
             step: 1,
+            sizeType: '',
+            ageYears: '',
+            ageMonths: '',
+            sexType: '',
             description: '',
             image: '',
             nombreImagen: '',
             locality: '',
             province: '',
-            street: '',
-            number: '',
-            serviceType: '',
+            longitude: '',
+            latitude: '',
         }))
     }
 })
@@ -149,6 +201,12 @@ export const useAdoptionEditStore = create(set => {
     }
 })
 
+export const useServiceEditStore = create(set => {
+    return {
+        service: null,
+        setServiceStore: (serv) => set({ service: serv} )
+    }
+})
 
 export const useProfileEditStore = create(set => {
     return {
@@ -157,3 +215,9 @@ export const useProfileEditStore = create(set => {
     }
 })
 
+export const useLostEditStore = create(set => {
+    return {
+        lost: null,
+        setLostStore: (l) => set({ lost: l} )
+    }
+})

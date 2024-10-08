@@ -1,85 +1,33 @@
 import 'server-only';
-import { getToken } from '../session';
+
+import { apiRequest } from '../apiRequest';
+import { getQueryParams } from '@/util/queryparams';
 
 export async function getServices(filter, page, size) {
-  const queryParams = getQueryParams(filter, page, size);
-  const token = await getToken();
-  const res = await fetch(`http://localhost:8080/service?${queryParams}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch adoptions');
-  }
-  return res;
+  const queryParams = getQueryParams(filter, page, size)
+  return await apiRequest(`/service?${queryParams}`, 'GET', null, 'application/json', true)
 }
-
-function getQueryParams(filter, page, size) {
-  const filteredParams = Object.entries({
-    ...filter,
-    page: page - 1, 
-    size,
-  }).reduce((acc, [key, value]) => {
-    if (value !== "" && value !== null && value !== undefined) {
-      acc[key] = value;
-    }
-    return acc;
-  }, {});
-
-  return new URLSearchParams(filteredParams).toString();
-}
-
 
 export async function getServiceTypes() {
-  const res = await fetch('http://localhost:8080/serviceType?page=0&size=20', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch service type');
-  }
-
-  return res.json(); 
+  return await apiRequest(`/serviceType?page=0&size=20`, 'GET', null, 'application/json', true)
 }
 
 export async function createService(data){
-    const token = await getToken()
-    const res = await fetch('http://localhost:8080/service',{
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
-        method: 'POST',
-        body: data,
-    })
-
-    if(!res.ok){
-        const errorData = await res.json();
-        throw new Error(`Failed to fetch data: `, errorData)
-    }
-    return res.json()
+  return await apiRequest(`/service`, 'POST', data, 'multipart/form-data', true)
 }
 
 export async function getServiceById(id) {
-  const token = await getToken();
-  console.log("Token:", token);
+  return await apiRequest(`/service/${id}`, 'GET', null, 'application/json', true)
+}
 
-  const res = await fetch(`http://localhost:8080/service/${id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-  });
+export async function deleteService(id){
+  return await apiRequest(`/service/${id}`, 'DELETE', null, 'application/json', true)
+}
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch service`);
-  }
-  return res.json();
+export async function editService(id, data) {
+  return await apiRequest(`/service/${id}`, 'PUT', data, 'multipart/form-data', true)
+}
+
+export async function getServiceTypeId(id) {
+  return await apiRequest(`/serviceType/${id}`, 'GET', null, 'application/json', true)
 }

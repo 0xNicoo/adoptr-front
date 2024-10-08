@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/solid';
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { logOut } from '../actions';
 import { useRouter } from 'next/navigation';
+import { logOutAction } from '@/actions/auth';
 
 const DropdownUser = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +18,7 @@ const DropdownUser = () => {
   };
 
   const handleLogout = async () => {
-    await logOut();
+    await logOutAction();
     setIsOpen(false);
     router.push("/");
   };
@@ -61,7 +61,7 @@ const DropdownUser = () => {
             Favoritas
           </Link>
 
-          <Link href="/chatList" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+          <Link href="/chat/publicaciones" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
             Chats
           </Link>
 

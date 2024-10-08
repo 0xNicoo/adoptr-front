@@ -3,18 +3,25 @@
 import { useEffect, useState } from "react";
 import { Card } from "@nextui-org/react";
 import { useRouter } from "next/navigation"; 
-import { getServiceType } from "../actions";
+import { getServiceTypesAction } from "@/actions/service";
+import CustomLoading from "@/app/components/customLoading";
+import { Roboto_Slab } from 'next/font/google';
+
+const roboto = Roboto_Slab({
+  subsets: ['latin'],
+  weight: ['400','700'],
+})
 
 const ServiceType = () => {
   const [servicesTypes, setServiceTypes] = useState([]);
   const [loading, setLoadingServiceTypes] = useState(true);
   const [error, setError] = useState(null);
-  const router = useRouter(); // Inicializa useRouter
+  const router = useRouter(); 
 
   useEffect(() => {
     async function fetchServiceTypes() {
       try {
-        const serviceTypeData = await getServiceType();
+        const serviceTypeData = await getServiceTypesAction();
         console.log(serviceTypeData);
         setServiceTypes(serviceTypeData || []);
         setLoadingServiceTypes(false);
@@ -29,7 +36,7 @@ const ServiceType = () => {
   
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <CustomLoading />;
   }
 
   if (error) {
@@ -41,7 +48,7 @@ const ServiceType = () => {
       {servicesTypes.map((servT, index) => (
         <div key={index} className="text-center">
           {/* Nombre del servicio */}
-          <h3 className="mb-2 font-bold text-lg">{servT.name}</h3>
+          <h3 className={`${roboto.className} mb-2 text-2xl font-bold text-secondary-blue`}>{servT.name}</h3>
 
           {/* Tarjeta */}
           <Card

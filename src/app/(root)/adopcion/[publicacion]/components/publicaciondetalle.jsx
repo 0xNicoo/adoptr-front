@@ -1,17 +1,24 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { Inter } from "next/font/google";
-import { Checkbox, Textarea } from '@nextui-org/react';
-import { getAdoptionDetail } from '../actions';
+import { Checkbox, Textarea, user } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import { deleteAdoptionAction, getUserId, getChatByPublicationIdAction, setFavoriteAction, getFavoriteAction } from '../actions';
 import { useAdoptionEditStore } from '@/app/store';
 import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/react/24/solid';
 import { BookmarkIcon as OutlineBookmarkIcon } from '@heroicons/react/24/outline';
 import { CIcon } from '@coreui/icons-react';
 import { cilTrash } from '@coreui/icons';
 import { cilPencil } from '@coreui/icons';
+import { getUserIdAction } from '@/actions/global';
+import { getProfilByUserIdAction } from '@/actions/profile';
+import { changeAdoptionStatusAction, deleteAdoptionAction, getAdoptionAction } from '@/actions/adoption';
+import { getChatsByPublicationIdAction } from '@/actions/chat';
+import { getFavoriteAction, setFavoriteAction } from '@/actions/favorite';
+import CustomLoading from "@/app/components/customLoading";
+import { errorToast, successToast } from '@/util/toast';
+import DeleteModal from './deleteModal';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -46,15 +53,22 @@ const PublicationDetail = ({ adoptionId }) => {
   const [userId, setUserId] = useState(null);
   const [favorite, setFavorite] = useState(false);
   const {setAdoptionStore} = useAdoptionEditStore()
+  const [profile, setProfile] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [adopted, setAdopted] = useState(false); //state para refrescar la pagina porque la verga del router.refresh no anda.
+
+
 
   useEffect(() => {
     const fetchUserId = async () => {
-      setUserId(await getUserId())
+      setUserId(await getUserIdAction())
     }
     const fetchAdoption = async () => {
       try {
-        const data = await getAdoptionDetail(adoptionId);
+        const data = await getAdoptionAction(adoptionId);
         setAdoption(data);
+        const profileData = await getProfilByUserIdAction(data.user.id);
+        setProfile(profileData);
       } catch (err) {
         setError(err.message);
       }
@@ -71,11 +85,12 @@ const PublicationDetail = ({ adoptionId }) => {
       fetchAdoption();
       fetchFavorite()
     }
-  }, [adoptionId]);
+  }, [adoptionId, adopted]);
+
 
   if (error) return <div>Error: {error}</div>;
-  if (!adoption) return <div>Loading...</div>;
-
+  if (!adoption) return <CustomLoading />;
+  
   //TODO(nico): cuando se ejecuta, poner un loading en el boton de eliminar
   const handleDelete = async (id) => {
     await deleteAdoptionAction(id)
@@ -88,14 +103,37 @@ const PublicationDetail = ({ adoptionId }) => {
   };
 
   const handleAdoptClick = async () => {
-    if(userId == adoption.user.id){
-      router.push('/chatList')
+    try{
+      const chats = await getChatsByPublicationIdAction(adoption.id)
+      if(chats.length == 1){
+        router.push(`/chat?chat=${chats[0].id}`);
+      }else{
+        router.push(`/chat/publicaciones/${adoption.id}`)
+        return
+      }
+    }catch(err){
+      errorToast(err.message)
       return
-    }else{
-      const chat = await getChatByPublicationIdAction(adoption.id)
-      router.push(`/chat?chat=${chat.id}`);
     }
+  };
 
+  const handleAdoptedClick = async () => {
+    setIsOpen(true);
+  }
+
+  const handleAdopted = async () => {
+    try{
+      const data = await changeAdoptionStatusAction(adoption.id, 'ADOPTED')
+      successToast("La mascota ha sido adoptada!")
+      setAdopted(true)
+      setIsOpen(false)
+    }catch(err){
+      errorToast(err.message)
+    }
+  }
+
+  const handleClose = () => {
+    setIsOpen(false);
   };
 
   const handleFavorite = async () => {
@@ -109,6 +147,11 @@ const PublicationDetail = ({ adoptionId }) => {
       <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 w-full relative">
           <div className="flex-shrink-0">
+          <Link href={userId == adoption.user.id ? `/mi-perfil` : `/perfiles?id=${profile?.user.id}`}>
+            <p className='hover:underline underline-offset-4 text-gray-400 text-xs mb-1'>
+              Publicado el {new Date(adoption.creationDate).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' })} por {profile?.firstName + " " + profile?.lastName}
+            </p>
+          </Link>
             <img
               className='rounded-xl w-full md:w-80 lg:w-96'
               src={adoption.s3Url}
@@ -118,7 +161,19 @@ const PublicationDetail = ({ adoptionId }) => {
             />
           </div>
           <div className='flex flex-col w-full'>
-            <h1 className={`${inter.className} xl:text-2xl 2xl:text-3xl md:text-lg font-medium text-primary-blue`}>{adoption.title}</h1>
+            <div className="flex items-center"> 
+              <h1 className={`${inter.className} xl:text-2xl 2xl:text-3xl md:text-lg font-medium text-primary-blue`}>
+                {adoption.title}
+              </h1>
+              {adoption.adoptionStatusType == "ADOPTED" ? (
+                <button 
+                  className="bg-green-500 text-white py-1 px-5 ml-4 rounded-3xl" 
+                  disabled 
+                >
+                  ADOPTADA :D
+                </button>
+              ) : (<></>)}
+            </div>
             <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>TAMAÑO</p>
             <p className='xl:text-sm 2xl:text-md md:text-sm text-black'>{mapSizeType(adoption.sizeType)}</p>
             <p className={`${inter.className} xl:text-sm 2xl:text-md md:text-sm font-medium text-black mt-2`}>EDAD</p>
@@ -160,16 +215,27 @@ const PublicationDetail = ({ adoptionId }) => {
                     className="bg-blue-700 rounded-xl text-white px-2 py-2 rounded ml-4 hover:bg-secondary-blue flex items-center justify-center">
                   <CIcon icon={cilPencil} className="w-4 h-4 text-white fill-current" />
                   </button>
+                  {adoption.user.id == userId && adoption.adoptionStatusType != "ADOPTED"  ? (
+                    <button className="bg-primary-orange hover:bg-orange-700 py-1 px-5 ml-4 rounded-3xl transition-colors duration-300 text-white"
+                      onClick={handleAdoptedClick}>
+                      Adoptada
+                    </button>
+                  ) : (<></>)}
                 </div>
             )}
           </div>
         </div>
-        <div className='w-full flex justify-end mt-4'>
-          <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"
-          onClick={handleAdoptClick}>
-          {adoption.user.id == userId ? (<>Chats</>) : (<>Adoptar</>)}
-          </button>
-        </div>
+        {adoption.adoptionStatusType == "ADOPTED" ? (
+              <></>
+              ) : (
+                <div className='w-full flex justify-end mt-4'>
+                  <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white"
+                    onClick={handleAdoptClick}>
+                    {adoption.user.id == userId ? (<>Chats</>) : (<>Adoptar</>)}
+                  </button>
+                </div>
+              )}
+         <DeleteModal isOpen={isOpen} onOpenChange={handleClose} handleAdopted={handleAdopted}/>
       </div>
     </div>
   );

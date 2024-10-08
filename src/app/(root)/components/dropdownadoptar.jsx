@@ -38,11 +38,10 @@ const DropdownAdoptar = () => {
   const handlePublish = () => {
     resetForm()
     router.push('/adopcion/publicar/form')
-
   }
 
   return (
-    <div className="z-50 relative inline-block text-left" ref={dropdownRef}>
+    <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
         className="text-primary-blue flex items-center space-x-1"

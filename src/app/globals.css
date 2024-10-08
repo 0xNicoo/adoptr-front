@@ -67,3 +67,30 @@
   .custom-shape-divider-bottom-1723517902 .shape-fill {
     fill: var(--shape-fill-color);
   }
+
+  /* En tu archivo CSS o estilos globales */
+  .map-container {
+    height: 500px; /* o cualquier altura que desees */
+    width: 100%;   /* o cualquier ancho que desees */
+    position: relative; /* Asegúrate de que la posición sea relativa */
+  }
+
+  
+  .custom-pagination-item {
+    color: #000000; 
+    border-color: #000000; 
+    background-color: #ffffff; 
+  }
+  
+  .custom-cursor-item {
+    color: #fff; 
+    border-color: #fff; 
+    background-color: #1C3EB2; 
+  }
+
+  .max-w-custom {
+    max-width: 62rem; 
+  }
+  
+
+

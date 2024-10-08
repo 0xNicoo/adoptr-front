@@ -9,22 +9,31 @@ const inter = Inter({ subsets: ["latin"] });
 const PublicationServiceList = ({ publications }) => {
   console.log('Publicaciones a mostrar:', publications);
   if (!publications || publications.length === 0) {
-    return <p>No hay publicaciones</p>;
+    return (
+    <div className="flex flex-col items-center justify-center">
+      <img 
+        src="/images/globito.png" 
+        alt="No hay publicaciones" 
+        className="w-64 h-64 object-cover" 
+        />
+      <p className="mt-4 text-gray-600 text-3xl">Aún no hay publicaciones</p>
+    </div>
+    );
   }
 
   return (
-    <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+    <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mx-8">
       {publications.map((pub) => (
         <div key={pub.id} className="w-full">
-          <Card className="items-center justify-center p-4">
+          <Card className="items-center justify-center">
             <CardBody className="overflow-hidden p-0 flex justify-center">
-              <Image
-                alt="Servicio"
-                className="object-cover rounded-xl"
+            <div className="w-full h-[300px] overflow-hidden">
+              <img
+                alt="Imagen del post"
                 src={pub.s3Url}
-                width={270}
-                height={300}
-              />
+                className="w-full h-full rounded-t-xl object-cover"    
+                />
+            </div>
             </CardBody>
             <CardHeader className="pb-2 pt-4 flex flex-col items-start">
               <p className={`${inter.className} text-xs uppercase font-bold`}>

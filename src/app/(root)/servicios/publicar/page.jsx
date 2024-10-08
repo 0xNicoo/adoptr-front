@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NextUIProvider } from '@nextui-org/react';
 import Step1 from './step-1';
 import Step2 from './step-2';
@@ -8,7 +8,11 @@ import Stepper from './stepper';
 import { useFormStoreServicio } from '@/app/store';
 
 const MultiStepForm = () => {
-  const { step, nextStep, prevStep } = useFormStoreServicio();
+  const { step, nextStep, prevStep, resetForm } = useFormStoreServicio();
+
+  useEffect(() => {
+    resetForm();
+}, [resetForm]);
 
   const renderStepper = () => {
     return (

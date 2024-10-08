@@ -1,9 +1,14 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { handleGetProfile, handleGetPosts, handleGetAdoptions } from './actions';
 import ProfileCard from './components/profile-card';
 import MiPerfilTabs from './components/tabs';
+import { getPostsByUserIdAction } from '@/actions/post';
+import { getAdoptionsAction } from '@/actions/adoption';
+import { getProfilByUserIdAction } from '@/actions/profile';
+import { getServicesAction } from '@/actions/service';
+import { getLostsAction } from '@/actions/lost';
+import CustomLoading from '@/app/components/customLoading';
 
 export default function PerfilesPage() {
     const searchParams = useSearchParams();
@@ -11,6 +16,8 @@ export default function PerfilesPage() {
     const [profile, setProfile] = useState(null);
     const [posts, setPosts] = useState([]);
     const [adoptions, setAdoptions] = useState(null);
+    const [services, setServices] = useState([]);
+    const [lost, setLost] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -23,14 +30,19 @@ export default function PerfilesPage() {
       }
 
       try {
-        const profileData = await handleGetProfile(userId);
+        const profileData = await getProfilByUserIdAction(userId);
         setProfile(profileData);
-        console.log('profile', profileData);
-        const postsData = await handleGetPosts(userId); 
+        const postsData = await getPostsByUserIdAction(userId); 
         setPosts(postsData); 
-        const adoptionsData = await handleGetAdoptions();
-        const filteredAdoptions = adoptionsData.filter(adoption => adoption.user.id === profileData.user.id);
+        var { total, data } = await getAdoptionsAction();
+        const filteredAdoptions = data.filter(adoption => adoption.user.id === profileData.user.id);
         setAdoptions(filteredAdoptions);
+        var { total, data } = await getServicesAction();
+        const filteredServices = data.filter(service => service.user.id === profileData.user.id); //TODO: deberiamos crear un endpoint para obtener los servicios de usuario
+        setServices(filteredServices);
+        var { total, data } = await getLostsAction();
+        const filteredLost = data.filter(lost => lost.user.id === profileData.user.id); 
+        setLost(filteredLost);
       } catch (err) {
         setError('Error al obtener el perfil ');
       } finally {
@@ -41,7 +53,7 @@ export default function PerfilesPage() {
     fetchProfileAndPosts();
   }, [userId]);
 
-  if (loading) return <div>Cargando perfil...</div>;
+  if (loading) return <CustomLoading />;
   if (error) return <div>{error}</div>;
   if (!profile) return <div>No se encontró el perfil</div>;
 
@@ -51,7 +63,7 @@ export default function PerfilesPage() {
       <ProfileCard profile={profile}/>
     </div>
     <div className="mt-4 w-full lg:w-2/3 mr-4">
-      <MiPerfilTabs adoptions={adoptions} posts={posts} profile={profile}/>
+      <MiPerfilTabs adoptions={adoptions} posts={posts} profile={profile} services={services} lost={lost}/>
     </div>
   </div>
   );

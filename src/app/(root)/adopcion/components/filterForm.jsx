@@ -1,17 +1,15 @@
-import { getAdoption, getProvince, getLocality } from '../actions';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation'; // Importa useRouter para manejar la redirección
 import { Checkbox, Button, Select, SelectItem } from '@nextui-org/react';
+import { getAdoptionsAction } from '@/actions/adoption';
+import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
 
 const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilters, initialFilters }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { register, handleSubmit, setValue, reset, watch } = useForm(); // Agrega watch para observar los cambios
-    const router = useRouter(); // Inicializa useRouter para redireccionar
 
     const [provinces, setProvinces] = useState([]);
     const [localities, setLocalities] = useState([]);
-    const [loadingServiceTypes, setLoadingServiceTypes] = useState(true);
     const [loadingLocalities, setLoadingLocalities] = useState(false);
 
     const selectedProvince = watch('province_id');
@@ -20,7 +18,8 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
     const [filters, setFilters] = useState({
         vaccinated: initialFilters.vaccinated || false,
         unprotected: initialFilters.unprotected || false,
-        castrated: initialFilters.castrated || false
+        castrated: initialFilters.castrated || false,
+        adopted: initialFilters.adopted || false
     });
     useEffect(() => {
         // Sincroniza el estado inicial de los filtros con react-hook-form
@@ -34,20 +33,13 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
         setValue('unprotected', filters.unprotected);
         setValue('castrated', filters.castrated);
     }, [filters, setValue]);
-    // Actualiza el estado de los checkboxes
-    const handleCheckboxChange = (event) => {
-        const { name, checked } = event.target;
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [name]: checked
-        }));
-    };
+
 
     // Cargar provincias al montar el componente
     useEffect(() => {
         async function fetchProvinces() {
             try {
-                const provincesData = await getProvince();
+                const provincesData = await getProvinceAction();
                 setProvinces(provincesData || []);
             } catch (error) {
                 console.error("Error fetching provinces:", error);
@@ -63,7 +55,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
             if (provinceId) {
                 setLoadingLocalities(true);
                 try {
-                    const localitiesData = await getLocality(provinceId);
+                    const localitiesData = await getLocalitiesAction(provinceId);
                     setLocalities(localitiesData || []);
                 } catch (error) {
                     console.error("Error fetching localities:", error);
@@ -86,7 +78,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
             Object.entries(combinedFilter).filter(([_, value]) => value)
         );
         updateFilters(cleanFilter);
-        const { total, data } = await getAdoption(cleanFilter, 1);
+        const { total, data } = await getAdoptionsAction(cleanFilter, 1, 8);
         updateTotalPage(total);
         updateData(data);
         updateCurrentPage(1);
@@ -101,7 +93,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
     
         updateFilters({});
         
-        const { total, data } = await getAdoption({}, 1);
+        const { total, data } = await getAdoptionsAction({}, 1, 8);
         updateTotalPage(total);
         updateData(data);
         updateCurrentPage(1);
@@ -109,15 +101,17 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
 
     return (
         <div className="w-full">
-            <Button
-                onClick={() => setIsOpen(!isOpen)}
-                className="py-2 px-4 bg-primary-orange text-white mb-4 ml-4 mt-4"
-            >
-                {isOpen ? 'Ocultar filtro' : 'Mostrar filtro'}
-            </Button>
+            <div className="flex justify-end mr-4 mb-2 mt-2">
+                <Button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="py-2 px-4 bg-primary-orange text-white outline-none"
+                >
+                    {isOpen ? 'Ocultar filtro' : 'Filtrar'}
+                </Button>
+            </div>
 
             {isOpen && (
-                <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-md w-full">
+                <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg w-full border border-gray-200 mt-2">
                     <div className="flex flex-col">
                         <div className="flex flex-item-center gap-4">
                             <div className="relative z-0 w-full md:w-1/4">
@@ -172,6 +166,15 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                                     Tamaño
                                 </label>
                             </div>
+
+                            <Checkbox
+                                    name="adopted"
+                                    isSelected={filters.adopted} 
+                                    onChange={() => setFilters(prev => ({ ...prev, adopted: !prev.adopted }))}
+                                >
+                                    Adoptadas
+                            </Checkbox>
+
 
                             <Button
                                 type="submit" className='bg-primary-blue text-white'

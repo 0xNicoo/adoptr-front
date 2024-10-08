@@ -4,13 +4,13 @@ import { useState, useEffect, useRef } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useFormStoreAdopcion } from '@/app/store';
+import { useFormStoreServicio } from '@/app/store';
 
 const DropdownServicios = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pathname = usePathname();
   const dropdownRef = useRef(null); 
-  const {resetForm} = useFormStoreAdopcion()
+  const {resetForm} = useFormStoreServicio()
   const router = useRouter()
 
   const toggleDropdown = () => {
@@ -40,7 +40,7 @@ const DropdownServicios = () => {
   }
 
   return (
-    <div className="z-50 relative inline-block text-left" ref={dropdownRef}>
+    <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
         className="text-primary-blue flex items-center space-x-1"

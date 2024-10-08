@@ -7,10 +7,14 @@ export default function PaginationComponent({ totalPages, currentPage, onPageCha
       <Pagination
         loop
         showControls
-        color="warning"
         total={totalPages}
-        initialPage={currentPage} 
+        initialPage={currentPage}
         onChange={(page) => onPageChange(page)}
+        classNames={{
+          cursor:"custom-cursor-item",
+          item: "custom-pagination-item",
+          active: "custom-active-item", 
+        }}
       />
     </div>
   );

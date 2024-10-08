@@ -1,8 +1,9 @@
-import { getService, getServiceType, getProvince, getLocality } from '../actions'; // Asegúrate de tener estas funciones
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { Button, Select, SelectItem } from '@nextui-org/react';
+import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
+import { getServicesAction } from '@/actions/service';
 
 const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilters, initialFilters }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +22,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
     useEffect(() => {
         async function fetchProvinces() {
             try {
-                const provincesData = await getProvince();
+                const provincesData = await getProvinceAction();
                 setProvinces(provincesData || []);
             } catch (error) {
                 console.error("Error fetching provinces:", error);
@@ -37,7 +38,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
             if (provinceId) {
                 setLoadingLocalities(true);
                 try {
-                    const localitiesData = await getLocality(provinceId);
+                    const localitiesData = await getLocalitiesAction(provinceId);
                     setLocalities(localitiesData || []);
                 } catch (error) {
                     console.error("Error fetching localities:", error);
@@ -63,7 +64,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
     // Manejo del envío del formulario
     const onSubmit = async (filter) => {
         updateFilters(filter);
-        const { total, data } = await getService(filter, 1);
+        const { total, data } = await getServicesAction(filter, 1, 8);
         updateTotalPage(total);
         updateData(data);
         updateCurrentPage(1);
@@ -86,7 +87,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
         const updatedFilters = { ...currentFilters, ...filtersToReset };
         updateFilters(updatedFilters); 
 
-        const { total, data } = await getService(updatedFilters, 1); 
+        const { total, data } = await getServicesAction(updatedFilters, 1, 8); 
         updateTotalPage(total);
         updateData(data);
         updateCurrentPage(1);
@@ -94,12 +95,14 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
 
     return (
         <div className="w-full">
-            <Button
-                onClick={() => setIsOpen(!isOpen)}
-                className="py-2 px-4 bg-primary-orange text-white mb-4 ml-4 mt-4"
-            >
-                {isOpen ? 'Ocultar filtro' : 'Mostrar filtro'}
-            </Button>
+            <div className='flex justify-end mt-4 mr-4'>
+                <Button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="py-2 px-4 bg-primary-orange text-white"
+                >
+                    {isOpen ? 'Ocultar filtro' : 'Filtrar'}
+                </Button>
+            </div>
 
             {isOpen && (
                 <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-md w-full">

@@ -1,30 +1,43 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { handleGetProfile, handleGetAdoptions, handleGetPosts } from './actions';
 import ProfileCard from './components/profile-card';
 import MiPerfilTabs from './components/tabs';
 import { useProfileEditStore } from '@/app/store';
 import { useRouter } from 'next/navigation';
+import { getProfileAction } from '@/actions/profile';
+import { getAdoptionsAction } from '@/actions/adoption';
+import { getPostsAction } from '@/actions/post';
+import { getServicesAction } from '@/actions/service';
+import { getLostsAction } from '@/actions/lost';
+import CustomLoading from "@/app/components/customLoading";
 
 const MiPerfil = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [adoptions, setAdoptions] = useState(null);
+  const [services, setServices] = useState([]);
+  const [lost, setLost] = useState([]);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const { setProfileStore } = useProfileEditStore();
   const router = useRouter();
-
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const profileData = await handleGetProfile();
+        const profileData = await getProfileAction();
         setProfile(profileData);
-        const adoptionsData = await handleGetAdoptions();
-        const filteredAdoptions = adoptionsData.filter(adoption => adoption.user.id === profileData.user.id);
+        var { total, data } = await getAdoptionsAction();
+        const filteredAdoptions = data.filter(adoption => adoption.user.id === profileData.user.id); //TODO: deberiamos crear un endpoint para obtener las adopciones del usuario
         setAdoptions(filteredAdoptions);
-        const postsData = await handleGetPosts(); 
+        const postsData = await getPostsAction(); 
         setPosts(postsData); 
+        var { total, data } = await getServicesAction();
+        const filteredServices = data.filter(service => service.user.id === profileData.user.id); //TODO: deberiamos crear un endpoint para obtener los servicios de usuario
+        setServices(filteredServices);
+        var { total, data } = await getLostsAction();
+        const filteredLost = data.filter(lost => lost.user.id === profileData.user.id); 
+        setLost(filteredLost);
       } catch (err) {
         setError('Error al obtener el perfil');
       } finally {
@@ -34,20 +47,12 @@ const MiPerfil = () => {
     fetchProfile();
   }, []);
 
-  const onPostsChange = (post) => {
-    setPosts([...posts, post]) 
-  }
-
-  const removePost = (postId) => {
-    setPosts(posts.filter(post => post.id !== postId));
-  };
-
   const handleEdit = () => {
     setProfileStore(profile);
     router.push('/mi-perfil/editar');
   };
 
-  if (loading) return <p>Cargando perfil...</p>;
+  if (loading) return <CustomLoading />;
   if (error) return <p>{error}</p>;
 
   return (
@@ -55,8 +60,8 @@ const MiPerfil = () => {
       <div className="w-full lg:w-1/3 mb-8 lg:mb-0 lg:mr-8">
         <ProfileCard profile={profile} onEdit={handleEdit} />
       </div>
-      <div className="mt-4 w-full lg:w-2/3 mr-4">
-        <MiPerfilTabs adoptions={adoptions} posts={posts} onPostsChange={onPostsChange} profile={profile} removePost={removePost}/>
+      <div className="mt-4 w-full lg:w-2/3">
+        <MiPerfilTabs profile={profile} adoptions={adoptions} posts={posts} services={services} lost={lost} />
       </div>
     </div>
   );

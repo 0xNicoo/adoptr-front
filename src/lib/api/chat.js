@@ -1,49 +1,23 @@
 import 'server-only';
-import { getToken } from '../session';
 
-export async function handleGetChatList() {
-  const token = await getToken()
-  const res = await fetch('http://localhost:8080/chat/all', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-  });
-  if (!res.ok) {
-    throw new Error('Failed to fetch adoptions');
-  }
-  return res.json(); 
+import { apiRequest } from '../apiRequest';
+
+export async function getChatList() {
+  return await apiRequest(`/chat/all`, 'GET', null, 'application/json', true)
 }
 
-export async function getChatByPublicationId(publicationId) {
-  const token = await getToken()
-  const res = await fetch(`http://localhost:8080/chat/publication/${publicationId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-  });
-  if (!res.ok) {
-    console.log(await res.json())
-    throw new Error('Failed to fetch adoptions');
-  }
-  return res.json(); 
+export async function getChatListGroupByPublication() {
+  return await apiRequest(`/chat/publication/all`, 'GET', null, 'application/json', true)
+}
+
+export async function getChatListGroupByUser() {
+  return await apiRequest(`/chat/user/all`, 'GET', null, 'application/json', true)
+}
+
+export async function getChatsByPublication(publicationId) {
+  return await apiRequest(`/chat/publication/${publicationId}`, 'GET', null, 'application/json', true)
 }
 
 export async function getChat(id) {
-  const token = await getToken()
-  const res = await fetch(`http://localhost:8080/chat/${id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-  });
-  if (!res.ok) {
-    console.log(await res.json())
-    throw new Error('Failed to fetch adoptions');
-  }
-  return res.json(); 
+  return await apiRequest(`/chat/${id}`, 'GET', null, 'application/json', true)
 }

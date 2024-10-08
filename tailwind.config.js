@@ -9,6 +9,14 @@ module.exports = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      'xs': '350px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       colors: {
         'custom-blue': '#051A65',
@@ -23,6 +31,9 @@ module.exports = {
         'blue-hover': '#040A22',
         'background-gray':'#F9F9FB',
         'primary-orange-light': '#FFD4A2',
+        'custom-orange': '#D76D31',
+        'blue-light': '#1774D3',
+        'custom-light': '#1159a2',
       },
       spacing: {
         '18': '4.5rem', 

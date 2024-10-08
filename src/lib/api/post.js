@@ -1,73 +1,27 @@
 import 'server-only';
-import { getToken } from '../session';
 
-//TODO: paginar
-export async function getPosts() {
-    const token = await getToken();
-    const res = await fetch(`http://localhost:8080/post/all`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      method: 'GET'
-    });
-  
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.log(errorData)
-      throw new Error(`Failed to fetch data: `, errorData)
-    }
-    
-    return res.json();
+import { apiRequest } from '../apiRequest';
+
+export async function getPosts(page, size) {
+  return await apiRequest(`/post/all?page=${page}&size=${size}`, 'GET', null, 'application/json', true)
+}
+
+export async function getAllPosts(page, size) {
+  return await apiRequest(`/post/community/all?page=${page}&size=${size}`, 'GET', null, 'application/json', true)
+}
+
+export async function getPost(id) {
+  return await apiRequest(`/post/${id}`, 'GET', null, 'application/json', true)
 }
 
 export async function getPostsByUserId(userId) {
-  const token = await getToken()
-  const res = await fetch(`http://localhost:8080/post/user/${userId}`,
-      {
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-          },
-      });
-      if (!res.ok) {
-          const errorData = await res.json()
-          console.log(errorData)
-          throw new Error('Failed to fetch data', errorData)
-      }
-      return res.json()
+  return await apiRequest(`/post/user/${userId}`, 'GET', null, 'application/json', true)
 }
 
-export async function createPost(FormData) {
-    const token = await getToken();
-    const res = await fetch(`http://localhost:8080/post`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      method: 'POST',
-      body: FormData
-    });
-  
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.log(errorData)
-      throw new Error(`Failed to fetch data: `, errorData)
-    }
-    
-    return res.json();
+export async function createPost(formData) {
+  return await apiRequest(`/post`, 'POST', formData, 'multipart/form-data', true)
 }
 
 export async function deletePost(id){
-  const token = await getToken();
-  const res = await fetch(`http://localhost:8080/post/${id}`,{
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-  })
-
-  if(!res.ok){
-      throw new Error('Failed to fetch data')
-  }
-  return
+  return await apiRequest(`/post/${id}`, 'DELETE', null, 'application/json', true)
 }
