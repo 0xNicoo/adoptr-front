@@ -4,17 +4,16 @@ export default function TerminosYCondiciones() {
   return (
     <div className="p-8">
       <h1 className="text-2xl text-center font-bold mb-4">Términos y Condiciones de Adoptr</h1>
-  
       <h2 className="text-xl font-semibold mt-6 mb-2">I. Condiciones Generales y Aceptación del Usuario</h2>
       <p className="mb-4">
-        Las  siguientes Condiciones Generales (en adelante, las "Condiciones Generales") regulan el acceso, uso y registro
-        de los usuarios en el sitio web de Adoptr (en adelante, el "Sitio"), propiedad de Adoptr S.A. (en adelante, "Adoptr").
+        Las siguientes Condiciones Generales (en adelante, las &quot;Condiciones Generales&quot;) regulan el acceso, uso y registro
+        de los usuarios en el sitio web de Adoptr (en adelante, el &quot;Sitio&quot;), propiedad de Adoptr S.A. (en adelante, &quot;Adoptr&quot;).
         Estas Condiciones también establecen los lineamientos para el tratamiento y uso de los datos personales proporcionados
         por los usuarios.
       </p>
       <p className="mb-4">
         El acceso es gratuito y está condicionado a la aceptación y cumplimiento de estas Condiciones Generales. Al acceder
-        al Sitio o a cualquier página del mismo, el usuario (en adelante, el "Usuario") acepta expresamente estas Condiciones
+        al Sitio o a cualquier página del mismo, el usuario (en adelante, el &quot;Usuario&quot;) acepta expresamente estas Condiciones
         Generales desde el momento en que accede al Sitio, obligándose a cumplirlas y respetarlas.
       </p>
       <p className="mb-4">
@@ -29,14 +28,14 @@ export default function TerminosYCondiciones() {
         Si tiene alguna duda con respecto a los Términos y Condiciones, puede contactarnos por correo electrónico a: 
         <a href="mailto:adoptr.contact@gmail.com" className="text-blue-600 underline">adoptr.contact@gmail.com</a>.
       </p>
-  
+
       <h2 className="text-xl font-semibold mt-6 mb-2">II. Servicios y Materiales del Sitio</h2>
       <p className="mb-4">
-        El Sitio permite a los Usuarios acceder y utilizar los servicios ofrecidos (en adelante, los "Servicios"), tanto por los
+        El Sitio permite a los Usuarios acceder y utilizar los servicios ofrecidos (en adelante, los &quot;Servicios&quot;), tanto por los
         Usuarios del Sitio como por terceros proveedores de servicios.
       </p>
       <p className="mb-4">
-        Para los efectos de estas Condiciones Generales, por "Materiales" se entenderá toda imagen, texto, gráfico, dibujo, archivo
+        Para los efectos de estas Condiciones Generales, por &quot;Materiales&quot; se entenderá toda imagen, texto, gráfico, dibujo, archivo
         de sonido o imagen, fotografía, grabación, programa de computación y, en general, cualquier tipo de material, información o
         contenido, interpretado en su sentido más amplio.
       </p>
@@ -44,7 +43,7 @@ export default function TerminosYCondiciones() {
         Adoptr se reserva el derecho de modificar los Materiales total o parcialmente, en cualquier momento, sin previo aviso y
         sin necesidad de expresar causa alguna, así como las condiciones para acceder y utilizar el Sitio.
       </p>
-  
+
       <h2 className="text-xl font-semibold mt-6 mb-2">III. Consentimiento del Usuario Registrado</h2>
       <p className="mb-4">
         Los usuarios que deseen registrarse en el sitio web deberán ser mayores de 18 años y contar con capacidad legal plena. En caso contrario, 
@@ -55,7 +54,7 @@ export default function TerminosYCondiciones() {
         por Adoptr, con la única finalidad de establecer perfiles y utilizar los diferentes Servicios que se brindan en el Sitio.
       </p> 
 
-      <h2 className="text-xl font-semibold mt-6 mb-2">IV. Obligaciones del Usuario Rregistrado</h2>
+      <h2 className="text-xl font-semibold mt-6 mb-2">IV. Obligaciones del Usuario Registrado</h2>
       <p className="mb-4">
         El Usuario se obliga a cumplir con las obligaciones que a continuación se señalan:
       </p>
@@ -104,7 +103,7 @@ export default function TerminosYCondiciones() {
       <h2 className="text-xl font-semibold mt-6 mb-2">VI. Uso del Sitio</h2>
       <p className="mb-4">
         Adoptr proporciona el acceso a multitud de informaciones, servicios, programas o datos (en
-        adelante, "los Contenidos") en Internet pertenecientes a Adoptr o a sus licenciantes a los
+        adelante, &quot;los Contenidos&quot;) en Internet pertenecientes a Adoptr o a sus licenciantes a los
         que el Usuario pueda tener acceso.
       </p>
       <p className="mb-4">
@@ -114,7 +113,7 @@ export default function TerminosYCondiciones() {
         consecuencia de este registro, al Usuario se le puede proporcionar una contraseña de la
         que será responsable, comprometiéndose a hacer un uso diligente y confidencial de la misma.
       </p>
-     <p className="mb-4">
+      <p className="mb-4">
         El Usuario se compromete a hacer un uso adecuado de los contenidos y servicios
         (como por ejemplo servicios de chat, publicación de adopción o publicación de pérdidas)
         que Adoptr ofrece a través de su portal y con carácter enunciativo pero no limitativo, a no
@@ -130,11 +129,10 @@ export default function TerminosYCondiciones() {
       <p className="mb-4">
         Adoptr se reserva el derecho de retirar todos aquellos comentarios y aportaciones que vulneren el respeto a la
         dignidad de la persona, que sean discriminatorios, xenófobos, racistas, pornográficos, que atenten contra la juventud o
-        la infancia, el orden o la seguridad pública o que, a su juicio, no resulten adecuados para su publicación. En
-        cualquier caso, Adoptr no será responsable de las opiniones vertidas por los usuarios a través de foros, chats, u
-        otras herramientas de participación.
-      </p>
-            
+        la infancia, el orden o la seguridad pública o que, a su juicio, no resultaran adecuados para su publicación. En cualquier
+        caso, Adoptr no será responsable de las opiniones vertidas por los usuarios a través de los foros, chats, u otras herramientas
+        de participación.
+      </p>  
       <h2 className="text-xl font-semibold mt-6 mb-2">VII. Exclusión de Garantías</h2>
       <p className="mb-4">
         Adoptr ha realizado de buena fe este Sitio para ofrecer a sus consumidores y público en
@@ -149,14 +147,21 @@ export default function TerminosYCondiciones() {
         En consecuencia, el usuario acepta los Servicios y Materiales en las condiciones en que
         efectivamente se entreguen y asume personalmente las consecuencias de su decisión de hacer uso de los mismos.
       </p>
+      <p className="mb-4">Adoptr no garantiza en caso alguno:</p>
       <p className="mb-4">
-        Adoptr no garantiza en caso alguno:
+        1. La exactitud o veracidad de cualquier información contenida en el Sitio, los Servicios o los Materiales.
       </p>
-      <p className="mb-4">1. La exactitud o veracidad de cualquier información contenida en el Sitio, los Servicios o los Materiales.</p>
-      <p className="mb-4">2. La disponibilidad, continuidad, accesibilidad, funcionamiento, operatividad o calidad del Sitio, los Servicios o los Materiales.</p>
-      <p className="mb-4">3. La licitud, fiabilidad, calidad, utilidad o veracidad de la información, ausencia de virus u otros elementos perjudiciales de los Servicios o Materiales del Sitio o contenidos en ellos.</p>
-      <p className="mb-4">4. La veracidad o autenticidad de la información de los datos personales proporcionados por los Usuarios.</p>        <p className="mb-4">5. El cumplimiento, por parte de los Usuarios, de la ley, las Condiciones Generales, la moral, las buenas costumbres o el orden público, en el acceso o utilización que hagan del Sitio, los Servicios y los Materiales.</p>
-    
+      <p className="mb-4">
+        2. La disponibilidad, continuidad, accesibilidad, funcionamiento, operatividad o calidad del Sitio, los Servicios o los Materiales.
+      </p>
+      <p className="mb-4">
+        3. La licitud, fiabilidad, calidad, utilidad o veracidad de la información, ausencia de virus u otros elementos perjudiciales de los Servicios o Materiales del Sitio o contenidos en ellos.
+      </p>
+      <p className="mb-4">4. La veracidad o autenticidad de la información de los datos personales proporcionados por los Usuarios.</p>
+      <p className="mb-4">
+        5. El cumplimiento, por parte de los Usuarios, de la ley, las Condiciones Generales, la moral, las buenas costumbres o el orden público, en el acceso o utilización que hagan del Sitio, los Servicios y los Materiales.
+      </p>
+
       <h2 className="text-xl font-semibold mt-6 mb-2">VIII. Responsabilidad de Adoptr</h2>
       <p className="mb-4">
         Adoptr no se hace responsable por los daños o perjuicios, de cualquier naturaleza que estos
@@ -177,9 +182,7 @@ export default function TerminosYCondiciones() {
         investiga, no verifica, no controla ni respalda el contenido, exactitud, legalidad y opiniones
         expresadas en otras conexiones suministradas por estos medios.
       </p>
-      <p className="mb-4">
-        Sin perjuicio de lo anterior, Adoptr se compromete a:
-      </p>
+      <p className="mb-4">Sin perjuicio de lo anterior, Adoptr se compromete a:</p>
       <p className="mb-4">
         1. Utilizar la información proporcionada por el Usuario sólo para los fines específicamente establecidos en el apartado III de las
         presentes condiciones generales.
@@ -194,7 +197,7 @@ export default function TerminosYCondiciones() {
         constatarse errores en los mismos.
       </p>
 
-      <h2 className="text-xl font-semibold mt-6 mb-2">VIII. Propiedad Intelectual</h2>
+      <h2 className="text-xl font-semibold mt-6 mb-2">IX. Propiedad Intelectual</h2>
       <p className="mb-4">
         La totalidad de los Materiales que contiene este Sitio, será considerada para todos los
         efectos legales de propiedad de Adoptr o de sus compañías asociadas. Adoptr se reserva el
@@ -214,4 +217,3 @@ export default function TerminosYCondiciones() {
     </div>
   );
 }
-  

@@ -1,14 +1,14 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useFormStoreLost } from '@/app/store';
 import { Inter } from "next/font/google";
-import { Checkbox, Textarea } from '@nextui-org/react';
-import Image from 'next/image';
+import { Textarea } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import CustomLoading from '@/app/components/customLoading';
 import { successToast } from '@/util/toast';
 import { createLostAction } from '@/actions/lost';
 import MapPreview from './mapPreview';
+import CIcon from '@coreui/icons-react';
 
 const inter = Inter({ subsets: ["latin"] });
 

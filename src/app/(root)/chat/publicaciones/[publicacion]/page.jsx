@@ -55,7 +55,8 @@ const UserList = () => {
           contacts.map((contact) => {
             const interlocutor = userId == contact.interlocutorUserProfile.id ? contact.publicationUserProfile : contact.interlocutorUserProfile
             return (
-            <ChatList 
+            <ChatList
+              key={contact.id}
               id={contact.id} 
               s3Url={interlocutor.s3Url} 
               title={interlocutor.firstName + " " + interlocutor.lastName} 

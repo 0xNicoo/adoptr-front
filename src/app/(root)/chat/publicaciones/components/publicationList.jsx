@@ -50,7 +50,7 @@ const PublicationList = () => {
       <div className='w-full'>
         {contacts.length > 0 ? (
           contacts.map((contact) => {
-            return (<ChatList id={contact.id} s3Url={contact.s3Url} title={contact.title} type={'Publicación'} handleClick={handleClick}/>);
+            return (<ChatList key={contact.id} id={contact.id} s3Url={contact.s3Url} title={contact.title} type={'Publicación'} handleClick={handleClick}/>);
           })
         ) : (
           <p className='text-center text-blond'>No hay chats</p>

@@ -8,8 +8,8 @@ export default function PoliticasDePrivacidad() {
                 <span className="w-12 flex-shrink-0">1.1.</span>
                 <p className="flex-grow">
                     La presente Política de Privacidad se aplica a la utilización de cada uno de
-                    los "Servicios", ofrecidos o puestos a disposición de los Usuarios de internet
-                    por Adoptr "la Organización", a través del sitio de internet propio de la
+                    los &quot;Servicios&quot;, ofrecidos o puestos a disposición de los Usuarios de internet
+                    por Adoptr &quot;la Organización&quot;, a través del sitio de internet propio de la
                     organización.
                 </p>
             </div>
@@ -31,7 +31,7 @@ export default function PoliticasDePrivacidad() {
                     Por lo expuesto, la Política de Privacidad constituirá un acuerdo válido y
                     obligatorio entre los usuarios y la Organización. Asimismo, la utilización de
                     los Servicios expresa la aceptación plena y sin reservas de los Usuarios a los
-                    "Términos y Condiciones" publicados por la Organización en su sitio web,
+                    &quot;Términos y Condiciones&quot; publicados por la Organización en su sitio web,
                     que se complementan con la Política de Privacidad.
                 </p>
             </div>
@@ -111,7 +111,7 @@ export default function PoliticasDePrivacidad() {
                     desde donde el cookie ha sido transferido, la fecha de creación, y un código de identificación. La única información
                     personal que un cookie puede contener es información que los Usuarios mismos suministran con su navegación por internet,
                     tales como la dirección de IP, las páginas visitadas y en qué orden, el tiempo de permanencia en cada página, fecha,
-                    hora, etc. - "Información de Actividad"-. Un cookie no puede leer datos del disco duro de los Usuarios ni tampoco los
+                    hora, etc. - &quot;Información de Actividad&quot;-. Un cookie no puede leer datos del disco duro de los Usuarios ni tampoco los
                     archivos cookie creados por otros sitios de internet.
                 </p>
             </div>
@@ -172,7 +172,7 @@ export default function PoliticasDePrivacidad() {
                 <span className="w-12 flex-shrink-0">4.1.</span>
                 <p className="flex-grow">
                     La Organización podrá recolectar información de los Usuarios utilizando cookies y/o tags, exclusivamente cuando los Usuarios 
-                    visiten Adoptr, un aviso publicitario, colocado en su "Sitio". La información que recopile la Organización podrá incluir el 
+                    visiten Adoptr, un aviso publicitario, colocado en su &quot;Sitio&quot;. La información que recopile la Organización podrá incluir el 
                     comportamiento de navegación, dirección IP, logs, y otros tipos de información. Sin embargo, la Organización no recolecta 
                     información personal identificable de manera directa de ningún Usuario usando los mencionados cookies o tags.
                 </p>
@@ -311,8 +311,8 @@ export default function PoliticasDePrivacidad() {
             <div className="flex mb-4 pl-4">
                 <span className="w-12 flex-shrink-0">A.</span>
                 <p className="flex-grow">
-                    A tales efectos, los Usuarios deberán enviar su Solicitud mediante el envío de un correo electrónico con el asunto "Acceso 
-                    a Datos Personales" a <a href="mailto:adoptr.contact@gmail.com" className="text-blue-600 underline">adoptr.contact@gmail.com</a>. 
+                    A tales efectos, los Usuarios deberán enviar su Solicitud mediante el envío de un correo electrónico con el asunto &quot;Acceso 
+                    a Datos Personales&quot; a <a href="mailto:adoptr.contact@gmail.com" className="text-blue-600 underline">adoptr.contact@gmail.com</a>. 
                     La Organización podrá requerir a los Usuarios que se identifiquen, así como 
                     que indiquen los datos personales a los cuales desean acceder, rectificar o remover.
                 </p>
@@ -351,8 +351,8 @@ export default function PoliticasDePrivacidad() {
                 La Organización podrá modificar la presente Política de Privacidad en caso que lo considere oportuno. Cuando las modificaciones 
                 sean muy importantes, con relación al tratamiento de los datos personales recolectados en virtud de los Servicios, las
                 mismas serán notificadas mediante la publicación de un aviso destacado en esta página. En caso que el Usuario deseara ser notificado 
-                vía correo electrónico de dichas modificaciones, deberá enviar un correo electrónico con el asunto "Lista de Cambios de Política de 
-                Privacidad" a <a href="mailto:adoptr.contact@gmail.com" className="text-blue-600 underline">adoptr.contact@gmail.com</a> desde la 
+                vía correo electrónico de dichas modificaciones, deberá enviar un correo electrónico con el asunto &quot;Lista de Cambios de Política de 
+                Privacidad&quot; a <a href="mailto:adoptr.contact@gmail.com" className="text-blue-600 underline">adoptr.contact@gmail.com</a> desde la 
                 dirección de correo electrónico en la cual desea recibir dichas notificaciones.
                 </p>
             </div>

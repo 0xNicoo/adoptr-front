@@ -20,7 +20,7 @@ const DeleteModal = ({ isOpen, onOpenChange, handleAdopted }) => {
             <Divider />
             <ModalBody>
               <p>
-                Usted cambiará el estado de la publicación a "adoptada", ¿está seguro?
+                Usted cambiará el estado de la publicación a &quot;adoptada&quot;, ¿está seguro?
               </p>
             </ModalBody>
             <ModalFooter>
