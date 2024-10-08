@@ -13,7 +13,7 @@ const ProfileCard = ({ profile }) => {
   if (!profile) return <p>No se encontró el perfil</p>;
 
   return (
-    <div className="sticky top-0 bg-white rounded-b-xl shadow-lg overflow-hidden">
+    <div className="sticky top-0 ml-4 bg-white rounded-b-xl shadow-lg overflow-hidden">
       <div className="absolute mx-10 top-0 left-0 right-0 h-1/3 bg-primary-orange rounded-b-[30px]"></div>
       <div className="relative flex flex-col items-center pt-8 pb-4">
         <div className="w-32 h-32 lg:w-40 lg:h-40 relative mb-4">

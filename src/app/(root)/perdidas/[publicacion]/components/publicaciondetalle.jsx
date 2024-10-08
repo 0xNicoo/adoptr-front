@@ -68,7 +68,7 @@ const PublicationDetail = ({ lostId }) => {
 
     if (lostId) {
       fetchLost();
-    }
+    } fetchUserId()
   }, [lostId]);
 
   if (error) return <div>Error: {error}</div>;

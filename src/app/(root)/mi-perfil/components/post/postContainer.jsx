@@ -51,21 +51,17 @@ const PostConatiner = ({profile}) => {
 
   return (
     <>
-      <div className="flex w-full max-w-4xl">
-        <div className="flex flex-col w-full max-w-4xl">
-          <div className="w-full">
-            <Post onPostsChange={onPostsChange} profile={profile} />
-          </div>
-          <div className="w-full">
-            <PostList posts={posts} profile={profile} onOpen={handleOpen} setPosts={setPosts} />
-          </div>
-          <PostDeleteModal isOpen={isOpen} onOpenChange={handleClose} postId={selectedPostId} removePost={removePost} />
+      <div className='w-full flex flex-row'>
+        <div className='max-w-4xl flex flex-col w-2/3'>
+          <Post onPostsChange={onPostsChange} profile={profile} />
+          <PostList posts={posts} profile={profile} onOpen={handleOpen} setPosts={setPosts} />
+          <PostDeleteModal isOpen={isOpen} onOpenChange={handleClose} postId={selectedPostId} removePost={removePost}/>
         </div>
-        <div className="hidden lg:block lg:w-1/4 lg:sticky top-4 lg:h-screen ml-8">
+        <div className='w-1/3 flex justify-center lg:sticky top-4 lg:h-screen'>
           <ChatList />
         </div>
       </div>
-    </>
+       </>
   )  
 }
 

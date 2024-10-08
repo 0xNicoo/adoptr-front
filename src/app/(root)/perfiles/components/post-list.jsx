@@ -33,7 +33,7 @@ const PostList = ({ posts, profile }) => {
     <div className="flex flex-col gap-3">
       {sortedPosts.length > 0 ? (
         sortedPosts.map((post) => (
-          <Card className="w-4/5" key={post.id}>
+          <Card className='w-2/3' key={post.id}>
             <CardHeader className="flex flex-row justify-between">
               <div className='flex flex-row gap-2'>
                 <div className='flex flex-col'>
