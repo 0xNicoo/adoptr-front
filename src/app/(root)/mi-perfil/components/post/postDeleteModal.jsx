@@ -3,21 +3,13 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Divid
 import { useRouter } from 'next/navigation';
 import { deletePostAction } from "@/actions/post";
 
-const PostDeleteModal = ({ isOpen, onOpenChange, postId, removePost }) => {
+const PostDeleteModal = ({ isOpen, onOpenChange, handleDeletePost }) => {
 
     const router = useRouter();
 
-    const handleDelete = async () => {
-        if (postId) {
-            try {
-                await deletePostAction(postId);
-                removePost(postId)
-                onOpenChange(false); 
-            } catch (error) {
-                console.error('Failed to delete post', error);
-            }
-        }
-    }; 
+    const onDeleteClick = async () => {
+      handleDeletePost()
+    }
 
     return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -35,7 +27,7 @@ const PostDeleteModal = ({ isOpen, onOpenChange, postId, removePost }) => {
                 <Button color="default" variant="light" onPress={onClose}>
                 Cancelar
                 </Button>
-                <Button color="danger" onClick={handleDelete}>
+                <Button color="danger" onClick={onDeleteClick}>
                 Eliminar
                 </Button>
             </ModalFooter>

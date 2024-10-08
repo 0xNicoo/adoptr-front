@@ -85,9 +85,9 @@ const PostList = ({ posts, profile, onOpen, setPosts }) => {
                   </div>
                 </div>
                 <div className='flex flex-col'>
-                <button onClick={() => onOpen(post.id)}>
-                  <MoreVertIcon className='text-primary-blue'/>
-                </button>
+                  <button onClick={() => onOpen(post)}>
+                    <MoreVertIcon className='text-primary-blue'/>
+                  </button>
                 </div>
               </CardHeader>
               <Divider />
