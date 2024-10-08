@@ -59,7 +59,9 @@ const PublicationDetail = ({ serviceId }) => {
         return
       }
     }catch(err){
-      errorToast(err.message)
+      //TODO: arreglar el toast en el build
+      // errorToast(err.message)
+      router.push(`/chat/publicaciones`);
       return
     }
   };
