@@ -67,7 +67,7 @@ const Step1 = ({nextStep}) => {
           </RadioGroup>
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>
-        <div className="flex flex-row justify-end mb-4 mx-4 xs:mb-0 xs:mt-2">
+        <div className="flex flex-row xs:justify-center sm:justify-end mb-4 mx-4 xs:mb-0 xs:mt-2">
           <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700  xs:px-4 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>
             Siguiente
           </button>

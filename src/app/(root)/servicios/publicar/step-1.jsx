@@ -101,20 +101,19 @@ const Step1 = ({nextStep}) => {
   }, []);
 
   return (
-    <div className='flex flex-grow flex-col mb-4 ml-12'>
-      <div className='flex flex-row gap-12'>
-
-        <div className='flex flex-col w-1/6'>
-          <label htmlFor="nombre" className="block xl:text-md 2xl:text-xl font-medium">Nombre</label>
+    <div className='flex flex-grow flex-col mb-4 xs:ml-4 sm:ml-12'>
+      <div className='flex xs:flex-col md:flex-row xs:gap-4 md:gap-12'>
+        <div className='flex flex-col xs:w-5/6 md:w-1/6'>
+          <label htmlFor="nombre" className="block xs:text-sm md:text-md 2xl:text-xl font-medium">Nombre</label>
           <div className="flex mt-2 gap-4">
             <Input isRequired aria-label="Seleccionar nombre" value={title} onChange={e => setNombre(e.target.value)} id="nombre" name="nombre" type="text" placeholder="Juan"/>
           </div>
           {errors.title && <p className='text-red-500 mt-2 text-xs'>{errors.title}</p>}
         </div>
 
-        <div className='flex flex-col w-1/6'>
-          <label htmlFor="serviceType" className='block xl:text-md 2xl:text-xl font-medium'>Tipo de servicio</label>
-          <div className='flex mt-2 gap-4 w-1/6'>
+        <div className='flex flex-col xs:w-5/6 md:w-1/6'>
+          <label htmlFor="serviceType" className='xs:text-sm block md:text-md 2xl:text-xl font-medium'>Tipo de servicio</label>
+          <div className='flex mt-2 gap-4 md:w-1/6'>
             {loadingSetServiceType ? (
                <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Select>
             ) : error ? (
@@ -142,11 +141,11 @@ const Step1 = ({nextStep}) => {
         </div>
     </div>
 
-    <div className='flex flex-col mt-8'>
-      <div className='flex flex-row gap-12'>
-        <div className='flex flex-col w-1/6'>
-        <label htmlFor="provincia" className='block xl:text-md 2xl:text-xl font-medium'>Provincia</label>
-          <div className='flex flex-col mt-2 gap-4 w-1/6'>
+    <div className='flex flex-col xs:mt-4 sm:mt-8'>
+      <div className='flex xs:flex-col md:flex-row xs:gap-4 md:gap-12'>
+        <div className='flex flex-col xs:w-5/6 md:w-1/6'>
+        <label htmlFor="provincia" className='xs:text-sm block md:text-md 2xl:text-xl font-medium'>Provincia</label>
+          <div className='flex flex-col mt-2 xs:gap-2 sm:gap-4 xs:w-5/6 md:w-1/6'>
             {loadingProvinces ? (
               <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Select>
             ) : error ? (
@@ -172,9 +171,9 @@ const Step1 = ({nextStep}) => {
           </div>
           {errors.province && <p className='text-red-500 mt-2 text-xs'>{errors.province}</p>}
         </div>
-        <div className='flex flex-col w-1/6'>
-          <label htmlFor="localidad" className='block xl:text-md 2xl:text-xl font-medium'>Localidad</label>
-          <div className='flex mt-2 gap-4 w-1/6'>
+        <div className='flex flex-col xs:w-5/6 md:w-1/6'>
+          <label htmlFor="localidad" className='xs:text-sm block md:text-md 2xl:text-xl font-medium'>Localidad</label>
+          <div className='flex mt-2 xs:gap-2 sm:gap-4 xs:w-5/6 md:w-1/6'>
             {loadingLocalities ? (
                <Select aria-label='Cargando' placeholder='Cargando...' className="w-full min-w-[12rem]" isLoading></Select>
             ) : error ? (
@@ -203,19 +202,18 @@ const Step1 = ({nextStep}) => {
 
     </div>
 
-    <div className='flex flex-row gap-12 mt-8'>
-
-        <div className='flex flex-col w-1/6'>
-          <label htmlFor="calle" className="block xl:text-md 2xl:text-xl font-medium">Calle</label>
-          <div className="flex mt-2 gap-4">
+    <div className='flex xs:flex-col md:flex-row xs:gap-4 md:gap-12 xs:mt-4 sm:mt-8'>
+        <div className='flex flex-col xs:w-5/6 md:w-1/6'>
+          <label htmlFor="calle" className="xs:text-sm block md:text-md 2xl:text-xl font-medium">Calle</label>
+          <div className="flex mt-2 xs:gap-2 sm:gap-4">
             <Input isRequired aria-label="Seleccionar calle" value={street} onChange={e => setCalle(e.target.value)} id="calle" name="calle" type="text" placeholder="Av.Corrientes"/>
           </div>
           {errors.street && <p className='text-red-500 mt-2 text-xs'>{errors.street}</p>}
         </div>
 
-        <div className='flex flex-col w-1/6'>
-          <label htmlFor="numero" className="block xl:text-md 2xl:text-xl font-medium">Número</label>
-          <div className="flex mt-2 gap-4">
+        <div className='flex flex-col xs:w-5/6 md:w-1/6'>
+          <label htmlFor="numero" className="xs:text-sm block md:text-md 2xl:text-xl font-medium">Número</label>
+          <div className="flex mt-2 xs:gap-2 sm:gap-4">
             <Input isRequired aria-label="Seleccionar número" value={number} onChange={e => setNumero(e.target.value)} id="numero" name="numero" type="text" placeholder="3247"/>
           </div>
           {errors.number && <p className='text-red-500 mt-2 text-xs'>{errors.number}</p>}
@@ -223,8 +221,8 @@ const Step1 = ({nextStep}) => {
     </div>
   </div>
 
-    <div className="flex flex-row justify-between mt-4 items-end mr-4 mt-8">
-        <button className="bg-primary-orange hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
+    <div className="flex flex-row justify-between mt-4 items-end mr-4 xs:mt-4 sm:mt-8">
+        <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700 py-2 px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
     </div>
   </div>
   );

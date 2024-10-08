@@ -83,9 +83,9 @@ const Step3 = ({nextStep={nextStep}, prevStep={prevStep}}) => {
                 </div>
             </div>
             <div className="flex flex-row justify-between mt-4 md:mr-4 xs:mr-0">
-        <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700 xs:px-4 py-2 md:px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
-        <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700 xs:px-4 py-2 md:px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
-      </div>
+              <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700 xs:px-4 py-2 md:px-8 rounded-3xl transition-colors duration-300 text-white" onClick={prevStep}>Atrás</button>
+              <button className="bg-primary-orange xs:text-sm md:text-md hover:bg-orange-700 xs:px-4 py-2 md:px-8 rounded-3xl transition-colors duration-300 text-white" onClick={handleNextStep}>Siguiente</button>
+            </div>
         </div>
     )
 }
