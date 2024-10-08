@@ -8,6 +8,7 @@ import CustomLoading from '@/app/components/customLoading';
 import { successToast } from '@/util/toast';
 import { createLostAction } from '@/actions/lost';
 import CIcon from '@coreui/icons-react';
+import MapPreviewWrapper from './mapPreviewWrapper';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,14 +41,6 @@ const Step4 = ({prevStep = {prevStep}}) => {
     const { title, sizeType, animalType, ageYears, ageMonths, sexType, description, image, locality, province, fileImage, longitude, latitude } = useFormStoreLost();
     const router = useRouter()
     const [publishing, setPublishing] = useState(false)
-    const [MapPreview, setMapPreview] = useState(null)
-
-    useEffect(() => [
-        (async () => {
-            const mp = (await import('./mapPreview')).default
-            setMapPreview(mp)
-          })()
-    ], [])
 
     const publicarPerdida = async () => {
         setPublishing(true)
@@ -120,7 +113,7 @@ const Step4 = ({prevStep = {prevStep}}) => {
                 </div>
                 
                 <div className="flex justify-end xs:w-5/6 sm:w-1/3 ml-38">
-                    <MapPreview latitude={latitude} longitude={longitude} />
+                    <MapPreviewWrapper latitude={latitude} longitude={longitude} />
                 </div>
 
             </div>
