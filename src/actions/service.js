@@ -1,6 +1,6 @@
 'use server'
 
-import { createService, deleteService, editService, getServiceById, getServiceTypes, getServices } from "@/lib/api/service";
+import { createService, deleteService, editService, getServiceById, getServiceTypes, getServices, getServiceTypeId } from "@/lib/api/service";
 
 export async function getServicesAction(filter, page, size) {
   const {data, headers} = await getServices(filter, page, size)

@@ -5,8 +5,8 @@ import { Radio, RadioGroup, Checkbox, Autocomplete, AutocompleteItem, Input, Sel
 import { Inter } from "next/font/google";
 import Image from 'next/image';
 import { getLocalitiesAction, getProvinceAction } from '@/actions/location';
-import MapForm from './MapForm';
-import { ErrorOutlineSharp } from '@mui/icons-material';
+import MapForm from './mapForm';
+
 
 const inter = Inter({ subsets: ["latin"] });
 
