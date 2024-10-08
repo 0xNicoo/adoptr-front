@@ -10,7 +10,6 @@ import { getPostsAction } from '@/actions/post';
 import { getServicesAction } from '@/actions/service';
 import { getLostsAction } from '@/actions/lost';
 import CustomLoading from "@/app/components/customLoading";
-import ChatList from './components/chatList';
 
 const MiPerfil = () => {
   const [profile, setProfile] = useState(null);
@@ -23,8 +22,6 @@ const MiPerfil = () => {
   const { setProfileStore } = useProfileEditStore();
   const router = useRouter();
   
-
-
   useEffect(() => {
     const fetchProfile = async () => {
       try {

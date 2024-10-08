@@ -18,6 +18,7 @@ import { getChatsByPublicationIdAction } from '@/actions/chat';
 import { getFavoriteAction, setFavoriteAction } from '@/actions/favorite';
 import CustomLoading from "@/app/components/customLoading";
 import { errorToast, successToast } from '@/util/toast';
+import DeleteModal from './deleteModal';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,6 +54,8 @@ const PublicationDetail = ({ adoptionId }) => {
   const [favorite, setFavorite] = useState(false);
   const {setAdoptionStore} = useAdoptionEditStore()
   const [profile, setProfile] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [adopted, setAdopted] = useState(false); //state para refrescar la pagina porque la verga del router.refresh no anda.
 
 
 
@@ -82,7 +85,7 @@ const PublicationDetail = ({ adoptionId }) => {
       fetchAdoption();
       fetchFavorite()
     }
-  }, [adoptionId]);
+  }, [adoptionId, adopted]);
 
 
   if (error) return <div>Error: {error}</div>;
@@ -115,14 +118,23 @@ const PublicationDetail = ({ adoptionId }) => {
   };
 
   const handleAdoptedClick = async () => {
+    setIsOpen(true);
+  }
+
+  const handleAdopted = async () => {
     try{
       const data = await changeAdoptionStatusAction(adoption.id, 'ADOPTED')
       successToast("La mascota ha sido adoptada!")
-      router.refresh()
+      setAdopted(true)
+      setIsOpen(false)
     }catch(err){
       errorToast(err.message)
     }
   }
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
   const handleFavorite = async () => {
     setFavorite(!favorite)
@@ -158,7 +170,7 @@ const PublicationDetail = ({ adoptionId }) => {
                   className="bg-green-500 text-white py-1 px-5 ml-4 rounded-3xl" 
                   disabled 
                 >
-                  ADOPTADO :D
+                  ADOPTADA :D
                 </button>
               ) : (<></>)}
             </div>
@@ -206,7 +218,7 @@ const PublicationDetail = ({ adoptionId }) => {
                   {adoption.user.id == userId && adoption.adoptionStatusType != "ADOPTED"  ? (
                     <button className="bg-primary-orange hover:bg-orange-700 py-1 px-5 ml-4 rounded-3xl transition-colors duration-300 text-white"
                       onClick={handleAdoptedClick}>
-                      Adoptado
+                      Adoptada
                     </button>
                   ) : (<></>)}
                 </div>
@@ -223,7 +235,7 @@ const PublicationDetail = ({ adoptionId }) => {
                   </button>
                 </div>
               )}
-
+         <DeleteModal isOpen={isOpen} onOpenChange={handleClose} handleAdopted={handleAdopted}/>
       </div>
     </div>
   );

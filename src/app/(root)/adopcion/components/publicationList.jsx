@@ -109,7 +109,7 @@ const PublicationList = ({ publications }) => {
                     className="bg-green-500 text-white py-1 px-3 ml-4 rounded-3xl items-end" 
                     disabled 
                   >
-                    ADOPTADO
+                    ADOPTADA
                   </button>
                 ) : (<></>)}
               </div>

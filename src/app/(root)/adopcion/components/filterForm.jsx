@@ -172,7 +172,7 @@ const FilterForm = ({ updateData, updateTotalPage, updateCurrentPage, updateFilt
                                     isSelected={filters.adopted} 
                                     onChange={() => setFilters(prev => ({ ...prev, adopted: !prev.adopted }))}
                                 >
-                                    Adoptados
+                                    Adoptadas
                             </Checkbox>
 
 
