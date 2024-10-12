@@ -8,7 +8,7 @@ export default function PoliticasDePrivacidad() {
                 <span className="w-12 flex-shrink-0">1.1.</span>
                 <p className="flex-grow">
                     La presente Política de Privacidad se aplica a la utilización de cada uno de
-                    los "Servicios&quot;, ofrecidos o puestos a disposición de los Usuarios de internet
+                    los "Servicios", ofrecidos o puestos a disposición de los Usuarios de internet
                     por Adoptr &quot;la Organización&quot;, a través del sitio de internet propio de la
                     organización.
                 </p>
