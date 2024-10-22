@@ -6,7 +6,7 @@ import { Inter } from "next/font/google";
 import { Checkbox, Textarea, Button, user } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useAdoptionEditStore } from '@/app/store';
-import { BookmarkIcon as SolidBookmarkIcon } from '@heroicons/react/24/solid';
+import { ExclamationTriangleIcon, BookmarkIcon as SolidBookmarkIcon } from '@heroicons/react/24/solid';
 import { BookmarkIcon as OutlineBookmarkIcon } from '@heroicons/react/24/outline';
 import { CIcon } from '@coreui/icons-react';
 import { cilTrash } from '@coreui/icons';
@@ -19,6 +19,7 @@ import { getFavoriteAction, setFavoriteAction } from '@/actions/favorite';
 import CustomLoading from "@/app/components/customLoading";
 import { errorToast, successToast } from '@/util/toast';
 import DeleteModal from './deleteModal';
+import { reportPublicationAction } from '@/actions/report';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -142,6 +143,21 @@ const PublicationDetail = ({ adoptionId }) => {
     resp ? setFavorite(true) : setFavorite(false)
   }
 
+  const handleReport = async () => {
+    //TODO(nico): Que salte un popup para seleccionar reason.
+
+    try{
+      const data = {
+        modelId: adoption.id,
+        reasonId: 2
+      }
+      await reportPublicationAction(data)
+      successToast('Reportaste la publicacion')
+    }catch(error){
+      errorToast("Error: ", error.message)
+    }
+  }
+
   return (
     <div className="bg-background-gray flex pt-4 px-4 pb-4 justify-center">
       <div className='flex flex-col p-4 gap-4 md:gap-6 items-start bg-white border border-gray-300 rounded-3xl drop-shadow-md w-full max-w-7xl h-auto'>
@@ -197,11 +213,24 @@ const PublicationDetail = ({ adoptionId }) => {
           <div className='absolute top-0 right-0'>
             {/* TODO: Revisar el responsive de esto */}
             {adoption.user.id != userId ? (
-              <button className=" py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
-                onClick={handleFavorite}
-              >
-                {favorite ? <SolidBookmarkIcon className="h-10 w-10 text-yellow-500" /> : <OutlineBookmarkIcon className="h-10 w-10 text-gray-500" />}
-              </button>
+                <div className="flex items-center justify-center space-x-1">
+                  <button
+                    className="py-1 px-4 rounded-3xl transition-colors duration-300 text-white"
+                    onClick={handleFavorite}
+                  >
+                    {favorite ? (
+                      <SolidBookmarkIcon className="h-10 w-10 text-yellow-500" />
+                    ) : (
+                      <OutlineBookmarkIcon className="h-10 w-10 text-gray-500" />
+                    )}
+                  </button>
+                  <button
+                    className="bg-red-500 text-white font-bold py-2 px-2 rounded items-center hover:bg-red-600"
+                    onClick={handleReport}
+                  >
+                    <ExclamationTriangleIcon className="h-5 w-5" />
+                  </button>
+                </div>
             ): (
                 <div className='flex'>
                   <button
