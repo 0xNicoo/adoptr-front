@@ -18,8 +18,9 @@ import { getChatsByPublicationIdAction } from '@/actions/chat';
 import { getFavoriteAction, setFavoriteAction } from '@/actions/favorite';
 import CustomLoading from "@/app/components/customLoading";
 import { errorToast, successToast } from '@/util/toast';
-import DeleteModal from './deleteModal';
+import AdoptModal from './deleteModal';
 import { reportPublicationAction } from '@/actions/report';
+import ReportModal from './reportModal';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -55,7 +56,8 @@ const PublicationDetail = ({ adoptionId }) => {
   const [favorite, setFavorite] = useState(false);
   const {setAdoptionStore} = useAdoptionEditStore()
   const [profile, setProfile] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenAdoptModal, setIsOpenAdoptModal] = useState(false);
+  const [isOpenReportModal, setIsOpenReportModal] = useState(false);
   const [adopted, setAdopted] = useState(false); //state para refrescar la pagina porque la verga del router.refresh no anda.
 
 
@@ -119,7 +121,7 @@ const PublicationDetail = ({ adoptionId }) => {
   };
 
   const handleAdoptedClick = async () => {
-    setIsOpen(true);
+    setIsOpenAdoptModal(true);
   }
 
   const handleAdopted = async () => {
@@ -127,14 +129,14 @@ const PublicationDetail = ({ adoptionId }) => {
       const data = await changeAdoptionStatusAction(adoption.id, 'ADOPTED')
       successToast("La mascota ha sido adoptada!")
       setAdopted(true)
-      setIsOpen(false)
+      setIsOpenAdoptModal(false)
     }catch(err){
       errorToast(err.message)
     }
   }
 
-  const handleClose = () => {
-    setIsOpen(false);
+  const handleCloseAdoptModal = () => {
+    setIsOpenAdoptModal(false);
   };
 
   const handleFavorite = async () => {
@@ -142,6 +144,14 @@ const PublicationDetail = ({ adoptionId }) => {
     const resp = await setFavoriteAction(adoption.id)
     resp ? setFavorite(true) : setFavorite(false)
   }
+
+  const handleReportClick = async () => {
+    setIsOpenReportModal(true);
+  }
+
+  const handleCloseReportModal = () => {
+    setIsOpenReportModal(false);
+  };
 
   const handleReport = async () => {
     //TODO(nico): Que salte un popup para seleccionar reason.
@@ -153,8 +163,10 @@ const PublicationDetail = ({ adoptionId }) => {
       }
       await reportPublicationAction(data)
       successToast('Reportaste la publicacion')
+      setIsOpenReportModal(false)
     }catch(error){
       errorToast("Error: ", error.message)
+      setIsOpenReportModal(false)
     }
   }
 
@@ -226,7 +238,7 @@ const PublicationDetail = ({ adoptionId }) => {
                   </button>
                   <button
                     className="bg-red-500 text-white font-bold py-2 px-2 rounded items-center hover:bg-red-600"
-                    onClick={handleReport}
+                    onClick={handleReportClick}
                   >
                     <ExclamationTriangleIcon className="h-5 w-5" />
                   </button>
@@ -264,7 +276,8 @@ const PublicationDetail = ({ adoptionId }) => {
                   </button>
                 </div>
               )}
-         <DeleteModal isOpen={isOpen} onOpenChange={handleClose} handleAdopted={handleAdopted}/>
+         <AdoptModal isOpen={isOpenAdoptModal} onOpenChange={handleCloseAdoptModal} handleAdopted={handleAdopted}/>
+         <ReportModal isOpen={isOpenReportModal} onOpenChange={handleCloseReportModal} handleReport={handleReport} title={adoption.title} />
       </div>
     </div>
   );

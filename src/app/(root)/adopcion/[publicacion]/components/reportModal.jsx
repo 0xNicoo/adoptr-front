@@ -2,12 +2,13 @@ import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Divider } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
 
-const AdoptModal = ({ isOpen, onOpenChange, handleAdopted }) => {
+
+const ReportModal = ({ isOpen, onOpenChange, handleReport, title }) => {
 
     const router = useRouter();
 
     const onAceptClick = async () => {
-        handleAdopted()
+        handleReport()
     }; 
 
     return (
@@ -15,11 +16,11 @@ const AdoptModal = ({ isOpen, onOpenChange, handleAdopted }) => {
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col">Mascota adoptada</ModalHeader>
+            <ModalHeader className="flex flex-col">Reportar publicación</ModalHeader>
             <Divider />
             <ModalBody>
               <p>
-                Usted cambiará el estado de la publicación a &quot;adoptada&quot;, ¿está seguro?
+                Usted esta reportando la publicacion: {title}
               </p>
             </ModalBody>
             <ModalFooter>
@@ -27,7 +28,7 @@ const AdoptModal = ({ isOpen, onOpenChange, handleAdopted }) => {
                     Cancelar
                 </Button>
                 <Button className="bg-primary-blue text-white" onClick={onAceptClick}>
-                    Aceptar
+                    Reportar
                 </Button>
             </ModalFooter>
           </>
@@ -37,4 +38,4 @@ const AdoptModal = ({ isOpen, onOpenChange, handleAdopted }) => {
   );
 };
 
-export default AdoptModal;
+export default ReportModal;
