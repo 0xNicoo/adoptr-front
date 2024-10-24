@@ -154,14 +154,13 @@ const PublicationDetail = ({ adoptionId }) => {
   };
 
   const handleReport = async (reasonId) => {
-    //TODO(nico): Que salte un popup para seleccionar reason.
     console.log(reasonId)
     try{
       const data = {
         modelId: adoption.id,
         reasonId: reasonId
       }
-      //await reportPublicationAction(data)
+      await reportPublicationAction(data)
       successToast('Reportaste la publicacion')
       setIsOpenReportModal(false)
     }catch(error){

@@ -10,3 +10,8 @@ export async function reportProfile(data) {
 export async function reportPublication(data) {
     return await apiRequest(`/report/publication`, 'POST', data, 'application/json', true)
 }
+
+
+export async function reportReasons(){
+    return await apiRequest(`/report/reasons`, 'GET', null, 'application/json', true)
+}
