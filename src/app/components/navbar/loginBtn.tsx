@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronDownIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { logoutAction } from "@/actions/auth";
 
 export default function LoginBtn() {
 
@@ -17,8 +18,8 @@ export default function LoginBtn() {
     };
     
     const handleLogout = async () => {
-        //await logOutAction();
         setIsOpen(false);
+        await logoutAction();
         router.push("/");
     };  
 
