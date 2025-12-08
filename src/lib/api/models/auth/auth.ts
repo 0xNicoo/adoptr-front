@@ -4,3 +4,8 @@ export interface Auth {
   token: string;
   user: User;
 } 
+
+export interface LoginInput {
+  token: string;
+  provider: string;
+}

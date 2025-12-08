@@ -30,11 +30,8 @@ export default function LoginPage() {
     const token = response.credential;
 
     try {
-     const auth = await loginAction({ token, provider: 'google' });
-     localStorage.setItem("userId", auth.user.id);
-     localStorage.setItem("name", auth.user.name);
-     localStorage.setItem("email", auth.user.email);
-      window.location.href = "/prueba";
+      await loginAction({ token, provider: 'google' });
+      window.location.href = "/profile";
     } catch (err) {
       console.error("Error en login:", err);
     }
