@@ -8,8 +8,24 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-custom-blue: #051A65;
+  --color-primary-blue: #1C3EB2;
+  --color-primary-orange: #FF823B;
+  --color-primary-orange-dark: #db6826;
+  --color-footer-primary: #050D2D;
+  --color-sectionB: #F8F3EA;
+  --color-sectionC: #D1E8FF;
+  --color-sectionD: #5784E6;
+  --color-secondary-blue: #0B1956;
+  --color-blue-hover: #040A22;
+  --color-background-gray: #F9F9FB;
+  --color-primary-orange-light: #FFD4A2;
+  --color-custom-orange: #D76D31;
+  --color-blue-light: #1774D3;
+  --color-custom-light: #1159a2;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-genty-demo: var(--font-genty-demo);
 }
 
 @media (prefers-color-scheme: dark) {
