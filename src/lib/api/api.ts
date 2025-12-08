@@ -50,9 +50,7 @@ export async function apiRequest<T = any>(
   }
 
   const res = await fetch(url, options);
-  console.log("RESPUESTAAAAAAAAAAAAAAAAA");
-  console.log(res);
-
+  
   if (!res.ok) {
     let errorData: any;
     try {
