@@ -1,5 +1,6 @@
 "use client";
 
+import { loginAction } from "@/actions/auth";
 import { useEffect } from "react";
 
 declare global {
@@ -29,26 +30,10 @@ export default function LoginPage() {
     const token = response.credential;
 
     try {
-      const res = await fetch("http://localhost:8081/auth/oauth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 'token': token, 'provider': 'google' }),
-      });
-
-      if (!res.ok) {
-        console.error("Error login Google:", await res.text());
-        alert("No se pudo iniciar sesión");
-        return;
-      }
-
-      const data = await res.json();
-
-      localStorage.setItem("accessToken", data.token);
-      localStorage.setItem("userId", data.user.id);
-      localStorage.setItem("name", data.user.name);
-      localStorage.setItem("email", data.user.email);
-
-
+     const auth = await loginAction({ token, provider: 'google' });
+     localStorage.setItem("userId", auth.user.id);
+     localStorage.setItem("name", auth.user.name);
+     localStorage.setItem("email", auth.user.email);
       window.location.href = "/prueba";
     } catch (err) {
       console.error("Error en login:", err);
