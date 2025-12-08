@@ -1,5 +1,5 @@
 import { Gender } from "./gender";
-import { Locality } from "./locality";
+import { Locality } from "../locality/locality";
 
 export interface Profile {
     id: string;

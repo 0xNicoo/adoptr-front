@@ -1,6 +1,6 @@
 'use server';
 import { apiRequest } from '../api';
-import { Auth } from '../models/auth';
+import { Auth } from '../models/auth/auth';
 
 export async function login({ token, provider }: { token: string; provider: string }): Promise<Auth> {
   const response = await apiRequest<Auth>('/auth/oauth', 'POST', { token, provider }, 'application/json', false);
