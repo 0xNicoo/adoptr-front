@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# adoptr-front
 
-## Getting Started
+Interfaz web de Adoptr con Next.js App Router. Leer [AGENT.md](AGENT.md), [arquitectura y prioridades técnicas](docs/arquitectura/lineamientos.md) e [integración con la API](docs/arquitectura/integracion.md) antes de agregar funcionalidades.
 
-First, run the development server:
+## Desarrollo local
+
+Requisitos: Node.js compatible con Next.js 16, npm y backend accesible con PostgreSQL y claves Google disponibles. La URL de la API se configura mediante `API_URL`, solo del lado servidor. Para el botón Google se necesita un Client ID de Google Identity Services autorizado para `http://localhost:3000`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Crear .env.local (ignorado por git) y completar:
+API_URL=http://localhost:8081
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=<tu-client-id-de-Google>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+El Client ID es público; **no** colocar secretos de cliente ni JWT allí. El backend aún no valida el audience del ID token: no considerar seguro el login para producción. Ver [integración](docs/arquitectura/integracion.md).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm ci
+npm run dev
+# abrir http://localhost:3000
+npm run lint
+npx tsc --noEmit
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Verificar la política de cookie `secure` en HTTP de desarrollo y HTTPS de despliegue; no asumir persistencia ni autorización por la sola presencia de la cookie. Para ejecutar la API ver también `../adoptr-back/README.md`.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Arquitectura y prioridades: [lineamientos](docs/arquitectura/lineamientos.md) · [integración](docs/arquitectura/integracion.md)
+- Producto: [flujos y decisiones abiertas](docs/producto/flujos-producto.md)

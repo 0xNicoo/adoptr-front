@@ -30,7 +30,11 @@ export async function apiRequest<T = any>(
     token = await getAccessToken();
   }
 
-  const url = new URL(`http://localhost:8081${endpoint}`);
+  const baseUrl = process.env.API_URL;
+  if (!baseUrl) {
+    throw new Error('Falta configurar API_URL en el servidor');
+  }
+  const url = new URL(endpoint, baseUrl);
 
   const options: RequestInit = {
     method,
