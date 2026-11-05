@@ -2,7 +2,7 @@
 
 Guía de estilo de Adoptr: paleta, tipografía, componentes base, ilustraciones y accesibilidad. Es la referencia para construir pantallas y para los tokens de `src/app/globals.css`. Los recorridos y reglas de producto **no** se definen acá: ver [flujos](../producto/flujos-producto.md) y [lineamientos](lineamientos.md).
 
-**Estado:** propuesta validada visualmente con un prototipo (guía, inicio, catálogo, ficha y paso 2 de publicación). Todavía no está aplicada en el código. Las pantallas del prototipo muestran ideas de UX que siguen siendo decisiones abiertas de producto; lo que vale de ellas es el estilo.
+**Estado:** propuesta validada visualmente con un prototipo (guía, inicio, catálogo, ficha y paso 2 de publicación). Los tokens de color, forma y fuentes ya están en `src/app/globals.css`; los componentes base y las pantallas todavía no los usan. Las pantallas del prototipo muestran ideas de UX que siguen siendo decisiones abiertas de producto; lo que vale de ellas es el estilo.
 
 ## Dirección
 
@@ -42,7 +42,7 @@ Reglas:
 - **El naranja es escaso:** una acción principal por pantalla o por bloque. En listas repetidas (tarjetas del catálogo) los botones van en `surface` con contorno.
 - **Verde para lo positivo, cereza para lo negativo o cerrado.** El turquesa es solo decorativo, para no competir con el verde.
 - Los colores que tienen que distinguirse (estado, sí/no) también difieren en forma o texto, no solo en tono.
-- Mapear los tokens actuales de `globals.css` (`primary-blue`, `primary-orange`, `secondary-blue`, `sectionB`, etc.) a estos nombres por función y retirar los que no tengan uso.
+- En `globals.css` cada token es `--color-<nombre>` (clases `bg-<nombre>`, `text-<nombre>`, `border-<nombre>`). Los nombres viejos por pantalla (`primary-blue`, `sectionB`, etc.) ya no existen: no reintroducirlos.
 
 ## Tipografía
 
@@ -123,4 +123,5 @@ Estados: al presionar el botón se desplaza 4 px y pierde la sombra; el foco se 
 
 1. Confirmar la licencia comercial de Genty Demo o reemplazar el logo por uno con licencia clara.
 2. Producir las ilustraciones definitivas de perros y gatos con estas reglas (las del prototipo son provisorias).
-3. Volcar los tokens en `globals.css` y crear los componentes base antes de construir pantallas nuevas.
+3. Crear los componentes base (botón, campo, tarjeta, badge, stepper) con los tokens de `globals.css` antes de construir pantallas nuevas.
+4. Modo oscuro: la paleta es solo clara. Se retiró el ajuste automático por `prefers-color-scheme`; diseñar una variante oscura si producto la pide.
