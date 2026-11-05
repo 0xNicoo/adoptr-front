@@ -5,10 +5,6 @@ import { getAccessToken } from "@/lib/auth/session";
 import Button from "../ui/button";
 import UserMenu, { LogoutButton } from "./user-menu";
 
-// Navbar del sistema visual (docs/arquitectura/sistema-visual.md#componentes-base).
-// «Adoptar» y «Publicar» llevan a la landing hasta que existan sus rutas
-// (docs/producto/flujos-producto.md).
-
 const links = [
   { label: "Adoptar", href: "/" },
   { label: "Publicar", href: "/" },
@@ -16,20 +12,18 @@ const links = [
 ];
 
 const linkClass =
-  "rounded-sm px-0.5 py-2.5 text-[17px] font-bold text-paper underline-offset-8 decoration-cta decoration-4 " +
+  "rounded-sm px-0.5 py-2.5 text-[17px] font-bold text-surface underline-offset-8 decoration-cta decoration-4 " +
   "hover:underline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent-teal";
 
 export default async function Navbar() {
-  // Solo una pista para la navegación: la cookie puede estar vencida.
-  // La autorización real la hace el backend.
   const isLoggedIn = Boolean(await getAccessToken());
 
   return (
-    <Disclosure as="nav" aria-label="Principal" className="relative z-50 border-b-4 border-cta bg-ink">
+    <Disclosure as="nav" aria-label="Principal" className="relative z-50 border-b-4 border-ink bg-primary">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3.5">
         <Link
           href="/"
-          className="font-brand text-4xl leading-none text-paper [text-shadow:3px_3px_0_var(--color-primary)] sm:text-5xl"
+          className="font-brand text-4xl leading-none text-surface [text-shadow:3px_3px_0_var(--color-ink)] sm:text-5xl"
         >
           Adop<span className="text-cta">tr</span>
         </Link>
@@ -49,7 +43,7 @@ export default async function Navbar() {
           )}
         </div>
 
-        <DisclosureButton className="group inline-flex h-11 w-11 items-center justify-center rounded-full border-3 border-paper text-paper focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent-teal sm:hidden">
+        <DisclosureButton className="group inline-flex h-11 w-11 items-center justify-center rounded-full border-3 border-surface text-surface focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent-teal sm:hidden">
           <span className="sr-only">Abrir menú</span>
           <Bars3Icon aria-hidden="true" className="h-6 w-6 group-data-[open]:hidden" />
           <XMarkIcon aria-hidden="true" className="hidden h-6 w-6 group-data-[open]:block" />
@@ -69,7 +63,7 @@ export default async function Navbar() {
                 <Button href="/profile" variant="secondary" size="sm" tone="dark">
                   Mi perfil
                 </Button>
-                <LogoutButton className="min-h-11 rounded-full border-3 border-paper px-5 font-bold text-paper" />
+                <LogoutButton className="min-h-11 rounded-full border-3 border-surface px-5 font-bold text-surface" />
               </>
             ) : (
               <Button href="/login" variant="cta" size="sm" tone="dark">

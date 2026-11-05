@@ -43,7 +43,7 @@ export default function UserMenu() {
     <Menu as="div" className="relative">
       <MenuButton
         aria-label="Menú de usuario"
-        className="flex min-h-11 items-center gap-1.5 rounded-full px-2 text-paper focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent-teal"
+        className="flex min-h-11 items-center gap-1.5 rounded-full px-2 text-surface focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent-teal"
       >
         <UserCircleIcon aria-hidden="true" className="h-8 w-8" />
         <ChevronDownIcon aria-hidden="true" className="h-4 w-4" />
