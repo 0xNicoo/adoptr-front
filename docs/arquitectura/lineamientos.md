@@ -23,6 +23,7 @@ Descripción de la estructura y criterios para evolucionarla. Mantener aquí las
 
 ## Experiencia y sistema visual
 
+- Paleta, tipografía, componentes base, reglas de ilustración y accesibilidad visual: ver [sistema visual](sistema-visual.md), que es la referencia de estilo para pantallas nuevas y tokens de `globals.css`.
 - Mantener identidad existente (azul/naranja, Genty Demo para marca, Geist para interfaz) y consolidar tokens de `globals.css` en componentes reutilizables: botón, campo, tarjeta de mascota, badge de estado, aviso/error y modal. Revisar contraste en tema claro/oscuro, estados focus/hover/disabled y responsive.
 - MVP de navegación **a definir con producto**: catálogo de mascotas con filtros (ubicación y atributos solo si están soportados), detalle con fotos y datos esenciales, CTA de consulta/adopción, perfil/alta de publicación; añadir perdidas/servicios, favoritos y chat solo con contrato real. No inventar información de mascota ni simular acciones persistidas.
 - Navegación semántica: links para destinos existentes, botones reales para menús, foco y cierre con teclado, etiquetas accesibles; navbar mobile también debe ofrecer login/logout cuando corresponda. Formulario Google con carga controlada del SDK y estados de error/espera, sin log de credenciales.
