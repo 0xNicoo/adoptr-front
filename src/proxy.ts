@@ -10,7 +10,7 @@ export default async function proxy(req: NextRequest) {
   const token = (await cookies()).get('access_token')?.value
  
   if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL('/', req.nextUrl))
+    return NextResponse.redirect(new URL('/login', req.nextUrl))
   }
  
   return NextResponse.next()

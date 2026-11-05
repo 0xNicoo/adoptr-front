@@ -123,5 +123,5 @@ Estados: al presionar el botón se desplaza 4 px y pierde la sombra; el foco se 
 
 1. Confirmar la licencia comercial de Genty Demo o reemplazar el logo por uno con licencia clara.
 2. Producir las ilustraciones definitivas de perros y gatos con estas reglas (las del prototipo son provisorias).
-3. Crear los componentes base (botón, campo, tarjeta, badge, stepper) con los tokens de `globals.css` antes de construir pantallas nuevas.
+3. Componentes base: `Button` y `Badge` ya existen en `src/app/components/ui/`. Faltan campo, tarjeta de mascota y stepper; crearlos ahí antes de las pantallas que los usen.
 4. Modo oscuro: la paleta es solo clara. Se retiró el ajuste automático por `prefers-color-scheme`; diseñar una variante oscura si producto la pide.
