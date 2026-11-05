@@ -46,8 +46,8 @@ export default function LoginBtn() {
             className="flex items-center space-x-2 p-2 rounded cursor-pointer"
             onClick={toggleDropdown}
           >
-            <ChevronDownIcon className="w-4 h-4 text-custom-blue" />
-            <UserCircleIcon className="w-8 h-8 text-custom-blue" />
+            <ChevronDownIcon className="w-4 h-4 text-ink" />
+            <UserCircleIcon className="w-8 h-8 text-ink" />
           </div>
     
           {isOpen && (

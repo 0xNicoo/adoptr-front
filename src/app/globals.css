@@ -1,42 +1,51 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Sistema visual de Adoptr: ver docs/arquitectura/sistema-visual.md.
+ * Los nombres son por función, no por pantalla. Generan clases como
+ * bg-cta, text-ink, border-ink, shadow-card o rounded-card.
+ * Solo tema claro: el modo oscuro está pendiente.
+ */
+@theme {
+  --color-primary: #1C3EB2;
+  --color-cta: #FF823B;
+  --color-cta-hover: #DB6826;
+  --color-ink: #0B1956;
+  --color-ink-soft: #4A5280;
+  --color-paper: #FFF4E2;
+  --color-surface: #FFFDF7;
+  --color-positive: #6CC24A;
+  --color-positive-soft: #E3F5D9;
+  --color-accent-teal: #2EC4B6;
+  --color-accent-mustard: #FFC43D;
+  --color-danger: #C8303C;
+  --color-danger-soft: #FFF1F1;
+  --color-disabled: #EDE4D3;
+
+  /* Sombras duras desplazadas, sin desenfoque. */
+  --shadow-hard: 4px 4px 0 var(--color-ink);
+  --shadow-card: 6px 6px 0 var(--color-ink);
+  --shadow-panel: 8px 8px 0 var(--color-ink);
+
+  --radius-card: 22px;
+  --radius-field: 14px;
 }
 
+/* Fuentes cargadas con next/font en layout.tsx. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-custom-blue: #051A65;
-  --color-primary-blue: #1C3EB2;
-  --color-primary-orange: #FF823B;
-  --color-primary-orange-dark: #db6826;
-  --color-footer-primary: #050D2D;
-  --color-sectionB: #F8F3EA;
-  --color-sectionC: #D1E8FF;
-  --color-sectionD: #5784E6;
-  --color-secondary-blue: #0B1956;
-  --color-blue-hover: #040A22;
-  --color-background-gray: #F9F9FB;
-  --color-primary-orange-light: #FFD4A2;
-  --color-custom-orange: #D76D31;
-  --color-blue-light: #1774D3;
-  --color-custom-light: #1159a2;
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-genty-demo: var(--font-genty-demo);
+  --font-display: var(--font-lilita-one);
+  --font-brand: var(--font-genty-demo);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Trama de puntos tipo impresión vieja. Se combina con un bg-* de color. */
+@utility halftone {
+  background-image: radial-gradient(rgb(11 25 86 / 0.16) 1.3px, transparent 1.6px);
+  background-size: 14px 14px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
 }

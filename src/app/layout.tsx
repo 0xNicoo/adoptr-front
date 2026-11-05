@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Lilita_One } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/navbar";
@@ -9,8 +9,9 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const lilitaOne = Lilita_One({
+  variable: "--font-lilita-one",
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="es" className={`${geistSans.variable} ${lilitaOne.variable} ${gentyDemo.variable}`}>
       <head>
         <script
           src="https://accounts.google.com/gsi/client"
@@ -35,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defer
         ></script>
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} ${gentyDemo.variable}`}>
+      <body>
         <Navbar />
         <main className="container mx-auto p-4">
           {children}
