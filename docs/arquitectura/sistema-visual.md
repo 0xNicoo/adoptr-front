@@ -21,10 +21,10 @@ Azul y naranja son los colores de la marca y mandan. Los acentos se usan poco: b
 
 | Token propuesto | Color | Hex | Uso | Texto encima |
 | --- | --- | --- | --- | --- |
-| `primary` | Azul Adoptr | `#1C3EB2` | Botón primario, títulos, links | Blanco (8,8:1) |
+| `primary` | Azul Adoptr | `#1C3EB2` | Botón primario, títulos, links, fondo de la navbar | Blanco (8,8:1) |
 | `cta` | Naranja Adoptr | `#FF823B` | Acción principal de cada pantalla | **Tinta** (6,6:1). Nunca blanco (2,5:1) |
 | `cta-hover` | Naranja oscuro | `#DB6826` | Hover del naranja | Tinta |
-| `ink` | Tinta | `#0B1956` | Texto, contornos, sombras, navbar y pie | Crema |
+| `ink` | Tinta | `#0B1956` | Texto, contornos, sombras y pie | Crema |
 | `ink-soft` | Tinta suave | `#4A5280` | Texto secundario, fechas, ayudas, «no» | Sobre papel: 6,8:1 |
 | `paper` | Papel | `#FFF4E2` | Fondo general | Tinta |
 | `surface` | Papel claro | `#FFFDF7` | Tarjetas, paneles, campos de lectura | Tinta |
@@ -91,6 +91,8 @@ Quitar el `font-family: Arial` que hoy fuerza `globals.css` en `body`.
 
 Estados: al presionar el botón se desplaza 4 px y pierde la sombra; el foco se marca con `outline` de 3 px `accent-teal` separado 4 px. Los botones de solo ícono llevan `aria-label`.
 
+Sobre fondos oscuros (`primary` o `ink`), el contorno y la sombra tinta casi no se ven (1,8:1 sobre azul): usar `tone="dark"`, que los pasa a papel. Tamaño `size="sm"` (alto 44 px) para barras compactas como la navbar.
+
 **Badges de estado:** píldora con contorno. «En adopción» en `positive` y «Adoptado» en `danger` cuando van sueltos; sobre una foto, fondo `surface` para que se lean. «Próximamente» en `accent-mustard`, rectangular y levemente girada.
 
 **Datos de salud (sí/no):** el «sí» va en chip `positive-soft` con contorno sólido y tilde; el «no» va con contorno punteado `ink-soft`, cruz y texto explícito («Sin castrar»). No usar un tilde gris para «no»: se confunde con «deshabilitado». En formularios, cada dato es un par de botones Sí/No.
@@ -99,7 +101,7 @@ Estados: al presionar el botón se desplaza 4 px y pierde la sombra; el foco se 
 
 **Tarjeta de mascota:** foto arriba (mientras carga o si falta, fondo de color con trama), badge de estado, nombre en Lilita One, línea de datos («Perro · Pequeño · Macho · 1 año»), localidad y un único botón secundario. Quien publicó ve sus acciones («Editar») en lugar de «Conocelo».
 
-**Navbar:** fondo `ink` con línea inferior `cta` de 4 px. Logo en crema con «tr» naranja; links en crema; «Ingresar» como botón `cta`. Página actual marcada con subrayado naranja y `aria-current`.
+**Navbar:** fondo `primary` (azul Adoptr) con línea inferior `ink` de 4 px. Logo en `surface` (blanco) con «tr» naranja y sombra dura tinta; links, íconos y botón del menú mobile en `surface` (8,7:1). Subrayado de hover en `cta` (3,6:1 sobre el azul). «Ingresar» como botón `cta` con `tone="dark"`. Nada en tinta sobre el azul: no llega a 3:1.
 
 **Stepper:** pasos numerados en círculos; completo en `positive` con tilde, actual en `cta`, pendientes con contorno punteado `ink-soft`.
 
