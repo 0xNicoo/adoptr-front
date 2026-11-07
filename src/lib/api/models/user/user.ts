@@ -1,11 +1,11 @@
 import { Profile } from "../profile/profile";
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
   provider: string;
   providerUserId: string;
-  profile: Profile;
- createdAt: Date;
+  profile: Profile | null;
+  createdAt: string;
 }

@@ -33,7 +33,7 @@ Descripción de la estructura y criterios para evolucionarla. Mantener aquí las
 ## Prioridades técnicas a resolver
 
 1. Robustecer carga del SDK Google, evitar logs de credenciales, validar cookie/sesión y manejo de errores; alinear navegación de perfil con rutas reales y permisos del backend.
-2. Alinear tipos TypeScript con respuestas HTTP (IDs, fechas, `genderType`, perfil opcional) y construir vistas de perfil solo con endpoints funcionales.
+2. Construir las vistas de perfil sobre los endpoints que ya existen (`GET`/`POST /profile`, catálogo de provincias y localidades) y los tipos alineados con ellos.
 3. Tras acordar el contrato con backend y producto, incorporar listado/detalle y luego publicación/solicitud de adopción con estados de UI completos; dejar fuera enlaces a flujos inexistentes.
 4. Corregir lint, auditar/actualizar dependencias, añadir pruebas de integración/e2e y ejecutar `lint`, TypeScript y build en CI.
 
@@ -41,7 +41,7 @@ Descripción de la estructura y criterios para evolucionarla. Mantener aquí las
 
 1. **Identidad (antes de confiar en la sesión):** eliminar el log de la respuesta Google que incluye `credential` en `src/app/login/page.tsx`; evitar que la server action serialice el JWT al cliente. Reprobar con inspección de red/cliente y pruebas de login, error, logout y expiración. El backend todavía no valida issuer/audience/proveedor y mantiene un secreto JWT conocido: ver [API backend](../../../adoptr-back/docs/arquitectura/api.md); no declarar login listo para producción.
 2. **Integración:** `apiRequest` actual no falla por falta de token aunque se invoque con `requiresAuth=true` (aún no hay tales llamadas desde UI); ante error asume JSON, registra payload y pierde status/código al lanzar `Error(message)`. El backend ya responde `{code, message}` uniforme con `code` textual estable (incluidos los 401). Definir error seguro con status/code, distinguir 401 (`UNAUTHENTICATED`), tratar cuerpo no JSON, evitar volcar datos sensibles y probar casos de red/timeout. La base URL se configura con `API_URL` solo de servidor; definirla según la topología del entorno.
-3. **Contrato tipado:** modelos actuales declaran `User.id` y `Profile.id` como `string` (backend `Long`), `User.createdAt` como `Date` (JSON string), `User.profile` no nullable y `Profile.gender` donde backend expone `genderType`. Ajustar antes de consumirlos y probar JSON real; no copiar tipos aspiracionales a nuevas pantallas.
+3. **Contrato tipado:** los modelos de `src/lib/api/models/` siguen el contrato de [API backend](../../../adoptr-back/docs/arquitectura/api.md): ids numéricos, fechas como texto ISO, `User.profile` nullable, `Profile` como unión discriminada por `profileType` y `Locality` con `displayName`. Al cambiar el contrato, actualizar los tipos en el mismo cambio y probar contra JSON real; no copiar tipos aspiracionales a nuevas pantallas.
 4. **Calidad y alcance:** hoy solo existen `/` (landing), `/login` y `/profile` (placeholder), no hay tests automatizados configurados en `package.json` para flujos, y la navegación contiene enlaces a rutas inexistentes. Una feature se acepta con ruta/contrato/persistencia reales o mock temporal **visible y rotulado**, autorización backend, estados, accesibilidad móvil y pruebas. Ver [flujos](../producto/flujos-producto.md) para decisiones pendientes. Docker/CI listados arriba son propuestas, no servicios existentes.
 
 Mantener la lista de prioridades corta y orientada a decisiones del código, no a avances de un entorno particular.
