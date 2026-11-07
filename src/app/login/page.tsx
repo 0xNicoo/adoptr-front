@@ -29,8 +29,9 @@ export default function LoginPage() {
   const handleCredentialResponse = useCallback(async (response: GoogleCredentialResponse) => {
     setError(false);
     try {
-      await loginAction({ token: response.credential, provider: "google" });
-      window.location.href = "/profile";
+      const { hasProfile } = await loginAction({ token: response.credential, provider: "google" });
+      // Sin perfil, el alta se pide inmediatamente después del login.
+      window.location.href = hasProfile ? "/profile" : "/profile/new";
     } catch {
       setError(true);
     }
