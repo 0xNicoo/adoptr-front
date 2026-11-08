@@ -6,7 +6,7 @@ import Button from "../ui/button";
 import UserMenu, { LogoutButton } from "./user-menu";
 
 const links = [
-  { label: "Adoptar", href: "/" },
+  { label: "Adoptar", href: "/adoptions" },
   { label: "Publicar", href: "/" },
   { label: "Cómo funciona", href: "/#como" },
 ];

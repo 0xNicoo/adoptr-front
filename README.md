@@ -21,6 +21,7 @@ npm run dev
 npm run lint
 npx tsc --noEmit
 npm run build
+npm test   # lógica pura con Vitest; no necesita la API ni variables de entorno
 ```
 
 Verificar la política de cookie `secure` en HTTP de desarrollo y HTTPS de despliegue; no asumir persistencia ni autorización por la sola presencia de la cookie. Para ejecutar la API ver también `../adoptr-back/README.md`.

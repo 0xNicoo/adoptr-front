@@ -6,4 +6,5 @@ Toda imagen de esta carpeta tiene una línea acá: archivo, origen, autor, licen
 | --- | --- | --- | --- | --- |
 | `perros/perro-azul.svg` | Dibujado para el proyecto (SVG a mano, prototipo de estilo, 2026-11) | Equipo Adoptr | Propia del proyecto | Provisoria: reemplazar por la ilustración definitiva |
 | `gatos/gato-turquesa.svg` | Dibujado para el proyecto (SVG a mano, prototipo de estilo, 2026-11) | Equipo Adoptr | Propia del proyecto | Provisoria: reemplazar por la ilustración definitiva |
+| `gatos/gato-crema.svg` | Variante de `gato-turquesa.svg` con la cara crema, para que se lea sobre las tarjetas turquesa (2026-11) | Equipo Adoptr | Propia del proyecto | Provisoria: reemplazar por la ilustración definitiva |
 | `decoracion/starburst.svg` | Dibujado para el proyecto (forma geométrica) | Equipo Adoptr | Propia del proyecto | Definitiva |

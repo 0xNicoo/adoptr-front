@@ -1,0 +1,140 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Badge from "@/app/components/ui/badge";
+import Button from "@/app/components/ui/button";
+import HealthChips from "@/app/components/ui/health-chips";
+import PetArt from "@/app/components/ui/pet-art";
+import { birthMonthToAge, formatAge } from "@/lib/adoption/age";
+import { SEX_LABEL, SIZE_LABEL, SPECIES_LABEL, formatPublishedDate, healthChips } from "@/lib/adoption/labels";
+import { getAdoption } from "@/lib/api/calls/adoption";
+import { Adoption } from "@/lib/api/models/adoption/adoption";
+import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
+import { ProfileType } from "@/lib/api/models/profile/profile-type";
+import BackLink from "./back-link";
+
+type Params = Promise<{ id: string }>;
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+type Loaded = { kind: "ok"; adoption: Adoption } | { kind: "not-found" } | { kind: "error" };
+
+async function load(rawId: string): Promise<Loaded> {
+  if (!/^\d+$/.test(rawId)) return { kind: "not-found" };
+  try {
+    const adoption = await getAdoption(Number(rawId));
+    return adoption ? { kind: "ok", adoption } : { kind: "not-found" };
+  } catch {
+    return { kind: "error" };
+  }
+}
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const result = await load((await params).id);
+  return { title: result.kind === "ok" ? `${result.adoption.petName} — Adoptr` : "Mascota en adopción — Adoptr" };
+}
+
+export default async function AdoptionDetailPage({ params, searchParams }: { params: Params; searchParams: SearchParams }) {
+  const result = await load((await params).id);
+  if (result.kind === "not-found") notFound();
+
+  if (result.kind === "error") {
+    return (
+      <div className="mx-auto max-w-6xl px-4 pt-10 pb-16 md:px-6">
+        <BackLink />
+        <div role="alert" className="mt-6 rounded-card border-3 border-ink bg-surface p-8 shadow-panel">
+          <h1 className="font-display text-4xl text-primary">No pudimos cargar esta mascota</h1>
+          <p className="mt-3 text-[17px]">Probá de nuevo en unos minutos.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const pet = result.adoption;
+  const adopted = pet.status === AdoptionStatus.ADOPTED;
+  const justPublished = (await searchParams).published === "1";
+  const facts = [
+    pet.size ? { label: "Tamaño", value: SIZE_LABEL[pet.size] } : { label: "Especie", value: SPECIES_LABEL[pet.species] },
+    { label: "Edad", value: formatAge(birthMonthToAge(pet.estimatedBirthDate)) },
+    { label: "Sexo", value: SEX_LABEL[pet.sex] },
+    { label: "Ubicación", value: `${pet.locality.displayName}, ${pet.province.name}` },
+  ];
+
+  return (
+    <div className="mx-auto max-w-6xl px-4 pt-10 pb-16 md:px-6">
+      <BackLink />
+
+      {justPublished && (
+        <div role="status" className="mt-6 rounded-card border-3 border-ink bg-positive-soft p-5 shadow-card">
+          <p className="font-display text-2xl">¡Listo! Publicaste a {pet.petName}.</p>
+          <p className="mt-1 text-[17px]">Ya aparece en el catálogo.</p>
+        </div>
+      )}
+      {adopted && (
+        <div role="status" className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-card border-3 border-ink bg-surface p-5 shadow-card">
+          <p className="font-display text-2xl">{pet.petName} ya encontró una familia.</p>
+          <Button href="/adoptions" variant="secondary">
+            Ver otras mascotas en adopción
+          </Button>
+        </div>
+      )}
+
+      <div className="mt-8 grid gap-10 md:grid-cols-2">
+        <PetArt id={pet.id} species={pet.species} size="large">
+          {adopted ? <Badge variant="danger">Adoptado</Badge> : <Badge variant="surface">En adopción</Badge>}
+        </PetArt>
+
+        <div className="flex flex-col gap-6">
+          <div>
+            <h1 className="font-display text-[52px] leading-none text-primary md:text-[42px]">{pet.petName}</h1>
+            <p className="mt-2 text-[15px] text-ink-soft">Publicado el {formatPublishedDate(pet.createdAt)}</p>
+          </div>
+
+          <dl className="grid grid-cols-2 gap-3">
+            {facts.map((fact) => (
+              <div key={fact.label} className="rounded-field border-3 border-ink bg-surface px-4 py-3">
+                <dt className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-soft">{fact.label}</dt>
+                <dd className="mt-1 text-[17px] font-bold">{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <HealthChips chips={healthChips(pet)} size="md" />
+
+          <section>
+            <h2 className="text-[22px] font-bold">Su historia</h2>
+            <p className="mt-2 whitespace-pre-line text-[17px] leading-[1.55]">{pet.description}</p>
+          </section>
+
+          {pet.owner && (
+            <section
+              aria-label="Quién la publica"
+              className="flex items-center gap-4 rounded-card border-3 border-ink bg-surface p-4"
+            >
+              <span
+                aria-hidden="true"
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-3 border-ink bg-accent-mustard font-display text-2xl"
+              >
+                {pet.owner.displayName.charAt(0).toUpperCase()}
+              </span>
+              <div>
+                <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-soft">Lo publica</p>
+                <p className="text-[17px] font-bold">{pet.owner.displayName}</p>
+                <p className="text-sm text-ink-soft">
+                  {pet.owner.profileType === ProfileType.ORGANIZATION ? "Organización" : "Particular"}
+                </p>
+              </div>
+            </section>
+          )}
+
+          {!adopted && (
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge variant="soon">Próximamente</Badge>
+              <p className="text-[15px] text-ink-soft">
+                Muy pronto vas a poder escribirle a quien la publicó desde Adoptr.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

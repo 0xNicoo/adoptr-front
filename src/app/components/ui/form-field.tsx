@@ -12,6 +12,14 @@ export const inputClass =
 
 export const labelClass = "mb-2 block text-[13px] font-semibold uppercase tracking-[0.08em]";
 
+/** Variante compacta para barras de filtros: misma forma, menos alto (44 px, el mínimo táctil). */
+export const compactInputClass =
+  "w-full h-11 rounded-[12px] border-[2.5px] border-ink bg-surface px-3 text-[15px] text-ink " +
+  "placeholder:text-ink-soft focus:outline-3 focus:outline-offset-2 focus:outline-cta " +
+  "disabled:cursor-not-allowed disabled:bg-disabled disabled:text-ink-soft";
+
+export const compactLabelClass = "mb-1 block text-[11px] font-semibold uppercase tracking-[0.08em]";
+
 export function Label({ htmlFor, children }: { htmlFor: string; children: ReactNode }) {
   return (
     <label htmlFor={htmlFor} className={labelClass}>
