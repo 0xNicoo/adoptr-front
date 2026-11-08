@@ -5,7 +5,6 @@ const pill =
   "inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-3 border-ink px-4 font-bold " +
   "focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal";
 
-/** Páginas visibles: la primera, la última y dos alrededor de la actual. */
 function visiblePages(current: number, total: number): (number | "…")[] {
   const pages = new Set([1, total, current - 1, current, current + 1].filter((p) => p >= 1 && p <= total));
   const sorted = [...pages].sort((a, b) => a - b);

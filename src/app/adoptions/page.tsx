@@ -33,10 +33,6 @@ function countText(total: number, species?: Species): string {
   return total === 1 ? `1 ${one} esperando una familia` : `${total} ${many} esperando una familia`;
 }
 
-/**
- * La URL solo trae el id de la localidad: el nombre se toma de los resultados, que la incluyen.
- * Si no hay resultados, se muestra un nombre genérico; el filtro sigue aplicado.
- */
 function selectedLocality(localityId: number | undefined, items: AdoptionSummary[]): Locality | null {
   if (!localityId) return null;
   return (
@@ -56,7 +52,7 @@ export default async function AdoptionsPage({ searchParams }: { searchParams: Pr
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 pt-12 pb-16 md:px-6">
       <header>
-        <h1 className="font-display text-[44px] leading-tight text-primary md:text-[60px]">Encontrá a tu compañero</h1>
+        <h1 className="font-display text-[44px] leading-tight text-primary md:text-[42px]">Encontrá a tu compañero</h1>
         {result.ok && result.page.totalItems > 0 && (
           <p className="mt-1 text-[17px] text-ink-soft">{countText(result.page.totalItems, query.filters.species)}</p>
         )}
@@ -98,7 +94,6 @@ export default async function AdoptionsPage({ searchParams }: { searchParams: Pr
 }
 
 function EmptyState({ query, hasFilters, totalItems }: { query: CatalogQuery; hasFilters: boolean; totalItems: number }) {
-  // Hay resultados, pero no en esta página (por ejemplo, un link viejo a la página 9).
   if (totalItems > 0) {
     return (
       <div className="rounded-card border-3 border-ink bg-surface p-8 text-center shadow-panel">

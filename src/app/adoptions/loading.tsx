@@ -1,4 +1,3 @@
-// Mientras carga el catálogo: tarjetas «esqueleto» con la trama, sin datos.
 export default function Loading() {
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 pt-12 pb-16 md:px-6" aria-busy="true">

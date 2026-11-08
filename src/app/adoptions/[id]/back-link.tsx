@@ -5,10 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
 
-/**
- * «Volver al catálogo». Si se llegó desde el catálogo (con o sin filtros), vuelve atrás para
- * conservar esa búsqueda; si no (link compartido, recién publicada), va al catálogo.
- */
 export default function BackLink() {
   const router = useRouter();
 
@@ -20,7 +16,6 @@ export default function BackLink() {
         router.back();
       }
     } catch {
-      // Sin referrer válido: sigue el link.
     }
   }
 

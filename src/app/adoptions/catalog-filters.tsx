@@ -22,11 +22,6 @@ const SPECIES_OPTIONS: { value: Species | null; label: string }[] = [
   { value: Species.CAT, label: "Gatos" },
 ];
 
-/**
- * Filtros del catálogo. Al buscar navega a la URL de la búsqueda (/adoptions?species=dog…);
- * la página la lee en el servidor. El tamaño solo aparece con «Perros» y se borra al cambiar
- * de especie, para que no quede un filtro invisible aplicado.
- */
 export default function CatalogFilters({
   provinces,
   initial,
@@ -34,7 +29,6 @@ export default function CatalogFilters({
 }: {
   provinces: Province[];
   initial: Filters;
-  /** Localidad elegida, con nombre para mostrarla (la URL solo trae el id). */
   initialLocality: Locality | null;
 }) {
   const router = useRouter();

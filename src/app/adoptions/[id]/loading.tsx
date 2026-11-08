@@ -1,4 +1,3 @@
-// Mientras carga el detalle.
 export default function Loading() {
   return (
     <div className="mx-auto max-w-6xl px-4 pt-10 pb-16 md:px-6" aria-busy="true">

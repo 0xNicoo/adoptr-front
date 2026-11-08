@@ -34,7 +34,6 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function AdoptionDetailPage({ params, searchParams }: { params: Params; searchParams: SearchParams }) {
   const result = await load((await params).id);
-  // notFound() lanza una excepción interna de Next: va fuera del try.
   if (result.kind === "not-found") notFound();
 
   if (result.kind === "error") {
@@ -85,7 +84,7 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
 
         <div className="flex flex-col gap-6">
           <div>
-            <h1 className="font-display text-[52px] leading-none text-primary md:text-[64px]">{pet.petName}</h1>
+            <h1 className="font-display text-[52px] leading-none text-primary md:text-[42px]">{pet.petName}</h1>
             <p className="mt-2 text-[15px] text-ink-soft">Publicado el {formatPublishedDate(pet.createdAt)}</p>
           </div>
 
