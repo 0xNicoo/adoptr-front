@@ -7,7 +7,8 @@ El frontend usa server actions y llamadas `fetch` desde código `server-only`; n
 | Login Google | `login/page.tsx` (ruta `/login`) → `loginAction` → `calls/auth.ts` | `POST /auth/oauth` sin Bearer, JSON `{token,provider:"google"}` | Única integración HTTP actual. Backend retorna `{token,user}`; la action guarda `token` en cookie **y devuelve `Auth` completo al cliente, incluido JWT**. El validador backend no comprueba issuer/audience; ver [API backend](../../../adoptr-back/docs/arquitectura/api.md). Body sin `token`/`provider` → 400 `VALIDATION_ERROR`; un ID token Google inválido **todavía llega como 500 `INTERNAL_ERROR`** (pendiente en backend). |
 | Perfil | `src/proxy.ts` comprueba cookie en la ruta exacta `/profile` | `GET /profile` requiere Bearer | **No consumido por la UI.** El backend responde 200 con el perfil del usuario del token, 404 `PROFILE_NOT_FOUND` si todavía no tiene perfil y 401 `UNAUTHENTICATED` sin token válido. La página es un placeholder. |
 | Creación de perfil | No hay formulario/llamada | `POST /profile` | Backend stub: no persiste. No implementar cliente suponiendo éxito real. |
-| Publicaciones y ubicaciones | Solo modelos de localidad/perfil en `src/lib/api/models` | Sin endpoints | No existen llamadas, listados ni navegación real. |
+| Ubicaciones | `calls/location.ts` (`getProvinces`, `searchLocalities`) | `GET /provinces` y `GET /provinces/{id}/localities?q=`, **públicas** (sin Bearer) | Se pueden llamar sin sesión, por ejemplo para filtrar el catálogo como visitante anónimo. Si se envía un Bearer, el backend lo ignora en estas rutas (uno vencido no produce 401). Citar la fuente Georef donde se muestren. |
+| Publicaciones | Sin llamadas ni modelos | Sin endpoints | No existen listados ni navegación real. |
 
 ## Sesión y modelos
 
