@@ -30,11 +30,9 @@ async function loadState(): Promise<PageState> {
   }
 }
 
-/** Publicar exige login y perfil (decisión de producto, dominio-y-alcance.md). */
 export default async function NewAdoptionPage() {
   const state = await loadState();
 
-  // redirect() lanza una excepción interna de Next: se llama fuera del try.
   if (state.kind === "unauthenticated") redirect("/login");
   if (state.kind === "no-profile") redirect("/profile/new");
 

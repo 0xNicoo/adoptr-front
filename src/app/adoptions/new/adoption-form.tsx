@@ -33,7 +33,6 @@ import { Province } from "@/lib/api/models/locality/province";
 
 const LAST_STEP = STEP.REVIEW;
 
-// Id del elemento que recibe el foco cuando un campo tiene error.
 const FIELD_IDS: Record<AdoptionField, string> = {
   species: "species",
   petName: "pet-name",
@@ -82,7 +81,6 @@ export default function AdoptionForm({
   initialLocation,
 }: {
   provinces: Province[];
-  /** Ubicación del perfil, para precargar el paso 4. */
   initialLocation: LocationValue;
 }) {
   const router = useRouter();
@@ -95,7 +93,6 @@ export default function AdoptionForm({
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
 
-  // Al cambiar de paso, el foco va al título del paso para que se anuncie.
   useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
@@ -150,7 +147,6 @@ export default function AdoptionForm({
   }
 
   function submit() {
-    // Se revalida todo por si se editó un paso desde la revisión.
     const invalid = firstInvalidStep(draft);
     if (invalid !== null) {
       setStep(invalid);
