@@ -7,7 +7,7 @@ import UserMenu, { LogoutButton } from "./user-menu";
 
 const links = [
   { label: "Adoptar", href: "/adoptions" },
-  { label: "Publicar", href: "/" },
+  { label: "Publicar", href: "/adoptions/new" },
   { label: "Cómo funciona", href: "/#como" },
 ];
 

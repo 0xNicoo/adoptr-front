@@ -2,11 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
 // Guardia de navegación por presencia de cookie: no valida el JWT ni autoriza.
-// Cada ruta protegida cubre también sus subrutas (/profile cubre /profile/new).
-const protectedRoutes = ['/profile']
+// `protectedTrees` cubre también las subrutas (/profile cubre /profile/new); `protectedPaths`
+// es la ruta exacta, porque /adoptions y /adoptions/[id] son públicas.
+const protectedTrees = ['/profile']
+const protectedPaths = ['/adoptions/new']
 
 function isProtected(path: string) {
-  return protectedRoutes.some((route) => path === route || path.startsWith(`${route}/`))
+  return (
+    protectedPaths.includes(path) ||
+    protectedTrees.some((route) => path === route || path.startsWith(`${route}/`))
+  )
 }
 
 export default async function proxy(req: NextRequest) {
