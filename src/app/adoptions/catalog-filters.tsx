@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import LocationSelector, { LocationValue } from "@/app/components/location-selector";
 import Button from "@/app/components/ui/button";
-import { Label, inputClass } from "@/app/components/ui/form-field";
+import { compactInputClass, compactLabelClass } from "@/app/components/ui/form-field";
 import { CATALOG_PATH, CatalogFilters as Filters, catalogHref } from "@/lib/adoption/catalog-query";
 import { SIZE_LABEL, lifeStageLabel } from "@/lib/adoption/labels";
 import { LifeStage } from "@/lib/api/models/adoption/life-stage";
@@ -70,8 +70,10 @@ export default function CatalogFilters({
     );
   }
 
+  const selectClass = compactInputClass;
+
   return (
-    <section aria-label="Filtros" className="rounded-card border-3 border-ink bg-surface p-5 shadow-panel md:p-6">
+    <section aria-label="Filtros" className="rounded-card border-3 border-ink bg-surface p-4 shadow-card md:p-5">
       <button
         type="button"
         onClick={() => setOpen(!open)}
@@ -86,40 +88,50 @@ export default function CatalogFilters({
       <form
         id="catalog-filters"
         onSubmit={submit}
-        className={`${open ? "mt-5 flex" : "hidden"} flex-col gap-5 md:mt-0 md:flex`}
+        className={`${open ? "mt-4 flex" : "hidden"} flex-col gap-4 md:mt-0 md:flex`}
       >
-        <fieldset>
-          <legend className="sr-only">Especie</legend>
-          <div className="flex flex-wrap gap-3">
-            {SPECIES_OPTIONS.map((option) => (
-              <label
-                key={option.label}
-                className={
-                  "inline-flex min-h-11 cursor-pointer items-center rounded-full border-3 border-ink bg-surface px-5 font-bold " +
-                  "has-checked:bg-ink has-checked:text-surface " +
-                  "has-focus-visible:outline-3 has-focus-visible:outline-offset-3 has-focus-visible:outline-accent-teal"
-                }
-              >
-                <input
-                  type="radio"
-                  name="species"
-                  className="sr-only"
-                  checked={species === (option.value ?? undefined)}
-                  onChange={() => chooseSpecies(option.value ?? undefined)}
-                />
-                {option.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <fieldset>
+            <legend className="sr-only">Especie</legend>
+            <div className="flex flex-wrap gap-2">
+              {SPECIES_OPTIONS.map((option) => (
+                <label
+                  key={option.label}
+                  className={
+                    "inline-flex min-h-11 cursor-pointer items-center rounded-full border-[2.5px] border-ink bg-surface px-4 text-[15px] font-bold " +
+                    "has-checked:bg-ink has-checked:text-surface " +
+                    "has-focus-visible:outline-3 has-focus-visible:outline-offset-3 has-focus-visible:outline-accent-teal"
+                  }
+                >
+                  <input
+                    type="radio"
+                    name="species"
+                    className="sr-only"
+                    checked={species === (option.value ?? undefined)}
+                    onChange={() => chooseSpecies(option.value ?? undefined)}
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <Link
+            href={CATALOG_PATH}
+            className="min-h-11 px-1.5 py-2.5 text-[15px] font-semibold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal"
+          >
+            Limpiar filtros
+          </Link>
+        </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-wrap items-end gap-3">
           {species === Species.DOG && (
-            <div>
-              <Label htmlFor="filter-size">Tamaño</Label>
+            <div className="min-w-32 flex-1">
+              <label htmlFor="filter-size" className={compactLabelClass}>
+                Tamaño
+              </label>
               <select
                 id="filter-size"
-                className={inputClass}
+                className={selectClass}
                 value={size ?? ""}
                 onChange={(e) => setSize((e.target.value as PetSize) || undefined)}
               >
@@ -132,11 +144,13 @@ export default function CatalogFilters({
               </select>
             </div>
           )}
-          <div>
-            <Label htmlFor="filter-sex">Sexo</Label>
+          <div className="min-w-32 flex-1">
+            <label htmlFor="filter-sex" className={compactLabelClass}>
+              Sexo
+            </label>
             <select
               id="filter-sex"
-              className={inputClass}
+              className={selectClass}
               value={sex ?? ""}
               onChange={(e) => setSex((e.target.value as PetSex) || undefined)}
             >
@@ -145,11 +159,13 @@ export default function CatalogFilters({
               <option value={PetSex.FEMALE}>Hembra</option>
             </select>
           </div>
-          <div>
-            <Label htmlFor="filter-life-stage">Edad</Label>
+          <div className="min-w-36 flex-1">
+            <label htmlFor="filter-life-stage" className={compactLabelClass}>
+              Edad
+            </label>
             <select
               id="filter-life-stage"
-              className={inputClass}
+              className={selectClass}
               value={lifeStage ?? ""}
               onChange={(e) => setLifeStage((e.target.value as LifeStage) || undefined)}
             >
@@ -161,18 +177,10 @@ export default function CatalogFilters({
               ))}
             </select>
           </div>
-        </div>
 
-        <LocationSelector provinces={provinces} value={location} onChange={setLocation} optional />
+          <LocationSelector provinces={provinces} value={location} onChange={setLocation} variant="filter" />
 
-        <div className="flex flex-wrap items-center justify-end gap-4 border-t-2 border-dashed border-ink pt-5">
-          <Link
-            href={CATALOG_PATH}
-            className="min-h-11 px-1.5 py-2.5 font-semibold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal"
-          >
-            Limpiar filtros
-          </Link>
-          <Button type="submit" variant="cta">
+          <Button type="submit" variant="cta" size="sm" className="w-full sm:w-auto">
             Buscar
           </Button>
         </div>
