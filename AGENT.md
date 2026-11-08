@@ -9,7 +9,7 @@ Este repositorio es la interfaz Next.js de Adoptr. Antes de editar, leer [arquit
 - Considerar `src/proxy.ts` solo guardia de navegación por presencia de cookie, no validación de JWT ni autorización. Mantener decisiones de acceso del lado servidor/backend y contemplar expiración/401.
 - Conservar `globals.css` como origen de tokens de color/tipografía hasta definir un sistema visual; construir pantallas accesibles, responsive y con estados loading/empty/error. Evitar callbacks de Google dependientes del orden de carga del script.
 - No poner secretos en variables públicas ni imprimir tokens/credenciales en consola. Revisar cookie `secure`/política de sesión para entornos locales y producción; no deshabilitar seguridad en producción para probar.
-- Por cambio ejecutar `npm run lint`, `npx tsc --noEmit` y `npm run build` cuando haya dependencias instaladas; reportar bloqueos. Cubrir con pruebas los flujos críticos y reportar si aún no hay infraestructura para ejecutarlas.
+- Por cambio ejecutar `npm run lint`, `npx tsc --noEmit`, `npm test` y `npm run build` cuando haya dependencias instaladas; reportar bloqueos. La lógica (conversiones, mapeos, validaciones) va en funciones puras con su `*.test.ts` al lado (ver [lineamientos](docs/arquitectura/lineamientos.md#pruebas)); para pantallas todavía no hay tests de componentes ni de navegador: reportar qué se verificó a mano.
 - Al modificar arquitectura, contratos, prioridades o reglas de producto, **actualizar el documento existente** en `docs/arquitectura/` o `docs/producto/`; crear otro solo si hay un tema independiente y mantener los enlaces. No incorporar comprobaciones de un entorno personal como si fueran el estado de todo el equipo.
 
 ## Navegación

@@ -125,5 +125,5 @@ Sobre fondos oscuros (`primary` o `ink`), el contorno y la sombra tinta casi no 
 
 1. Confirmar la licencia comercial de Genty Demo o reemplazar el logo por uno con licencia clara.
 2. Producir las ilustraciones definitivas de perros y gatos con estas reglas (las del prototipo son provisorias).
-3. Componentes base: `Button` y `Badge` ya existen en `src/app/components/ui/`. Faltan campo, tarjeta de mascota y stepper; crearlos ahí antes de las pantallas que los usen.
+3. Componentes base: en `src/app/components/ui/` ya existen `Button`, `Badge`, las piezas de campo (`form-field.tsx`), la tarjeta de mascota (`pet-card.tsx`, con `pet-art.tsx` para el bloque de color con ilustración y `health-chips.tsx` para la salud). Falta extraer el stepper como componente.
 4. Modo oscuro: la paleta es solo clara. Se retiró el ajuste automático por `prefers-color-scheme`; diseñar una variante oscura si producto la pide.
