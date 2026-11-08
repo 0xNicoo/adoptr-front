@@ -56,16 +56,13 @@ export default function Home() {
               En nuestra plataforma podrás adoptar a tu
               compañero ideal y acceder a servicios esenciales para su cuidado.
             </p>
-            <div className="flex flex-col items-start gap-3">
-              <div className="flex flex-wrap gap-4">
-                <Button variant="cta" href="/adoptions">
-                  Ver mascotas en adopción
-                </Button>
-                <Button variant="secondary" disabled>
-                  Publicar una mascota
-                </Button>
-              </div>
-              <Badge variant="soon">Próximamente</Badge>
+            <div className="flex flex-wrap gap-4">
+              <Button variant="cta" href="/adoptions">
+                Ver mascotas en adopción
+              </Button>
+              <Button variant="secondary" href="/adoptions/new">
+                Publicar una mascota
+              </Button>
             </div>
           </div>
 
@@ -125,7 +122,7 @@ export default function Home() {
           </span>
           <nav aria-label="Pie de página" className="flex flex-wrap gap-6 font-semibold">
             <Link href="/adoptions" className="underline-offset-4 hover:underline">Adoptar</Link>
-            <Link href="/" className="underline-offset-4 hover:underline">Publicar</Link>
+            <Link href="/adoptions/new" className="underline-offset-4 hover:underline">Publicar</Link>
             <Link href="#como" className="underline-offset-4 hover:underline">Cómo funciona</Link>
             <Link href="/login" className="underline-offset-4 hover:underline">Ingresar</Link>
           </nav>
