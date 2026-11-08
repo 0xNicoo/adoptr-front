@@ -26,12 +26,15 @@ export default function LocationSelector({
   onChange,
   provinceError,
   localityError,
+  optional = false,
 }: {
   provinces: Province[];
   value: LocationValue;
   onChange: (value: LocationValue) => void;
   provinceError?: string;
   localityError?: string;
+  /** Para filtros: la provincia ofrece «Todas» y los campos van en fila en pantallas anchas. */
+  optional?: boolean;
 }) {
   const id = useId();
   const provinceSelectId = `${id}-province`;
@@ -93,7 +96,7 @@ export default function LocationSelector({
   const showResults = status === "done" && results.length > 0;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className={optional ? "grid gap-4 md:grid-cols-2" : "flex flex-col gap-6"}>
       <div>
         <Label htmlFor={provinceSelectId}>Provincia</Label>
         <select
@@ -104,7 +107,7 @@ export default function LocationSelector({
           aria-invalid={provinceError ? true : undefined}
           aria-describedby={provinceError ? `${provinceSelectId}-error` : undefined}
         >
-          <option value="">Elegí una provincia</option>
+          <option value="">{optional ? "Todas" : "Elegí una provincia"}</option>
           {provinces.map((p) => (
             <option key={p.id} value={p.id}>
               {p.name}
@@ -136,7 +139,7 @@ export default function LocationSelector({
               type="search"
               autoComplete="off"
               className={inputClass}
-              placeholder={province ? "Buscá la localidad" : "Primero elegí una provincia"}
+              placeholder={province ? (optional ? "Todas (buscá para elegir una)" : "Buscá la localidad") : "Primero elegí una provincia"}
               value={query}
               onChange={(e) => changeQuery(e.target.value)}
               disabled={!province}
@@ -183,7 +186,7 @@ export default function LocationSelector({
         )}
       </div>
 
-      <p className="text-sm leading-normal text-ink-soft">
+      <p className={`text-sm leading-normal text-ink-soft ${optional ? "md:col-span-2" : ""}`}>
         Fuente de provincias y localidades: Servicio Georef –{" "}
         <a href="https://www.argentina.gob.ar/georef" className="text-primary underline" target="_blank" rel="noreferrer">
           argentina.gob.ar/georef

@@ -58,7 +58,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col items-start gap-3">
               <div className="flex flex-wrap gap-4">
-                <Button variant="cta" disabled>
+                <Button variant="cta" href="/adoptions">
                   Ver mascotas en adopción
                 </Button>
                 <Button variant="secondary" disabled>
@@ -124,7 +124,7 @@ export default function Home() {
             Adop<span className="text-cta">tr</span>
           </span>
           <nav aria-label="Pie de página" className="flex flex-wrap gap-6 font-semibold">
-            <Link href="/" className="underline-offset-4 hover:underline">Adoptar</Link>
+            <Link href="/adoptions" className="underline-offset-4 hover:underline">Adoptar</Link>
             <Link href="/" className="underline-offset-4 hover:underline">Publicar</Link>
             <Link href="#como" className="underline-offset-4 hover:underline">Cómo funciona</Link>
             <Link href="/login" className="underline-offset-4 hover:underline">Ingresar</Link>

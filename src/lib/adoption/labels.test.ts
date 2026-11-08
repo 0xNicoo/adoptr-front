@@ -3,7 +3,7 @@ import { LifeStage } from "@/lib/api/models/adoption/life-stage";
 import { PetSex } from "@/lib/api/models/adoption/pet-sex";
 import { PetSize } from "@/lib/api/models/adoption/pet-size";
 import { Species } from "@/lib/api/models/adoption/species";
-import { healthChips, knowMoreLabel, lifeStageLabel, summaryLine } from "./labels";
+import { formatPublishedDate, healthChips, knowMoreLabel, lifeStageLabel, summaryLine } from "./labels";
 
 const TODAY = new Date(2026, 10, 7, 12);
 
@@ -48,6 +48,12 @@ describe("summaryLine", () => {
     expect(
       summaryLine({ species: Species.CAT, size: null, sex: PetSex.UNKNOWN, estimatedBirthDate: "2026-07" }, TODAY),
     ).toBe("Gato · Sexo sin determinar · 4 meses");
+  });
+});
+
+describe("formatPublishedDate", () => {
+  it("dd/mm/aaaa a partir de la fecha ISO local del back, sin corrimiento de zona", () => {
+    expect(formatPublishedDate("2026-11-07T00:30:00.123456")).toBe("07/11/2026");
   });
 });
 

@@ -66,6 +66,15 @@ export function summaryLine(
     .join(" · ");
 }
 
+/**
+ * «07/11/2026». El back manda la fecha local de Argentina sin zona: se lee como texto
+ * para que el navegador o el servidor no la corran de día.
+ */
+export function formatPublishedDate(isoLocal: string): string {
+  const [year, month, day] = isoLocal.slice(0, 10).split("-");
+  return `${day}/${month}/${year}`;
+}
+
 export function knowMoreLabel(sex: PetSex): string {
   if (sex === PetSex.MALE) return "Conocelo";
   if (sex === PetSex.FEMALE) return "Conocela";
