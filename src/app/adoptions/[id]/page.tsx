@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import Badge from "@/app/components/ui/badge";
 import Button from "@/app/components/ui/button";
 import HealthChips from "@/app/components/ui/health-chips";
-import PetArt from "@/app/components/ui/pet-art";
 import { birthMonthToAge, formatAge } from "@/lib/adoption/age";
 import { SEX_LABEL, SIZE_LABEL, SPECIES_LABEL, formatPublishedDate, healthChips } from "@/lib/adoption/labels";
 import { getAdoption } from "@/lib/api/calls/adoption";
@@ -11,6 +10,7 @@ import { Adoption } from "@/lib/api/models/adoption/adoption";
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
 import BackLink from "./back-link";
+import PhotoGallery from "./photo-gallery";
 
 type Params = Promise<{ id: string }>;
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -78,9 +78,9 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
       )}
 
       <div className="mt-8 grid gap-10 md:grid-cols-2">
-        <PetArt id={pet.id} species={pet.species} size="large">
+        <PhotoGallery id={pet.id} species={pet.species} petName={pet.petName} photos={pet.photos}>
           {adopted ? <Badge variant="danger">Adoptado</Badge> : <Badge variant="surface">En adopción</Badge>}
-        </PetArt>
+        </PhotoGallery>
 
         <div className="flex flex-col gap-6">
           <div>

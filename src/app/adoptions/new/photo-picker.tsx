@@ -1,0 +1,149 @@
+"use client";
+
+import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { FieldError, FieldHelp } from "@/app/components/ui/form-field";
+import { ACCEPTED_PHOTO_TYPES, MAX_PHOTOS, PHOTO_RULES_TEXT, selectPhotos } from "@/lib/adoption/photos";
+
+export interface DraftPhoto {
+  id: string;
+  file: File;
+  previewUrl: string;
+}
+
+/** Fotos elegidas todavía sin subir, con su vista previa local. Libera las vistas previas al salir. */
+export function useDraftPhotos() {
+  const [photos, setPhotos] = useState<DraftPhoto[]>([]);
+  const [rejected, setRejected] = useState<string[]>([]);
+  const previewUrls = useRef(new Set<string>());
+
+  useEffect(() => {
+    const urls = previewUrls.current;
+    return () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+      urls.clear();
+    };
+  }, []);
+
+  const add = useCallback(
+    (files: File[]) => {
+      const selection = selectPhotos(files, photos.length);
+      const added = selection.accepted.map((file) => {
+        const previewUrl = URL.createObjectURL(file);
+        previewUrls.current.add(previewUrl);
+        return { id: crypto.randomUUID(), file, previewUrl };
+      });
+      setPhotos([...photos, ...added]);
+      setRejected(selection.rejected);
+    },
+    [photos],
+  );
+
+  const remove = useCallback(
+    (photo: DraftPhoto) => {
+      URL.revokeObjectURL(photo.previewUrl);
+      previewUrls.current.delete(photo.previewUrl);
+      setPhotos(photos.filter((other) => other.id !== photo.id));
+      setRejected([]);
+    },
+    [photos],
+  );
+
+  return { photos, rejected, add, remove };
+}
+
+export default function PhotoPicker({
+  photos,
+  rejected,
+  onAdd,
+  onRemove,
+}: {
+  photos: DraftPhoto[];
+  rejected: string[];
+  onAdd: (files: File[]) => void;
+  onRemove: (photo: DraftPhoto) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const full = photos.length >= MAX_PHOTOS;
+
+  function choose(event: ChangeEvent<HTMLInputElement>) {
+    onAdd(Array.from(event.target.files ?? []));
+    // Sin esto, elegir de nuevo un archivo que se acaba de quitar no dispara el cambio.
+    event.target.value = "";
+  }
+
+  function remove(photo: DraftPhoto) {
+    onRemove(photo);
+    // El botón presionado desaparece: el foco no puede quedar perdido.
+    requestAnimationFrame(() => inputRef.current?.focus());
+  }
+
+  return (
+    <div className="flex flex-col gap-5">
+      <FieldHelp id="photos-help">
+        Opcional. Hasta {MAX_PHOTOS} fotos: {PHOTO_RULES_TEXT} La primera que elijas va a ser la portada. Quitamos la
+        ubicación y los demás datos que traen las fotos de celular.
+      </FieldHelp>
+
+      <div className="flex flex-wrap items-center gap-4">
+        <label
+          className={
+            "inline-flex min-h-12 items-center gap-2 rounded-full border-3 px-7 text-[17px] font-bold " +
+            "has-focus-visible:outline-3 has-focus-visible:outline-offset-4 has-focus-visible:outline-accent-teal " +
+            (full
+              ? "cursor-not-allowed border-dashed border-ink-soft bg-disabled text-ink-soft"
+              : "cursor-pointer border-ink bg-surface text-ink shadow-hard active:translate-x-1 active:translate-y-1 active:shadow-none")
+          }
+        >
+          <input
+            ref={inputRef}
+            type="file"
+            accept={ACCEPTED_PHOTO_TYPES.join(",")}
+            multiple
+            disabled={full}
+            onChange={choose}
+            aria-describedby="photos-help"
+            className="sr-only"
+          />
+          <PhotoIcon aria-hidden="true" className="h-6 w-6" />
+          Elegir fotos
+        </label>
+        <p aria-live="polite" className="text-[15px] font-semibold text-ink-soft">
+          {photos.length} de {MAX_PHOTOS}
+        </p>
+      </div>
+
+      {rejected.length > 0 && (
+        <div role="alert">
+          {rejected.map((message) => (
+            <FieldError key={message}>{message}</FieldError>
+          ))}
+        </div>
+      )}
+
+      {photos.length > 0 && (
+        <ul aria-label="Fotos elegidas" className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+          {photos.map((photo, index) => (
+            <li key={photo.id} className="relative aspect-square overflow-hidden rounded-field border-3 border-ink bg-disabled">
+              <Image src={photo.previewUrl} alt={`Foto ${index + 1}: ${photo.file.name}`} fill unoptimized className="object-cover" />
+              {index === 0 && (
+                <span className="absolute bottom-1.5 left-1.5 rounded-full border-2 border-ink bg-accent-mustard px-2 text-[13px] font-bold">
+                  Portada
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={() => remove(photo)}
+                aria-label={`Quitar ${photo.file.name}`}
+                className="absolute top-1 right-1 flex size-11 cursor-pointer items-center justify-center rounded-full border-3 border-ink bg-surface focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent-teal"
+              >
+                <XMarkIcon aria-hidden="true" className="h-5 w-5 stroke-[2.5]" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}

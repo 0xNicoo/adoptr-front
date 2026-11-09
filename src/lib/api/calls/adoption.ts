@@ -42,3 +42,10 @@ export async function createAdoption(input: AdoptionInput): Promise<Adoption> {
   }
   return response.data;
 }
+
+/** Suma una foto al final de la publicación. Sin `Content-Type`: `fetch` lo arma con el boundary del multipart. */
+export async function addAdoptionPhoto(id: number, file: File): Promise<void> {
+  const body = new FormData();
+  body.append('file', file, file.name);
+  await apiRequest<Adoption>(`/adoptions/${id}/photos`, 'POST', body, 'multipart/form-data');
+}

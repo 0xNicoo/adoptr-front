@@ -6,7 +6,7 @@ import { PetSex } from "./pet-sex";
 import { PetSize } from "./pet-size";
 import { Species } from "./species";
 
-/** Tarjeta de listado (`GET /adoptions/mine`): la ficha sin descripción ni responsable. */
+/** Tarjeta de listado (`GET /adoptions` y `GET /adoptions/mine`): la ficha sin descripción ni responsable. */
 export interface AdoptionSummary {
   id: number;
   petName: string;
@@ -21,6 +21,8 @@ export interface AdoptionSummary {
   dewormed: boolean;
   neutered: boolean;
   status: AdoptionStatus;
+  /** `null` si no tiene fotos. El detalle no lo completa: ahí se usa `photos`. */
+  coverPhotoUrl: string | null;
   locality: Locality;
   province: Province;
   /** ISO local sin zona (hora de Argentina). */

@@ -84,6 +84,13 @@ describe("validateAdoptionStep", () => {
   });
 });
 
+describe("fotos", () => {
+  it("son opcionales: el paso nunca frena la publicación", () => {
+    expect(validateAdoptionStep(STEP.PHOTOS, EMPTY_ADOPTION_DRAFT)).toEqual({});
+    expect(firstInvalidStep(COMPLETE_DOG)).toBeNull();
+  });
+});
+
 describe("firstInvalidStep", () => {
   it("devuelve el primer paso con errores, o null si está todo completo", () => {
     expect(firstInvalidStep(COMPLETE_DOG)).toBeNull();

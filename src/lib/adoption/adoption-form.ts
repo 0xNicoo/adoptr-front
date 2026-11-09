@@ -11,8 +11,8 @@ import { ageError, ageToBirthMonth } from "./age";
 export const MAX_PET_NAME = 50;
 export const MAX_DESCRIPTION = 2000;
 
-export const STEP = { ANIMAL: 1, DATA: 2, HEALTH: 3, LOCATION: 4, STORY: 5, REVIEW: 6 } as const;
-export const ADOPTION_STEPS = ["Animal", "Datos", "Salud", "Ubicación", "Historia", "Revisión"] as const;
+export const STEP = { ANIMAL: 1, DATA: 2, HEALTH: 3, LOCATION: 4, STORY: 5, PHOTOS: 6, REVIEW: 7 } as const;
+export const ADOPTION_STEPS = ["Animal", "Datos", "Salud", "Ubicación", "Historia", "Fotos", "Revisión"] as const;
 
 export interface AdoptionDraft {
   species: Species | null;
