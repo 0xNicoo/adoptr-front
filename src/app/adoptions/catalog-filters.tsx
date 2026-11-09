@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import LocationSelector, { LocationValue } from "@/app/components/location-selector";
 import Button from "@/app/components/ui/button";
+import Select from "@/app/components/ui/select";
 import { compactInputClass, compactLabelClass } from "@/app/components/ui/form-field";
 import { CATALOG_PATH, CatalogFilters as Filters, catalogHref } from "@/lib/adoption/catalog-query";
 import { SIZE_LABEL, lifeStageLabel } from "@/lib/adoption/labels";
@@ -120,56 +121,48 @@ export default function CatalogFilters({
         <div className="flex flex-wrap items-end gap-3">
           {species === Species.DOG && (
             <div className="min-w-32 flex-1">
-              <label htmlFor="filter-size" className={compactLabelClass}>
-                Tamaño
-              </label>
-              <select
+              <Select
                 id="filter-size"
+                label="Tamaño"
                 className={selectClass}
+                labelClassName={compactLabelClass}
                 value={size ?? ""}
-                onChange={(e) => setSize((e.target.value as PetSize) || undefined)}
-              >
-                <option value="">Cualquiera</option>
-                {Object.values(PetSize).map((value) => (
-                  <option key={value} value={value}>
-                    {SIZE_LABEL[value]}
-                  </option>
-                ))}
-              </select>
+                onChange={(value) => setSize((value as PetSize) || undefined)}
+                options={[
+                  { value: "", label: "Cualquiera" },
+                  ...Object.values(PetSize).map((value) => ({ value, label: SIZE_LABEL[value] })),
+                ]}
+              />
             </div>
           )}
           <div className="min-w-32 flex-1">
-            <label htmlFor="filter-sex" className={compactLabelClass}>
-              Sexo
-            </label>
-            <select
+            <Select
               id="filter-sex"
+              label="Sexo"
               className={selectClass}
+              labelClassName={compactLabelClass}
               value={sex ?? ""}
-              onChange={(e) => setSex((e.target.value as PetSex) || undefined)}
-            >
-              <option value="">Cualquiera</option>
-              <option value={PetSex.MALE}>Macho</option>
-              <option value={PetSex.FEMALE}>Hembra</option>
-            </select>
+              onChange={(value) => setSex((value as PetSex) || undefined)}
+              options={[
+                { value: "", label: "Cualquiera" },
+                { value: PetSex.MALE, label: "Macho" },
+                { value: PetSex.FEMALE, label: "Hembra" },
+              ]}
+            />
           </div>
           <div className="min-w-36 flex-1">
-            <label htmlFor="filter-life-stage" className={compactLabelClass}>
-              Edad
-            </label>
-            <select
+            <Select
               id="filter-life-stage"
+              label="Edad"
               className={selectClass}
+              labelClassName={compactLabelClass}
               value={lifeStage ?? ""}
-              onChange={(e) => setLifeStage((e.target.value as LifeStage) || undefined)}
-            >
-              <option value="">Cualquiera</option>
-              {Object.values(LifeStage).map((value) => (
-                <option key={value} value={value}>
-                  {lifeStageLabel(value, species)}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => setLifeStage((value as LifeStage) || undefined)}
+              options={[
+                { value: "", label: "Cualquiera" },
+                ...Object.values(LifeStage).map((value) => ({ value, label: lifeStageLabel(value, species) })),
+              ]}
+            />
           </div>
 
           <LocationSelector provinces={provinces} value={location} onChange={setLocation} variant="filter" />
