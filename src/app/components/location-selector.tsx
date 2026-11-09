@@ -4,7 +4,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import { searchLocalitiesAction } from "@/actions/location";
 import { Locality } from "@/lib/api/models/locality/locality";
 import { Province } from "@/lib/api/models/locality/province";
-import { FieldError, FieldHelp, Label, compactInputClass, compactLabelClass, inputClass } from "./ui/form-field";
+import { FieldError, FieldHelp, Label, compactInputClass, compactLabelClass, inputClass, labelClass } from "./ui/form-field";
+import Select from "./ui/select";
 
 const MIN_QUERY = 2;
 const DEBOUNCE_MS = 300;
@@ -115,22 +116,20 @@ export default function LocationSelector({
   return (
     <div className={filter ? "contents" : "flex flex-col gap-6"}>
       <div className={filter ? "min-w-40 flex-1" : ""}>
-        {label(provinceSelectId, "Provincia")}
-        <select
+        <Select
           id={provinceSelectId}
+          label="Provincia"
           className={fieldClass}
-          value={value.provinceId ?? ""}
-          onChange={(e) => selectProvince(e.target.value)}
+          labelClassName={filter ? compactLabelClass : labelClass}
+          value={value.provinceId === null ? "" : String(value.provinceId)}
+          onChange={selectProvince}
+          options={[
+            { value: "", label: filter ? "Todas" : "Elegí una provincia" },
+            ...provinces.map((p) => ({ value: String(p.id), label: p.name })),
+          ]}
           aria-invalid={provinceError ? true : undefined}
           aria-describedby={provinceError ? `${provinceSelectId}-error` : undefined}
-        >
-          <option value="">{filter ? "Todas" : "Elegí una provincia"}</option>
-          {provinces.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
-            </option>
-          ))}
-        </select>
+        />
         {provinceError && <FieldError id={`${provinceSelectId}-error`}>{provinceError}</FieldError>}
       </div>
 

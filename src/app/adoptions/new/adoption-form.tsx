@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState, useTransition } from "react";
 import { addAdoptionPhotoAction, createAdoptionAction } from "@/actions/adoption";
 import LocationSelector, { LocationValue } from "@/app/components/location-selector";
+import Select from "@/app/components/ui/select";
 import Button from "@/app/components/ui/button";
 import { FieldError, FieldHelp, Label, RadioPill, inputClass } from "@/app/components/ui/form-field";
 import HealthChips from "@/app/components/ui/health-chips";
@@ -131,9 +132,10 @@ export default function AdoptionForm({
     if (first) {
       requestAnimationFrame(() => {
         const element = document.getElementById(FIELD_IDS[first]);
-        const focusable = element?.matches("input, select, textarea")
+        const selector = 'input, select, textarea, button[aria-haspopup="listbox"]';
+        const focusable = element?.matches(selector)
           ? element
-          : element?.querySelector<HTMLElement>("input, select, textarea");
+          : element?.querySelector<HTMLElement>(selector);
         focusable?.focus();
       });
     }
@@ -322,46 +324,34 @@ export default function AdoptionForm({
               <legend className="mb-2 block text-[13px] font-semibold uppercase tracking-[0.08em]">Edad aproximada</legend>
               <div className="grid max-w-md grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="age-years" className="mb-1.5 block text-sm font-semibold">
-                    Años
-                  </label>
-                  <select
+                  <Select
                     id="age-years"
-                    className={inputClass}
-                    value={draft.ageYears ?? ""}
-                    onChange={(e) =>
-                      update({ ageYears: e.target.value === "" ? null : Number(e.target.value) }, ["age"])
-                    }
+                    label="Años"
+                    labelClassName="mb-1.5 block text-sm font-semibold"
+                    value={draft.ageYears === null ? "" : String(draft.ageYears)}
+                    onChange={(value) => update({ ageYears: value === "" ? null : Number(value) }, ["age"])}
+                    options={[
+                      { value: "", label: "Elegí" },
+                      ...Array.from({ length: MAX_AGE_YEARS + 1 }, (_, n) => ({ value: String(n), label: String(n) })),
+                    ]}
                     aria-invalid={errors.age ? true : undefined}
-                  >
-                    <option value="">Elegí</option>
-                    {Array.from({ length: MAX_AGE_YEARS + 1 }, (_, n) => (
-                      <option key={n} value={n}>
-                        {n}
-                      </option>
-                    ))}
-                  </select>
+                    aria-describedby={`age-help${errors.age ? ` ${FIELD_IDS.age}-error` : ""}`}
+                  />
                 </div>
                 <div>
-                  <label htmlFor="age-months" className="mb-1.5 block text-sm font-semibold">
-                    Meses
-                  </label>
-                  <select
+                  <Select
                     id="age-months"
-                    className={inputClass}
-                    value={draft.ageMonths ?? ""}
-                    onChange={(e) =>
-                      update({ ageMonths: e.target.value === "" ? null : Number(e.target.value) }, ["age"])
-                    }
+                    label="Meses"
+                    labelClassName="mb-1.5 block text-sm font-semibold"
+                    value={draft.ageMonths === null ? "" : String(draft.ageMonths)}
+                    onChange={(value) => update({ ageMonths: value === "" ? null : Number(value) }, ["age"])}
+                    options={[
+                      { value: "", label: "Elegí" },
+                      ...Array.from({ length: 12 }, (_, n) => ({ value: String(n), label: String(n) })),
+                    ]}
                     aria-invalid={errors.age ? true : undefined}
-                  >
-                    <option value="">Elegí</option>
-                    {Array.from({ length: 12 }, (_, n) => (
-                      <option key={n} value={n}>
-                        {n}
-                      </option>
-                    ))}
-                  </select>
+                    aria-describedby={`age-help${errors.age ? ` ${FIELD_IDS.age}-error` : ""}`}
+                  />
                 </div>
               </div>
               <FieldHelp id="age-help">

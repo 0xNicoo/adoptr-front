@@ -99,6 +99,8 @@ Sobre fondos oscuros (`primary` o `ink`), el contorno y la sombra tinta casi no 
 
 **Campos:** etiqueta siempre visible arriba (no solo *placeholder*), contorno 3 px, fondo blanco. Error: contorno y texto `danger`, fondo `danger-soft` y mensaje asociado con `aria-describedby`.
 
+**Selectores:** `src/app/components/ui/select.tsx` centraliza los desplegables con `Listbox` de Headless UI (la dependencia ya usada por la navbar). Se usa en provincia, filtros de tamaño/sexo/edad y años/meses del alta. El clic sobre texto o flecha solo abre la lista, anclada fuera del campo; elegir una opción o confirmar con Enter cambia el valor. Escape cierra sin confirmar el cambio; admite flechas y búsqueda por teclado. Conserva etiqueta asociada, foco visible y atributos de error. Los formularios contemplan el botón con `aria-haspopup="listbox"` al enfocar el primer campo inválido. No cambia los valores ni los contratos de la API.
+
 **Tarjeta de mascota:** foto arriba (mientras carga o si falta, fondo de color con trama), badge de estado, nombre en Lilita One, línea de datos («Perro · Pequeño · Macho · 1 año»), localidad y un único botón secundario. Quien publicó ve sus acciones («Editar») en lugar de «Conocelo».
 
 **Navbar:** fondo `primary` (azul Adoptr) con línea inferior `ink` de 4 px. Logo en `surface` (blanco) con «tr» naranja y sombra dura tinta; links, íconos y botón del menú mobile en `surface` (8,7:1). Subrayado de hover en `cta` (3,6:1 sobre el azul). «Ingresar» como botón `cta` con `tone="dark"`. Nada en tinta sobre el azul: no llega a 3:1.

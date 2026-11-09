@@ -217,9 +217,10 @@ export default function ProfileForm({ provinces }: { provinces: Province[] }) {
     if (first) {
       requestAnimationFrame(() => {
         const element = document.getElementById(FIELD_IDS[first]);
-        const focusable = element?.matches("input, select, textarea")
+        const selector = 'input, select, textarea, button[aria-haspopup="listbox"]';
+        const focusable = element?.matches(selector)
           ? element
-          : element?.querySelector<HTMLElement>("input, select, textarea");
+          : element?.querySelector<HTMLElement>(selector);
         focusable?.focus();
       });
     }
