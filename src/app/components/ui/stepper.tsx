@@ -5,7 +5,7 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 
 export default function Stepper({ steps, current }: { steps: readonly string[]; current: number }) {
   return (
-    <ol aria-label="Pasos" className="flex items-center gap-2">
+    <ol aria-label="Pasos" className="flex items-center justify-between gap-0.5 sm:justify-start sm:gap-2">
       {steps.map((label, index) => {
         const number = index + 1;
         const state = number < current ? "done" : number === current ? "current" : "todo";
@@ -13,11 +13,11 @@ export default function Stepper({ steps, current }: { steps: readonly string[]; 
           <li
             key={label}
             aria-current={state === "current" ? "step" : undefined}
-            className="flex flex-1 items-center gap-2 last:flex-none"
+            className="flex flex-none items-center gap-2 sm:flex-auto sm:last:flex-none"
           >
             <span
               className={
-                "flex size-9 flex-none items-center justify-center rounded-full text-[15px] font-bold " +
+                "flex size-8 flex-none items-center justify-center rounded-full text-[15px] font-bold sm:size-9 " +
                 (state === "done"
                   ? "border-[2.5px] border-ink bg-positive"
                   : state === "current"
@@ -34,7 +34,7 @@ export default function Stepper({ steps, current }: { steps: readonly string[]; 
             {number < steps.length && (
               <span
                 aria-hidden="true"
-                className={`h-0 flex-1 border-t-[2.5px] ${state === "done" ? "border-ink" : "border-dashed border-ink-soft"}`}
+                className={`hidden h-0 flex-1 border-t-[2.5px] sm:block ${state === "done" ? "border-ink" : "border-dashed border-ink-soft"}`}
               />
             )}
           </li>

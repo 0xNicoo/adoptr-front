@@ -15,7 +15,7 @@ export default function PetCard({ pet }: { pet: AdoptionSummary }) {
 
   return (
     <article className="flex flex-col overflow-hidden rounded-card border-3 border-ink bg-surface shadow-card">
-      <PetArt id={pet.id} species={pet.species}>
+      <PetArt id={pet.id} species={pet.species} photoUrl={pet.coverPhotoUrl}>
         <Badge variant="surface" className="px-3 py-1 text-[13px]">
           {adopted ? "Adoptado" : "En adopción"}
         </Badge>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState, useTransition } from "react";
-import { createAdoptionAction } from "@/actions/adoption";
+import { addAdoptionPhotoAction, createAdoptionAction } from "@/actions/adoption";
 import LocationSelector, { LocationValue } from "@/app/components/location-selector";
 import Button from "@/app/components/ui/button";
 import { FieldError, FieldHelp, Label, RadioPill, inputClass } from "@/app/components/ui/form-field";
@@ -26,10 +26,12 @@ import {
 } from "@/lib/adoption/adoption-form";
 import { MAX_AGE_YEARS, ageToBirthMonth, formatAge, formatBirthMonth } from "@/lib/adoption/age";
 import { SEX_LABEL, SIZE_LABEL, SPECIES_LABEL, healthChips } from "@/lib/adoption/labels";
+import { PhotoUploadFailure, photoUploadMessage, uploadInOrder } from "@/lib/adoption/photos";
 import { PetSex } from "@/lib/api/models/adoption/pet-sex";
 import { PetSize } from "@/lib/api/models/adoption/pet-size";
 import { Species } from "@/lib/api/models/adoption/species";
 import { Province } from "@/lib/api/models/locality/province";
+import PhotoPicker, { DraftPhoto, useDraftPhotos } from "./photo-picker";
 
 const LAST_STEP = STEP.REVIEW;
 
@@ -71,6 +73,7 @@ const STEP_TITLES = [
   "Su salud",
   "¿Dónde está?",
   "Contanos su historia",
+  "Sumá fotos",
   "Revisá la publicación",
 ];
 
@@ -89,6 +92,11 @@ export default function AdoptionForm({
   const [errors, setErrors] = useState<AdoptionErrors>({});
   const [submitError, setSubmitError] = useState<SubmitError | null>(null);
   const [pending, startTransition] = useTransition();
+  const { photos, rejected: rejectedPhotos, add: addPhotos, remove: removePhoto } = useDraftPhotos();
+  // Una vez creada la publicación no se vuelve a crear: un reintento solo sube las fotos que faltan.
+  const [publishedId, setPublishedId] = useState<number | null>(null);
+  const [uploadFailures, setUploadFailures] = useState<PhotoUploadFailure<DraftPhoto>[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
@@ -146,6 +154,30 @@ export default function AdoptionForm({
     goTo(step + 1);
   }
 
+  async function uploadPhotos(adoptionId: number, pendingPhotos: DraftPhoto[]) {
+    const failures = await uploadInOrder(
+      pendingPhotos,
+      async (photo) => {
+        const formData = new FormData();
+        formData.append("file", photo.file);
+        const result = await addAdoptionPhotoAction(adoptionId, formData);
+        return result.ok ? null : result.code;
+      },
+      (current, total) => setUploadProgress({ current, total }),
+    );
+    setUploadProgress(null);
+    setUploadFailures(failures);
+    if (failures.length === 0) {
+      router.push(`/adoptions/${adoptionId}?published=1`);
+    }
+  }
+
+  function retryPhotos() {
+    if (publishedId === null) return;
+    const pendingPhotos = uploadFailures.map((failure) => failure.item);
+    startTransition(() => uploadPhotos(publishedId, pendingPhotos));
+  }
+
   function submit() {
     const invalid = firstInvalidStep(draft);
     if (invalid !== null) {
@@ -157,7 +189,8 @@ export default function AdoptionForm({
     startTransition(async () => {
       const result = await createAdoptionAction(toAdoptionInput(draft));
       if (result.ok) {
-        router.push(`/adoptions/${result.id}?published=1`);
+        setPublishedId(result.id);
+        await uploadPhotos(result.id, photos);
         return;
       }
       if (result.code === "LOCALITY_NOT_FOUND") {
@@ -183,6 +216,9 @@ export default function AdoptionForm({
 
   const error = (field: AdoptionField) =>
     errors[field] ? <FieldError id={`${FIELD_IDS[field]}-error`}>{errors[field]}</FieldError> : null;
+
+  const published = publishedId !== null;
+  const locked = pending || published;
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-7">
@@ -428,12 +464,16 @@ export default function AdoptionForm({
           </div>
         )}
 
+        {step === STEP.PHOTOS && (
+          <PhotoPicker photos={photos} rejected={rejectedPhotos} onAdd={addPhotos} onRemove={removePhoto} />
+        )}
+
         {step === STEP.REVIEW && draft.species && draft.sex && age && (
           <dl className="flex flex-col gap-5">
-            <ReviewRow label="Animal" onEdit={() => goTo(STEP.ANIMAL)} editLabel="Cambiar el animal">
+            <ReviewRow label="Animal" onEdit={() => goTo(STEP.ANIMAL)} editLabel="Cambiar el animal" disabled={locked}>
               {SPECIES_LABEL[draft.species]}
             </ReviewRow>
-            <ReviewRow label="Datos" onEdit={() => goTo(STEP.DATA)} editLabel="Editar nombre, sexo, edad y tamaño">
+            <ReviewRow label="Datos" onEdit={() => goTo(STEP.DATA)} editLabel="Editar nombre, sexo, edad y tamaño" disabled={locked}>
               <span className="font-display text-2xl text-primary">{draft.petName.trim()}</span>
               <span className="mt-1 block">
                 {[SEX_LABEL[draft.sex], isDog && draft.size ? SIZE_LABEL[draft.size] : null].filter(Boolean).join(" · ")}
@@ -442,7 +482,7 @@ export default function AdoptionForm({
                 {formatAge(age)} (nació aprox. en {formatBirthMonth(ageToBirthMonth(age))})
               </span>
             </ReviewRow>
-            <ReviewRow label="Salud" onEdit={() => goTo(STEP.HEALTH)} editLabel="Editar salud">
+            <ReviewRow label="Salud" onEdit={() => goTo(STEP.HEALTH)} editLabel="Editar salud" disabled={locked}>
               <HealthChips
                 chips={healthChips({
                   sex: draft.sex,
@@ -452,11 +492,24 @@ export default function AdoptionForm({
                 })}
               />
             </ReviewRow>
-            <ReviewRow label="Ubicación" onEdit={() => goTo(STEP.LOCATION)} editLabel="Editar ubicación">
+            <ReviewRow label="Ubicación" onEdit={() => goTo(STEP.LOCATION)} editLabel="Editar ubicación" disabled={locked}>
               {draft.location.locality?.displayName}, {province?.name}
             </ReviewRow>
-            <ReviewRow label="Su historia" onEdit={() => goTo(STEP.STORY)} editLabel="Editar historia">
+            <ReviewRow label="Su historia" onEdit={() => goTo(STEP.STORY)} editLabel="Editar historia" disabled={locked}>
               <span className="whitespace-pre-line">{draft.description.trim()}</span>
+            </ReviewRow>
+            <ReviewRow label="Fotos" onEdit={() => goTo(STEP.PHOTOS)} editLabel="Editar fotos" disabled={locked}>
+              {photos.length === 0 ? (
+                "Sin fotos: vamos a mostrar una ilustración."
+              ) : (
+                <ul className="mt-1 flex flex-wrap gap-2">
+                  {photos.map((photo, index) => (
+                    <li key={photo.id} className="relative size-20 overflow-hidden rounded-field border-3 border-ink bg-disabled">
+                      <Image src={photo.previewUrl} alt={`Foto ${index + 1}: ${photo.file.name}`} fill unoptimized className="object-cover" />
+                    </li>
+                  ))}
+                </ul>
+              )}
             </ReviewRow>
           </dl>
         )}
@@ -467,28 +520,72 @@ export default function AdoptionForm({
           </div>
         )}
 
-        <div className="flex flex-col-reverse items-stretch gap-4 border-t-3 border-dashed border-ink pt-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap items-center gap-3">
-            {step > STEP.ANIMAL && (
-              <Button variant="secondary" onClick={() => goTo(step - 1)} disabled={pending}>
-                Atrás
-              </Button>
-            )}
-            <Link
-              href="/adoptions"
-              className="inline-flex min-h-11 items-center px-1.5 font-semibold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal"
-            >
-              Cancelar
-            </Link>
+        {uploadProgress && (
+          <p role="status" className="font-semibold">
+            Subiendo foto {uploadProgress.current} de {uploadProgress.total}…
+          </p>
+        )}
+
+        {published && uploadFailures.length > 0 && !pending && (
+          <div role="alert" className="flex flex-col gap-3 rounded-field border-3 border-danger bg-danger-soft px-5 py-4">
+            <p className="font-semibold">
+              Ya publicamos a {draft.petName.trim()}, pero{" "}
+              {uploadFailures.length === 1 ? "una foto no se pudo subir" : `${uploadFailures.length} fotos no se pudieron subir`}:
+            </p>
+            <ul className="flex flex-col gap-1">
+              {uploadFailures.map(({ item, code }) => (
+                <li key={item.id} className="wrap-anywhere">
+                  <strong>{item.file.name}:</strong> {photoUploadMessage(code)}
+                </li>
+              ))}
+            </ul>
+            <p>Por ahora no se pueden agregar fotos después de publicar.</p>
           </div>
-          {step < LAST_STEP ? (
-            <Button variant="primary" onClick={next}>
-              Siguiente
-            </Button>
+        )}
+
+        <div className="flex flex-col-reverse items-stretch gap-4 border-t-3 border-dashed border-ink pt-6 md:flex-row md:items-center md:justify-between">
+          {published ? (
+            uploadFailures.length > 0 && !pending ? (
+              <>
+                <Button variant="secondary" href={`/adoptions/${publishedId}?published=1`}>
+                  {uploadFailures.length === 1 ? "Seguir sin esa foto" : "Seguir sin esas fotos"}
+                </Button>
+                <Button variant="cta" onClick={retryPhotos}>
+                  Reintentar
+                </Button>
+              </>
+            ) : (
+              <Button variant="cta" disabled className="md:ml-auto">
+                Publicando…
+              </Button>
+            )
           ) : (
-            <Button variant="cta" onClick={submit} disabled={pending}>
-              {pending ? "Publicando…" : "Publicar"}
-            </Button>
+            <>
+              <div className="flex flex-wrap items-center gap-3">
+                {step > STEP.ANIMAL && (
+                  <Button variant="secondary" onClick={() => goTo(step - 1)} disabled={pending}>
+                    Atrás
+                  </Button>
+                )}
+                {!pending && (
+                  <Link
+                    href="/adoptions"
+                    className="inline-flex min-h-11 items-center px-1.5 font-semibold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal"
+                  >
+                    Cancelar
+                  </Link>
+                )}
+              </div>
+              {step < LAST_STEP ? (
+                <Button variant="primary" onClick={next}>
+                  Siguiente
+                </Button>
+              ) : (
+                <Button variant="cta" onClick={submit} disabled={pending}>
+                  {pending ? "Publicando…" : "Publicar"}
+                </Button>
+              )}
+            </>
           )}
         </div>
       </section>
@@ -552,11 +649,13 @@ function ReviewRow({
   label,
   onEdit,
   editLabel,
+  disabled,
   children,
 }: {
   label: string;
   onEdit: () => void;
   editLabel: string;
+  disabled: boolean;
   children: ReactNode;
 }) {
   return (
@@ -565,14 +664,16 @@ function ReviewRow({
         <dt className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-soft">{label}</dt>
         <dd className="mt-1 text-[17px] leading-relaxed wrap-anywhere">{children}</dd>
       </div>
-      <button
-        type="button"
-        onClick={onEdit}
-        aria-label={editLabel}
-        className="min-h-11 flex-none px-1.5 font-semibold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal"
-      >
-        Editar
-      </button>
+      {!disabled && (
+        <button
+          type="button"
+          onClick={onEdit}
+          aria-label={editLabel}
+          className="min-h-11 flex-none px-1.5 font-semibold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal"
+        >
+          Editar
+        </button>
+      )}
     </div>
   );
 }

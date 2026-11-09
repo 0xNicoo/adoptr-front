@@ -1,8 +1,9 @@
 'use server';
 
 import { redirect } from 'next/navigation';
+import { MAX_PHOTO_BYTES } from '@/lib/adoption/photos';
 import { ApiError, UNKNOWN_ERROR_CODE } from '@/lib/api/api';
-import { createAdoption } from '@/lib/api/calls/adoption';
+import { addAdoptionPhoto, createAdoption } from '@/lib/api/calls/adoption';
 import { AdoptionInput } from '@/lib/api/models/adoption/adoption-input';
 import { Species } from '@/lib/api/models/adoption/species';
 import { clearAccessToken } from '@/lib/auth/session';
@@ -44,6 +45,35 @@ export async function createAdoptionAction(input: AdoptionInput): Promise<Create
   }
   if (code === 'PROFILE_REQUIRED') {
     redirect('/profile/new');
+  }
+  return { ok: false, code };
+}
+
+export type AddAdoptionPhotoResult = { ok: true } | { ok: false; code: string };
+
+/**
+ * Sube una foto (parte `file`). Pasa por el servidor porque el JWT y la URL de la API solo
+ * existen ahí. El tamaño máximo del pedido está en `serverActions.bodySizeLimit` (next.config.ts).
+ */
+export async function addAdoptionPhotoAction(adoptionId: number, formData: FormData): Promise<AddAdoptionPhotoResult> {
+  const file = formData.get('file');
+  if (!Number.isInteger(adoptionId) || !(file instanceof File) || file.size === 0) {
+    return { ok: false, code: 'IMAGE_INVALID' };
+  }
+  if (file.size > MAX_PHOTO_BYTES) {
+    return { ok: false, code: 'IMAGE_TOO_LARGE' };
+  }
+  let code: string;
+  try {
+    await addAdoptionPhoto(adoptionId, file);
+    return { ok: true };
+  } catch (error) {
+    code = error instanceof ApiError ? error.code : UNKNOWN_ERROR_CODE;
+  }
+  // redirect() lanza una excepción interna de Next, por eso va fuera del try.
+  if (code === 'UNAUTHENTICATED') {
+    await clearAccessToken();
+    redirect('/login');
   }
   return { ok: false, code };
 }
