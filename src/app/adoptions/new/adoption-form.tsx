@@ -4,13 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState, useTransition } from "react";
-import { addAdoptionPhotoAction, createAdoptionAction } from "@/actions/adoption";
+import { addAdoptionPhotoAction, createAdoptionAction, updateAdoptionAction } from "@/actions/adoption";
 import LocationSelector, { LocationValue } from "@/app/components/location-selector";
 import Select from "@/app/components/ui/select";
 import Button from "@/app/components/ui/button";
 import { FieldError, FieldHelp, Label, RadioPill, inputClass } from "@/app/components/ui/form-field";
 import HealthChips from "@/app/components/ui/health-chips";
 import Stepper from "@/app/components/ui/stepper";
+import { useToast } from "@/app/components/ui/toast";
 import {
   ADOPTION_STEPS,
   AdoptionDraft,
@@ -22,6 +23,7 @@ import {
   STEP,
   firstInvalidStep,
   toAdoptionInput,
+  updateErrorMessage,
   validateAdoptionStep,
   withSpecies,
 } from "@/lib/adoption/adoption-form";
@@ -83,13 +85,20 @@ type SubmitError = { message: string };
 export default function AdoptionForm({
   provinces,
   initialLocation,
+  initialDraft,
+  editing,
 }: {
   provinces: Province[];
   initialLocation: LocationValue;
+  initialDraft?: AdoptionDraft;
+  editing?: { id: number; petName: string };
 }) {
   const router = useRouter();
-  const [step, setStep] = useState<number>(STEP.ANIMAL);
-  const [draft, setDraft] = useState<AdoptionDraft>({ ...EMPTY_ADOPTION_DRAFT, location: initialLocation });
+  const toast = useToast();
+  const [step, setStep] = useState<number>(editing ? STEP.REVIEW : STEP.ANIMAL);
+  const [draft, setDraft] = useState<AdoptionDraft>(
+    initialDraft ?? { ...EMPTY_ADOPTION_DRAFT, location: initialLocation },
+  );
   const [errors, setErrors] = useState<AdoptionErrors>({});
   const [submitError, setSubmitError] = useState<SubmitError | null>(null);
   const [pending, startTransition] = useTransition();
@@ -148,13 +157,13 @@ export default function AdoptionForm({
     setStep(target);
   }
 
-  function next() {
+  function next(target: number = step + 1) {
     const found = validateAdoptionStep(step, draft);
     if (Object.keys(found).length) {
       showErrors(found);
       return;
     }
-    goTo(step + 1);
+    goTo(target);
   }
 
   async function uploadPhotos(adoptionId: number, pendingPhotos: DraftPhoto[]) {
@@ -190,6 +199,22 @@ export default function AdoptionForm({
     }
     setSubmitError(null);
     startTransition(async () => {
+      if (editing) {
+        const updated = await updateAdoptionAction(editing.id, toAdoptionInput(draft));
+        if (updated.ok) {
+          toast(`Guardaste los cambios de ${draft.petName.trim()}`);
+          router.push(`/adoptions/${editing.id}`);
+          return;
+        }
+        if (updated.code !== "LOCALITY_NOT_FOUND") {
+          setSubmitError({ message: updateErrorMessage(updated.code) });
+          return;
+        }
+        update({ location: { provinceId: draft.location.provinceId, locality: null } });
+        setStep(STEP.LOCATION);
+        showErrors({ locality: "Esa localidad ya no está disponible. Elegí otra." });
+        return;
+      }
       const result = await createAdoptionAction(toAdoptionInput(draft));
       if (result.ok) {
         setPublishedId(result.id);
@@ -226,9 +251,13 @@ export default function AdoptionForm({
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-7">
       <div className="flex flex-col gap-2.5">
-        <h1 className="font-display text-[40px] leading-tight text-primary md:text-[56px]">Publicar una mascota</h1>
+        <h1 className="font-display text-[40px] leading-tight text-primary md:text-[56px]">
+          {editing ? `Editá los datos de ${editing.petName}` : "Publicar una mascota"}
+        </h1>
         <p className="max-w-2xl text-[17px] leading-relaxed">
-          Cargá su ficha y la van a poder conocer quienes buscan adoptar.
+          {editing
+            ? "Tocá \"Editar\" en lo que quieras cambiar y después guardá los cambios."
+            : "Cargá su ficha y la van a poder conocer quienes buscan adoptar."}
         </p>
       </div>
 
@@ -236,7 +265,7 @@ export default function AdoptionForm({
         aria-labelledby="step-title"
         className="flex flex-col gap-7 rounded-card border-3 border-ink bg-surface p-6 shadow-card md:p-9 md:shadow-panel"
       >
-        <Stepper steps={ADOPTION_STEPS} current={step} />
+        {!editing && <Stepper steps={ADOPTION_STEPS} current={step} />}
 
         <h2
           id="step-title"
@@ -499,6 +528,7 @@ export default function AdoptionForm({
             <ReviewRow label="Su historia" onEdit={() => goTo(STEP.STORY)} editLabel="Editar historia" disabled={locked}>
               <span className="whitespace-pre-line">{draft.description.trim()}</span>
             </ReviewRow>
+            {!editing && (
             <ReviewRow label="Fotos" onEdit={() => goTo(STEP.PHOTOS)} editLabel="Editar fotos" disabled={locked}>
               {photos.length === 0 ? (
                 "Sin fotos: vamos a mostrar una ilustración."
@@ -512,6 +542,7 @@ export default function AdoptionForm({
                 </ul>
               )}
             </ReviewRow>
+            )}
           </dl>
         )}
 
@@ -563,23 +594,31 @@ export default function AdoptionForm({
           ) : (
             <>
               <div className="flex flex-wrap items-center gap-3">
-                {step > STEP.ANIMAL && (
+                {!editing && step > STEP.ANIMAL && (
                   <Button variant="secondary" onClick={() => goTo(step - 1)} disabled={pending}>
                     Atrás
                   </Button>
                 )}
                 {!pending && (
                   <Link
-                    href="/adoptions"
+                    href={editing ? `/adoptions/${editing.id}` : "/adoptions"}
                     className="inline-flex min-h-11 items-center px-1.5 font-semibold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal"
                   >
                     Cancelar
                   </Link>
                 )}
               </div>
-              {step < LAST_STEP ? (
-                <Button variant="primary" onClick={next}>
+              {editing && step < LAST_STEP ? (
+                <Button variant="primary" onClick={() => next(STEP.REVIEW)}>
+                  Volver a la revisión
+                </Button>
+              ) : step < LAST_STEP ? (
+                <Button variant="primary" onClick={() => next()}>
                   Siguiente
+                </Button>
+              ) : editing ? (
+                <Button variant="cta" onClick={submit} disabled={pending}>
+                  {pending ? "Guardando…" : "Guardar cambios"}
                 </Button>
               ) : (
                 <Button variant="cta" onClick={submit} disabled={pending}>

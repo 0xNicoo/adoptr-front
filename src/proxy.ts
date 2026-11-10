@@ -7,9 +7,12 @@ import { cookies } from 'next/headers'
 const protectedTrees = ['/profile']
 const protectedPaths = ['/adoptions/new']
 
+const protectedPatterns = [/^\/adoptions\/[^/]+\/edit$/]
+
 function isProtected(path: string) {
   return (
     protectedPaths.includes(path) ||
+    protectedPatterns.some((pattern) => pattern.test(path)) ||
     protectedTrees.some((route) => path === route || path.startsWith(`${route}/`))
   )
 }

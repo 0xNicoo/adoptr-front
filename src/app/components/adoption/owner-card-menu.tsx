@@ -1,7 +1,8 @@
 "use client";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { ArrowCounterClockwise, DotsThree, House } from "@phosphor-icons/react/dist/ssr";
+import { ArrowCounterClockwise, DotsThree, House, PencilSimple } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 import { useState } from "react";
 import { statusActionLabel } from "@/lib/adoption/status-change";
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
@@ -24,6 +25,15 @@ export default function OwnerCardMenu({ target }: { target: StatusChangeTarget }
           anchor="bottom end"
           className="z-40 w-60 overflow-hidden rounded-field border-3 border-ink bg-surface py-1 shadow-card [--anchor-gap:8px] focus:outline-none"
         >
+          <MenuItem>
+            <Link
+              href={`/adoptions/${target.adoptionId}/edit`}
+              className="flex w-full items-center gap-3 px-4 py-3 text-[15px] font-semibold data-focus:bg-positive-soft"
+            >
+              <PencilSimple aria-hidden={true} weight="bold" className="h-5 w-5 shrink-0" />
+              Editar
+            </Link>
+          </MenuItem>
           <MenuItem>
             <button
               type="button"

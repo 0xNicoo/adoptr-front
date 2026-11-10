@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { Adoption } from "@/lib/api/models/adoption/adoption";
+import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
+import { LifeStage } from "@/lib/api/models/adoption/life-stage";
+import { ProfileType as ProfileTypeForTest } from "@/lib/api/models/profile/profile-type";
 import { PetSex } from "@/lib/api/models/adoption/pet-sex";
 import { PetSize } from "@/lib/api/models/adoption/pet-size";
 import { Species } from "@/lib/api/models/adoption/species";
@@ -8,8 +12,10 @@ import {
   MAX_DESCRIPTION,
   MAX_PET_NAME,
   STEP,
+  draftFromAdoption,
   firstInvalidStep,
   toAdoptionInput,
+  updateErrorMessage,
   validateAdoptionStep,
   withSpecies,
 } from "./adoption-form";
@@ -127,5 +133,66 @@ describe("toAdoptionInput", () => {
 
   it("falla si el borrador está incompleto", () => {
     expect(() => toAdoptionInput(EMPTY_ADOPTION_DRAFT, TODAY)).toThrow();
+  });
+});
+
+describe("draftFromAdoption", () => {
+  const ADOPTION: Adoption = {
+    id: 12,
+    petName: "Luna",
+    description: "Muy cariñosa.",
+    species: Species.DOG,
+    sex: PetSex.FEMALE,
+    size: PetSize.MEDIUM,
+    estimatedBirthDate: "2024-08",
+    lifeStage: LifeStage.ADULT,
+    vaccinated: true,
+    dewormed: false,
+    neutered: true,
+    status: AdoptionStatus.AVAILABLE,
+    coverPhotoUrl: null,
+    photos: [],
+    locality: LOCALITY,
+    province: { id: 6, name: "Buenos Aires" },
+    owner: { profileId: 3, displayName: "Victoria Miranda", profileType: ProfileTypeForTest.PERSON },
+    viewerIsOwner: true,
+    createdAt: "2026-10-01T09:30:00",
+    updatedAt: "2026-10-01T09:30:00",
+  };
+
+  it("arma un borrador completo con la edad calculada a hoy", () => {
+    const draft = draftFromAdoption(ADOPTION, TODAY);
+    expect(draft).toEqual({
+      species: Species.DOG,
+      petName: "Luna",
+      sex: PetSex.FEMALE,
+      size: PetSize.MEDIUM,
+      ageYears: 2,
+      ageMonths: 3,
+      vaccinated: true,
+      dewormed: false,
+      neutered: true,
+      location: { provinceId: 6, locality: LOCALITY },
+      description: "Muy cariñosa.",
+    });
+    expect(firstInvalidStep(draft)).toBeNull();
+  });
+
+  it("sin cambios, el body conserva el mes de nacimiento", () => {
+    expect(toAdoptionInput(draftFromAdoption(ADOPTION, TODAY), TODAY).estimatedBirthDate).toBe("2024-08");
+  });
+
+  it("un gato queda sin tamaño", () => {
+    const cat = { ...ADOPTION, species: Species.CAT, size: null };
+    expect(draftFromAdoption(cat, TODAY).size).toBeNull();
+  });
+});
+
+describe("updateErrorMessage", () => {
+  it("según el code del back", () => {
+    expect(updateErrorMessage("ADOPTION_NOT_OWNER")).toBe("Solo quien la publicó puede editarla.");
+    expect(updateErrorMessage("ADOPTION_NOT_FOUND")).toBe("Esta publicación ya no existe.");
+    expect(updateErrorMessage("VALIDATION_ERROR")).toBe("Hay datos que no pudimos guardar. Revisalos y probá de nuevo.");
+    expect(updateErrorMessage("UNKNOWN_ERROR")).toBe("No pudimos guardar los cambios. Probá de nuevo en unos minutos.");
   });
 });
