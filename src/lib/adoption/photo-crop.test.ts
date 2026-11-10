@@ -2,23 +2,23 @@ import { describe, expect, it } from "vitest";
 import { PHOTO_MAX_ZOOM, PHOTO_MIN_ZOOM, clampZoom, croppedFileName, croppedOutputSize } from "./photo-crop";
 
 describe("croppedOutputSize", () => {
-  it("achica a 1600×1200 una zona grande", () => {
-    expect(croppedOutputSize({ width: 3024 })).toEqual({ width: 1600, height: 1200 });
+  it("achica a 1200×1600 una zona grande", () => {
+    expect(croppedOutputSize({ width: 3024 })).toEqual({ width: 1200, height: 1600 });
   });
 
   it("no agranda una zona chica", () => {
-    expect(croppedOutputSize({ width: 800 })).toEqual({ width: 800, height: 600 });
+    expect(croppedOutputSize({ width: 600 })).toEqual({ width: 600, height: 800 });
   });
 
-  it("siempre es 4:3 exacto, aunque la zona tenga decimales", () => {
+  it("siempre es 3:4 vertical exacto, aunque la zona tenga decimales", () => {
     const size = croppedOutputSize({ width: 1013.6 });
-    expect(size.width * 3).toBe(size.height * 4);
+    expect(size.width * 4).toBe(size.height * 3);
     expect(Number.isInteger(size.height)).toBe(true);
-    expect(size).toEqual({ width: 1012, height: 759 });
+    expect(size).toEqual({ width: 1014, height: 1352 });
   });
 
   it("tiene un mínimo para no quedar en cero", () => {
-    expect(croppedOutputSize({ width: 0.4 })).toEqual({ width: 4, height: 3 });
+    expect(croppedOutputSize({ width: 0.4 })).toEqual({ width: 3, height: 4 });
   });
 });
 

@@ -505,7 +505,7 @@ export default function AdoptionForm({
               ) : (
                 <ul className="mt-1 flex flex-wrap gap-2">
                   {photos.map((photo, index) => (
-                    <li key={photo.id} className="relative aspect-[4/3] w-24 overflow-hidden rounded-field border-3 border-ink bg-disabled">
+                    <li key={photo.id} className="relative aspect-[3/4] w-20 overflow-hidden rounded-field border-3 border-ink bg-disabled">
                       <Image src={photo.previewUrl} alt={`Foto ${index + 1}: ${photo.original.name}`} fill unoptimized className="object-cover" />
                     </li>
                   ))}

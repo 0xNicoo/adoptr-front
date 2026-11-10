@@ -13,7 +13,7 @@ function loadImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
-/** Devuelve la zona elegida de la imagen como JPEG 4:3 de hasta 1600×1200. */
+/** Devuelve la zona elegida de la imagen como JPEG vertical 3:4 de hasta 1200×1600. */
 export async function cropToFile(imageUrl: string, area: CropArea, originalName: string): Promise<File> {
   const image = await loadImage(imageUrl);
   const size = croppedOutputSize(area);

@@ -9,7 +9,7 @@ import { FieldError } from "@/app/components/ui/form-field";
 import { cropToFile } from "@/lib/adoption/crop-image";
 import { CropArea, PHOTO_ASPECT, PHOTO_MAX_ZOOM, PHOTO_MIN_ZOOM, clampZoom } from "@/lib/adoption/photo-crop";
 
-// Recorte 4:3 de una foto (docs/producto/flujos-producto.md, paso Fotos del alta). Arranca centrado con
+// Recorte vertical 3:4 de una foto (docs/producto/flujos-producto.md, paso Fotos del alta). Arranca centrado con
 // el mayor marco posible: si así está bien, alcanza con «Usar esta foto». Se mueve arrastrando o, con
 // teclado, enfocando la foto y usando las flechas; el zoom, con la rueda, pellizcando o con el control.
 
@@ -90,7 +90,7 @@ function CropPanel({
   }
 
   return (
-    <DialogPanel className="flex w-full max-w-2xl flex-col gap-5 rounded-card border-3 border-ink bg-surface p-5 shadow-panel md:p-7">
+    <DialogPanel className="flex w-full max-w-xl flex-col gap-5 rounded-card border-3 border-ink bg-surface p-5 shadow-panel md:p-7">
       <div>
         {request.position && request.position.total > 1 && (
           <p className="text-[13px] font-semibold tracking-[0.08em] text-ink-soft uppercase">
@@ -99,12 +99,12 @@ function CropPanel({
         )}
         <DialogTitle className="font-display text-3xl text-primary">Ubicá la foto</DialogTitle>
         <Description className="mt-1 text-[15px] text-ink-soft">
-          Se muestra en formato 4:3. Arrastrala para elegir qué parte queda y acercala con la rueda, pellizcando o
+          Las fotos van verticales (3:4). Arrastrala para elegir qué parte queda y acercala con la rueda, pellizcando o
           con el zoom. Con teclado: tabulá hasta la foto y usá las flechas.
         </Description>
       </div>
 
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-field border-3 border-ink bg-ink">
+      <div className="relative mx-auto aspect-[3/4] h-[min(60vh,560px)] max-w-full overflow-hidden rounded-field border-3 border-ink bg-ink">
         {failed === "load" ? (
           <p className="absolute inset-0 flex items-center justify-center p-6 text-center font-semibold text-surface">
             No pudimos abrir esta foto. Probá con otra.

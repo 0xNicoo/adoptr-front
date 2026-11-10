@@ -10,7 +10,7 @@ import PhotoCropDialog, { CropRequest } from "./photo-crop-dialog";
 
 export interface DraftPhoto {
   id: string;
-  /** Lo que se sube: el recorte 4:3 en JPEG. */
+  /** Lo que se sube: el recorte vertical 3:4 en JPEG. */
   file: File;
   previewUrl: string;
   /** La foto elegida, para poder reajustar el recorte. */
@@ -37,7 +37,7 @@ function release(urls: Set<string>, url: string) {
 }
 
 /**
- * Fotos elegidas todavía sin subir. Cada foto pasa por el recorte 4:3 antes de sumarse: si se eligen
+ * Fotos elegidas todavía sin subir. Cada foto pasa por el recorte vertical 3:4 antes de sumarse: si se eligen
  * varias, se recortan una tras otra. Libera las URLs locales al quitar una foto y al salir.
  */
 export function useDraftPhotos() {
@@ -172,7 +172,7 @@ export default function PhotoPicker({
   return (
     <div className="flex flex-col gap-5">
       <FieldHelp id="photos-help">
-        Opcional. Hasta {MAX_PHOTOS} fotos: {PHOTO_RULES_TEXT} Las fotos se muestran en formato 4:3: al elegir cada una
+        Opcional. Hasta {MAX_PHOTOS} fotos: {PHOTO_RULES_TEXT} Las fotos van verticales (3:4): al elegir cada una
         vas a poder ubicarla. La primera va a ser la portada. Quitamos la ubicación y los demás datos que traen las
         fotos de celular.
       </FieldHelp>
@@ -214,9 +214,9 @@ export default function PhotoPicker({
       )}
 
       {photos.length > 0 && (
-        <ul aria-label="Fotos elegidas" className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+        <ul aria-label="Fotos elegidas" className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
           {photos.map((photo, index) => (
-            <li key={photo.id} className="relative aspect-[4/3] overflow-hidden rounded-field border-3 border-ink bg-disabled">
+            <li key={photo.id} className="relative aspect-[3/4] overflow-hidden rounded-field border-3 border-ink bg-disabled">
               <Image src={photo.previewUrl} alt={`Foto ${index + 1}: ${photo.original.name}`} fill unoptimized className="object-cover" />
               {index === 0 && (
                 <span className="absolute bottom-1.5 left-1.5 rounded-full border-2 border-ink bg-accent-mustard px-2 text-[13px] font-bold">
