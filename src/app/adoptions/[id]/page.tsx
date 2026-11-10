@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import Badge from "@/app/components/ui/badge";
 import Button from "@/app/components/ui/button";
@@ -117,7 +118,12 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
               </span>
               <div>
                 <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-soft">Lo publica</p>
-                <p className="text-[17px] font-bold">{pet.owner.displayName}</p>
+                <Link
+                  href={`/profiles/${pet.owner.profileId}`}
+                  className="text-[17px] font-bold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal"
+                >
+                  {pet.owner.displayName}
+                </Link>
                 <p className="text-sm text-ink-soft">
                   {pet.owner.profileType === ProfileType.ORGANIZATION ? "Organización" : "Particular"}
                 </p>

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Gender } from "@/lib/api/models/profile/gender";
 import { OrganizationProfile, PersonProfile } from "@/lib/api/models/profile/profile";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
-import { initials, profileAdoptionsCountText, profileDisplayName } from "./display";
+import { initials, parseProfileId, profileAdoptionsCountText, profileDisplayName, profileShortName } from "./display";
 
 const base = {
   id: 1,
@@ -43,6 +43,27 @@ describe("profileDisplayName", () => {
 
   it("organización: su nombre", () => {
     expect(profileDisplayName(organization)).toBe("Refugio Patitas");
+  });
+});
+
+describe("profileShortName", () => {
+  it("persona: nombre de pila; organización: su nombre", () => {
+    expect(profileShortName(person)).toBe("Victoria");
+    expect(profileShortName(organization)).toBe("Refugio Patitas");
+  });
+});
+
+describe("parseProfileId", () => {
+  it("entero positivo", () => {
+    expect(parseProfileId("3")).toBe(3);
+  });
+
+  it("rechaza lo que no es un id", () => {
+    expect(parseProfileId("0")).toBeNull();
+    expect(parseProfileId("-1")).toBeNull();
+    expect(parseProfileId("abc")).toBeNull();
+    expect(parseProfileId("2.5")).toBeNull();
+    expect(parseProfileId("99999999999999999999")).toBeNull();
   });
 });
 

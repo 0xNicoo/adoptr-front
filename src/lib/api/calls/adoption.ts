@@ -29,6 +29,20 @@ export async function getMyAdoptions(query: ProfileAdoptionsQuery): Promise<Page
   return response.data;
 }
 
+/** Publicaciones de un perfil, públicas (va sin token). Si el perfil no existe, 404 `PROFILE_NOT_FOUND`. */
+export async function getProfileAdoptions(
+  profileId: number,
+  query: ProfileAdoptionsQuery,
+): Promise<Page<AdoptionSummary>> {
+  const response = await apiRequest<Page<AdoptionSummary>>(
+    `/profiles/${profileId}/adoptions?${toProfileAdoptionsApiParams(query)}`, 'GET', null, 'application/json', false,
+  );
+  if (!response.data) {
+    throw new Error('Las publicaciones del perfil no devolvieron una página');
+  }
+  return response.data;
+}
+
 /**
  * Detalle público, o `null` si no existe o fue dado de baja. Manda la sesión si hay, para que
  * el back calcule `viewerIsOwner`; un token vencido no rompe (el back lo ignora en esta ruta).

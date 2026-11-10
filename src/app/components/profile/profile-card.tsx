@@ -1,13 +1,13 @@
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { Profile } from "@/lib/api/models/profile/profile";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
+import { PublicProfile } from "@/lib/api/models/profile/public-profile";
 import { initials, profileDisplayName } from "@/lib/profile/display";
 
-// Tarjeta lateral de «Mi perfil»: foto o iniciales, nombre, ubicación y descripción.
+// Tarjeta lateral de un perfil (propio o ajeno): foto o iniciales, nombre, ubicación y descripción.
 // Las organizaciones llevan además su etiqueta, redes y web.
 
-export default function ProfileCard({ profile }: { profile: Profile }) {
+export default function ProfileCard({ profile }: { profile: PublicProfile }) {
   const name = profileDisplayName(profile);
   const organization = profile.profileType === ProfileType.ORGANIZATION ? profile : null;
 
