@@ -6,10 +6,10 @@ export default function Loading() {
       </p>
       <div className="h-16 w-3/4 max-w-xl rounded-card bg-disabled" />
       <div className="h-40 rounded-card border-3 border-dashed border-ink-soft" />
-      <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 8 }, (_, i) => (
+      <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }, (_, i) => (
           <li key={i} className="overflow-hidden rounded-card border-3 border-dashed border-ink-soft bg-surface">
-            <div className="halftone h-44 bg-disabled" />
+            <div className="halftone aspect-[4/3] bg-disabled" />
             <div className="flex flex-col gap-3 p-5">
               <div className="h-7 w-1/2 rounded-full bg-disabled" />
               <div className="h-4 w-5/6 rounded-full bg-disabled" />

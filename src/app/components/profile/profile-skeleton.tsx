@@ -21,10 +21,10 @@ export default function ProfileSkeleton({ label }: { label: string }) {
       <div className="flex flex-col gap-7">
         <div className="h-12 w-2/3 max-w-md rounded-card bg-disabled" />
         <div className="h-11 w-64 rounded-full bg-disabled" />
-        <ul className="grid gap-7 sm:grid-cols-2 xl:grid-cols-3">
-          {Array.from({ length: 6 }, (_, i) => (
+        <ul className="grid gap-7 sm:grid-cols-2">
+          {Array.from({ length: 4 }, (_, i) => (
             <li key={i} className="overflow-hidden rounded-card border-3 border-dashed border-ink-soft bg-surface">
-              <div className="halftone h-44 bg-disabled" />
+              <div className="halftone aspect-[4/3] bg-disabled" />
               <div className="flex flex-col gap-3 p-5">
                 <div className="h-7 w-1/2 rounded-full bg-disabled" />
                 <div className="h-4 w-5/6 rounded-full bg-disabled" />

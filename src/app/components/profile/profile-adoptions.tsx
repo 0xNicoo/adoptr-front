@@ -61,7 +61,7 @@ export default function ProfileAdoptions({
         </div>
       ) : list.items.length > 0 ? (
         <>
-          <ul className="grid gap-7 sm:grid-cols-2 xl:grid-cols-3">
+          <ul className="grid gap-7 sm:grid-cols-2">
             {list.items.map((pet) => (
               <li key={pet.id} className="flex">
                 <div className="w-full">
