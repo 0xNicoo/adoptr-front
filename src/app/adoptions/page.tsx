@@ -60,7 +60,7 @@ export default async function AdoptionsPage({ searchParams }: { searchParams: Pr
 
       {!result.ok ? (
         <div role="alert" className="rounded-card border-3 border-ink bg-surface p-8 shadow-panel">
-          <h2 className="font-display text-3xl text-primary">No pudimos cargar el catálogo</h2>
+          <h2 className="font-display text-3xl text-primary">No pudimos cargar las mascotas</h2>
           <p className="mt-3 text-[17px]">Probá de nuevo en unos minutos.</p>
         </div>
       ) : (

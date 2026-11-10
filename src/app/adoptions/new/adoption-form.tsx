@@ -227,7 +227,7 @@ export default function AdoptionForm({
       <div className="flex flex-col gap-2.5">
         <h1 className="font-display text-[40px] leading-tight text-primary md:text-[56px]">Publicar una mascota</h1>
         <p className="max-w-2xl text-[17px] leading-relaxed">
-          Cargá su ficha y va a aparecer en el catálogo para que la conozcan quienes buscan adoptar.
+          Cargá su ficha y la van a poder conocer quienes buscan adoptar.
         </p>
       </div>
 
