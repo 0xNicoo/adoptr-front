@@ -12,6 +12,7 @@ import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
 import BackLink from "./back-link";
 import PhotoGallery from "./photo-gallery";
+import RemovePublishedParam from "./remove-published-param";
 
 type Params = Promise<{ id: string }>;
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -51,7 +52,7 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
 
   const pet = result.adoption;
   const adopted = pet.status === AdoptionStatus.ADOPTED;
-  const justPublished = (await searchParams).published === "1";
+  const justPublished = (await searchParams).published === "1" && pet.viewerIsOwner;
   const facts = [
     pet.size ? { label: "Tamaño", value: SIZE_LABEL[pet.size] } : { label: "Especie", value: SPECIES_LABEL[pet.species] },
     { label: "Edad", value: formatAge(birthMonthToAge(pet.estimatedBirthDate)) },
@@ -63,6 +64,7 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
     <div className="mx-auto max-w-6xl px-4 pt-10 pb-16 md:px-6">
       <BackLink justPublished={justPublished} />
 
+      {justPublished && <RemovePublishedParam />}
       {justPublished && (
         <div role="status" className="mt-6 rounded-card border-3 border-ink bg-positive-soft p-5 shadow-card">
           <p className="font-display text-2xl">¡Listo! Publicaste a {pet.petName}.</p>
