@@ -1,6 +1,6 @@
 import 'server-only';
 import { CatalogQuery, toApiParams } from '@/lib/adoption/catalog-query';
-import { MyAdoptionsQuery, toMyAdoptionsApiParams } from '@/lib/profile/my-adoptions-query';
+import { ProfileAdoptionsQuery, toProfileAdoptionsApiParams } from '@/lib/profile/profile-adoptions-query';
 import { ApiError, apiRequest } from '../api';
 import { Adoption } from '../models/adoption/adoption';
 import { AdoptionInput } from '../models/adoption/adoption-input';
@@ -21,10 +21,24 @@ export async function searchAdoptions(query: CatalogQuery): Promise<Page<Adoptio
 }
 
 /** Publicaciones del usuario de la sesión, en adopción y adoptadas (o solo en adopción si se filtra). */
-export async function getMyAdoptions(query: MyAdoptionsQuery): Promise<Page<AdoptionSummary>> {
-  const response = await apiRequest<Page<AdoptionSummary>>(`/adoptions/mine?${toMyAdoptionsApiParams(query)}`);
+export async function getMyAdoptions(query: ProfileAdoptionsQuery): Promise<Page<AdoptionSummary>> {
+  const response = await apiRequest<Page<AdoptionSummary>>(`/adoptions/mine?${toProfileAdoptionsApiParams(query)}`);
   if (!response.data) {
     throw new Error('Mis publicaciones no devolvió una página');
+  }
+  return response.data;
+}
+
+/** Publicaciones de un perfil, públicas (va sin token). Si el perfil no existe, 404 `PROFILE_NOT_FOUND`. */
+export async function getProfileAdoptions(
+  profileId: number,
+  query: ProfileAdoptionsQuery,
+): Promise<Page<AdoptionSummary>> {
+  const response = await apiRequest<Page<AdoptionSummary>>(
+    `/profiles/${profileId}/adoptions?${toProfileAdoptionsApiParams(query)}`, 'GET', null, 'application/json', false,
+  );
+  if (!response.data) {
+    throw new Error('Las publicaciones del perfil no devolvieron una página');
   }
   return response.data;
 }

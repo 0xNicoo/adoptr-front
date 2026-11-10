@@ -1,13 +1,14 @@
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
 import { SearchParams } from "@/lib/adoption/catalog-query";
 
-// Listado de «Mi perfil» en la URL (/profile?status=available&page=2) ⇄ query de `GET /adoptions/mine`.
+// Listado de publicaciones de un perfil en la URL (/profile?status=available&page=2, igual en /profiles/3)
+// ⇄ query de `GET /adoptions/mine` y `GET /profiles/{id}/adoptions`.
 // Como en el catálogo, la URL usa minúsculas y la página empieza en 1; la API, el enum y página desde 0.
 
 export const MY_PROFILE_PATH = "/profile";
-export const MY_ADOPTIONS_PAGE_SIZE = 12;
+export const PROFILE_ADOPTIONS_PAGE_SIZE = 12;
 
-export interface MyAdoptionsQuery {
+export interface ProfileAdoptionsQuery {
   /** Solo las que están en adopción; si no, todas (también las adoptadas). */
   onlyAvailable: boolean;
   /** Desde 1. */
@@ -19,7 +20,7 @@ function first(value: string | string[] | undefined): string | undefined {
 }
 
 /** Lee la URL. Un valor desconocido (por ejemplo, de un link viejo) se ignora. */
-export function parseMyAdoptionsQuery(params: SearchParams): MyAdoptionsQuery {
+export function parseProfileAdoptionsQuery(params: SearchParams): ProfileAdoptionsQuery {
   const rawPage = first(params.page);
   const page = rawPage && /^\d+$/.test(rawPage) ? Number(rawPage) : NaN;
   return {
@@ -28,20 +29,20 @@ export function parseMyAdoptionsQuery(params: SearchParams): MyAdoptionsQuery {
   };
 }
 
-/** Query de `GET /adoptions/mine`. */
-export function toMyAdoptionsApiParams({ onlyAvailable, page }: MyAdoptionsQuery): URLSearchParams {
+/** Query de `GET /adoptions/mine` y `GET /profiles/{id}/adoptions`. */
+export function toProfileAdoptionsApiParams({ onlyAvailable, page }: ProfileAdoptionsQuery): URLSearchParams {
   const params = new URLSearchParams();
   if (onlyAvailable) params.set("status", AdoptionStatus.AVAILABLE);
   params.set("page", String(page - 1));
-  params.set("pageSize", String(MY_ADOPTIONS_PAGE_SIZE));
+  params.set("pageSize", String(PROFILE_ADOPTIONS_PAGE_SIZE));
   return params;
 }
 
-/** Link de «Mi perfil» con ese filtro y página. */
-export function myProfileHref({ onlyAvailable, page }: MyAdoptionsQuery): string {
+/** Link de la página del perfil (`basePath`) con ese filtro y página. */
+export function profileAdoptionsHref(basePath: string, { onlyAvailable, page }: ProfileAdoptionsQuery): string {
   const params = new URLSearchParams();
   if (onlyAvailable) params.set("status", "available");
   if (page > 1) params.set("page", String(page));
   const query = params.toString();
-  return query ? `${MY_PROFILE_PATH}?${query}` : MY_PROFILE_PATH;
+  return query ? `${basePath}?${query}` : basePath;
 }

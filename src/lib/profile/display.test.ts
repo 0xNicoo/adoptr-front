@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Gender } from "@/lib/api/models/profile/gender";
 import { OrganizationProfile, PersonProfile } from "@/lib/api/models/profile/profile";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
-import { initials, myAdoptionsCountText, profileDisplayName } from "./display";
+import { initials, parseProfileId, profileAdoptionsCountText, profileDisplayName, profileShortName } from "./display";
 
 const base = {
   id: 1,
@@ -46,6 +46,27 @@ describe("profileDisplayName", () => {
   });
 });
 
+describe("profileShortName", () => {
+  it("persona: nombre de pila; organización: su nombre", () => {
+    expect(profileShortName(person)).toBe("Victoria");
+    expect(profileShortName(organization)).toBe("Refugio Patitas");
+  });
+});
+
+describe("parseProfileId", () => {
+  it("entero positivo", () => {
+    expect(parseProfileId("3")).toBe(3);
+  });
+
+  it("rechaza lo que no es un id", () => {
+    expect(parseProfileId("0")).toBeNull();
+    expect(parseProfileId("-1")).toBeNull();
+    expect(parseProfileId("abc")).toBeNull();
+    expect(parseProfileId("2.5")).toBeNull();
+    expect(parseProfileId("99999999999999999999")).toBeNull();
+  });
+});
+
 describe("initials", () => {
   it("toma las dos primeras palabras", () => {
     expect(initials("Victoria Miranda")).toBe("VM");
@@ -62,14 +83,14 @@ describe("initials", () => {
   });
 });
 
-describe("myAdoptionsCountText", () => {
+describe("profileAdoptionsCountText", () => {
   it("todas", () => {
-    expect(myAdoptionsCountText(1, false)).toBe("1 mascota publicada");
-    expect(myAdoptionsCountText(5, false)).toBe("5 mascotas publicadas");
+    expect(profileAdoptionsCountText(1, false)).toBe("1 mascota publicada");
+    expect(profileAdoptionsCountText(5, false)).toBe("5 mascotas publicadas");
   });
 
   it("solo en adopción", () => {
-    expect(myAdoptionsCountText(1, true)).toBe("1 mascota buscando familia");
-    expect(myAdoptionsCountText(4, true)).toBe("4 mascotas buscando familia");
+    expect(profileAdoptionsCountText(1, true)).toBe("1 mascota buscando familia");
+    expect(profileAdoptionsCountText(4, true)).toBe("4 mascotas buscando familia");
   });
 });

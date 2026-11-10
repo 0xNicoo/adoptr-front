@@ -1,13 +1,25 @@
-import { Profile } from "@/lib/api/models/profile/profile";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
+import { PublicProfile } from "@/lib/api/models/profile/public-profile";
 
 // Textos para mostrar un perfil.
 
 /** Nombre y apellido de una persona, o el nombre de la organización. */
-export function profileDisplayName(profile: Profile): string {
+export function profileDisplayName(profile: PublicProfile): string {
   return profile.profileType === ProfileType.PERSON
     ? `${profile.firstName} ${profile.lastName}`.trim()
     : profile.organizationName.trim();
+}
+
+/** Para títulos cortos: el nombre de pila de una persona o el nombre de la organización. */
+export function profileShortName(profile: PublicProfile): string {
+  return profile.profileType === ProfileType.PERSON ? profile.firstName.trim() : profile.organizationName.trim();
+}
+
+/** Id de perfil de la URL (`/profiles/3`), o `null` si no es un entero positivo. */
+export function parseProfileId(raw: string): number | null {
+  if (!/^\d+$/.test(raw)) return null;
+  const id = Number(raw);
+  return id > 0 && Number.isSafeInteger(id) ? id : null;
 }
 
 /** Hasta dos iniciales en mayúscula: «Victoria Miranda» → «VM», «Refugio» → «R». */
@@ -20,8 +32,8 @@ export function initials(name: string): string {
     .join("");
 }
 
-/** Subtítulo del listado de «Mi perfil». */
-export function myAdoptionsCountText(total: number, onlyAvailable: boolean): string {
+/** Subtítulo del listado de publicaciones de un perfil. */
+export function profileAdoptionsCountText(total: number, onlyAvailable: boolean): string {
   if (onlyAvailable) {
     return total === 1 ? "1 mascota buscando familia" : `${total} mascotas buscando familia`;
   }
