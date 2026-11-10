@@ -1,9 +1,10 @@
+import { Adoption } from "@/lib/api/models/adoption/adoption";
 import { AdoptionInput } from "@/lib/api/models/adoption/adoption-input";
 import { PetSex } from "@/lib/api/models/adoption/pet-sex";
 import { PetSize } from "@/lib/api/models/adoption/pet-size";
 import { Species } from "@/lib/api/models/adoption/species";
 import { Locality } from "@/lib/api/models/locality/locality";
-import { ageError, ageToBirthMonth } from "./age";
+import { ageError, ageToBirthMonth, birthMonthToAge } from "./age";
 
 // Alta de una mascota en adopción: pasos, validación y armado del body.
 // Mismas reglas que el back (adoptr-back/docs/arquitectura/api.md, «Publicación de adopción»).
@@ -130,4 +131,34 @@ export function toAdoptionInput(draft: AdoptionDraft, today: Date = new Date()):
     neutered: draft.neutered as boolean,
     localityId: (draft.location.locality as Locality).id,
   };
+}
+
+export function draftFromAdoption(adoption: Adoption, today: Date = new Date()): AdoptionDraft {
+  const age = birthMonthToAge(adoption.estimatedBirthDate, today);
+  return {
+    species: adoption.species,
+    petName: adoption.petName,
+    sex: adoption.sex,
+    size: adoption.size,
+    ageYears: age.years,
+    ageMonths: age.months,
+    vaccinated: adoption.vaccinated,
+    dewormed: adoption.dewormed,
+    neutered: adoption.neutered,
+    location: { provinceId: adoption.province.id, locality: adoption.locality },
+    description: adoption.description,
+  };
+}
+
+export function updateErrorMessage(code: string): string {
+  switch (code) {
+    case "VALIDATION_ERROR":
+      return "Hay datos que no pudimos guardar. Revisalos y probá de nuevo.";
+    case "ADOPTION_NOT_FOUND":
+      return "Esta publicación ya no existe.";
+    case "ADOPTION_NOT_OWNER":
+      return "Solo quien la publicó puede editarla.";
+    default:
+      return "No pudimos guardar los cambios. Probá de nuevo en unos minutos.";
+  }
 }

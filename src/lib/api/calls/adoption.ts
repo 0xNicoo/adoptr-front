@@ -84,3 +84,11 @@ export async function changeAdoptionStatus(id: number, status: AdoptionStatus): 
   }
   return response.data;
 }
+
+export async function updateAdoption(id: number, input: AdoptionInput): Promise<Adoption> {
+  const response = await apiRequest<Adoption>(`/adoptions/${id}`, 'PUT', input);
+  if (!response.data) {
+    throw new Error('La edición no devolvió la publicación');
+  }
+  return response.data;
+}

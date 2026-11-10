@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PencilSimple } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Badge from "@/app/components/ui/badge";
@@ -98,7 +99,13 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
               </div>
             </div>
             {owner && (
-              <StatusChangeButton target={{ adoptionId: pet.id, petName: pet.petName, sex: pet.sex, status: pet.status }} />
+              <div className="flex flex-wrap items-center gap-3">
+                <Button href={`/adoptions/${pet.id}/edit`} variant="secondary" size="sm">
+                  <PencilSimple aria-hidden={true} weight="bold" className="h-5 w-5" />
+                  Editar
+                </Button>
+                <StatusChangeButton target={{ adoptionId: pet.id, petName: pet.petName, sex: pet.sex, status: pet.status }} />
+              </div>
             )}
           </div>
 
