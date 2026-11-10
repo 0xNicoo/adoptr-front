@@ -19,7 +19,6 @@ export default function PhotoGallery({
   species,
   petName,
   photos,
-  muted = false,
   children,
 }: {
   id: number;
@@ -27,7 +26,6 @@ export default function PhotoGallery({
   petName: string;
   photos: AdoptionPhoto[];
   /** Va sobre la foto grande (por ejemplo, el badge de estado). */
-  muted?: boolean;
   children?: ReactNode;
 }) {
   const [selected, setSelected] = useState(0);
@@ -61,12 +59,12 @@ export default function PhotoGallery({
             aria-label={`Ampliar foto ${selected + 1} de ${photos.length} de ${petName}`}
             className="block w-full cursor-zoom-in rounded-card text-left focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-accent-teal"
           >
-            <PetArt id={id} species={species} size="large" photoUrl={photo.url} muted={muted}>
+            <PetArt id={id} species={species} size="large" photoUrl={photo.url}>
               {children}
             </PetArt>
           </button>
         ) : (
-          <PetArt id={id} species={species} size="large" muted={muted}>
+          <PetArt id={id} species={species} size="large">
             {children}
           </PetArt>
         )}

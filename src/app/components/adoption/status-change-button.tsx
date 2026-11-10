@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowCounterClockwise } from "@phosphor-icons/react/dist/ssr";
+import { ArrowCounterClockwise, House } from "@phosphor-icons/react/dist/ssr";
 import { useState } from "react";
 import Button from "@/app/components/ui/button";
 import { statusActionLabel } from "@/lib/adoption/status-change";
@@ -13,8 +13,10 @@ export default function StatusChangeButton({ target }: { target: StatusChangeTar
   return (
     <>
       <Button variant="primary" size="sm" onClick={() => setOpen(true)}>
-        {target.status === AdoptionStatus.ADOPTED && (
+        {target.status === AdoptionStatus.ADOPTED ? (
           <ArrowCounterClockwise aria-hidden={true} weight="bold" className="h-5 w-5" />
+        ) : (
+          <House aria-hidden={true} weight="bold" className="h-5 w-5" />
         )}
         {statusActionLabel(target.sex, target.status)}
       </Button>

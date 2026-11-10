@@ -84,7 +84,7 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
       )}
 
       <div className="mt-8 grid gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <PhotoGallery id={pet.id} species={pet.species} petName={pet.petName} photos={pet.photos} muted={adopted}>
+        <PhotoGallery id={pet.id} species={pet.species} petName={pet.petName} photos={pet.photos}>
           {owner ? null : adopted ? <Badge variant="danger">{adoptedLabel(pet.sex)}</Badge> : <Badge variant="surface">En adopción</Badge>}
         </PhotoGallery>
 
@@ -151,9 +151,6 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
                 Muy pronto vas a poder escribirle a quien la publicó desde Adoptr.
               </p>
             </div>
-          )}
-          {owner && (
-            <p className="border-t-3 border-dashed border-ink pt-4 text-sm text-ink-soft">Solo vos ves estas opciones.</p>
           )}
         </div>
       </div>
