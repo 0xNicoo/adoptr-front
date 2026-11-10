@@ -61,12 +61,12 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-10 pb-16 md:px-6">
-      <BackLink />
+      <BackLink justPublished={justPublished} />
 
       {justPublished && (
         <div role="status" className="mt-6 rounded-card border-3 border-ink bg-positive-soft p-5 shadow-card">
           <p className="font-display text-2xl">¡Listo! Publicaste a {pet.petName}.</p>
-          <p className="mt-1 text-[17px]">Ya aparece en el catálogo.</p>
+          <p className="mt-1 text-[17px]">Ya la pueden ver quienes buscan adoptar.</p>
         </div>
       )}
       {adopted && (
