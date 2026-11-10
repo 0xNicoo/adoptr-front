@@ -78,6 +78,7 @@ export default async function MyProfilePage({ searchParams }: { searchParams: Pr
           emptyAll: "Todavía no publicaste ninguna mascota",
           emptyAllHint: "Cuando publiques una, la vas a ver acá.",
           emptyAvailable: "No tenés mascotas en adopción en este momento",
+          emptyAdopted: "Ninguna de tus mascotas fue adoptada todavía",
         }}
         action={
           <Button href="/adoptions/new" variant="cta">

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
 import { Gender } from "@/lib/api/models/profile/gender";
 import { OrganizationProfile, PersonProfile } from "@/lib/api/models/profile/profile";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
@@ -85,12 +86,17 @@ describe("initials", () => {
 
 describe("profileAdoptionsCountText", () => {
   it("todas", () => {
-    expect(profileAdoptionsCountText(1, false)).toBe("1 mascota publicada");
-    expect(profileAdoptionsCountText(5, false)).toBe("5 mascotas publicadas");
+    expect(profileAdoptionsCountText(1, null)).toBe("1 mascota publicada");
+    expect(profileAdoptionsCountText(5, null)).toBe("5 mascotas publicadas");
   });
 
   it("solo en adopción", () => {
-    expect(profileAdoptionsCountText(1, true)).toBe("1 mascota buscando familia");
-    expect(profileAdoptionsCountText(4, true)).toBe("4 mascotas buscando familia");
+    expect(profileAdoptionsCountText(1, AdoptionStatus.AVAILABLE)).toBe("1 mascota buscando familia");
+    expect(profileAdoptionsCountText(4, AdoptionStatus.AVAILABLE)).toBe("4 mascotas buscando familia");
+  });
+
+  it("solo adoptadas", () => {
+    expect(profileAdoptionsCountText(1, AdoptionStatus.ADOPTED)).toBe("1 mascota adoptada");
+    expect(profileAdoptionsCountText(2, AdoptionStatus.ADOPTED)).toBe("2 mascotas adoptadas");
   });
 });

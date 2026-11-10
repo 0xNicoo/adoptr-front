@@ -84,6 +84,7 @@ export default async function ProfilePage({ params, searchParams }: { params: Pa
           loadError: "No pudimos cargar sus publicaciones",
           emptyAll: "Todavía no publicó ninguna mascota",
           emptyAvailable: "No tiene mascotas en adopción en este momento",
+          emptyAdopted: "Ninguna de sus mascotas fue adoptada todavía",
         }}
       />
     </div>

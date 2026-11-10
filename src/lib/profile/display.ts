@@ -1,3 +1,4 @@
+import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
 import { PublicProfile } from "@/lib/api/models/profile/public-profile";
 
@@ -33,9 +34,12 @@ export function initials(name: string): string {
 }
 
 /** Subtítulo del listado de publicaciones de un perfil. */
-export function profileAdoptionsCountText(total: number, onlyAvailable: boolean): string {
-  if (onlyAvailable) {
+export function profileAdoptionsCountText(total: number, status: AdoptionStatus | null): string {
+  if (status === AdoptionStatus.AVAILABLE) {
     return total === 1 ? "1 mascota buscando familia" : `${total} mascotas buscando familia`;
+  }
+  if (status === AdoptionStatus.ADOPTED) {
+    return total === 1 ? "1 mascota adoptada" : `${total} mascotas adoptadas`;
   }
   return total === 1 ? "1 mascota publicada" : `${total} mascotas publicadas`;
 }
