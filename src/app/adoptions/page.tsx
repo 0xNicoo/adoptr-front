@@ -9,8 +9,8 @@ import { Species } from "@/lib/api/models/adoption/species";
 import { Locality } from "@/lib/api/models/locality/locality";
 import { Page } from "@/lib/api/models/page/page";
 import { Province } from "@/lib/api/models/locality/province";
+import Pagination from "@/app/components/ui/pagination";
 import CatalogFilters from "./catalog-filters";
-import Pagination from "./pagination";
 
 export const metadata: Metadata = {
   title: "Mascotas en adopción — Adoptr",
@@ -86,7 +86,11 @@ export default async function AdoptionsPage({ searchParams }: { searchParams: Pr
             <EmptyState query={query} hasFilters={hasFilters} totalItems={result.page.totalItems} />
           )}
 
-          <Pagination query={query} totalPages={result.page.totalPages} />
+          <Pagination
+            page={query.page}
+            totalPages={result.page.totalPages}
+            href={(page) => catalogHref({ ...query, page })}
+          />
         </>
       )}
     </div>

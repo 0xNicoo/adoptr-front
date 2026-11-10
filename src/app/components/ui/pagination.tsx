@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { CatalogQuery, catalogHref } from "@/lib/adoption/catalog-query";
 
 const pill =
   "inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-3 border-ink px-4 font-bold " +
@@ -16,10 +15,19 @@ function visiblePages(current: number, total: number): (number | "…")[] {
   return result;
 }
 
-export default function Pagination({ query, totalPages }: { query: CatalogQuery; totalPages: number }) {
+// Paginación por links: cada listado arma la URL de cada página con `href`.
+
+export default function Pagination({
+  page,
+  totalPages,
+  href,
+}: {
+  /** Desde 1. */
+  page: number;
+  totalPages: number;
+  href: (page: number) => string;
+}) {
   if (totalPages <= 1) return null;
-  const { page } = query;
-  const href = (target: number) => catalogHref({ ...query, page: target });
 
   return (
     <nav aria-label="Páginas" className="flex flex-col items-center gap-3">
