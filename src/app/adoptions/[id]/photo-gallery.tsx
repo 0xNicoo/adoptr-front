@@ -4,10 +4,10 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { type ReactNode, type TouchEvent, useRef, useState } from "react";
 import PetArt from "@/app/components/ui/pet-art";
+import { swipeDelta, wrapIndex } from "@/lib/adoption/gallery";
 import { AdoptionPhoto } from "@/lib/api/models/adoption/adoption-photo";
 import { Species } from "@/lib/api/models/adoption/species";
-
-const SWIPE_MIN_PX = 40;
+import PhotoLightbox from "./photo-lightbox";
 
 const arrowClass =
   "absolute top-1/2 flex size-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-3 border-ink bg-surface shadow-hard " +
@@ -29,19 +29,20 @@ export default function PhotoGallery({
   children?: ReactNode;
 }) {
   const [selected, setSelected] = useState(0);
+  const [enlarged, setEnlarged] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const photo = photos[selected];
   const several = photos.length > 1;
 
   function move(delta: number) {
-    setSelected((current) => (current + delta + photos.length) % photos.length);
+    setSelected((current) => wrapIndex(current, delta, photos.length));
   }
 
   function endSwipe(event: TouchEvent) {
     if (touchStartX.current === null) return;
-    const distance = event.changedTouches[0].clientX - touchStartX.current;
+    const delta = swipeDelta(event.changedTouches[0].clientX - touchStartX.current);
     touchStartX.current = null;
-    if (Math.abs(distance) >= SWIPE_MIN_PX) move(distance < 0 ? 1 : -1);
+    if (delta !== 0) move(delta);
   }
 
   return (
@@ -51,15 +52,22 @@ export default function PhotoGallery({
         onTouchStart={several ? (event) => (touchStartX.current = event.touches[0].clientX) : undefined}
         onTouchEnd={several ? endSwipe : undefined}
       >
-        <PetArt
-          id={id}
-          species={species}
-          size="large"
-          photoUrl={photo?.url}
-          photoAlt={photo ? `Foto ${selected + 1} de ${photos.length} de ${petName}` : ""}
-        >
-          {children}
-        </PetArt>
+        {photo ? (
+          <button
+            type="button"
+            onClick={() => setEnlarged(true)}
+            aria-label={`Ampliar foto ${selected + 1} de ${photos.length} de ${petName}`}
+            className="block w-full cursor-zoom-in rounded-card text-left focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-accent-teal"
+          >
+            <PetArt id={id} species={species} size="large" photoUrl={photo.url}>
+              {children}
+            </PetArt>
+          </button>
+        ) : (
+          <PetArt id={id} species={species} size="large">
+            {children}
+          </PetArt>
+        )}
 
         {several && (
           <>
@@ -113,6 +121,15 @@ export default function PhotoGallery({
           })}
         </ul>
       )}
+      <PhotoLightbox
+        open={enlarged}
+        photos={photos}
+        selected={selected}
+        petName={petName}
+        onSelect={setSelected}
+        onMove={move}
+        onClose={() => setEnlarged(false)}
+      />
     </div>
   );
 }
