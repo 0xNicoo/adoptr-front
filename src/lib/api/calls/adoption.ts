@@ -1,5 +1,6 @@
 import 'server-only';
 import { CatalogQuery, toApiParams } from '@/lib/adoption/catalog-query';
+import { MyAdoptionsQuery, toMyAdoptionsApiParams } from '@/lib/profile/my-adoptions-query';
 import { ApiError, apiRequest } from '../api';
 import { Adoption } from '../models/adoption/adoption';
 import { AdoptionInput } from '../models/adoption/adoption-input';
@@ -15,6 +16,15 @@ export async function searchAdoptions(query: CatalogQuery): Promise<Page<Adoptio
   );
   if (!response.data) {
     throw new Error('El catálogo no devolvió una página');
+  }
+  return response.data;
+}
+
+/** Publicaciones del usuario de la sesión, en adopción y adoptadas (o solo en adopción si se filtra). */
+export async function getMyAdoptions(query: MyAdoptionsQuery): Promise<Page<AdoptionSummary>> {
+  const response = await apiRequest<Page<AdoptionSummary>>(`/adoptions/mine?${toMyAdoptionsApiParams(query)}`);
+  if (!response.data) {
+    throw new Error('Mis publicaciones no devolvió una página');
   }
   return response.data;
 }
