@@ -8,9 +8,13 @@ import { SearchParams } from "@/lib/adoption/catalog-query";
 export const MY_PROFILE_PATH = "/profile";
 export const PROFILE_ADOPTIONS_PAGE_SIZE = 12;
 
+const STATUS_IN_URL: Record<AdoptionStatus, string> = {
+  [AdoptionStatus.AVAILABLE]: "available",
+  [AdoptionStatus.ADOPTED]: "adopted",
+};
+
 export interface ProfileAdoptionsQuery {
-  /** Solo las que están en adopción; si no, todas (también las adoptadas). */
-  onlyAvailable: boolean;
+  status: AdoptionStatus | null;
   /** Desde 1. */
   page: number;
 }
@@ -23,25 +27,27 @@ function first(value: string | string[] | undefined): string | undefined {
 export function parseProfileAdoptionsQuery(params: SearchParams): ProfileAdoptionsQuery {
   const rawPage = first(params.page);
   const page = rawPage && /^\d+$/.test(rawPage) ? Number(rawPage) : NaN;
+  const rawStatus = first(params.status);
+  const status = Object.values(AdoptionStatus).find((value) => STATUS_IN_URL[value] === rawStatus) ?? null;
   return {
-    onlyAvailable: first(params.status) === "available",
+    status,
     page: page > 0 && Number.isSafeInteger(page) ? page : 1,
   };
 }
 
 /** Query de `GET /adoptions/mine` y `GET /profiles/{id}/adoptions`. */
-export function toProfileAdoptionsApiParams({ onlyAvailable, page }: ProfileAdoptionsQuery): URLSearchParams {
+export function toProfileAdoptionsApiParams({ status, page }: ProfileAdoptionsQuery): URLSearchParams {
   const params = new URLSearchParams();
-  if (onlyAvailable) params.set("status", AdoptionStatus.AVAILABLE);
+  if (status) params.set("status", status);
   params.set("page", String(page - 1));
   params.set("pageSize", String(PROFILE_ADOPTIONS_PAGE_SIZE));
   return params;
 }
 
 /** Link de la página del perfil (`basePath`) con ese filtro y página. */
-export function profileAdoptionsHref(basePath: string, { onlyAvailable, page }: ProfileAdoptionsQuery): string {
+export function profileAdoptionsHref(basePath: string, { status, page }: ProfileAdoptionsQuery): string {
   const params = new URLSearchParams();
-  if (onlyAvailable) params.set("status", "available");
+  if (status) params.set("status", STATUS_IN_URL[status]);
   if (page > 1) params.set("page", String(page));
   const query = params.toString();
   return query ? `${basePath}?${query}` : basePath;

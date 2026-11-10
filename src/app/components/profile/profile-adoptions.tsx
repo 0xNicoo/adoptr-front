@@ -3,12 +3,13 @@ import type { ReactNode } from "react";
 import Button from "@/app/components/ui/button";
 import Pagination from "@/app/components/ui/pagination";
 import PetCard from "@/app/components/ui/pet-card";
+import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
 import { AdoptionSummary } from "@/lib/api/models/adoption/adoption-summary";
 import { Page } from "@/lib/api/models/page/page";
 import { profileAdoptionsCountText } from "@/lib/profile/display";
 import { ProfileAdoptionsQuery, profileAdoptionsHref } from "@/lib/profile/profile-adoptions-query";
 
-// Publicaciones de un perfil: filtro «Todas / En adopción», grilla, paginación y estados vacío y de error.
+// Publicaciones de un perfil: filtro «Todas / En adopción / Adoptadas», grilla, paginación y estados vacío y de error.
 // Lo usan «Mi perfil» y el perfil de otra persona; cambian la ruta, los textos y la acción del encabezado.
 
 export interface ProfileAdoptionsTexts {
@@ -19,6 +20,7 @@ export interface ProfileAdoptionsTexts {
   emptyAllHint?: string;
   /** Con el filtro «En adopción», sin resultados. */
   emptyAvailable: string;
+  emptyAdopted: string;
 }
 
 export default function ProfileAdoptions({
@@ -48,13 +50,13 @@ export default function ProfileAdoptions({
             {texts.title}
           </h2>
           {list && list.totalItems > 0 && (
-            <p className="mt-1 text-[17px] text-ink-soft">{profileAdoptionsCountText(list.totalItems, query.onlyAvailable)}</p>
+            <p className="mt-1 text-[17px] text-ink-soft">{profileAdoptionsCountText(list.totalItems, query.status)}</p>
           )}
         </div>
         {action}
       </header>
 
-      <StatusFilter onlyAvailable={query.onlyAvailable} href={href} />
+      <StatusFilter status={query.status} href={href} />
 
       {!list ? (
         <div role="alert" className="rounded-card border-3 border-ink bg-surface p-8 shadow-panel">
@@ -86,16 +88,21 @@ const pill =
   "focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal";
 
 function StatusFilter({
-  onlyAvailable,
+  status,
   href,
 }: {
-  onlyAvailable: boolean;
+  status: AdoptionStatus | null;
   href: (query: ProfileAdoptionsQuery) => string;
 }) {
   const options = [
-    { label: "Todas", active: !onlyAvailable, href: href({ onlyAvailable: false, page: 1 }) },
-    { label: "En adopción", active: onlyAvailable, href: href({ onlyAvailable: true, page: 1 }) },
-  ];
+    { label: "Todas", value: null },
+    { label: "En adopción", value: AdoptionStatus.AVAILABLE },
+    { label: "Adoptadas", value: AdoptionStatus.ADOPTED },
+  ].map((option) => ({
+    label: option.label,
+    active: status === option.value,
+    href: href({ status: option.value, page: 1 }),
+  }));
   return (
     <nav aria-label="Filtrar publicaciones">
       <ul className="flex flex-wrap gap-2.5">
@@ -138,12 +145,14 @@ function EmptyState({
       </div>
     );
   }
-  if (query.onlyAvailable) {
+  if (query.status) {
     return (
       <div className="halftone rounded-card border-3 border-ink bg-accent-mustard p-8 text-center shadow-panel">
-        <h3 className="font-display text-3xl">{texts.emptyAvailable}</h3>
+        <h3 className="font-display text-3xl">
+          {query.status === AdoptionStatus.ADOPTED ? texts.emptyAdopted : texts.emptyAvailable}
+        </h3>
         <div className="mt-5 flex justify-center">
-          <Button href={href({ onlyAvailable: false, page: 1 })} variant="secondary">
+          <Button href={href({ status: null, page: 1 })} variant="secondary">
             Ver todas
           </Button>
         </div>
