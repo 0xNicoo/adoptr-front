@@ -4,8 +4,8 @@ export default function Loading() {
       <p className="sr-only" role="status">
         Cargando mascota…
       </p>
-      <div className="mt-14 grid gap-10 md:grid-cols-2">
-        <div className="halftone aspect-[4/3] rounded-card border-3 border-dashed border-ink-soft bg-disabled" />
+      <div className="mt-14 grid gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+        <div className="halftone aspect-[3/4] rounded-card border-3 border-dashed border-ink-soft bg-disabled" />
         <div className="flex flex-col gap-4">
           <div className="h-14 w-1/2 rounded-full bg-disabled" />
           <div className="grid grid-cols-2 gap-3">

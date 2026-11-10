@@ -38,7 +38,7 @@ export default function PetArt({
   return (
     <div
       className={`halftone relative flex items-center justify-center overflow-hidden ${background} ${
-        large ? "aspect-[4/3] rounded-card border-3 border-ink shadow-panel" : "aspect-[4/3] border-b-3 border-ink"
+        large ? "aspect-[3/4] rounded-card border-3 border-ink shadow-panel" : "aspect-[4/3] border-b-3 border-ink"
       }`}
     >
       {photoUrl ? (

@@ -95,7 +95,7 @@ export default function PhotoGallery({
                   aria-label={`Ver foto ${index + 1} de ${photos.length}`}
                   aria-current={current ? "true" : undefined}
                   className={
-                    "group relative block aspect-square w-full cursor-pointer overflow-hidden rounded-field border-3 border-ink bg-disabled " +
+                    "group relative block aspect-[3/4] w-full cursor-pointer overflow-hidden rounded-field border-3 border-ink bg-disabled " +
                     "focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal " +
                     (current ? "ring-3 ring-primary ring-offset-2 ring-offset-paper" : "")
                   }

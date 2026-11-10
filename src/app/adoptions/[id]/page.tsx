@@ -78,7 +78,7 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
         </div>
       )}
 
-      <div className="mt-8 grid gap-10 md:grid-cols-2">
+      <div className="mt-8 grid gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         <PhotoGallery id={pet.id} species={pet.species} petName={pet.petName} photos={pet.photos}>
           {adopted ? <Badge variant="danger">Adoptado</Badge> : <Badge variant="surface">En adopción</Badge>}
         </PhotoGallery>
