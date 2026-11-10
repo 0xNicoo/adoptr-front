@@ -252,11 +252,11 @@ export default function AdoptionForm({
     <div className="mx-auto flex max-w-4xl flex-col gap-7">
       <div className="flex flex-col gap-2.5">
         <h1 className="font-display text-[40px] leading-tight text-primary md:text-[56px]">
-          {editing ? `Editar a ${editing.petName}` : "Publicar una mascota"}
+          {editing ? `Editá los datos de ${editing.petName}` : "Publicar una mascota"}
         </h1>
         <p className="max-w-2xl text-[17px] leading-relaxed">
           {editing
-            ? "Tocá «Editar» en lo que quieras cambiar y después guardá los cambios."
+            ? "Tocá \"Editar\" en lo que quieras cambiar y después guardá los cambios."
             : "Cargá su ficha y la van a poder conocer quienes buscan adoptar."}
         </p>
       </div>
