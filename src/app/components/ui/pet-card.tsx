@@ -2,7 +2,7 @@ import { MapPinIcon } from "@heroicons/react/24/outline";
 import { adoptedLabel, healthChips, knowMoreLabel, summaryLine } from "@/lib/adoption/labels";
 import { AdoptionSummary } from "@/lib/api/models/adoption/adoption-summary";
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
-import StatusChangeButton from "@/app/components/adoption/status-change-button";
+import OwnerCardMenu from "@/app/components/adoption/owner-card-menu";
 import Badge from "./badge";
 import Button from "./button";
 import HealthChips from "./health-chips";
@@ -18,11 +18,18 @@ export default function PetCard({ pet, owner = false }: { pet: AdoptionSummary; 
 
   return (
     <article className="flex h-full min-w-0 flex-col overflow-hidden rounded-card border-3 border-ink bg-surface shadow-card">
-      <PetArt id={pet.id} species={pet.species} photoUrl={pet.coverPhotoUrl}>
-        <Badge variant={adopted ? "danger" : "surface"} className="px-3 py-1 text-[13px]">
-          {adopted ? adoptedLabel(pet.sex) : owner ? "Tu publicación" : "En adopción"}
-        </Badge>
-      </PetArt>
+      <div className="relative">
+        <PetArt id={pet.id} species={pet.species} photoUrl={pet.coverPhotoUrl} muted={adopted}>
+          <Badge variant={adopted ? "danger" : "surface"} className="px-3 py-1 text-[13px]">
+            {adopted ? adoptedLabel(pet.sex) : "En adopción"}
+          </Badge>
+        </PetArt>
+        {owner && (
+          <div className="absolute top-3 right-3">
+            <OwnerCardMenu target={{ adoptionId: pet.id, petName: pet.petName, sex: pet.sex, status: pet.status }} />
+          </div>
+        )}
+      </div>
       <div className="flex flex-1 flex-col gap-3 px-4 pt-4 pb-4">
         <div>
           <div className="flex items-center justify-between gap-3">
@@ -38,29 +45,12 @@ export default function PetCard({ pet, owner = false }: { pet: AdoptionSummary; 
           </p>
         </div>
         <HealthChips chips={healthChips(pet)} size="xs" />
-        {owner ? (
-          <div className="mt-auto flex gap-2 pt-1">
-            <Button href={`/adoptions/${pet.id}`} variant="secondary" className="flex-1 px-4">
-              Ver
-              <span className="sr-only">: {pet.petName}</span>
-            </Button>
-            <StatusChangeButton
-              adoptionId={pet.id}
-              petName={pet.petName}
-              sex={pet.sex}
-              status={pet.status}
-              compact
-              className="flex-[2] px-4"
-            />
-          </div>
-        ) : (
-          <div className="mt-auto pt-1">
-            <Button href={`/adoptions/${pet.id}`} variant="secondary" className="w-full">
-              {knowMoreLabel(pet.sex, adopted)}
-              <span className="sr-only">: {pet.petName}</span>
-            </Button>
-          </div>
-        )}
+        <div className="mt-auto pt-1">
+          <Button href={`/adoptions/${pet.id}`} variant="secondary" className="w-full">
+            {knowMoreLabel(pet.sex, adopted)}
+            <span className="sr-only">: {pet.petName}</span>
+          </Button>
+        </div>
       </div>
     </article>
   );

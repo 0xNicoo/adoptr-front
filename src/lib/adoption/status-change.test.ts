@@ -5,44 +5,59 @@ import {
   nextStatus,
   statusActionLabel,
   statusChangeMessage,
+  statusChangedMessage,
+  statusConfirmButton,
   statusConfirmText,
   statusConfirmTitle,
-  statusShortLabel,
 } from "./status-change";
+
+const { AVAILABLE, ADOPTED } = AdoptionStatus;
 
 describe("nextStatus", () => {
   it("alterna entre en adopción y adoptada", () => {
-    expect(nextStatus(AdoptionStatus.AVAILABLE)).toBe(AdoptionStatus.ADOPTED);
-    expect(nextStatus(AdoptionStatus.ADOPTED)).toBe(AdoptionStatus.AVAILABLE);
+    expect(nextStatus(AVAILABLE)).toBe(ADOPTED);
+    expect(nextStatus(ADOPTED)).toBe(AVAILABLE);
   });
 });
 
 describe("statusActionLabel", () => {
   it("en adopción: marcar como adoptada o adoptado según el sexo", () => {
-    expect(statusActionLabel(PetSex.FEMALE, AdoptionStatus.AVAILABLE)).toBe("Marcar como adoptada");
-    expect(statusActionLabel(PetSex.MALE, AdoptionStatus.AVAILABLE)).toBe("Marcar como adoptado");
-    expect(statusActionLabel(PetSex.UNKNOWN, AdoptionStatus.AVAILABLE)).toBe("Marcar como adoptado");
+    expect(statusActionLabel(PetSex.FEMALE, AVAILABLE)).toBe("Marcar como adoptada");
+    expect(statusActionLabel(PetSex.MALE, AVAILABLE)).toBe("Marcar como adoptado");
+    expect(statusActionLabel(PetSex.UNKNOWN, AVAILABLE)).toBe("Marcar como adoptado");
   });
 
-  it("adoptada: volver a ponerla en adopción", () => {
-    expect(statusActionLabel(PetSex.FEMALE, AdoptionStatus.ADOPTED)).toBe("Volver a poner en adopción");
-  });
-});
-
-describe("statusShortLabel", () => {
-  it("versión corta para la tarjeta", () => {
-    expect(statusShortLabel(PetSex.FEMALE, AdoptionStatus.AVAILABLE)).toBe("Fue adoptada");
-    expect(statusShortLabel(PetSex.MALE, AdoptionStatus.AVAILABLE)).toBe("Fue adoptado");
-    expect(statusShortLabel(PetSex.MALE, AdoptionStatus.ADOPTED)).toBe("Volver a adopción");
+  it("adoptada: volver a adopción", () => {
+    expect(statusActionLabel(PetSex.FEMALE, ADOPTED)).toBe("Volver a adopción");
   });
 });
 
-describe("statusConfirmTitle y statusConfirmText", () => {
-  it("nombran a la mascota y dicen qué pasa", () => {
-    expect(statusConfirmTitle("Luna", PetSex.FEMALE, AdoptionStatus.AVAILABLE)).toBe("¿Marcar a Luna como adoptada?");
-    expect(statusConfirmTitle("Toby", PetSex.MALE, AdoptionStatus.ADOPTED)).toBe("¿Volver a poner a Toby en adopción?");
-    expect(statusConfirmText(AdoptionStatus.AVAILABLE)).toContain("dejar de aparecer");
-    expect(statusConfirmText(AdoptionStatus.ADOPTED)).toContain("volver a aparecer");
+describe("confirmación", () => {
+  it("al marcar como adoptada", () => {
+    expect(statusConfirmTitle("Muni", AVAILABLE)).toBe("¿Muni ya tiene familia?");
+    expect(statusConfirmText(PetSex.FEMALE, AVAILABLE)).toBe(
+      "La publicación saldrá de la lista de adopciones y nadie más va a poder escribirte por ella. " +
+        "Va a seguir en tu perfil como adoptada, y si hace falta la podés volver a poner en adopción.",
+    );
+    expect(statusConfirmText(PetSex.MALE, AVAILABLE)).toContain("como adoptado,");
+    expect(statusConfirmButton(PetSex.FEMALE, AVAILABLE)).toBe("Sí, fue adoptada");
+    expect(statusConfirmButton(PetSex.MALE, AVAILABLE)).toBe("Sí, fue adoptado");
+  });
+
+  it("al volver a adopción", () => {
+    expect(statusConfirmTitle("Rocco", ADOPTED)).toBe("¿Volver a poner a Rocco en adopción?");
+    expect(statusConfirmText(PetSex.MALE, ADOPTED)).toBe(
+      "Va a volver a aparecer en la lista de adopciones y te van a poder escribir por ella.",
+    );
+    expect(statusConfirmButton(PetSex.MALE, ADOPTED)).toBe("Sí, volver a adopción");
+  });
+});
+
+describe("statusChangedMessage", () => {
+  it("según el estado nuevo", () => {
+    expect(statusChangedMessage("Muni", PetSex.FEMALE, ADOPTED)).toBe("¡Qué buena noticia! Muni quedó como adoptada");
+    expect(statusChangedMessage("Rocco", PetSex.MALE, ADOPTED)).toBe("¡Qué buena noticia! Rocco quedó como adoptado");
+    expect(statusChangedMessage("Muni", PetSex.FEMALE, AVAILABLE)).toBe("Muni volvió a estar en adopción");
   });
 });
 

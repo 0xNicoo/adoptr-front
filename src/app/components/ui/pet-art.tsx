@@ -20,6 +20,7 @@ export default function PetArt({
   photoUrl,
   photoAlt = "",
   size = "card",
+  muted = false,
   children,
 }: {
   /** Elige el color de fondo, para que cada mascota tenga siempre el mismo. */
@@ -28,12 +29,14 @@ export default function PetArt({
   photoUrl?: string | null;
   photoAlt?: string;
   size?: "card" | "large";
+  muted?: boolean;
   /** Va arriba a la izquierda (por ejemplo, el badge de estado). */
   children?: ReactNode;
 }) {
   const large = size === "large";
   // Alrededor de una foto entera, un fondo neutro: un color vivo le competiría.
-  const background = large && photoUrl ? "bg-surface" : BACKGROUNDS[id % BACKGROUNDS.length];
+  const background = muted ? "bg-disabled" : large && photoUrl ? "bg-surface" : BACKGROUNDS[id % BACKGROUNDS.length];
+  const tone = muted ? "grayscale opacity-60" : "";
 
   return (
     <div
@@ -43,7 +46,7 @@ export default function PetArt({
     >
       {photoUrl ? (
         // En la ficha se ve entera, sin recortar; en la tarjeta llena el bloque para que la grilla quede pareja.
-        <Image src={photoUrl} alt={photoAlt} fill unoptimized className={large ? "object-contain" : "object-cover"} />
+        <Image src={photoUrl} alt={photoAlt} fill unoptimized className={`${large ? "object-contain" : "object-cover"} ${tone}`} />
       ) : (
         <Image
           src={ART[species]}
@@ -51,7 +54,7 @@ export default function PetArt({
           width={120}
           height={120}
           unoptimized
-          className={large ? "h-auto w-40 md:w-56" : "h-auto w-24"}
+          className={`${large ? "h-auto w-40 md:w-56" : "h-auto w-24"} ${tone}`}
         />
       )}
       {children && <div className="absolute top-3 left-3">{children}</div>}
