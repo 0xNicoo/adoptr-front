@@ -20,14 +20,9 @@ export async function searchAdoptions(query: CatalogQuery): Promise<Page<Adoptio
   return response.data;
 }
 
-/**
- * Publicaciones del usuario de la sesión, en adopción y adoptadas (o solo en adopción si se filtra).
- * `pageSize` distinto solo para contar: con 1 alcanza para leer `totalItems`.
- */
-export async function getMyAdoptions(query: MyAdoptionsQuery, pageSize?: number): Promise<Page<AdoptionSummary>> {
-  const response = await apiRequest<Page<AdoptionSummary>>(
-    `/adoptions/mine?${toMyAdoptionsApiParams(query, pageSize)}`,
-  );
+/** Publicaciones del usuario de la sesión, en adopción y adoptadas (o solo en adopción si se filtra). */
+export async function getMyAdoptions(query: MyAdoptionsQuery): Promise<Page<AdoptionSummary>> {
+  const response = await apiRequest<Page<AdoptionSummary>>(`/adoptions/mine?${toMyAdoptionsApiParams(query)}`);
   if (!response.data) {
     throw new Error('Mis publicaciones no devolvió una página');
   }

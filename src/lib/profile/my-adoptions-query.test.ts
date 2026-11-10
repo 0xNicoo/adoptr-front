@@ -42,10 +42,6 @@ describe("toMyAdoptionsApiParams", () => {
       `status=AVAILABLE&page=2&pageSize=${MY_ADOPTIONS_PAGE_SIZE}`,
     );
   });
-
-  it("acepta otro tamaño de página (para contar)", () => {
-    expect(toMyAdoptionsApiParams({ onlyAvailable: false, page: 1 }, 1).toString()).toBe("page=0&pageSize=1");
-  });
 });
 
 describe("myProfileHref", () => {

@@ -1,7 +1,7 @@
 export default function Loading() {
   return (
     <div
-      className="mx-auto grid max-w-6xl gap-10 px-4 pt-12 pb-16 md:px-6 lg:grid-cols-[300px_1fr] lg:items-start"
+      className="mx-auto grid max-w-7xl gap-10 px-4 pt-12 pb-16 md:px-6 lg:grid-cols-[380px_1fr] lg:items-start"
       aria-busy="true"
     >
       <p className="sr-only" role="status">

@@ -3,11 +3,6 @@ import { ProfileType } from "@/lib/api/models/profile/profile-type";
 
 // Textos para mostrar un perfil.
 
-export const PROFILE_TYPE_LABEL: Record<ProfileType, string> = {
-  [ProfileType.PERSON]: "Persona",
-  [ProfileType.ORGANIZATION]: "Organización",
-};
-
 /** Nombre y apellido de una persona, o el nombre de la organización. */
 export function profileDisplayName(profile: Profile): string {
   return profile.profileType === ProfileType.PERSON

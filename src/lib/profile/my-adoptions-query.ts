@@ -29,14 +29,11 @@ export function parseMyAdoptionsQuery(params: SearchParams): MyAdoptionsQuery {
 }
 
 /** Query de `GET /adoptions/mine`. */
-export function toMyAdoptionsApiParams(
-  { onlyAvailable, page }: MyAdoptionsQuery,
-  pageSize: number = MY_ADOPTIONS_PAGE_SIZE,
-): URLSearchParams {
+export function toMyAdoptionsApiParams({ onlyAvailable, page }: MyAdoptionsQuery): URLSearchParams {
   const params = new URLSearchParams();
   if (onlyAvailable) params.set("status", AdoptionStatus.AVAILABLE);
   params.set("page", String(page - 1));
-  params.set("pageSize", String(pageSize));
+  params.set("pageSize", String(MY_ADOPTIONS_PAGE_SIZE));
   return params;
 }
 

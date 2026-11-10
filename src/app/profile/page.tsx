@@ -26,7 +26,6 @@ type Loaded =
       profile: Profile;
       /** `null` si falló el listado: el perfil se muestra igual. */
       list: Page<AdoptionSummary> | null;
-      counts: { available: number; adopted: number } | null;
     };
 
 function isUnauthenticated(result: PromiseSettledResult<unknown>): boolean {
@@ -34,26 +33,12 @@ function isUnauthenticated(result: PromiseSettledResult<unknown>): boolean {
 }
 
 async function load(query: MyAdoptionsQuery): Promise<Loaded> {
-  // Además de la página pedida, se cuenta el otro conjunto (todas o solo en adopción) con una página de 1,
-  // para mostrar los dos contadores sea cual sea el filtro.
-  const [profile, list, other] = await Promise.allSettled([
-    getMyProfile(),
-    getMyAdoptions(query),
-    getMyAdoptions({ onlyAvailable: !query.onlyAvailable, page: 1 }, 1),
-  ]);
+  const [profile, list] = await Promise.allSettled([getMyProfile(), getMyAdoptions(query)]);
 
-  if ([profile, list, other].some(isUnauthenticated)) return { state: "unauthenticated" };
+  if ([profile, list].some(isUnauthenticated)) return { state: "unauthenticated" };
   if (profile.status === "rejected") return { state: "error" };
   if (!profile.value) return { state: "no-profile" };
-
-  const page = list.status === "fulfilled" ? list.value : null;
-  let counts = null;
-  if (page && other.status === "fulfilled") {
-    const available = query.onlyAvailable ? page.totalItems : other.value.totalItems;
-    const total = query.onlyAvailable ? other.value.totalItems : page.totalItems;
-    counts = { available, adopted: Math.max(total - available, 0) };
-  }
-  return { state: "ok", profile: profile.value, list: page, counts };
+  return { state: "ok", profile: profile.value, list: list.status === "fulfilled" ? list.value : null };
 }
 
 export default async function MyProfilePage({ searchParams }: { searchParams: Promise<SearchParams> }) {
@@ -67,7 +52,7 @@ export default async function MyProfilePage({ searchParams }: { searchParams: Pr
 
   if (result.state !== "ok") {
     return (
-      <div className="mx-auto max-w-6xl px-4 pt-12 pb-16 md:px-6">
+      <div className="mx-auto max-w-7xl px-4 pt-12 pb-16 md:px-6">
         <div role="alert" className="rounded-card border-3 border-ink bg-surface p-8 shadow-panel">
           <h1 className="font-display text-3xl text-primary">No pudimos cargar tu perfil</h1>
           <p className="mt-3 text-[17px]">Probá de nuevo en unos minutos.</p>
@@ -76,11 +61,11 @@ export default async function MyProfilePage({ searchParams }: { searchParams: Pr
     );
   }
 
-  const { profile, list, counts } = result;
+  const { profile, list } = result;
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-10 px-4 pt-12 pb-16 md:px-6 lg:grid-cols-[300px_1fr] lg:items-start">
-      <ProfileCard profile={profile} counts={counts} />
+    <div className="mx-auto grid max-w-7xl gap-10 px-4 pt-12 pb-16 md:px-6 lg:grid-cols-[380px_1fr] lg:items-start">
+      <ProfileCard profile={profile} />
 
       <section aria-labelledby="my-adoptions-title" className="flex min-w-0 flex-col gap-7">
         <header className="flex flex-wrap items-end justify-between gap-4">

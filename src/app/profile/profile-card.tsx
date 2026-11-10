@@ -2,18 +2,12 @@ import { MapPinIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { Profile } from "@/lib/api/models/profile/profile";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
-import { PROFILE_TYPE_LABEL, initials, profileDisplayName } from "@/lib/profile/display";
+import { initials, profileDisplayName } from "@/lib/profile/display";
 
-// Tarjeta lateral de «Mi perfil»: foto o iniciales, nombre, tipo, ubicación, descripción y contadores.
-// Los contadores son `null` si no se pudieron cargar.
+// Tarjeta lateral de «Mi perfil»: foto o iniciales, nombre, ubicación y descripción.
+// Las organizaciones llevan además su etiqueta, redes y web.
 
-export default function ProfileCard({
-  profile,
-  counts,
-}: {
-  profile: Profile;
-  counts: { available: number; adopted: number } | null;
-}) {
+export default function ProfileCard({ profile }: { profile: Profile }) {
   const name = profileDisplayName(profile);
   const organization = profile.profileType === ProfileType.ORGANIZATION ? profile : null;
 
@@ -38,9 +32,11 @@ export default function ProfileCard({
           <h1 id="profile-name" className="font-display text-[36px] leading-tight break-words text-primary">
             {name}
           </h1>
-          <span className="rounded-full border-2 border-ink bg-accent-mustard px-3.5 py-1 text-[13px] font-semibold tracking-[0.08em] uppercase">
-            {PROFILE_TYPE_LABEL[profile.profileType]}
-          </span>
+          {organization && (
+            <span className="rounded-full border-2 border-ink bg-accent-mustard px-3.5 py-1 text-[13px] font-semibold tracking-[0.08em] uppercase">
+              Organización
+            </span>
+          )}
         </div>
 
         <p className="flex items-center gap-1.5 text-center text-[15px] text-ink-soft">
@@ -76,19 +72,6 @@ export default function ProfileCard({
                 </dd>
               </>
             )}
-          </dl>
-        )}
-
-        {counts && (
-          <dl className="grid w-full grid-cols-2 border-t-3 border-dashed border-ink pt-4 text-center">
-            <div className="flex flex-col-reverse">
-              <dt className="text-sm text-ink-soft">en adopción</dt>
-              <dd className="font-display text-3xl text-primary">{counts.available}</dd>
-            </div>
-            <div className="flex flex-col-reverse">
-              <dt className="text-sm text-ink-soft">{counts.adopted === 1 ? "adoptada" : "adoptadas"}</dt>
-              <dd className="font-display text-3xl text-primary">{counts.adopted}</dd>
-            </div>
           </dl>
         )}
       </div>
