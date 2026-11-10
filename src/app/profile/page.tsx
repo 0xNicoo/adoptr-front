@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import ProfileAdoptions from "@/app/components/profile/profile-adoptions";
+import ProfileCard from "@/app/components/profile/profile-card";
 import Button from "@/app/components/ui/button";
-import Pagination from "@/app/components/ui/pagination";
-import PetCard from "@/app/components/ui/pet-card";
 import { SearchParams } from "@/lib/adoption/catalog-query";
 import { ApiError } from "@/lib/api/api";
 import { getMyAdoptions } from "@/lib/api/calls/adoption";
@@ -11,9 +10,11 @@ import { getMyProfile } from "@/lib/api/calls/profile";
 import { AdoptionSummary } from "@/lib/api/models/adoption/adoption-summary";
 import { Page } from "@/lib/api/models/page/page";
 import { Profile } from "@/lib/api/models/profile/profile";
-import { myAdoptionsCountText } from "@/lib/profile/display";
-import { MyAdoptionsQuery, myProfileHref, parseMyAdoptionsQuery } from "@/lib/profile/my-adoptions-query";
-import ProfileCard from "./profile-card";
+import {
+  MY_PROFILE_PATH,
+  ProfileAdoptionsQuery,
+  parseProfileAdoptionsQuery,
+} from "@/lib/profile/profile-adoptions-query";
 
 export const metadata: Metadata = {
   title: "Mi perfil — Adoptr",
@@ -32,7 +33,7 @@ function isUnauthenticated(result: PromiseSettledResult<unknown>): boolean {
   return result.status === "rejected" && result.reason instanceof ApiError && result.reason.code === "UNAUTHENTICATED";
 }
 
-async function load(query: MyAdoptionsQuery): Promise<Loaded> {
+async function load(query: ProfileAdoptionsQuery): Promise<Loaded> {
   const [profile, list] = await Promise.allSettled([getMyProfile(), getMyAdoptions(query)]);
 
   if ([profile, list].some(isUnauthenticated)) return { state: "unauthenticated" };
@@ -42,7 +43,7 @@ async function load(query: MyAdoptionsQuery): Promise<Loaded> {
 }
 
 export default async function MyProfilePage({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  const query = parseMyAdoptionsQuery(await searchParams);
+  const query = parseProfileAdoptionsQuery(await searchParams);
   const result = await load(query);
 
   // Quien postergó el alta llega acá desde «Mi perfil»: se lo lleva a completarla.
@@ -66,111 +67,23 @@ export default async function MyProfilePage({ searchParams }: { searchParams: Pr
   return (
     <div className="mx-auto grid max-w-7xl gap-10 px-4 pt-12 pb-16 md:px-6 lg:grid-cols-[380px_1fr] lg:items-start">
       <ProfileCard profile={profile} />
-
-      <section aria-labelledby="my-adoptions-title" className="flex min-w-0 flex-col gap-7">
-        <header className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 id="my-adoptions-title" className="font-display text-[42px] leading-tight text-primary">
-              Mis publicaciones
-            </h2>
-            {list && list.totalItems > 0 && (
-              <p className="mt-1 text-[17px] text-ink-soft">{myAdoptionsCountText(list.totalItems, query.onlyAvailable)}</p>
-            )}
-          </div>
+      <ProfileAdoptions
+        basePath={MY_PROFILE_PATH}
+        query={query}
+        list={list}
+        texts={{
+          title: "Mis publicaciones",
+          loadError: "No pudimos cargar tus publicaciones",
+          emptyAll: "Todavía no publicaste ninguna mascota",
+          emptyAllHint: "Cuando publiques una, la vas a ver acá.",
+          emptyAvailable: "No tenés mascotas en adopción en este momento",
+        }}
+        action={
           <Button href="/adoptions/new" variant="cta">
             Publicar una mascota
           </Button>
-        </header>
-
-        <StatusFilter onlyAvailable={query.onlyAvailable} />
-
-        {!list ? (
-          <div role="alert" className="rounded-card border-3 border-ink bg-surface p-8 shadow-panel">
-            <h3 className="font-display text-3xl text-primary">No pudimos cargar tus publicaciones</h3>
-            <p className="mt-3 text-[17px]">Probá de nuevo en unos minutos.</p>
-          </div>
-        ) : list.items.length > 0 ? (
-          <>
-            <ul className="grid gap-7 sm:grid-cols-2 xl:grid-cols-3">
-              {list.items.map((pet) => (
-                <li key={pet.id} className="flex">
-                  <div className="w-full">
-                    <PetCard pet={pet} />
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <Pagination
-              page={query.page}
-              totalPages={list.totalPages}
-              href={(page) => myProfileHref({ ...query, page })}
-            />
-          </>
-        ) : (
-          <EmptyState query={query} totalItems={list.totalItems} />
-        )}
-      </section>
-    </div>
-  );
-}
-
-const pill =
-  "inline-flex min-h-11 items-center justify-center rounded-full border-3 border-ink px-5 font-bold " +
-  "focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal";
-
-function StatusFilter({ onlyAvailable }: { onlyAvailable: boolean }) {
-  const options = [
-    { label: "Todas", active: !onlyAvailable, href: myProfileHref({ onlyAvailable: false, page: 1 }) },
-    { label: "En adopción", active: onlyAvailable, href: myProfileHref({ onlyAvailable: true, page: 1 }) },
-  ];
-  return (
-    <nav aria-label="Filtrar publicaciones">
-      <ul className="flex flex-wrap gap-2.5">
-        {options.map((option) => (
-          <li key={option.label}>
-            <Link
-              href={option.href}
-              aria-current={option.active ? "page" : undefined}
-              className={`${pill} ${option.active ? "bg-ink text-surface" : "bg-surface"}`}
-            >
-              {option.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-}
-
-function EmptyState({ query, totalItems }: { query: MyAdoptionsQuery; totalItems: number }) {
-  if (totalItems > 0) {
-    return (
-      <div className="rounded-card border-3 border-ink bg-surface p-8 text-center shadow-panel">
-        <h3 className="font-display text-3xl text-primary">Esta página no existe</h3>
-        <div className="mt-5 flex justify-center">
-          <Button href={myProfileHref({ ...query, page: 1 })} variant="secondary">
-            Ir a la primera página
-          </Button>
-        </div>
-      </div>
-    );
-  }
-  if (query.onlyAvailable) {
-    return (
-      <div className="halftone rounded-card border-3 border-ink bg-accent-mustard p-8 text-center shadow-panel">
-        <h3 className="font-display text-3xl">No tenés mascotas en adopción en este momento</h3>
-        <div className="mt-5 flex justify-center">
-          <Button href={myProfileHref({ onlyAvailable: false, page: 1 })} variant="secondary">
-            Ver todas
-          </Button>
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div className="halftone rounded-card border-3 border-ink bg-accent-mustard p-8 text-center shadow-panel">
-      <h3 className="font-display text-3xl">Todavía no publicaste ninguna mascota</h3>
-      <p className="mt-3 text-[17px]">Cuando publiques una, la vas a ver acá.</p>
+        }
+      />
     </div>
   );
 }

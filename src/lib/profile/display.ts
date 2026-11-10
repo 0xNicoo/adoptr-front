@@ -20,8 +20,8 @@ export function initials(name: string): string {
     .join("");
 }
 
-/** Subtítulo del listado de «Mi perfil». */
-export function myAdoptionsCountText(total: number, onlyAvailable: boolean): string {
+/** Subtítulo del listado de publicaciones de un perfil. */
+export function profileAdoptionsCountText(total: number, onlyAvailable: boolean): string {
   if (onlyAvailable) {
     return total === 1 ? "1 mascota buscando familia" : `${total} mascotas buscando familia`;
   }
