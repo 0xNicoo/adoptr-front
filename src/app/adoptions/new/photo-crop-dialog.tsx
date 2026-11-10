@@ -9,19 +9,12 @@ import { FieldError } from "@/app/components/ui/form-field";
 import { cropToFile } from "@/lib/adoption/crop-image";
 import { CropArea, PHOTO_ASPECT, PHOTO_MAX_ZOOM, PHOTO_MIN_ZOOM, clampZoom } from "@/lib/adoption/photo-crop";
 
-// Recorte vertical 3:4 de una foto (docs/producto/flujos-producto.md, paso Fotos del alta). Arranca centrado con
-// el mayor marco posible: si así está bien, alcanza con «Usar esta foto». Se mueve arrastrando o, con
-// teclado, enfocando la foto y usando las flechas; el zoom, con la rueda, pellizcando o con el control.
-
 const ZOOM_STEP = 0.25;
 
 export interface CropRequest {
-  /** URL local de la foto original. */
   imageUrl: string;
   fileName: string;
-  /** Recorte anterior, al reajustar una foto ya elegida. */
   initialArea?: CropArea;
-  /** «Foto 2 de 3» si se eligieron varias. */
   position?: { current: number; total: number };
 }
 
@@ -43,8 +36,7 @@ export default function PhotoCropDialog({
       <div aria-hidden="true" className="fixed inset-0 bg-ink/70" />
       <div className="fixed inset-0 flex items-center justify-center overflow-y-auto p-4">
         {request && (
-          // `key`: cada foto arranca con su propio estado (zoom, posición, errores).
-          <CropPanel
+         <CropPanel
             key={request.imageUrl}
             request={request}
             confirmLabel={confirmLabel}
@@ -99,8 +91,8 @@ function CropPanel({
         )}
         <DialogTitle className="font-display text-3xl text-primary">Ubicá la foto</DialogTitle>
         <Description className="mt-1 text-[15px] text-ink-soft">
-          Las fotos van verticales (3:4). Arrastrala para elegir qué parte queda y acercala con la rueda, pellizcando o
-          con el zoom. Con teclado: tabulá hasta la foto y usá las flechas.
+          Arrastrala para elegir qué parte queda y acercala con la rueda, pellizcando o
+          con el zoom.
         </Description>
       </div>
 

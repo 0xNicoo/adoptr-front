@@ -10,10 +10,8 @@ import PhotoCropDialog, { CropRequest } from "./photo-crop-dialog";
 
 export interface DraftPhoto {
   id: string;
-  /** Lo que se sube: el recorte vertical 3:4 en JPEG. */
   file: File;
   previewUrl: string;
-  /** La foto elegida, para poder reajustar el recorte. */
   original: File;
   originalUrl: string;
   area: CropArea;
@@ -24,7 +22,6 @@ interface PendingPhoto {
   originalUrl: string;
 }
 
-/** URL local de una foto, anotada para liberarla al salir. */
 function track(urls: Set<string>, blob: Blob): string {
   const url = URL.createObjectURL(blob);
   urls.add(url);
@@ -36,10 +33,6 @@ function release(urls: Set<string>, url: string) {
   urls.delete(url);
 }
 
-/**
- * Fotos elegidas todavía sin subir. Cada foto pasa por el recorte vertical 3:4 antes de sumarse: si se eligen
- * varias, se recortan una tras otra. Libera las URLs locales al quitar una foto y al salir.
- */
 export function useDraftPhotos() {
   const [photos, setPhotos] = useState<DraftPhoto[]>([]);
   const [rejected, setRejected] = useState<string[]>([]);
@@ -77,7 +70,6 @@ export function useDraftPhotos() {
     [photos],
   );
 
-  /** La foto que se está recortando: la primera de la cola o la que se reajusta. */
   const cropRequest: CropRequest | null = adjusting
     ? { imageUrl: adjusting.originalUrl, fileName: adjusting.original.name, initialArea: adjusting.area }
     : queue.length > 0
@@ -108,7 +100,6 @@ export function useDraftPhotos() {
     [adjusting, photos, queue],
   );
 
-  /** Al reajustar, deja la foto como estaba; con una foto nueva, la descarta. */
   const cancelCrop = useCallback(() => {
     if (adjusting) {
       setAdjusting(null);
@@ -159,13 +150,11 @@ export default function PhotoPicker({
 
   function choose(event: ChangeEvent<HTMLInputElement>) {
     onAdd(Array.from(event.target.files ?? []));
-    // Sin esto, elegir de nuevo un archivo que se acaba de quitar no dispara el cambio.
     event.target.value = "";
   }
 
   function remove(photo: DraftPhoto) {
     onRemove(photo);
-    // El botón presionado desaparece: el foco no puede quedar perdido.
     requestAnimationFrame(() => inputRef.current?.focus());
   }
 
@@ -173,8 +162,7 @@ export default function PhotoPicker({
     <div className="flex flex-col gap-5">
       <FieldHelp id="photos-help">
         Opcional. Hasta {MAX_PHOTOS} fotos: {PHOTO_RULES_TEXT} Las fotos van verticales (3:4): al elegir cada una
-        vas a poder ubicarla. La primera va a ser la portada. Quitamos la ubicación y los demás datos que traen las
-        fotos de celular.
+        vas a poder ubicarla. La primera va a ser la portada.
       </FieldHelp>
 
       <div className="flex flex-wrap items-center gap-4">
