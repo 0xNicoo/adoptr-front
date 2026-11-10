@@ -93,7 +93,8 @@ export default function AdoptionForm({
   const [errors, setErrors] = useState<AdoptionErrors>({});
   const [submitError, setSubmitError] = useState<SubmitError | null>(null);
   const [pending, startTransition] = useTransition();
-  const { photos, rejected: rejectedPhotos, add: addPhotos, remove: removePhoto } = useDraftPhotos();
+  const draftPhotos = useDraftPhotos();
+  const { photos, rejected: rejectedPhotos, add: addPhotos, remove: removePhoto } = draftPhotos;
   // Una vez creada la publicación no se vuelve a crear: un reintento solo sube las fotos que faltan.
   const [publishedId, setPublishedId] = useState<number | null>(null);
   const [uploadFailures, setUploadFailures] = useState<PhotoUploadFailure<DraftPhoto>[]>([]);
@@ -455,7 +456,17 @@ export default function AdoptionForm({
         )}
 
         {step === STEP.PHOTOS && (
-          <PhotoPicker photos={photos} rejected={rejectedPhotos} onAdd={addPhotos} onRemove={removePhoto} />
+          <PhotoPicker
+            photos={photos}
+            rejected={rejectedPhotos}
+            onAdd={addPhotos}
+            onRemove={removePhoto}
+            onAdjust={draftPhotos.adjust}
+            cropRequest={draftPhotos.cropRequest}
+            cropMode={draftPhotos.cropMode}
+            onConfirmCrop={draftPhotos.confirmCrop}
+            onCancelCrop={draftPhotos.cancelCrop}
+          />
         )}
 
         {step === STEP.REVIEW && draft.species && draft.sex && age && (
@@ -494,8 +505,8 @@ export default function AdoptionForm({
               ) : (
                 <ul className="mt-1 flex flex-wrap gap-2">
                   {photos.map((photo, index) => (
-                    <li key={photo.id} className="relative size-20 overflow-hidden rounded-field border-3 border-ink bg-disabled">
-                      <Image src={photo.previewUrl} alt={`Foto ${index + 1}: ${photo.file.name}`} fill unoptimized className="object-cover" />
+                    <li key={photo.id} className="relative aspect-[4/3] w-24 overflow-hidden rounded-field border-3 border-ink bg-disabled">
+                      <Image src={photo.previewUrl} alt={`Foto ${index + 1}: ${photo.original.name}`} fill unoptimized className="object-cover" />
                     </li>
                   ))}
                 </ul>
@@ -525,7 +536,7 @@ export default function AdoptionForm({
             <ul className="flex flex-col gap-1">
               {uploadFailures.map(({ item, code }) => (
                 <li key={item.id} className="wrap-anywhere">
-                  <strong>{item.file.name}:</strong> {photoUploadMessage(code)}
+                  <strong>{item.original.name}:</strong> {photoUploadMessage(code)}
                 </li>
               ))}
             </ul>
