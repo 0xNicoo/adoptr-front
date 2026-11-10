@@ -4,6 +4,8 @@ import { ProfileAdoptionsQuery, toProfileAdoptionsApiParams } from '@/lib/profil
 import { ApiError, apiRequest } from '../api';
 import { Adoption } from '../models/adoption/adoption';
 import { AdoptionInput } from '../models/adoption/adoption-input';
+import { AdoptionStatus } from '../models/adoption/adoption-status';
+import { AdoptionStatusInput } from '../models/adoption/adoption-status-input';
 import { AdoptionSummary } from '../models/adoption/adoption-summary';
 import { Page } from '../models/page/page';
 
@@ -72,4 +74,13 @@ export async function addAdoptionPhoto(id: number, file: File): Promise<void> {
   const body = new FormData();
   body.append('file', file, file.name);
   await apiRequest<Adoption>(`/adoptions/${id}/photos`, 'POST', body, 'multipart/form-data');
+}
+
+export async function changeAdoptionStatus(id: number, status: AdoptionStatus): Promise<Adoption> {
+  const body: AdoptionStatusInput = { status };
+  const response = await apiRequest<Adoption>(`/adoptions/${id}/status`, 'PATCH', body);
+  if (!response.data) {
+    throw new Error('El cambio de estado no devolvió la publicación');
+  }
+  return response.data;
 }

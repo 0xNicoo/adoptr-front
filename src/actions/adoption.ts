@@ -3,8 +3,9 @@
 import { redirect } from 'next/navigation';
 import { MAX_PHOTO_BYTES } from '@/lib/adoption/photos';
 import { ApiError, UNKNOWN_ERROR_CODE } from '@/lib/api/api';
-import { addAdoptionPhoto, createAdoption } from '@/lib/api/calls/adoption';
+import { addAdoptionPhoto, changeAdoptionStatus, createAdoption } from '@/lib/api/calls/adoption';
 import { AdoptionInput } from '@/lib/api/models/adoption/adoption-input';
+import { AdoptionStatus } from '@/lib/api/models/adoption/adoption-status';
 import { Species } from '@/lib/api/models/adoption/species';
 import { clearAccessToken } from '@/lib/auth/session';
 
@@ -71,6 +72,29 @@ export async function addAdoptionPhotoAction(adoptionId: number, formData: FormD
     code = error instanceof ApiError ? error.code : UNKNOWN_ERROR_CODE;
   }
   // redirect() lanza una excepción interna de Next, por eso va fuera del try.
+  if (code === 'UNAUTHENTICATED') {
+    await clearAccessToken();
+    redirect('/login');
+  }
+  return { ok: false, code };
+}
+
+export type ChangeAdoptionStatusResult = { ok: true } | { ok: false; code: string };
+
+export async function changeAdoptionStatusAction(
+  adoptionId: number,
+  status: AdoptionStatus,
+): Promise<ChangeAdoptionStatusResult> {
+  if (!Number.isInteger(adoptionId) || !Object.values(AdoptionStatus).includes(status)) {
+    return { ok: false, code: 'VALIDATION_ERROR' };
+  }
+  let code: string;
+  try {
+    await changeAdoptionStatus(adoptionId, status);
+    return { ok: true };
+  } catch (error) {
+    code = error instanceof ApiError ? error.code : UNKNOWN_ERROR_CODE;
+  }
   if (code === 'UNAUTHENTICATED') {
     await clearAccessToken();
     redirect('/login');

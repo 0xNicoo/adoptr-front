@@ -10,6 +10,8 @@ import { getAdoption } from "@/lib/api/calls/adoption";
 import { Adoption } from "@/lib/api/models/adoption/adoption";
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
+import StatusChangeButton from "@/app/components/adoption/status-change-button";
+import { adoptedLabel } from "@/lib/adoption/labels";
 import BackLink from "./back-link";
 import PhotoGallery from "./photo-gallery";
 import RemovePublishedParam from "./remove-published-param";
@@ -52,7 +54,8 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
 
   const pet = result.adoption;
   const adopted = pet.status === AdoptionStatus.ADOPTED;
-  const justPublished = (await searchParams).published === "1" && pet.viewerIsOwner;
+  const owner = pet.viewerIsOwner;
+  const justPublished = (await searchParams).published === "1" && owner;
   const facts = [
     pet.size ? { label: "Tamaño", value: SIZE_LABEL[pet.size] } : { label: "Especie", value: SPECIES_LABEL[pet.species] },
     { label: "Edad", value: formatAge(birthMonthToAge(pet.estimatedBirthDate)) },
@@ -62,7 +65,7 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-10 pb-16 md:px-6">
-      <BackLink justPublished={justPublished} />
+      <BackLink justPublished={justPublished} owner={owner} />
 
       {justPublished && <RemovePublishedParam />}
       {justPublished && (
@@ -71,7 +74,7 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
           <p className="mt-1 text-[17px]">Ya la pueden ver quienes buscan adoptar.</p>
         </div>
       )}
-      {adopted && (
+      {adopted && !owner && (
         <div role="status" className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-card border-3 border-ink bg-surface p-5 shadow-card">
           <p className="font-display text-2xl">{pet.petName} ya encontró una familia.</p>
           <Button href="/adoptions" variant="secondary">
@@ -82,13 +85,21 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
 
       <div className="mt-8 grid gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         <PhotoGallery id={pet.id} species={pet.species} petName={pet.petName} photos={pet.photos}>
-          {adopted ? <Badge variant="danger">Adoptado</Badge> : <Badge variant="surface">En adopción</Badge>}
+          {owner ? null : adopted ? <Badge variant="danger">{adoptedLabel(pet.sex)}</Badge> : <Badge variant="surface">En adopción</Badge>}
         </PhotoGallery>
 
         <div className="flex flex-col gap-6">
-          <div>
-            <h1 className="font-display text-[52px] leading-none text-primary md:text-[42px]">{pet.petName}</h1>
-            <p className="mt-2 text-[15px] text-ink-soft">Publicado el {formatPublishedDate(pet.createdAt)}</p>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 className="font-display text-[52px] leading-none text-primary md:text-[42px]">{pet.petName}</h1>
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                {owner && <StatusPill adopted={adopted} label={adopted ? adoptedLabel(pet.sex) : "En adopción"} />}
+                <p className="text-[15px] text-ink-soft">Publicado el {formatPublishedDate(pet.createdAt)}</p>
+              </div>
+            </div>
+            {owner && (
+              <StatusChangeButton target={{ adoptionId: pet.id, petName: pet.petName, sex: pet.sex, status: pet.status }} />
+            )}
           </div>
 
           <dl className="grid grid-cols-2 gap-3">
@@ -107,7 +118,7 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
             <p className="mt-2 whitespace-pre-line text-[17px] leading-[1.55]">{pet.description}</p>
           </section>
 
-          {pet.owner && (
+          {pet.owner && !owner && (
             <section
               aria-label="Quién la publica"
               className="flex items-center gap-4 rounded-card border-3 border-ink bg-surface p-4"
@@ -133,7 +144,7 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
             </section>
           )}
 
-          {!adopted && (
+          {!adopted && !owner && (
             <div className="flex flex-wrap items-center gap-3">
               <Badge variant="soon">Próximamente</Badge>
               <p className="text-[15px] text-ink-soft">
@@ -144,5 +155,17 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
         </div>
       </div>
     </div>
+  );
+}
+
+function StatusPill({ adopted, label }: { adopted: boolean; label: string }) {
+  return (
+    <span
+      className={`inline-flex items-center rounded-full border-2 border-ink px-3.5 py-1 text-[15px] font-bold ${
+        adopted ? "bg-danger text-white" : "bg-positive-soft text-ink"
+      }`}
+    >
+      {label}
+    </span>
   );
 }
