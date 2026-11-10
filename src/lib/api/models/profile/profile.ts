@@ -6,6 +6,8 @@ import { Province } from "../locality/province";
 interface BaseProfile {
   id: number;
   description: string;
+  /** `null` si no tiene foto. */
+  photoUrl: string | null;
   locality: Locality;
   province: Province;
 }
