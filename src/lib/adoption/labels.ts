@@ -31,11 +31,7 @@ export function lifeStageLabel(stage: LifeStage, species?: Species): string {
   return "Cachorro / gatito";
 }
 
-export type HealthItem = "vaccinated" | "dewormed" | "neutered";
-
 export interface HealthChip {
-  /** Qué dato es, para elegir el ícono. */
-  item: HealthItem;
   label: string;
   positive: boolean;
 }
@@ -49,28 +45,21 @@ export function healthChips(pet: {
 }): HealthChip[] {
   const ending = pet.sex === PetSex.FEMALE ? "a" : "o";
   return [
-    pet.vaccinated
-      ? { item: "vaccinated", label: `Vacunad${ending}`, positive: true }
-      : { item: "vaccinated", label: "Sin vacunar", positive: false },
-    pet.dewormed
-      ? { item: "dewormed", label: `Desparasitad${ending}`, positive: true }
-      : { item: "dewormed", label: "Sin desparasitar", positive: false },
-    pet.neutered
-      ? { item: "neutered", label: `Castrad${ending}`, positive: true }
-      : { item: "neutered", label: "Sin castrar", positive: false },
+    pet.vaccinated ? { label: `Vacunad${ending}`, positive: true } : { label: "Sin vacunar", positive: false },
+    pet.dewormed ? { label: `Desparasitad${ending}`, positive: true } : { label: "Sin desparasitar", positive: false },
+    pet.neutered ? { label: `Castrad${ending}`, positive: true } : { label: "Sin castrar", positive: false },
   ];
 }
 
-/** «Perro · Mediano · 2 años y 3 meses». Sin el sexo: en la tarjeta va como ícono junto al nombre. */
+/**
+ * Línea de la tarjeta: «Mediano · 2 años y 3 meses», o solo la edad para gatos (no tienen tamaño).
+ * Sin especie (la dice la foto o la ilustración) ni sexo (va como ícono junto al nombre).
+ */
 export function summaryLine(
-  pet: { species: Species; size: PetSize | null; estimatedBirthDate: string },
+  pet: { size: PetSize | null; estimatedBirthDate: string },
   today: Date = new Date(),
 ): string {
-  return [
-    SPECIES_LABEL[pet.species],
-    pet.size ? SIZE_LABEL[pet.size] : null,
-    formatAge(birthMonthToAge(pet.estimatedBirthDate, today)),
-  ]
+  return [pet.size ? SIZE_LABEL[pet.size] : null, formatAge(birthMonthToAge(pet.estimatedBirthDate, today))]
     .filter(Boolean)
     .join(" · ");
 }
@@ -82,4 +71,17 @@ export function summaryLine(
 export function formatPublishedDate(isoLocal: string): string {
   const [year, month, day] = isoLocal.slice(0, 10).split("-");
   return `${day}/${month}/${year}`;
+}
+
+/** Badge de una adoptada, concordando con el sexo: «Adoptada» o «Adoptado». */
+export function adoptedLabel(sex: PetSex): string {
+  return sex === PetSex.FEMALE ? "Adoptada" : "Adoptado";
+}
+
+/** Botón de la tarjeta: «Conocelo» / «Conocela», o «Ver su historia» si ya fue adoptada. */
+export function knowMoreLabel(sex: PetSex, adopted = false): string {
+  if (adopted) return "Ver su historia";
+  if (sex === PetSex.MALE) return "Conocelo";
+  if (sex === PetSex.FEMALE) return "Conocela";
+  return "Conocé su historia";
 }

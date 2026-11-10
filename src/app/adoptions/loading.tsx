@@ -6,7 +6,7 @@ export default function Loading() {
       </p>
       <div className="h-16 w-3/4 max-w-xl rounded-card bg-disabled" />
       <div className="h-40 rounded-card border-3 border-dashed border-ink-soft" />
-      <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(320px,100%),1fr))] gap-7">
         {Array.from({ length: 6 }, (_, i) => (
           <li key={i} className="overflow-hidden rounded-card border-3 border-dashed border-ink-soft bg-surface">
             <div className="halftone aspect-[4/3] bg-disabled" />

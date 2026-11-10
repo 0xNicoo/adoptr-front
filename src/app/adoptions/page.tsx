@@ -73,7 +73,7 @@ export default async function AdoptionsPage({ searchParams }: { searchParams: Pr
           />
 
           {result.page.items.length > 0 ? (
-            <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(320px,100%),1fr))] gap-7">
               {result.page.items.map((pet) => (
                 <li key={pet.id} className="flex">
                   <div className="w-full">
