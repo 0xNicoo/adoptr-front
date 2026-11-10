@@ -1,7 +1,7 @@
 "use client";
 
 import { Description, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { ArrowCounterClockwise, Heart } from "@phosphor-icons/react/dist/ssr";
+import { ArrowCounterClockwise, House } from "@phosphor-icons/react/dist/ssr";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { changeAdoptionStatusAction } from "@/actions/adoption";
@@ -75,7 +75,7 @@ export default function StatusChangeDialog({
           >
             <span className="flex size-16 items-center justify-center rounded-full border-3 border-ink bg-surface shadow-hard">
               {toAdopted ? (
-                <Heart aria-hidden={true} weight="fill" className="h-7 w-7 text-danger" />
+                <House aria-hidden={true} weight="bold" className="h-7 w-7 text-ink" />
               ) : (
                 <ArrowCounterClockwise aria-hidden={true} weight="bold" className="h-7 w-7 text-ink" />
               )}

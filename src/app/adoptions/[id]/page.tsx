@@ -161,14 +161,10 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
 function StatusPill({ adopted, label }: { adopted: boolean; label: string }) {
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full border-2 border-ink px-3.5 py-1 text-[15px] font-bold ${
+      className={`inline-flex items-center rounded-full border-2 border-ink px-3.5 py-1 text-[15px] font-bold ${
         adopted ? "bg-danger text-white" : "bg-positive-soft text-ink"
       }`}
     >
-      <span
-        aria-hidden="true"
-        className={`size-3.5 rounded-full border-2 ${adopted ? "border-white" : "border-ink bg-positive"}`}
-      />
       {label}
     </span>
   );
