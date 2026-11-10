@@ -47,11 +47,11 @@ export default function PhotoLightbox({
 
   return (
     <Dialog open={open && Boolean(photo)} onClose={onClose} className="relative z-50">
-      <div aria-hidden="true" className="fixed inset-0 bg-ink/90" />
+      <div aria-hidden="true" className="fixed inset-0 bg-zinc-900/85" />
       <div className="fixed inset-0 flex items-center justify-center p-3 md:p-6">
         <DialogPanel onKeyDown={keyDown} className="flex h-full w-full max-w-6xl flex-col gap-3">
-          <div className="flex items-center justify-between gap-3">
-            <DialogTitle className="truncate font-display text-2xl text-surface md:text-3xl">{petName}</DialogTitle>
+          <div className="flex items-center justify-end gap-3">
+            <DialogTitle className="sr-only">Fotos de {petName}</DialogTitle>
             <div className="flex items-center gap-3">
               {several && (
                 <p aria-live="polite" className="rounded-full border-2 border-surface px-3 py-0.5 text-sm font-bold text-surface">
