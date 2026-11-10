@@ -3,7 +3,7 @@ import { LifeStage } from "@/lib/api/models/adoption/life-stage";
 import { PetSex } from "@/lib/api/models/adoption/pet-sex";
 import { PetSize } from "@/lib/api/models/adoption/pet-size";
 import { Species } from "@/lib/api/models/adoption/species";
-import { formatPublishedDate, healthChips, knowMoreLabel, lifeStageLabel, summaryLine } from "./labels";
+import { adoptedLabel, formatPublishedDate, healthChips, knowMoreLabel, lifeStageLabel, summaryLine } from "./labels";
 
 const TODAY = new Date(2026, 10, 7, 12);
 
@@ -35,19 +35,14 @@ describe("lifeStageLabel", () => {
 });
 
 describe("summaryLine", () => {
-  it("especie, tamaño, sexo y edad", () => {
-    expect(
-      summaryLine(
-        { species: Species.DOG, size: PetSize.MEDIUM, sex: PetSex.FEMALE, estimatedBirthDate: "2024-08" },
-        TODAY,
-      ),
-    ).toBe("Perro · Mediano · Hembra · 2 años y 3 meses");
+  it("tamaño y edad, sin especie ni sexo", () => {
+    expect(summaryLine({ size: PetSize.MEDIUM, estimatedBirthDate: "2024-08" }, TODAY)).toBe(
+      "Mediano · 2 años y 3 meses",
+    );
   });
 
-  it("sin tamaño para gatos y con sexo sin determinar", () => {
-    expect(
-      summaryLine({ species: Species.CAT, size: null, sex: PetSex.UNKNOWN, estimatedBirthDate: "2026-07" }, TODAY),
-    ).toBe("Gato · Sexo sin determinar · 4 meses");
+  it("solo la edad para gatos, que no tienen tamaño", () => {
+    expect(summaryLine({ size: null, estimatedBirthDate: "2026-07" }, TODAY)).toBe("4 meses");
   });
 });
 
@@ -57,10 +52,22 @@ describe("formatPublishedDate", () => {
   });
 });
 
+describe("adoptedLabel", () => {
+  it("concuerda con el sexo", () => {
+    expect(adoptedLabel(PetSex.FEMALE)).toBe("Adoptada");
+    expect(adoptedLabel(PetSex.MALE)).toBe("Adoptado");
+    expect(adoptedLabel(PetSex.UNKNOWN)).toBe("Adoptado");
+  });
+});
+
 describe("knowMoreLabel", () => {
   it("según el sexo", () => {
     expect(knowMoreLabel(PetSex.MALE)).toBe("Conocelo");
     expect(knowMoreLabel(PetSex.FEMALE)).toBe("Conocela");
     expect(knowMoreLabel(PetSex.UNKNOWN)).toBe("Conocé su historia");
+  });
+
+  it("si ya fue adoptada", () => {
+    expect(knowMoreLabel(PetSex.FEMALE, true)).toBe("Ver su historia");
   });
 });

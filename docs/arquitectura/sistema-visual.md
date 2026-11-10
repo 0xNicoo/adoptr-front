@@ -95,13 +95,13 @@ Sobre fondos oscuros (`primary` o `ink`), el contorno y la sombra tinta casi no 
 
 **Badges de estado:** píldora con contorno. «En adopción» en `positive` y «Adoptado» en `danger` cuando van sueltos; sobre una foto, fondo `surface` para que se lean. «Próximamente» en `accent-mustard`, rectangular y levemente girada.
 
-**Datos de salud (sí/no):** el «sí» va en chip `positive-soft` con contorno sólido y tilde; el «no» va con contorno punteado `ink-soft`, cruz y texto explícito («Sin castrar»). No usar un tilde gris para «no»: se confunde con «deshabilitado». En formularios, cada dato es un par de botones Sí/No.
+**Datos de salud (sí/no):** el «sí» va en chip `positive-soft` con contorno sólido y tilde; el «no» va con contorno punteado `ink-soft`, cruz y texto explícito («Sin castrar»). No usar un tilde gris para «no»: se confunde con «deshabilitado». En formularios, cada dato es un par de botones Sí/No. En la tarjeta de mascota van los mismos chips en tamaño chico (`size="xs"`).
 
 **Campos:** etiqueta siempre visible arriba (no solo *placeholder*), contorno 3 px, fondo blanco. Error: contorno y texto `danger`, fondo `danger-soft` y mensaje asociado con `aria-describedby`.
 
 **Selectores:** `src/app/components/ui/select.tsx` centraliza los desplegables con `Listbox` de Headless UI (la dependencia ya usada por la navbar). Se usa en provincia, filtros de tamaño/sexo/edad y años/meses del alta. El clic sobre texto o flecha solo abre la lista, anclada fuera del campo; elegir una opción o confirmar con Enter cambia el valor. Escape cierra sin confirmar el cambio; admite flechas y búsqueda por teclado. Conserva etiqueta asociada, foco visible y atributos de error. Los formularios contemplan el botón con `aria-haspopup="listbox"` al enfocar el primer campo inválido. No cambia los valores ni los contratos de la API.
 
-**Tarjeta de mascota:** foto arriba (mientras carga o si falta, fondo de color con trama), badge de estado, nombre en Lilita One, línea de datos («Perro · Pequeño · Macho · 1 año»), localidad y un único botón secundario. Quien publicó ve sus acciones («Editar») en lugar de «Conocelo».
+**Tarjeta de mascota** (diseño v2, Dolores, 2026-11-10): ancho mínimo 340 px (la grilla pone tantas columnas como entren: en el catálogo, de hasta 1560 px, son 4 desde pantallas de ~1480 px). Foto arriba en **4:3** (mientras carga o si falta, fondo de color con trama) con el badge de estado: «En adopción» en `surface`, «Adoptada/o» en `danger`. Nombre en Lilita One y, a la derecha, el sexo como ícono en un círculo (♂ en `primary` con ícono blanco, ♀ en `cta` con ícono tinta, «?» en `surface`); debajo, tamaño y edad («Pequeño · 3 años y 3 meses»; los gatos, solo la edad) y la ubicación («Florencio Varela, Buenos Aires»), sin especie. Salud en chips chicos en un solo renglón y un único botón secundario: «Conocelo/Conocela», o «Ver su historia» si fue adoptada. Las fotos se piensan en 4:3; el recorte al subirlas queda pendiente. Pendientes del diseño, para cuando existan: el corazón de favoritos arriba a la derecha y, para quien publicó, el badge «Tu publicación» con «Editar» y «Fue adoptada» en lugar de «Conocelo».
 
 **Navbar:** fondo `primary` (azul Adoptr) con línea inferior `ink` de 4 px. Logo en `surface` (blanco) con «tr» naranja y sombra dura tinta; links, íconos y botón del menú mobile en `surface` (8,7:1). Subrayado de hover en `cta` (3,6:1 sobre el azul). «Ingresar» como botón `cta` con `tone="dark"`. Nada en tinta sobre el azul: no llega a 3:1.
 
@@ -113,7 +113,7 @@ Sobre fondos oscuros (`primary` o `ink`), el contorno y la sombra tinta casi no 
 - **Un solo estilo:** contorno `ink` de 4 px, rellenos planos con colores de la paleta, sin degradés. La textura la da la trama de puntos.
 - **No reutilizar** imágenes del front viejo sin verificar su licencia. En particular, `Snoopy.png` (personaje con copyright), los archivos con nombre tipo Freepik (`5737612.png`) y los banners de marcas de terceros quedan descartados.
 - **Fotos reales:** solo las que suben los usuarios. Datos de prueba con fotos propias.
-- **Íconos:** un solo set, de trazo redondeado de 2,2 px (por ejemplo Phosphor, MIT). Sin emojis. Decorativos con `aria-hidden="true"`; los que transmiten información, con `aria-label`.
+- **Íconos:** un solo set, de trazo redondeado de 2,2 px: **Phosphor** (`@phosphor-icons/react`, MIT, peso `bold`; en server components se importa de `@phosphor-icons/react/dist/ssr`). Los íconos nuevos van con Phosphor; los de Heroicons que quedan (navbar, localidad, flechas, chips de salud) se migran en un cambio aparte. Sin emojis. Decorativos con `aria-hidden="true"`; los que transmiten información, con `aria-label`.
 
 ## Accesibilidad
 
@@ -127,5 +127,5 @@ Sobre fondos oscuros (`primary` o `ink`), el contorno y la sombra tinta casi no 
 
 1. Confirmar la licencia comercial de Genty Demo o reemplazar el logo por uno con licencia clara.
 2. Producir las ilustraciones definitivas de perros y gatos con estas reglas (las del prototipo son provisorias).
-3. Componentes base: en `src/app/components/ui/` ya existen `Button`, `Badge`, las piezas de campo (`form-field.tsx`), la tarjeta de mascota (`pet-card.tsx`, con `pet-art.tsx` para el bloque de color con ilustración y `health-chips.tsx` para la salud). El stepper existe como `stepper.tsx` (completo en verde con tilde, actual en naranja, pendientes punteados) y lo usa el alta de adopción; el alta de perfil todavía tiene su propia versión, a migrar en un cambio aparte.
+3. Componentes base: en `src/app/components/ui/` ya existen `Button`, `Badge`, las piezas de campo (`form-field.tsx`), la tarjeta de mascota (`pet-card.tsx`, con `pet-art.tsx` para el bloque de color con ilustración `health-chips.tsx` para la salud y `sex-icon.tsx` para el sexo). El stepper existe como `stepper.tsx` (completo en verde con tilde, actual en naranja, pendientes punteados) y lo usa el alta de adopción; el alta de perfil todavía tiene su propia versión, a migrar en un cambio aparte.
 4. Modo oscuro: la paleta es solo clara. Se retiró el ajuste automático por `prefers-color-scheme`; diseñar una variante oscura si producto la pide.

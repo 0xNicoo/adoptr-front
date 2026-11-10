@@ -51,17 +51,15 @@ export function healthChips(pet: {
   ];
 }
 
-/** «Perro · Mediano · Hembra · 2 años y 3 meses». */
+/**
+ * Línea de la tarjeta: «Mediano · 2 años y 3 meses», o solo la edad para gatos (no tienen tamaño).
+ * Sin especie (la dice la foto o la ilustración) ni sexo (va como ícono junto al nombre).
+ */
 export function summaryLine(
-  pet: { species: Species; size: PetSize | null; sex: PetSex; estimatedBirthDate: string },
+  pet: { size: PetSize | null; estimatedBirthDate: string },
   today: Date = new Date(),
 ): string {
-  return [
-    SPECIES_LABEL[pet.species],
-    pet.size ? SIZE_LABEL[pet.size] : null,
-    SEX_LABEL[pet.sex],
-    formatAge(birthMonthToAge(pet.estimatedBirthDate, today)),
-  ]
+  return [pet.size ? SIZE_LABEL[pet.size] : null, formatAge(birthMonthToAge(pet.estimatedBirthDate, today))]
     .filter(Boolean)
     .join(" · ");
 }
@@ -75,7 +73,14 @@ export function formatPublishedDate(isoLocal: string): string {
   return `${day}/${month}/${year}`;
 }
 
-export function knowMoreLabel(sex: PetSex): string {
+/** Badge de una adoptada, concordando con el sexo: «Adoptada» o «Adoptado». */
+export function adoptedLabel(sex: PetSex): string {
+  return sex === PetSex.FEMALE ? "Adoptada" : "Adoptado";
+}
+
+/** Botón de la tarjeta: «Conocelo» / «Conocela», o «Ver su historia» si ya fue adoptada. */
+export function knowMoreLabel(sex: PetSex, adopted = false): string {
+  if (adopted) return "Ver su historia";
   if (sex === PetSex.MALE) return "Conocelo";
   if (sex === PetSex.FEMALE) return "Conocela";
   return "Conocé su historia";

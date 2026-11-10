@@ -50,7 +50,7 @@ export default async function AdoptionsPage({ searchParams }: { searchParams: Pr
   const hasFilters = Object.keys(query.filters).length > 0;
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 pt-12 pb-16 md:px-6">
+    <div className="mx-auto flex max-w-[1560px] flex-col gap-8 px-4 pt-12 pb-16 md:px-6">
       <header>
         <h1 className="font-display text-[44px] leading-tight text-primary md:text-[42px]">Encontrá a tu compañero</h1>
         {result.ok && result.page.totalItems > 0 && (
@@ -73,7 +73,7 @@ export default async function AdoptionsPage({ searchParams }: { searchParams: Pr
           />
 
           {result.page.items.length > 0 ? (
-            <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+            <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(340px,100%),1fr))] gap-6">
               {result.page.items.map((pet) => (
                 <li key={pet.id} className="flex">
                   <div className="w-full">

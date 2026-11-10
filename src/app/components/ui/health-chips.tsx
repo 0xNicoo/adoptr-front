@@ -4,21 +4,28 @@ import { HealthChip } from "@/lib/adoption/labels";
 // Datos de salud: el «sí» en chip verde con contorno sólido y tilde; el «no» con contorno
 // punteado, cruz y texto explícito (docs/arquitectura/sistema-visual.md#componentes-base).
 
-export default function HealthChips({ chips, size = "sm" }: { chips: HealthChip[]; size?: "sm" | "md" }) {
-  const text = size === "md" ? "text-[15px] px-3.5 py-1.5" : "text-[13px] px-2.5 py-1";
+// `xs` es para la tarjeta de mascota, donde los tres chips tienen que entrar en un renglón.
+const SIZES = {
+  xs: { chip: "text-[12px] px-1.5 py-0.5 gap-0.5 whitespace-nowrap", icon: "h-3 w-3", list: "gap-1" },
+  sm: { chip: "text-[13px] px-2.5 py-1 gap-1.5", icon: "h-4 w-4", list: "gap-2" },
+  md: { chip: "text-[15px] px-3.5 py-1.5 gap-1.5", icon: "h-4 w-4", list: "gap-2" },
+};
+
+export default function HealthChips({ chips, size = "sm" }: { chips: HealthChip[]; size?: "xs" | "sm" | "md" }) {
+  const { chip: text, icon, list } = SIZES[size];
   return (
-    <ul aria-label="Salud" className="flex flex-wrap gap-2">
+    <ul aria-label="Salud" className={`flex flex-wrap ${list}`}>
       {chips.map((chip) => (
         <li
           key={chip.label}
-          className={`inline-flex items-center gap-1.5 rounded-full border-2 font-semibold ${text} ${
+          className={`inline-flex items-center rounded-full border-2 font-semibold ${text} ${
             chip.positive ? "border-ink bg-positive-soft text-ink" : "border-dashed border-ink-soft text-ink-soft"
           }`}
         >
           {chip.positive ? (
-            <CheckIcon aria-hidden="true" className="h-4 w-4 stroke-[2.5]" />
+            <CheckIcon aria-hidden="true" className={`${icon} stroke-[2.5]`} />
           ) : (
-            <XMarkIcon aria-hidden="true" className="h-4 w-4 stroke-[2.5]" />
+            <XMarkIcon aria-hidden="true" className={`${icon} stroke-[2.5]`} />
           )}
           {chip.label}
         </li>
