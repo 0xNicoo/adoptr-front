@@ -1,9 +1,5 @@
 import { CropArea, PHOTO_OUTPUT_QUALITY, croppedFileName, croppedOutputSize } from "./photo-crop";
 
-// Recorte en el navegador con un canvas (solo cliente). El canvas no copia los metadatos de la foto,
-// así que el archivo que se sube ya no trae la ubicación GPS. Los navegadores actuales aplican la
-// orientación EXIF al dibujar la imagen, igual que al mostrarla en el recorte.
-
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -13,7 +9,6 @@ function loadImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
-/** Devuelve la zona elegida de la imagen como JPEG vertical 3:4 de hasta 1200×1600. */
 export async function cropToFile(imageUrl: string, area: CropArea, originalName: string): Promise<File> {
   const image = await loadImage(imageUrl);
   const size = croppedOutputSize(area);
@@ -22,7 +17,6 @@ export async function cropToFile(imageUrl: string, area: CropArea, originalName:
   canvas.height = size.height;
   const context = canvas.getContext("2d");
   if (!context) throw new Error("El navegador no permite recortar imágenes");
-  // JPEG no tiene transparencia: lo transparente de un PNG queda blanco, como en el back.
   context.fillStyle = "#ffffff";
   context.fillRect(0, 0, size.width, size.height);
   context.imageSmoothingQuality = "high";
