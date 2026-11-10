@@ -68,6 +68,7 @@ export default async function MyProfilePage({ searchParams }: { searchParams: Pr
     <div className="mx-auto grid max-w-7xl gap-10 px-4 pt-12 pb-16 md:px-6 lg:grid-cols-[380px_1fr] lg:items-start">
       <ProfileCard profile={profile} />
       <ProfileAdoptions
+        owner
         basePath={MY_PROFILE_PATH}
         query={query}
         list={list}

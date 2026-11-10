@@ -27,6 +27,7 @@ export default function ProfileAdoptions({
   list,
   texts,
   action,
+  owner = false,
 }: {
   /** Ruta de la página del perfil, para los links del filtro y la paginación. */
   basePath: string;
@@ -35,6 +36,7 @@ export default function ProfileAdoptions({
   list: Page<AdoptionSummary> | null;
   texts: ProfileAdoptionsTexts;
   action?: ReactNode;
+  owner?: boolean;
 }) {
   const href = (target: ProfileAdoptionsQuery) => profileAdoptionsHref(basePath, target);
 
@@ -65,7 +67,7 @@ export default function ProfileAdoptions({
             {list.items.map((pet) => (
               <li key={pet.id} className="flex">
                 <div className="w-full">
-                  <PetCard pet={pet} />
+                  <PetCard pet={pet} owner={owner} />
                 </div>
               </li>
             ))}

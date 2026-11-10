@@ -11,6 +11,7 @@ import { Adoption } from "@/lib/api/models/adoption/adoption";
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
 import BackLink from "./back-link";
+import StatusChangeButton from "@/app/components/adoption/status-change-button";
 import PhotoGallery from "./photo-gallery";
 import RemovePublishedParam from "./remove-published-param";
 
@@ -133,7 +134,17 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
             </section>
           )}
 
-          {!adopted && (
+          {pet.viewerIsOwner && (
+            <section
+              aria-label="Tu publicación"
+              className="flex flex-wrap items-center justify-between gap-4 rounded-card border-3 border-ink bg-surface p-4"
+            >
+              <p className="text-[17px] font-bold">Tu publicación</p>
+              <StatusChangeButton adoptionId={pet.id} petName={pet.petName} sex={pet.sex} status={pet.status} />
+            </section>
+          )}
+
+          {!adopted && !pet.viewerIsOwner && (
             <div className="flex flex-wrap items-center gap-3">
               <Badge variant="soon">Próximamente</Badge>
               <p className="text-[15px] text-ink-soft">
