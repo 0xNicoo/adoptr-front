@@ -61,7 +61,7 @@ export default function ProfileAdoptions({
         </div>
       ) : list.items.length > 0 ? (
         <>
-          <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(320px,100%),1fr))] gap-7">
+          <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(340px,100%),1fr))] gap-6">
             {list.items.map((pet) => (
               <li key={pet.id} className="flex">
                 <div className="w-full">

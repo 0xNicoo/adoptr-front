@@ -1,3 +1,4 @@
+import { MapPinIcon } from "@heroicons/react/24/outline";
 import { adoptedLabel, healthChips, knowMoreLabel, summaryLine } from "@/lib/adoption/labels";
 import { AdoptionSummary } from "@/lib/api/models/adoption/adoption-summary";
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
@@ -8,8 +9,8 @@ import PetArt from "./pet-art";
 import SexIcon from "./sex-icon";
 
 // Tarjeta de mascota para grilla (docs/arquitectura/sistema-visual.md#componentes-base): foto 4:3 con el
-// estado, nombre con el sexo como ícono, tamaño y edad en una línea, salud en chips chicos y un único botón
-// secundario. El botón es crema: con muchas tarjetas juntas, el naranja competiría consigo mismo.
+// estado, nombre con el sexo como ícono, ubicación a todo el ancho, tamaño y edad en una línea, salud en
+// chips chicos y un único botón secundario. El botón es crema: con muchas tarjetas juntas, el naranja competiría consigo mismo.
 
 export default function PetCard({ pet }: { pet: AdoptionSummary }) {
   const adopted = pet.status === AdoptionStatus.ADOPTED;
@@ -21,13 +22,19 @@ export default function PetCard({ pet }: { pet: AdoptionSummary }) {
           {adopted ? adoptedLabel(pet.sex) : "En adopción"}
         </Badge>
       </PetArt>
-      <div className="flex flex-1 flex-col gap-3 px-5 pt-4 pb-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="truncate font-display text-[28px] leading-tight text-primary">{pet.petName}</h3>
-            <p className="text-[15px] font-semibold">{summaryLine(pet)}</p>
+      <div className="flex flex-1 flex-col gap-3 px-4 pt-4 pb-4">
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="min-w-0 truncate font-display text-[28px] leading-tight text-primary">{pet.petName}</h3>
+            <SexIcon sex={pet.sex} />
           </div>
-          <SexIcon sex={pet.sex} />
+          <p className="mt-0.5 text-[15px] font-semibold">{summaryLine(pet)}</p>
+          <p className="mt-1 flex min-w-0 items-center gap-1.5 text-sm text-ink-soft">
+            <MapPinIcon aria-hidden="true" className="h-4 w-4 shrink-0" />
+            <span className="truncate">
+              {pet.locality.displayName}, {pet.province.name}
+            </span>
+          </p>
         </div>
         <HealthChips chips={healthChips(pet)} size="xs" />
         <div className="mt-auto pt-1">

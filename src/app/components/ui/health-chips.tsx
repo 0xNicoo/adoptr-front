@@ -6,7 +6,7 @@ import { HealthChip } from "@/lib/adoption/labels";
 
 // `xs` es para la tarjeta de mascota, donde los tres chips tienen que entrar en un renglón.
 const SIZES = {
-  xs: { chip: "text-[12px] px-2 py-0.5 gap-1", icon: "h-3 w-3", list: "gap-1.5" },
+  xs: { chip: "text-[12px] px-1.5 py-0.5 gap-0.5 whitespace-nowrap", icon: "h-3 w-3", list: "gap-1" },
   sm: { chip: "text-[13px] px-2.5 py-1 gap-1.5", icon: "h-4 w-4", list: "gap-2" },
   md: { chip: "text-[15px] px-3.5 py-1.5 gap-1.5", icon: "h-4 w-4", list: "gap-2" },
 };

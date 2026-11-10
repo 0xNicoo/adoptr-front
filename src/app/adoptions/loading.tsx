@@ -1,12 +1,12 @@
 export default function Loading() {
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 pt-12 pb-16 md:px-6" aria-busy="true">
+    <div className="mx-auto flex max-w-[1560px] flex-col gap-8 px-4 pt-12 pb-16 md:px-6" aria-busy="true">
       <p className="sr-only" role="status">
         Cargando mascotas…
       </p>
       <div className="h-16 w-3/4 max-w-xl rounded-card bg-disabled" />
       <div className="h-40 rounded-card border-3 border-dashed border-ink-soft" />
-      <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(320px,100%),1fr))] gap-7">
+      <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(340px,100%),1fr))] gap-6">
         {Array.from({ length: 6 }, (_, i) => (
           <li key={i} className="overflow-hidden rounded-card border-3 border-dashed border-ink-soft bg-surface">
             <div className="halftone aspect-[4/3] bg-disabled" />
