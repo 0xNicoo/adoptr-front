@@ -30,13 +30,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${geistSans.variable} ${lilitaOne.variable} ${gentyDemo.variable}`}>
-      <head>
-        <script
-          src="https://accounts.google.com/gsi/client"
-          async
-          defer
-        ></script>
-      </head>
       <body>
         <ToastProvider>
           <Navbar />
