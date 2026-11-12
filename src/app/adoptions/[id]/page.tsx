@@ -8,6 +8,9 @@ import HealthChips from "@/app/components/ui/health-chips";
 import { birthMonthToAge, formatAge } from "@/lib/adoption/age";
 import { SEX_LABEL, SIZE_LABEL, SPECIES_LABEL, formatPublishedDate, healthChips } from "@/lib/adoption/labels";
 import { getAdoption } from "@/lib/api/calls/adoption";
+import { getViewerFavoriteIds } from "@/lib/api/calls/favorite";
+import { getAccessToken } from "@/lib/auth/session";
+import FavoriteButton from "@/app/components/adoption/favorite-button";
 import { Adoption } from "@/lib/api/models/adoption/adoption";
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
@@ -56,6 +59,9 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
   const pet = result.adoption;
   const adopted = pet.status === AdoptionStatus.ADOPTED;
   const owner = pet.viewerIsOwner;
+  const [favoriteIds, loggedIn] = owner
+    ? [new Set<number>(), true]
+    : await Promise.all([getViewerFavoriteIds(), getAccessToken().then(Boolean)]);
   const justPublished = (await searchParams).published === "1" && owner;
   const facts = [
     pet.size ? { label: "Tamaño", value: SIZE_LABEL[pet.size] } : { label: "Especie", value: SPECIES_LABEL[pet.species] },
@@ -98,6 +104,13 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
                 <p className="text-[15px] text-ink-soft">Publicado el {formatPublishedDate(pet.createdAt)}</p>
               </div>
             </div>
+            {!owner && (
+              <FavoriteButton
+                adoptionId={pet.id}
+                petName={pet.petName}
+                initial={{ saved: favoriteIds.has(pet.id), loggedIn }}
+              />
+            )}
             {owner && (
               <div className="flex flex-wrap items-center gap-3">
                 <Button href={`/adoptions/${pet.id}/edit`} variant="secondary" size="sm">

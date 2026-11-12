@@ -13,7 +13,7 @@ const itemClass =
   "flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-base font-semibold text-ink data-[focus]:bg-paper";
 
 // Rutas que todavía no existen: se muestran deshabilitadas con «Próximamente».
-const upcoming = ["Favoritas", "Chats"];
+const upcoming = ["Chats"];
 
 function useLogout() {
   const router = useRouter();
@@ -56,6 +56,11 @@ export default function UserMenu() {
         <MenuItem>
           <Link href="/profile" className={itemClass}>
             Mi perfil
+          </Link>
+        </MenuItem>
+        <MenuItem>
+          <Link href="/saved" className={itemClass}>
+            Guardadas
           </Link>
         </MenuItem>
         {upcoming.map((label) => (

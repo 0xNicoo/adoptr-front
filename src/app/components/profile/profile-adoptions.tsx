@@ -30,6 +30,7 @@ export default function ProfileAdoptions({
   texts,
   action,
   owner = false,
+  favorites,
 }: {
   /** Ruta de la página del perfil, para los links del filtro y la paginación. */
   basePath: string;
@@ -39,6 +40,7 @@ export default function ProfileAdoptions({
   texts: ProfileAdoptionsTexts;
   action?: ReactNode;
   owner?: boolean;
+  favorites?: { ids: Set<number>; loggedIn: boolean };
 }) {
   const href = (target: ProfileAdoptionsQuery) => profileAdoptionsHref(basePath, target);
 
@@ -69,7 +71,11 @@ export default function ProfileAdoptions({
             {list.items.map((pet) => (
               <li key={pet.id} className="flex">
                 <div className="w-full">
-                  <PetCard pet={pet} owner={owner} />
+                  <PetCard
+                    pet={pet}
+                    owner={owner}
+                    favorite={favorites && { saved: favorites.ids.has(pet.id), loggedIn: favorites.loggedIn }}
+                  />
                 </div>
               </li>
             ))}
