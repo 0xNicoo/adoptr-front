@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { type ReactNode, useRef, useState } from "react";
 import { addFavoriteAction, removeFavoriteAction } from "@/actions/favorite";
 import Button from "@/app/components/ui/button";
@@ -7,8 +8,9 @@ import PetCard from "@/app/components/ui/pet-card";
 import { useToast } from "@/app/components/ui/toast";
 import { AdoptionSummary } from "@/lib/api/models/adoption/adoption-summary";
 import { Species } from "@/lib/api/models/adoption/species";
+import { settleFavorite } from "@/lib/saved/favorite-call";
 import { favoriteErrorMessage } from "@/lib/saved/favorite-errors";
-import { removeItem, restoreItem } from "@/lib/saved/saved-list";
+import { needsReload, removeItem, restoreItem } from "@/lib/saved/saved-list";
 import { SAVED_PATH, savedCountText, savedHref } from "@/lib/saved/saved-query";
 
 export default function SavedGrid({
@@ -28,20 +30,22 @@ export default function SavedGrid({
   const [total, setTotal] = useState(initialTotal);
   const pending = useRef(new Set<number>());
   const showToast = useToast();
+  const router = useRouter();
 
   async function unsave(pet: AdoptionSummary) {
     if (pending.current.has(pet.id)) return;
     pending.current.add(pet.id);
-    const result = await removeFavoriteAction(pet.id);
+    const result = await settleFavorite(removeFavoriteAction(pet.id));
     pending.current.delete(pet.id);
     if (!result.ok) {
       showToast(favoriteErrorMessage(result.code, pet.petName, "unsave"));
       return;
     }
-    const { removed } = removeItem(items, pet.id);
+    const { items: rest, removed } = removeItem(items, pet.id);
     if (!removed) return;
     setItems((current) => removeItem(current, pet.id).items);
     setTotal((current) => current - 1);
+    if (needsReload(rest.length, total - 1)) router.refresh();
     showToast(`Quitaste a ${pet.petName} de guardadas`, {
       label: "Deshacer",
       onClick: () => void undo(pet, removed.index),
@@ -49,7 +53,7 @@ export default function SavedGrid({
   }
 
   async function undo(pet: AdoptionSummary, index: number) {
-    const result = await addFavoriteAction(pet.id);
+    const result = await settleFavorite(addFavoriteAction(pet.id));
     if (!result.ok) {
       showToast(favoriteErrorMessage(result.code, pet.petName, "save"));
       return;

@@ -14,3 +14,7 @@ export function restoreItem<T extends { id: number }>(items: T[], removed: Remov
   const index = Math.min(removed.index, items.length);
   return [...items.slice(0, index), removed.item, ...items.slice(index)];
 }
+
+export function needsReload(itemsLeft: number, total: number): boolean {
+  return itemsLeft === 0 && total > 0;
+}

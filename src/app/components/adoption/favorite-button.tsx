@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { addFavoriteAction, removeFavoriteAction } from "@/actions/favorite";
 import { useToast } from "@/app/components/ui/toast";
+import { settleFavorite } from "@/lib/saved/favorite-call";
 import { favoriteErrorMessage } from "@/lib/saved/favorite-errors";
 
 export type FavoriteState = { saved: boolean; loggedIn: boolean };
@@ -45,7 +46,7 @@ export default function FavoriteButton({
     const next = !saved;
     setSaved(next);
     setPending(true);
-    const result = next ? await addFavoriteAction(adoptionId) : await removeFavoriteAction(adoptionId);
+    const result = await settleFavorite(next ? addFavoriteAction(adoptionId) : removeFavoriteAction(adoptionId));
     setPending(false);
     if (!result.ok) {
       setSaved(!next);

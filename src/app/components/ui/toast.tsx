@@ -1,7 +1,7 @@
 "use client";
 
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const TOAST_MS = 6000;
 
@@ -17,12 +17,21 @@ export function useToast() {
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<{ id: number; message: string; action?: ToastAction } | null>(null);
-  const show = useCallback<ShowToast>((message, action) => setToast({ id: Date.now(), message, action }), []);
+  const [paused, setPaused] = useState(false);
+  const actionRef = useRef<HTMLButtonElement>(null);
+  const show = useCallback<ShowToast>((message, action) => {
+    setPaused(false);
+    setToast({ id: Date.now(), message, action });
+  }, []);
 
   useEffect(() => {
-    if (!toast) return;
+    if (!toast || paused) return;
     const timer = setTimeout(() => setToast(null), TOAST_MS);
     return () => clearTimeout(timer);
+  }, [toast, paused]);
+
+  useEffect(() => {
+    if (toast?.action) actionRef.current?.focus();
   }, [toast]);
 
   return (
@@ -33,11 +42,18 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <div
             key={toast.id}
             role="status"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onFocus={() => setPaused(true)}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
+            }}
             className="pointer-events-auto flex items-center gap-4 rounded-full border-3 border-ink bg-ink py-3 pr-3 pl-6 text-[15px] font-bold text-surface shadow-[6px_6px_0_var(--color-cta)]"
           >
             {toast.message}
             {toast.action && (
               <button
+                ref={actionRef}
                 type="button"
                 onClick={() => {
                   toast.action?.onClick();

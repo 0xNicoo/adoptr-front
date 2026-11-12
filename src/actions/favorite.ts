@@ -4,8 +4,7 @@ import { redirect } from 'next/navigation';
 import { ApiError, UNKNOWN_ERROR_CODE } from '@/lib/api/api';
 import { addFavorite, removeFavorite } from '@/lib/api/calls/favorite';
 import { clearAccessToken } from '@/lib/auth/session';
-
-export type FavoriteResult = { ok: true } | { ok: false; code: string };
+import type { FavoriteResult } from '@/lib/saved/favorite-call';
 
 async function run(publicationId: number, call: (id: number) => Promise<void>): Promise<FavoriteResult> {
   if (!Number.isInteger(publicationId)) {

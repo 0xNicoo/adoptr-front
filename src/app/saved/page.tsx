@@ -74,7 +74,7 @@ export default async function SavedPage({ searchParams }: { searchParams: Promis
         </>
       ) : (
         <SavedGrid
-          key={savedHref(query)}
+          key={`${savedHref(query)}:${result.page.items.map((pet) => pet.id).join(",")}`}
           initial={result.page.items}
           total={result.page.totalItems}
           species={query.species}
