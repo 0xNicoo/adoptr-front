@@ -2,6 +2,7 @@ import { MapPinIcon } from "@heroicons/react/24/outline";
 import { adoptedLabel, healthChips, knowMoreLabel, summaryLine } from "@/lib/adoption/labels";
 import { AdoptionSummary } from "@/lib/api/models/adoption/adoption-summary";
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
+import FavoriteButton, { type FavoriteState } from "@/app/components/adoption/favorite-button";
 import OwnerCardMenu from "@/app/components/adoption/owner-card-menu";
 import Badge from "./badge";
 import Button from "./button";
@@ -13,7 +14,17 @@ import SexIcon from "./sex-icon";
 // estado, nombre con el sexo como ícono, ubicación a todo el ancho, tamaño y edad en una línea, salud en
 // chips chicos y un único botón secundario. El botón es crema: con muchas tarjetas juntas, el naranja competiría consigo mismo.
 
-export default function PetCard({ pet, owner = false }: { pet: AdoptionSummary; owner?: boolean }) {
+export default function PetCard({
+  pet,
+  owner = false,
+  favorite,
+  onUnsaved,
+}: {
+  pet: AdoptionSummary;
+  owner?: boolean;
+  favorite?: FavoriteState;
+  onUnsaved?: () => void;
+}) {
   const adopted = pet.status === AdoptionStatus.ADOPTED;
 
   return (
@@ -27,6 +38,11 @@ export default function PetCard({ pet, owner = false }: { pet: AdoptionSummary; 
         {owner && (
           <div className="absolute top-3 right-3">
             <OwnerCardMenu target={{ adoptionId: pet.id, petName: pet.petName, sex: pet.sex, status: pet.status }} />
+          </div>
+        )}
+        {!owner && favorite && (
+          <div className="absolute top-3 right-3">
+            <FavoriteButton adoptionId={pet.id} petName={pet.petName} initial={favorite} onUnsaved={onUnsaved} />
           </div>
         )}
       </div>

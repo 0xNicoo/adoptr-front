@@ -6,7 +6,6 @@ export const SAVED_PATH = "/saved";
 
 export interface SavedQuery {
   species: Species | null;
-  /** Desde 1. */
   page: number;
 }
 
@@ -22,7 +21,6 @@ export function parseSavedQuery(params: SearchParams): SavedQuery {
   return { species, page: page > 0 && Number.isSafeInteger(page) ? page : 1 };
 }
 
-/** Query de `GET /favorites/adoptions`. */
 export function toSavedApiParams({ species, page }: SavedQuery): URLSearchParams {
   const params = new URLSearchParams();
   if (species) params.set("species", species);

@@ -5,6 +5,7 @@ import ProfileAdoptions from "@/app/components/profile/profile-adoptions";
 import ProfileCard from "@/app/components/profile/profile-card";
 import { SearchParams } from "@/lib/adoption/catalog-query";
 import { getProfileAdoptions } from "@/lib/api/calls/adoption";
+import { getViewerFavoriteIds } from "@/lib/api/calls/favorite";
 import { getMyProfile, getPublicProfile } from "@/lib/api/calls/profile";
 import { PublicProfile } from "@/lib/api/models/profile/public-profile";
 import { getAccessToken } from "@/lib/auth/session";
@@ -49,10 +50,12 @@ export default async function ProfilePage({ params, searchParams }: { params: Pa
   const query = parseProfileAdoptionsQuery(await searchParams);
   const id = parseProfileId(rawId);
 
-  const [result, ownId, list] = await Promise.all([
+  const [result, ownId, list, favoriteIds, loggedIn] = await Promise.all([
     loadProfile(rawId),
     myProfileId(),
     id === null ? null : getProfileAdoptions(id, query).catch(() => null),
+    getViewerFavoriteIds(),
+    getAccessToken().then(Boolean),
   ]);
 
   // notFound() y redirect() lanzan excepciones internas de Next: van fuera de los try.
@@ -79,6 +82,7 @@ export default async function ProfilePage({ params, searchParams }: { params: Pa
         basePath={`/profiles/${profile.id}`}
         query={query}
         list={list}
+        favorites={{ ids: favoriteIds, loggedIn }}
         texts={{
           title: `Publicaciones de ${profileShortName(profile)}`,
           loadError: "No pudimos cargar sus publicaciones",

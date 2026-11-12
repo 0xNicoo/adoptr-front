@@ -3,7 +3,9 @@ import Button from "@/app/components/ui/button";
 import PetCard from "@/app/components/ui/pet-card";
 import { CatalogQuery, SearchParams, catalogHref, parseCatalogQuery } from "@/lib/adoption/catalog-query";
 import { searchAdoptions } from "@/lib/api/calls/adoption";
+import { getViewerFavoriteIds } from "@/lib/api/calls/favorite";
 import { getProvinces } from "@/lib/api/calls/location";
+import { getAccessToken } from "@/lib/auth/session";
 import { AdoptionSummary } from "@/lib/api/models/adoption/adoption-summary";
 import { Species } from "@/lib/api/models/adoption/species";
 import { Locality } from "@/lib/api/models/locality/locality";
@@ -16,12 +18,19 @@ export const metadata: Metadata = {
   title: "Mascotas en adopción — Adoptr",
 };
 
-type Loaded = { ok: true; page: Page<AdoptionSummary>; provinces: Province[] } | { ok: false };
+type Loaded =
+  | { ok: true; page: Page<AdoptionSummary>; provinces: Province[]; favoriteIds: Set<number>; loggedIn: boolean }
+  | { ok: false };
 
 async function load(query: CatalogQuery): Promise<Loaded> {
   try {
-    const [page, provinces] = await Promise.all([searchAdoptions(query), getProvinces()]);
-    return { ok: true, page, provinces };
+    const [page, provinces, favoriteIds, loggedIn] = await Promise.all([
+      searchAdoptions(query),
+      getProvinces(),
+      getViewerFavoriteIds(),
+      getAccessToken().then(Boolean),
+    ]);
+    return { ok: true, page, provinces, favoriteIds, loggedIn };
   } catch {
     return { ok: false };
   }
@@ -77,7 +86,10 @@ export default async function AdoptionsPage({ searchParams }: { searchParams: Pr
               {result.page.items.map((pet) => (
                 <li key={pet.id} className="flex">
                   <div className="w-full">
-                    <PetCard pet={pet} />
+                    <PetCard
+                      pet={pet}
+                      favorite={{ saved: result.favoriteIds.has(pet.id), loggedIn: result.loggedIn }}
+                    />
                   </div>
                 </li>
               ))}
