@@ -63,6 +63,9 @@ export default async function Navbar() {
                 <Button href="/profile" variant="secondary" size="sm" tone="dark">
                   Mi perfil
                 </Button>
+                <Button href="/saved" variant="secondary" size="sm" tone="dark">
+                  Guardadas
+                </Button>
                 <LogoutButton className="min-h-11 rounded-full border-3 border-surface px-5 font-bold text-surface" />
               </>
             ) : (

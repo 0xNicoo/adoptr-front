@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { Heart } from "@phosphor-icons/react/dist/ssr";
 import { useRouter } from "next/navigation";
 import { logoutAction } from "@/actions/auth";
 
@@ -13,7 +14,7 @@ const itemClass =
   "flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-base font-semibold text-ink data-[focus]:bg-paper";
 
 // Rutas que todavía no existen: se muestran deshabilitadas con «Próximamente».
-const upcoming = ["Favoritas", "Chats"];
+const upcoming = ["Chats"];
 
 function useLogout() {
   const router = useRouter();
@@ -56,6 +57,14 @@ export default function UserMenu() {
         <MenuItem>
           <Link href="/profile" className={itemClass}>
             Mi perfil
+          </Link>
+        </MenuItem>
+        <MenuItem>
+          <Link href="/saved" className={itemClass}>
+            <span className="flex items-center gap-2.5">
+              <Heart aria-hidden={true} weight="bold" className="h-5 w-5" />
+              Guardadas
+            </span>
           </Link>
         </MenuItem>
         {upcoming.map((label) => (

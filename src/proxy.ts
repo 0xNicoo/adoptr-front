@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 // `protectedTrees` cubre también las subrutas (/profile cubre /profile/new); `protectedPaths`
 // es la ruta exacta, porque /adoptions y /adoptions/[id] son públicas.
 const protectedTrees = ['/profile']
-const protectedPaths = ['/adoptions/new']
+const protectedPaths = ['/adoptions/new', '/saved']
 
 const protectedPatterns = [/^\/adoptions\/[^/]+\/edit$/]
 
