@@ -11,7 +11,7 @@ import { Species } from "@/lib/api/models/adoption/species";
 import { settleFavorite } from "@/lib/saved/favorite-call";
 import { favoriteErrorMessage } from "@/lib/saved/favorite-errors";
 import { needsReload, removeItem, restoreItem } from "@/lib/saved/saved-list";
-import { SAVED_PATH, savedCountText, savedHref } from "@/lib/saved/saved-query";
+import { SAVED_PATH, savedHref } from "@/lib/saved/saved-query";
 
 export default function SavedGrid({
   initial,
@@ -65,10 +65,7 @@ export default function SavedGrid({
   return (
     <>
       <header className="flex flex-wrap items-end justify-between gap-5">
-        <div>
-          <h1 className="font-display text-[44px] leading-tight text-primary md:text-[52px]">Guardadas</h1>
-          {total > 0 && <p className="mt-1 text-[17px] text-ink-soft">{savedCountText(total, species)}</p>}
-        </div>
+        <h1 className="font-display text-[44px] leading-tight text-primary md:text-[52px]">Guardadas</h1>
         {filters}
       </header>
 

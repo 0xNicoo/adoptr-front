@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon, UserCircleIcon } from "@heroicons/react/24/outline";
-import { Heart } from "@phosphor-icons/react/dist/ssr";
 import { useRouter } from "next/navigation";
 import { logoutAction } from "@/actions/auth";
 
@@ -61,10 +60,7 @@ export default function UserMenu() {
         </MenuItem>
         <MenuItem>
           <Link href="/saved" className={itemClass}>
-            <span className="flex items-center gap-2.5">
-              <Heart aria-hidden={true} weight="bold" className="h-5 w-5" />
-              Guardadas
-            </span>
+            Guardadas
           </Link>
         </MenuItem>
         {upcoming.map((label) => (

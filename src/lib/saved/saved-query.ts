@@ -36,13 +36,3 @@ export function savedHref({ species, page }: SavedQuery): string {
   const query = params.toString();
   return query ? `${SAVED_PATH}?${query}` : SAVED_PATH;
 }
-
-export function savedCountText(total: number, species: Species | null): string {
-  const [one, many] =
-    species === Species.DOG
-      ? ["perro guardado", "perros guardados"]
-      : species === Species.CAT
-        ? ["gato guardado", "gatos guardados"]
-        : ["mascota guardada", "mascotas guardadas"];
-  return `${total} ${total === 1 ? one : many}`;
-}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Species } from "@/lib/api/models/adoption/species";
-import { SAVED_PATH, parseSavedQuery, savedCountText, savedHref, toSavedApiParams } from "./saved-query";
+import { SAVED_PATH, parseSavedQuery, savedHref, toSavedApiParams } from "./saved-query";
 
 describe("parseSavedQuery", () => {
   it("sin parámetros: todas y página 1", () => {
@@ -38,17 +38,5 @@ describe("savedHref", () => {
 
   it("con especie y página", () => {
     expect(savedHref({ species: Species.DOG, page: 2 })).toBe("/saved?species=dog&page=2");
-  });
-});
-
-describe("savedCountText", () => {
-  it("cuenta mascotas sin filtro", () => {
-    expect(savedCountText(1, null)).toBe("1 mascota guardada");
-    expect(savedCountText(6, null)).toBe("6 mascotas guardadas");
-  });
-
-  it("cuenta perros o gatos con filtro", () => {
-    expect(savedCountText(1, Species.DOG)).toBe("1 perro guardado");
-    expect(savedCountText(3, Species.CAT)).toBe("3 gatos guardados");
   });
 });
