@@ -14,6 +14,7 @@
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@phosphor-icons/react": "2.1.7",
+    "@stomp/stompjs": "7.1.1",
     "google-one-tap": "^1.0.6",
     "next": "16.0.10",
     "react": "19.2.0",

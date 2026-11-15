@@ -4,7 +4,7 @@ Interfaz web de Adoptr con Next.js App Router. Leer [AGENT.md](AGENT.md), [arqui
 
 ## Desarrollo local
 
-Requisitos: Node.js compatible con Next.js 16, npm y backend accesible con PostgreSQL y claves Google disponibles. La URL de la API se configura mediante `API_URL`, solo del lado servidor. Para el botón Google se necesita un Client ID de Google Identity Services autorizado para `http://localhost:3000`:
+Requisitos: Node.js 22 o más (el chat en tiempo real usa el `WebSocket` global de Node), npm y backend accesible con PostgreSQL y claves Google disponibles. La URL de la API se configura mediante `API_URL`, solo del lado servidor. Para el botón Google se necesita un Client ID de Google Identity Services autorizado para `http://localhost:3000`:
 
 ```bash
 # Crear .env.local (ignorado por git) y completar:

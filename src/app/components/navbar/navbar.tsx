@@ -1,9 +1,10 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { getUnreadChatCount } from "@/lib/api/calls/chat";
 import { getAccessToken } from "@/lib/auth/session";
 import Button from "../ui/button";
-import UserMenu, { LogoutButton } from "./user-menu";
+import UserMenu, { LogoutButton, MobileChatsLink } from "./user-menu";
 
 const links = [
   { label: "Adoptar", href: "/adoptions" },
@@ -17,6 +18,7 @@ const linkClass =
 
 export default async function Navbar() {
   const isLoggedIn = Boolean(await getAccessToken());
+  const unread = isLoggedIn ? await getUnreadChatCount() : 0;
 
   return (
     <Disclosure as="nav" aria-label="Principal" className="relative z-50 border-b-4 border-ink bg-primary">
@@ -35,7 +37,8 @@ export default async function Navbar() {
             </Link>
           ))}
           {isLoggedIn ? (
-            <UserMenu />
+            // Con otra cantidad del servidor se vuelve a montar y deja de lado el valor en vivo anterior.
+            <UserMenu key={unread} unread={unread} />
           ) : (
             <Button href="/login" variant="cta" size="sm" tone="dark">
               Ingresar
@@ -66,6 +69,11 @@ export default async function Navbar() {
                 <Button href="/saved" variant="secondary" size="sm" tone="dark">
                   Guardadas
                 </Button>
+                <MobileChatsLink
+                  key={unread}
+                  unread={unread}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border-3 border-paper bg-surface px-5 text-base font-bold text-ink shadow-[3px_3px_0_var(--color-paper)] focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-accent-teal"
+                />
                 <LogoutButton className="min-h-11 rounded-full border-3 border-surface px-5 font-bold text-surface" />
               </>
             ) : (

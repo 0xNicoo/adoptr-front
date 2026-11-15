@@ -9,6 +9,10 @@ import { birthMonthToAge, formatAge } from "@/lib/adoption/age";
 import { SEX_LABEL, SIZE_LABEL, SPECIES_LABEL, formatPublishedDate, healthChips } from "@/lib/adoption/labels";
 import { getAdoption } from "@/lib/api/calls/adoption";
 import { getViewerFavoriteIds } from "@/lib/api/calls/favorite";
+import { findMyConversation } from "@/lib/api/calls/chat";
+import { Conversation } from "@/lib/api/models/chat/chat";
+import { chatsHref, conversationHref } from "@/lib/chat/chat-query";
+import ContactOwner from "@/app/components/chat/contact-owner";
 import { getAccessToken } from "@/lib/auth/session";
 import FavoriteButton from "@/app/components/adoption/favorite-button";
 import { Adoption } from "@/lib/api/models/adoption/adoption";
@@ -62,6 +66,9 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
   const [favoriteIds, loggedIn] = owner
     ? [new Set<number>(), true]
     : await Promise.all([getViewerFavoriteIds(), getAccessToken().then(Boolean)]);
+  // Si ya le escribió, «Contactar» lleva directo a ese chat (también si la mascota ya fue adoptada).
+  const conversation: Conversation | null =
+    !owner && loggedIn ? await findMyConversation(pet.id).catch(() => null) : null;
   const justPublished = (await searchParams).published === "1" && owner;
   const facts = [
     pet.size ? { label: "Tamaño", value: SIZE_LABEL[pet.size] } : { label: "Especie", value: SPECIES_LABEL[pet.species] },
@@ -164,18 +171,67 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
             </section>
           )}
 
-          {!adopted && !owner && (
-            <div className="flex flex-wrap items-center gap-3">
-              <Badge variant="soon">Próximamente</Badge>
-              <p className="text-[15px] text-ink-soft">
-                Muy pronto vas a poder escribirle a quien la publicó desde Adoptr.
-              </p>
-            </div>
+          {!owner && (
+            <Contact
+              petId={pet.id}
+              petName={pet.petName}
+              ownerName={pet.owner?.displayName ?? "quien la publicó"}
+              adopted={adopted}
+              loggedIn={loggedIn}
+              conversation={conversation}
+            />
+          )}
+          {owner && (
+            <Link
+              href={chatsHref({ tab: "mine", pet: pet.id })}
+              className="self-start text-[15px] font-bold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-accent-teal"
+            >
+              Ver los chats sobre {pet.petName}
+            </Link>
           )}
         </div>
       </div>
     </div>
   );
+}
+
+function Contact({
+  petId,
+  petName,
+  ownerName,
+  adopted,
+  loggedIn,
+  conversation,
+}: {
+  petId: number;
+  petName: string;
+  ownerName: string;
+  adopted: boolean;
+  loggedIn: boolean;
+  conversation: Conversation | null;
+}) {
+  if (conversation) {
+    return (
+      <div className="flex flex-wrap items-center gap-3">
+        <Button href={conversationHref(conversation)} variant={adopted ? "secondary" : "cta"}>
+          Ver tu chat con {ownerName}
+        </Button>
+      </div>
+    );
+  }
+  // Adoptada: el back no deja iniciar un chat nuevo (409 `CHAT_READ_ONLY`).
+  if (adopted) return null;
+  if (!loggedIn) {
+    return (
+      <div className="flex flex-wrap items-center gap-3">
+        <Button href="/login" variant="cta">
+          Contactar
+        </Button>
+        <p className="text-[15px] text-ink-soft">Ingresá para escribirle a {ownerName}.</p>
+      </div>
+    );
+  }
+  return <ContactOwner publicationId={petId} petName={petName} ownerName={ownerName} />;
 }
 
 function StatusPill({ adopted, label }: { adopted: boolean; label: string }) {
