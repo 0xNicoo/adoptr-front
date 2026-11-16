@@ -1,4 +1,4 @@
-import { CropArea, PHOTO_OUTPUT_QUALITY, croppedFileName, croppedOutputSize } from "./photo-crop";
+import { CROP_OUTPUT_QUALITY, CropArea, CropFormat, croppedFileName, croppedOutputSize } from "./crop";
 
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -9,9 +9,14 @@ function loadImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
-export async function cropToFile(imageUrl: string, area: CropArea, originalName: string): Promise<File> {
+export async function cropToFile(
+  imageUrl: string,
+  area: CropArea,
+  originalName: string,
+  format: CropFormat,
+): Promise<File> {
   const image = await loadImage(imageUrl);
-  const size = croppedOutputSize(area);
+  const size = croppedOutputSize(area, format);
   const canvas = document.createElement("canvas");
   canvas.width = size.width;
   canvas.height = size.height;
@@ -21,7 +26,7 @@ export async function cropToFile(imageUrl: string, area: CropArea, originalName:
   context.fillRect(0, 0, size.width, size.height);
   context.imageSmoothingQuality = "high";
   context.drawImage(image, area.x, area.y, area.width, area.height, 0, 0, size.width, size.height);
-  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", PHOTO_OUTPUT_QUALITY));
+  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", CROP_OUTPUT_QUALITY));
   if (!blob) throw new Error("No se pudo generar el recorte");
   return new File([blob], croppedFileName(originalName), { type: "image/jpeg" });
 }

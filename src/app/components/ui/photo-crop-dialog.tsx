@@ -6,8 +6,8 @@ import { useState } from "react";
 import Cropper, { type Area } from "react-easy-crop";
 import Button from "@/app/components/ui/button";
 import { FieldError } from "@/app/components/ui/form-field";
-import { cropToFile } from "@/lib/adoption/crop-image";
-import { CropArea, PHOTO_ASPECT, PHOTO_MAX_ZOOM, PHOTO_MIN_ZOOM, clampZoom } from "@/lib/adoption/photo-crop";
+import { CROP_MAX_ZOOM, CROP_MIN_ZOOM, CropArea, CropFormat, clampZoom, cropAspect } from "@/lib/photo/crop";
+import { cropToFile } from "@/lib/photo/crop-image";
 
 const ZOOM_STEP = 0.25;
 
@@ -18,14 +18,20 @@ export interface CropRequest {
   position?: { current: number; total: number };
 }
 
+export type CropShape = "rect" | "round";
+
 export default function PhotoCropDialog({
   request,
+  format,
+  shape = "rect",
   confirmLabel,
   cancelLabel,
   onConfirm,
   onCancel,
 }: {
   request: CropRequest | null;
+  format: CropFormat;
+  shape?: CropShape;
   confirmLabel: string;
   cancelLabel: string;
   onConfirm: (file: File, area: CropArea) => void;
@@ -39,6 +45,8 @@ export default function PhotoCropDialog({
          <CropPanel
             key={request.imageUrl}
             request={request}
+            format={format}
+            shape={shape}
             confirmLabel={confirmLabel}
             cancelLabel={cancelLabel}
             onConfirm={onConfirm}
@@ -52,19 +60,23 @@ export default function PhotoCropDialog({
 
 function CropPanel({
   request,
+  format,
+  shape,
   confirmLabel,
   cancelLabel,
   onConfirm,
   onCancel,
 }: {
   request: CropRequest;
+  format: CropFormat;
+  shape: CropShape;
   confirmLabel: string;
   cancelLabel: string;
   onConfirm: (file: File, area: CropArea) => void;
   onCancel: () => void;
 }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(PHOTO_MIN_ZOOM);
+  const [zoom, setZoom] = useState(CROP_MIN_ZOOM);
   const [area, setArea] = useState<CropArea | null>(request.initialArea ?? null);
   const [working, setWorking] = useState(false);
   const [failed, setFailed] = useState<"load" | "crop" | null>(null);
@@ -74,7 +86,7 @@ function CropPanel({
     setWorking(true);
     setFailed(null);
     try {
-      onConfirm(await cropToFile(request.imageUrl, area, request.fileName), area);
+      onConfirm(await cropToFile(request.imageUrl, area, request.fileName, format), area);
     } catch {
       setFailed("crop");
       setWorking(false);
@@ -96,7 +108,10 @@ function CropPanel({
         </Description>
       </div>
 
-      <div className="relative mx-auto aspect-[3/4] h-[min(60vh,560px)] max-w-full overflow-hidden rounded-field border-3 border-ink bg-ink">
+      <div
+        style={{ aspectRatio: `${format.aspectWidth} / ${format.aspectHeight}` }}
+        className="relative mx-auto h-[min(60vh,560px)] max-w-full overflow-hidden rounded-field border-3 border-ink bg-ink"
+      >
         {failed === "load" ? (
           <p className="absolute inset-0 flex items-center justify-center p-6 text-center font-semibold text-surface">
             No pudimos abrir esta foto. Probá con otra.
@@ -106,9 +121,10 @@ function CropPanel({
             image={request.imageUrl}
             crop={crop}
             zoom={zoom}
-            aspect={PHOTO_ASPECT}
-            minZoom={PHOTO_MIN_ZOOM}
-            maxZoom={PHOTO_MAX_ZOOM}
+            aspect={cropAspect(format)}
+            cropShape={shape}
+            minZoom={CROP_MIN_ZOOM}
+            maxZoom={CROP_MAX_ZOOM}
             keyboardStep={10}
             initialCroppedAreaPixels={request.initialArea}
             onCropChange={setCrop}
@@ -125,7 +141,7 @@ function CropPanel({
         <button
           type="button"
           onClick={() => setZoom(clampZoom(zoom - ZOOM_STEP))}
-          disabled={zoom <= PHOTO_MIN_ZOOM || failed === "load"}
+          disabled={zoom <= CROP_MIN_ZOOM || failed === "load"}
           aria-label="Alejar"
           className="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border-3 border-ink bg-surface disabled:cursor-not-allowed disabled:border-dashed disabled:border-ink-soft disabled:text-ink-soft focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent-teal"
         >
@@ -135,8 +151,8 @@ function CropPanel({
           <span className="sr-only">Zoom</span>
           <input
             type="range"
-            min={PHOTO_MIN_ZOOM}
-            max={PHOTO_MAX_ZOOM}
+            min={CROP_MIN_ZOOM}
+            max={CROP_MAX_ZOOM}
             step={0.01}
             value={zoom}
             disabled={failed === "load"}
@@ -147,7 +163,7 @@ function CropPanel({
         <button
           type="button"
           onClick={() => setZoom(clampZoom(zoom + ZOOM_STEP))}
-          disabled={zoom >= PHOTO_MAX_ZOOM || failed === "load"}
+          disabled={zoom >= CROP_MAX_ZOOM || failed === "load"}
           aria-label="Acercar"
           className="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border-3 border-ink bg-surface disabled:cursor-not-allowed disabled:border-dashed disabled:border-ink-soft disabled:text-ink-soft focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent-teal"
         >
