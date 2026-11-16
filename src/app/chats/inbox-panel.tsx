@@ -244,7 +244,12 @@ function MineList({
               current={conversation.id === openId}
               className={itemClass(conversation.id === openId)}
             >
-              <PersonAvatar name={conversation.counterpart.displayName} seed={conversation.counterpart.profileId} size="sm" />
+              <PersonAvatar
+                name={conversation.counterpart.displayName}
+                seed={conversation.counterpart.profileId}
+                photoUrl={conversation.counterpart.photoUrl}
+                size="sm"
+              />
               <ItemText title={conversation.counterpart.displayName} preview={lastMessagePreview(conversation)} person />
               <UnreadCount count={conversation.unreadCount} label="sin leer" />
             </PanelLink>

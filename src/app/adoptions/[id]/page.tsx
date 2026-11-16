@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PencilSimple } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import Badge from "@/app/components/ui/badge";
 import Button from "@/app/components/ui/button";
@@ -152,9 +153,13 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
             >
               <span
                 aria-hidden="true"
-                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-3 border-ink bg-accent-mustard font-display text-2xl"
+                className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-3 border-ink bg-accent-mustard font-display text-2xl"
               >
-                {pet.owner.displayName.charAt(0).toUpperCase()}
+                {pet.owner.photoUrl ? (
+                  <Image src={pet.owner.photoUrl} alt="" fill unoptimized className="object-cover" />
+                ) : (
+                  pet.owner.displayName.charAt(0).toUpperCase()
+                )}
               </span>
               <div>
                 <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-soft">Lo publica</p>

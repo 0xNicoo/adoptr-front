@@ -27,7 +27,7 @@ function conversation(id: number, role: ChatRole, publicationId: number, last: n
   return {
     id, role, unreadCount, readOnly: false,
     publication: { id: publicationId, type: "ADOPTION", petName: `Mascota ${publicationId}`, species: Species.DOG, status: AdoptionStatus.AVAILABLE, coverPhotoUrl: null, deleted: false },
-    counterpart: { profileId: 100 + id, displayName: `Persona ${id}`, profileType: ProfileType.PERSON },
+    counterpart: { profileId: 100 + id, displayName: `Persona ${id}`, profileType: ProfileType.PERSON, photoUrl: null },
     lastMessage, lastMessageAt: lastMessage.createdAt, createdAt: "2026-11-15T09:00:00",
   };
 }
