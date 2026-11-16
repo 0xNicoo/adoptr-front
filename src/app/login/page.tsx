@@ -152,8 +152,8 @@ export default function LoginPage() {
           <div className="flex items-start gap-3 rounded-field border-2 border-dashed border-ink p-4 text-[15px] leading-normal">
             <LockSimple aria-hidden="true" weight="bold" className="mt-0.5 h-5 w-5 shrink-0" />
             <p>
-              De tu cuenta de Google solo usamos tu nombre, tu email y tu foto. No vemos tu contraseña ni publicamos nada
-              por vos.
+              De tu cuenta de Google solo usamos tu nombre y tu email. Tu foto aparece en tu perfil solo si la elegís. No
+              vemos tu contraseña ni publicamos nada por vos.
             </p>
           </div>
         </div>

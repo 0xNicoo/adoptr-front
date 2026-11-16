@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ApiError } from "@/lib/api/api";
 import { getProvinces } from "@/lib/api/calls/location";
-import { getMyProfile } from "@/lib/api/calls/profile";
+import { getGooglePhotoUrl, getMyProfile } from "@/lib/api/calls/profile";
 import { Province } from "@/lib/api/models/locality/province";
 import ProfileForm from "./profile-form";
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 type PageState =
-  | { kind: "form"; provinces: Province[] }
+  | { kind: "form"; provinces: Province[]; googlePhotoUrl: string | null }
   | { kind: "has-profile" }
   | { kind: "unauthenticated" }
   | { kind: "error" };
@@ -21,7 +21,11 @@ async function loadState(): Promise<PageState> {
     if (await getMyProfile()) {
       return { kind: "has-profile" };
     }
-    return { kind: "form", provinces: await getProvinces() };
+    const [provinces, googlePhotoUrl] = await Promise.all([
+      getProvinces(),
+      getGooglePhotoUrl().catch(() => null),
+    ]);
+    return { kind: "form", provinces, googlePhotoUrl };
   } catch (error) {
     if (error instanceof ApiError && error.code === "UNAUTHENTICATED") {
       return { kind: "unauthenticated" };
@@ -40,7 +44,7 @@ export default async function NewProfilePage() {
   return (
     <div className="halftone min-h-[calc(100vh-5rem)] bg-paper px-4 pt-12 pb-16">
       {state.kind === "form" ? (
-        <ProfileForm provinces={state.provinces} />
+        <ProfileForm provinces={state.provinces} googlePhotoUrl={state.googlePhotoUrl} />
       ) : (
         <div role="alert" className="mx-auto max-w-2xl rounded-card border-3 border-ink bg-surface p-8 shadow-panel">
           <h1 className="font-display text-4xl text-primary">No pudimos cargar el formulario</h1>
