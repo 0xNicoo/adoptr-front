@@ -26,6 +26,7 @@ export function PhotoCircle({ url, name, size }: { url: string | null; name: str
 
 const STATUS: Record<PhotoChoice["kind"], string> = {
   none: "Sin foto: en tu perfil se van a ver tus iniciales.",
+  current: "Es tu foto actual.",
   google: "Vas a usar tu foto de Google.",
   upload: "Vas a usar la foto que subiste.",
 };
@@ -34,11 +35,13 @@ export default function PhotoStep({
   value,
   onChange,
   googlePhotoUrl,
+  currentPhotoUrl = null,
   name,
 }: {
   value: PhotoChoice;
   onChange: (choice: PhotoChoice) => void;
   googlePhotoUrl: string | null;
+  currentPhotoUrl?: string | null;
   name: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -72,7 +75,7 @@ export default function PhotoStep({
 
   return (
     <div id="photo" className="flex flex-col items-center gap-6 md:flex-row md:items-start md:gap-8">
-      <PhotoCircle url={photoPreviewUrl(value, googlePhotoUrl)} name={name} size="lg" />
+      <PhotoCircle url={photoPreviewUrl(value, googlePhotoUrl, currentPhotoUrl)} name={name} size="lg" />
 
       <div className="flex w-full flex-col gap-4">
         <FieldHelp id="photo-help">
@@ -81,7 +84,7 @@ export default function PhotoStep({
 
         <div className="flex flex-wrap gap-3">
           <Button variant="secondary" size="sm" onClick={() => inputRef.current?.click()}>
-            {value.kind === "upload" ? "Elegir otra foto" : "Subir una foto"}
+            {value.kind === "upload" || value.kind === "current" ? "Elegir otra foto" : "Subir una foto"}
           </Button>
           {googlePhotoUrl && value.kind !== "google" && (
             <Button variant="secondary" size="sm" onClick={() => choose({ kind: "google" })}>

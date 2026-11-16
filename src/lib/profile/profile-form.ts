@@ -1,7 +1,9 @@
 import { Locality } from "@/lib/api/models/locality/locality";
 import { CreateProfileInput } from "@/lib/api/models/profile/create-profile-input";
 import { Gender } from "@/lib/api/models/profile/gender";
+import { Profile } from "@/lib/api/models/profile/profile";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
+import { UpdateProfileInput } from "@/lib/api/models/profile/update-profile-input";
 
 // Límites iguales a los del back (adoptr-back/docs/arquitectura/api.md, «Perfil»).
 export const MAX_NAME = 100;
@@ -118,6 +120,37 @@ export function firstInvalidSection(draft: ProfileDraft, sections: ProfileSectio
 
 function optional(value: string): string | undefined {
   return value.trim() || undefined;
+}
+
+export function draftFromProfile(profile: Profile): ProfileDraft {
+  const location = { provinceId: profile.province.id, locality: profile.locality };
+  if (profile.profileType === ProfileType.ORGANIZATION) {
+    return {
+      ...EMPTY_PROFILE_DRAFT,
+      profileType: ProfileType.ORGANIZATION,
+      organizationName: profile.organizationName,
+      instagram: profile.instagram ?? "",
+      facebook: profile.facebook ?? "",
+      website: profile.website ?? "",
+      location,
+      description: profile.description,
+    };
+  }
+  return {
+    ...EMPTY_PROFILE_DRAFT,
+    profileType: ProfileType.PERSON,
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    genderType: profile.genderType,
+    location,
+    description: profile.description,
+  };
+}
+
+export function toUpdateProfileInput(draft: ProfileDraft): UpdateProfileInput {
+  const input: UpdateProfileInput & { profileType?: ProfileType } = { ...toCreateProfileInput(draft) };
+  delete input.profileType;
+  return input;
 }
 
 export function toCreateProfileInput(draft: ProfileDraft): CreateProfileInput {

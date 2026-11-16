@@ -1,20 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState, useTransition } from "react";
 import {
   ProfilePhotoResult,
   createProfileAction,
+  deleteProfilePhotoAction,
   setGoogleProfilePhotoAction,
   setProfilePhotoAction,
+  updateProfileAction,
 } from "@/actions/profile";
 import LocationSelector from "@/app/components/location-selector";
 import Button from "@/app/components/ui/button";
 import { FieldError, FieldHelp, Label, RadioCard, RadioPill, inputClass, labelClass } from "@/app/components/ui/form-field";
+import { useToast } from "@/app/components/ui/toast";
 import { Province } from "@/lib/api/models/locality/province";
 import { Gender } from "@/lib/api/models/profile/gender";
+import { Profile } from "@/lib/api/models/profile/profile";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
-import { PhotoChoice, photoPreviewUrl, profilePhotoErrorMessage } from "@/lib/profile/photo";
+import { PhotoChoice, photoAction, photoPreviewUrl, profilePhotoErrorMessage } from "@/lib/profile/photo";
 import {
   EMPTY_PROFILE_DRAFT,
   MAX_DESCRIPTION,
@@ -26,7 +31,9 @@ import {
   ProfileErrors,
   ProfileField,
   ProfileSection,
+  draftFromProfile,
   toCreateProfileInput,
+  toUpdateProfileInput,
   validateProfileSection,
 } from "@/lib/profile/profile-form";
 import PhotoStep, { PhotoCircle } from "./photo-step";
@@ -57,6 +64,13 @@ const TYPES = [
   },
 ];
 
+const PHOTO_REVIEW_TEXT: Record<PhotoChoice["kind"], string> = {
+  none: "Sin foto",
+  current: "Tu foto actual",
+  google: "Tu foto de Google",
+  upload: "La foto que subiste",
+};
+
 const GENDERS = [
   { value: Gender.FEMALE, label: "Femenino" },
   { value: Gender.MALE, label: "Masculino" },
@@ -80,23 +94,40 @@ const FIELD_IDS: Record<ProfileField, string> = {
 
 type SubmitError = { kind: "exists" } | { kind: "generic"; message: string };
 
-function savePhoto(photo: PhotoChoice): Promise<ProfilePhotoResult> {
-  if (photo.kind === "google") return setGoogleProfilePhotoAction();
-  const formData = new FormData();
-  if (photo.kind === "upload") formData.append("file", photo.file, photo.file.name);
-  return setProfilePhotoAction(formData);
+async function applyPhoto(photo: PhotoChoice, hadPhoto: boolean): Promise<ProfilePhotoResult> {
+  switch (photoAction(photo, hadPhoto)) {
+    case "keep":
+      return { ok: true };
+    case "delete":
+      return deleteProfilePhotoAction();
+    case "google":
+      return setGoogleProfilePhotoAction();
+    case "upload": {
+      const formData = new FormData();
+      if (photo.kind === "upload") formData.append("file", photo.file, photo.file.name);
+      return setProfilePhotoAction(formData);
+    }
+  }
 }
 
 export default function ProfileForm({
   provinces,
   googlePhotoUrl,
+  editing,
 }: {
   provinces: Province[];
   googlePhotoUrl: string | null;
+  editing?: { profile: Profile };
 }) {
-  const [step, setStep] = useState(1);
-  const [draft, setDraft] = useState<ProfileDraft>(EMPTY_PROFILE_DRAFT);
-  const [photo, setPhoto] = useState<PhotoChoice>({ kind: "none" });
+  const router = useRouter();
+  const toast = useToast();
+  const currentPhotoUrl = editing?.profile.photoUrl ?? null;
+  const hadPhoto = currentPhotoUrl !== null;
+  const [step, setStep] = useState(editing ? LAST_STEP : 1);
+  const [draft, setDraft] = useState<ProfileDraft>(() =>
+    editing ? draftFromProfile(editing.profile) : EMPTY_PROFILE_DRAFT,
+  );
+  const [photo, setPhoto] = useState<PhotoChoice>(hadPhoto ? { kind: "current" } : { kind: "none" });
   const [errors, setErrors] = useState<ProfileErrors>({});
   const [submitError, setSubmitError] = useState<SubmitError | null>(null);
   const [done, setDone] = useState(false);
@@ -169,9 +200,50 @@ export default function ProfileForm({
     goTo(step + 1);
   }
 
+  function backToReview() {
+    const found = validateStep(step, draft);
+    if (Object.keys(found).length) {
+      showErrors(found);
+      return;
+    }
+    goTo(LAST_STEP);
+  }
+
+  async function savePhotoChange(): Promise<boolean> {
+    if (photoAction(photo, hadPhoto) === "keep") return true;
+    setSavingPhoto(true);
+    const photoResult = await applyPhoto(photo, hadPhoto);
+    setSavingPhoto(false);
+    setPhotoError(photoResult.ok ? null : profilePhotoErrorMessage(photoResult.code));
+    return photoResult.ok;
+  }
+
+  function finishEditing() {
+    toast("Guardaste los cambios de tu perfil.");
+    router.push("/profile");
+  }
+
+  function handleSaveError(code: string, fallback: string) {
+    switch (code) {
+      case "PROFILE_ALREADY_EXISTS":
+        setSubmitError({ kind: "exists" });
+        break;
+      case "LOCALITY_NOT_FOUND":
+        update("location", { provinceId: draft.location.provinceId, locality: null });
+        setStep(3);
+        showErrors({ locality: "Esa localidad ya no está disponible. Elegí otra." });
+        break;
+      case "VALIDATION_ERROR":
+        setSubmitError({ kind: "generic", message: "Hay datos que no pudimos guardar. Revisalos y probá de nuevo." });
+        break;
+      default:
+        setSubmitError({ kind: "generic", message: fallback });
+    }
+  }
+
   function submit() {
     // Se revalida todo por si se editó un paso desde la revisión.
-    for (let s = 1; s < LAST_STEP; s++) {
+    for (let s = editing ? 2 : 1; s < LAST_STEP; s++) {
       const found = validateStep(s, draft);
       if (Object.keys(found).length) {
         setStep(s);
@@ -180,40 +252,30 @@ export default function ProfileForm({
       }
     }
     setSubmitError(null);
+    setPhotoError(null);
     startTransition(async () => {
-      const result = await createProfileAction(toCreateProfileInput(draft));
-      if (result.ok) {
-        if (photo.kind !== "none") {
-          setSavingPhoto(true);
-          const photoResult = await savePhoto(photo);
-          setSavingPhoto(false);
-          if (!photoResult.ok) setPhotoError(profilePhotoErrorMessage(photoResult.code));
+      if (editing) {
+        const result = await updateProfileAction(toUpdateProfileInput(draft));
+        if (!result.ok) {
+          handleSaveError(result.code, "No pudimos guardar los cambios. Probá de nuevo en unos minutos.");
+          return;
         }
-        setDone(true);
+        if (await savePhotoChange()) finishEditing();
         return;
       }
-      switch (result.code) {
-        case "PROFILE_ALREADY_EXISTS":
-          setSubmitError({ kind: "exists" });
-          break;
-        case "LOCALITY_NOT_FOUND":
-          update("location", { provinceId: draft.location.provinceId, locality: null });
-          setStep(3);
-          showErrors({ locality: "Esa localidad ya no está disponible. Elegí otra." });
-          break;
-        case "VALIDATION_ERROR":
-          setSubmitError({ kind: "generic", message: "Hay datos que no pudimos guardar. Revisalos y probá de nuevo." });
-          break;
-        default:
-          setSubmitError({ kind: "generic", message: "No pudimos crear tu perfil. Probá de nuevo en unos minutos." });
+      const result = await createProfileAction(toCreateProfileInput(draft));
+      if (!result.ok) {
+        handleSaveError(result.code, "No pudimos crear tu perfil. Probá de nuevo en unos minutos.");
+        return;
       }
+      await savePhotoChange();
+      setDone(true);
     });
   }
 
   function retryPhoto() {
     startTransition(async () => {
-      const photoResult = await savePhoto(photo);
-      setPhotoError(photoResult.ok ? null : profilePhotoErrorMessage(photoResult.code));
+      if ((await savePhotoChange()) && editing) finishEditing();
     });
   }
 
@@ -267,34 +329,40 @@ export default function ProfileForm({
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-7">
       <div className="flex flex-col gap-2.5">
-        <h1 className="font-display text-[40px] leading-tight text-primary md:text-[56px]">Completá tu perfil</h1>
+        <h1 className="font-display text-[40px] leading-tight text-primary md:text-[56px]">
+          {editing ? "Editá tu perfil" : "Completá tu perfil"}
+        </h1>
         <p className="max-w-2xl text-[17px] leading-relaxed">
-          Lo cargás una sola vez y es lo que ven los demás cuando publicás una mascota o cuando te interesa adoptar.
+          {editing
+            ? "Los cambios se ven en tu perfil, en tus publicaciones y en tus chats."
+            : "Lo cargás una sola vez y es lo que ven los demás cuando publicás una mascota o cuando te interesa adoptar."}
         </p>
       </div>
 
-      <ol aria-label="Pasos" className="flex justify-between gap-3 md:grid md:grid-cols-6">
-        {STEPS.map((label, index) => {
-          const number = index + 1;
-          const state = number < step ? "done" : number === step ? "current" : "todo";
-          return (
-            <li key={label} aria-current={state === "current" ? "step" : undefined} className="flex items-center gap-2.5 font-semibold">
-              <span
-                className={
-                  "flex size-9 flex-none items-center justify-center rounded-full border-[2.5px] border-ink text-[15px] font-bold " +
-                  (state === "done" ? "bg-positive" : state === "current" ? "bg-primary text-white" : "bg-disabled text-ink-soft")
-                }
-              >
-                {number}
-              </span>
-              <span className={`hidden md:inline ${state === "todo" ? "text-ink-soft" : ""}`}>
-                {label}
-                {state === "done" && <span className="sr-only"> (completo)</span>}
-              </span>
-            </li>
-          );
-        })}
-      </ol>
+      {!editing && (
+        <ol aria-label="Pasos" className="flex justify-between gap-3 md:grid md:grid-cols-6">
+          {STEPS.map((label, index) => {
+            const number = index + 1;
+            const state = number < step ? "done" : number === step ? "current" : "todo";
+            return (
+              <li key={label} aria-current={state === "current" ? "step" : undefined} className="flex items-center gap-2.5 font-semibold">
+                <span
+                  className={
+                    "flex size-9 flex-none items-center justify-center rounded-full border-[2.5px] border-ink text-[15px] font-bold " +
+                    (state === "done" ? "bg-positive" : state === "current" ? "bg-primary text-white" : "bg-disabled text-ink-soft")
+                  }
+                >
+                  {number}
+                </span>
+                <span className={`hidden md:inline ${state === "todo" ? "text-ink-soft" : ""}`}>
+                  {label}
+                  {state === "done" && <span className="sr-only"> (completo)</span>}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      )}
 
       <section
         aria-labelledby="step-title"
@@ -482,12 +550,18 @@ export default function ProfileForm({
         )}
 
         {step === PHOTO_STEP && (
-          <PhotoStep value={photo} onChange={setPhoto} googlePhotoUrl={googlePhotoUrl} name={displayName} />
+          <PhotoStep
+            value={photo}
+            onChange={setPhoto}
+            googlePhotoUrl={googlePhotoUrl}
+            currentPhotoUrl={currentPhotoUrl}
+            name={displayName}
+          />
         )}
 
         {step === LAST_STEP && (
           <dl className="flex flex-col gap-5">
-            <ReviewRow label="Perfil de" onEdit={() => goTo(1)} editLabel="Cambiar tipo de perfil">
+            <ReviewRow label="Perfil de" onEdit={editing ? undefined : () => goTo(1)} editLabel="Cambiar tipo de perfil">
               {TYPES.find((t) => t.value === draft.profileType)?.label}
             </ReviewRow>
             {isOrganization ? (
@@ -519,11 +593,25 @@ export default function ProfileForm({
             </ReviewRow>
             <ReviewRow label="Foto" onEdit={() => goTo(PHOTO_STEP)} editLabel="Cambiar foto">
               <span className="flex items-center gap-3">
-                <PhotoCircle url={photoPreviewUrl(photo, googlePhotoUrl)} name={displayName} size="sm" />
-                {photo.kind === "google" ? "Tu foto de Google" : photo.kind === "upload" ? "La foto que subiste" : "Sin foto"}
+                <PhotoCircle url={photoPreviewUrl(photo, googlePhotoUrl, currentPhotoUrl)} name={displayName} size="sm" />
+                {PHOTO_REVIEW_TEXT[photo.kind]}
               </span>
             </ReviewRow>
           </dl>
+        )}
+
+        {editing && photoError && (
+          <div role="alert" className="flex flex-col gap-3 rounded-field border-3 border-danger bg-danger-soft px-5 py-4">
+            <p className="font-semibold">Guardamos tus datos, pero no pudimos guardar la foto. {photoError}</p>
+            <div className="flex flex-wrap gap-3">
+              <Button variant="secondary" size="sm" onClick={retryPhoto} disabled={pending}>
+                {pending ? "Subiendo la foto…" : "Reintentar"}
+              </Button>
+              <Button variant="secondary" size="sm" href="/profile" disabled={pending}>
+                Ir a mi perfil
+              </Button>
+            </div>
+          </div>
         )}
 
         {submitError && (
@@ -543,25 +631,37 @@ export default function ProfileForm({
 
         <div className="flex flex-col-reverse items-stretch gap-4 border-t-3 border-ink pt-6 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap items-center gap-3">
-            {step > 1 && (
+            {!editing && step > 1 && (
               <Button variant="secondary" onClick={() => goTo(step - 1)} disabled={pending}>
                 Atrás
               </Button>
             )}
             <Link
-              href="/"
+              href={editing ? "/profile" : "/"}
               className="inline-flex min-h-11 items-center px-1.5 font-semibold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-cta"
             >
-              Completar más tarde
+              {editing ? "Cancelar" : "Completar más tarde"}
             </Link>
           </div>
-          {step < LAST_STEP ? (
+          {editing && step < LAST_STEP ? (
+            <Button variant="cta" onClick={backToReview}>
+              Volver a la revisión
+            </Button>
+          ) : step < LAST_STEP ? (
             <Button variant="cta" onClick={next}>
               Siguiente
             </Button>
           ) : (
             <Button variant="cta" onClick={submit} disabled={pending}>
-              {savingPhoto ? "Subiendo la foto…" : pending ? "Creando perfil…" : "Crear perfil"}
+              {savingPhoto
+                ? "Subiendo la foto…"
+                : pending
+                  ? editing
+                    ? "Guardando…"
+                    : "Creando perfil…"
+                  : editing
+                    ? "Guardar cambios"
+                    : "Crear perfil"}
             </Button>
           )}
         </div>
@@ -577,7 +677,7 @@ function ReviewRow({
   children,
 }: {
   label: string;
-  onEdit: () => void;
+  onEdit?: () => void;
   editLabel: string;
   children: ReactNode;
 }) {
@@ -587,14 +687,16 @@ function ReviewRow({
         <dt className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-soft">{label}</dt>
         <dd className="mt-1 text-[17px] leading-relaxed wrap-anywhere">{children}</dd>
       </div>
-      <button
-        type="button"
-        onClick={onEdit}
-        aria-label={editLabel}
-        className="min-h-11 flex-none px-1.5 font-semibold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-cta"
-      >
-        Editar
-      </button>
+      {onEdit && (
+        <button
+          type="button"
+          onClick={onEdit}
+          aria-label={editLabel}
+          className="min-h-11 flex-none px-1.5 font-semibold text-primary underline underline-offset-3 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-cta"
+        >
+          Editar
+        </button>
+      )}
     </div>
   );
 }

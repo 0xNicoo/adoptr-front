@@ -8,7 +8,15 @@ import { initials, profileDisplayName } from "@/lib/profile/display";
 // Tarjeta lateral de un perfil (propio o ajeno): foto o iniciales, nombre, ubicación y descripción.
 // Las organizaciones llevan además su etiqueta, redes y web.
 
-export default function ProfileCard({ profile, photoAction }: { profile: PublicProfile; photoAction?: ReactNode }) {
+export default function ProfileCard({
+  profile,
+  photoAction,
+  actions,
+}: {
+  profile: PublicProfile;
+  photoAction?: ReactNode;
+  actions?: ReactNode;
+}) {
   const name = profileDisplayName(profile);
   const organization = profile.profileType === ProfileType.ORGANIZATION ? profile : null;
 
@@ -78,6 +86,8 @@ export default function ProfileCard({ profile, photoAction }: { profile: PublicP
             )}
           </dl>
         )}
+
+        {actions}
       </div>
     </section>
   );
