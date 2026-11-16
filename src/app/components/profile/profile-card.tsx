@@ -1,5 +1,6 @@
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import type { ReactNode } from "react";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
 import { PublicProfile } from "@/lib/api/models/profile/public-profile";
 import { initials, profileDisplayName } from "@/lib/profile/display";
@@ -7,7 +8,7 @@ import { initials, profileDisplayName } from "@/lib/profile/display";
 // Tarjeta lateral de un perfil (propio o ajeno): foto o iniciales, nombre, ubicación y descripción.
 // Las organizaciones llevan además su etiqueta, redes y web.
 
-export default function ProfileCard({ profile }: { profile: PublicProfile }) {
+export default function ProfileCard({ profile, photoAction }: { profile: PublicProfile; photoAction?: ReactNode }) {
   const name = profileDisplayName(profile);
   const organization = profile.profileType === ProfileType.ORGANIZATION ? profile : null;
 
@@ -18,14 +19,17 @@ export default function ProfileCard({ profile }: { profile: PublicProfile }) {
     >
       <div className="halftone h-28 border-b-3 border-ink bg-cta" />
       <div className="-mt-20 flex flex-col items-center gap-4 px-6 pb-7">
-        <div className="relative flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border-4 border-ink bg-accent-teal shadow-card">
-          {profile.photoUrl ? (
-            <Image src={profile.photoUrl} alt={`Foto de ${name}`} fill unoptimized className="object-cover" />
-          ) : (
-            <span aria-hidden="true" className="font-display text-5xl text-ink">
-              {initials(name)}
-            </span>
-          )}
+        <div className="relative">
+          <div className="relative flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border-4 border-ink bg-accent-teal shadow-card">
+            {profile.photoUrl ? (
+              <Image src={profile.photoUrl} alt={`Foto de ${name}`} fill unoptimized className="object-cover" />
+            ) : (
+              <span aria-hidden="true" className="font-display text-5xl text-ink">
+                {initials(name)}
+              </span>
+            )}
+          </div>
+          {photoAction}
         </div>
 
         <div className="flex flex-col items-center gap-2 text-center">

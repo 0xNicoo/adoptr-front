@@ -49,6 +49,10 @@ export async function setGoogleProfilePhoto(): Promise<Profile> {
   return response.data;
 }
 
+export async function deleteProfilePhoto(): Promise<void> {
+  await apiRequest<void>('/profile/photo', 'DELETE');
+}
+
 /** Perfil de cualquier usuario, público (va sin token), o `null` si no existe. */
 export async function getPublicProfile(id: number): Promise<PublicProfile | null> {
   try {
