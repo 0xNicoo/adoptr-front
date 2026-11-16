@@ -8,26 +8,39 @@ import {
   setGoogleProfilePhotoAction,
   setProfilePhotoAction,
 } from "@/actions/profile";
-import LocationSelector, { LocationValue } from "@/app/components/location-selector";
+import LocationSelector from "@/app/components/location-selector";
 import Button from "@/app/components/ui/button";
 import { FieldError, FieldHelp, Label, RadioCard, RadioPill, inputClass, labelClass } from "@/app/components/ui/form-field";
 import { Province } from "@/lib/api/models/locality/province";
-import { CreateProfileInput } from "@/lib/api/models/profile/create-profile-input";
 import { Gender } from "@/lib/api/models/profile/gender";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
 import { PhotoChoice, photoPreviewUrl, profilePhotoErrorMessage } from "@/lib/profile/photo";
+import {
+  EMPTY_PROFILE_DRAFT,
+  MAX_DESCRIPTION,
+  MAX_NAME,
+  MAX_ORGANIZATION_NAME,
+  MAX_SOCIAL,
+  MAX_WEBSITE,
+  ProfileDraft,
+  ProfileErrors,
+  ProfileField,
+  ProfileSection,
+  toCreateProfileInput,
+  validateProfileSection,
+} from "@/lib/profile/profile-form";
 import PhotoStep, { PhotoCircle } from "./photo-step";
-
-// Límites iguales a los del back (adoptr-back/docs/arquitectura/api.md, «Perfil»).
-const MAX_NAME = 100;
-const MAX_ORGANIZATION_NAME = 150;
-const MAX_SOCIAL = 100;
-const MAX_WEBSITE = 255;
-const MAX_DESCRIPTION = 500;
 
 const STEPS = ["Tipo", "Datos", "Ubicación", "Descripción", "Foto", "Revisión"] as const;
 const PHOTO_STEP = 5;
 const LAST_STEP = STEPS.length;
+
+const STEP_SECTIONS: Partial<Record<number, ProfileSection>> = { 1: "type", 2: "data", 3: "location", 4: "description" };
+
+function validateStep(step: number, draft: ProfileDraft): ProfileErrors {
+  const section = STEP_SECTIONS[step];
+  return section ? validateProfileSection(section, draft) : {};
+}
 
 const TYPES = [
   {
@@ -50,36 +63,8 @@ const GENDERS = [
   { value: Gender.X, label: "X" },
 ];
 
-interface Draft {
-  profileType: ProfileType | null;
-  firstName: string;
-  lastName: string;
-  genderType: Gender | null;
-  organizationName: string;
-  instagram: string;
-  facebook: string;
-  website: string;
-  location: LocationValue;
-  description: string;
-}
-
-type FieldKey =
-  | "profileType"
-  | "firstName"
-  | "lastName"
-  | "genderType"
-  | "organizationName"
-  | "instagram"
-  | "facebook"
-  | "website"
-  | "province"
-  | "locality"
-  | "description";
-
-type Errors = Partial<Record<FieldKey, string>>;
-
 // Orden en que se busca el primer campo con error para llevarle el foco.
-const FIELD_IDS: Record<FieldKey, string> = {
+const FIELD_IDS: Record<ProfileField, string> = {
   profileType: "profile-type",
   firstName: "first-name",
   lastName: "last-name",
@@ -92,96 +77,6 @@ const FIELD_IDS: Record<FieldKey, string> = {
   locality: "location",
   description: "description",
 };
-
-const EMPTY_DRAFT: Draft = {
-  profileType: null,
-  firstName: "",
-  lastName: "",
-  genderType: null,
-  organizationName: "",
-  instagram: "",
-  facebook: "",
-  website: "",
-  location: { provinceId: null, locality: null },
-  description: "",
-};
-
-function requiredText(value: string, max: number, missing: string): string | undefined {
-  const text = value.trim();
-  if (!text) return missing;
-  if (text.length > max) return `Usá como máximo ${max} caracteres.`;
-  return undefined;
-}
-
-function optionalText(value: string, max: number): string | undefined {
-  return value.trim().length > max ? `Usá como máximo ${max} caracteres.` : undefined;
-}
-
-function websiteError(value: string): string | undefined {
-  const text = value.trim();
-  if (!text) return undefined;
-  if (text.length > MAX_WEBSITE) return `Usá como máximo ${MAX_WEBSITE} caracteres.`;
-  const lower = text.toLowerCase();
-  const valid =
-    (lower.startsWith("http://") && lower.length > 7) || (lower.startsWith("https://") && lower.length > 8);
-  return valid ? undefined : "Tiene que empezar con http:// o https://";
-}
-
-function validate(step: number, draft: Draft): Errors {
-  const errors: Errors = {};
-  if (step === 1 && !draft.profileType) {
-    errors.profileType = "Elegí una opción.";
-  }
-  if (step === 2) {
-    if (draft.profileType === ProfileType.ORGANIZATION) {
-      errors.organizationName = requiredText(draft.organizationName, MAX_ORGANIZATION_NAME, "Ingresá el nombre de la organización.");
-      errors.instagram = optionalText(draft.instagram, MAX_SOCIAL);
-      errors.facebook = optionalText(draft.facebook, MAX_SOCIAL);
-      errors.website = websiteError(draft.website);
-    } else {
-      errors.firstName = requiredText(draft.firstName, MAX_NAME, "Ingresá tu nombre.");
-      errors.lastName = requiredText(draft.lastName, MAX_NAME, "Ingresá tu apellido.");
-      if (!draft.genderType) errors.genderType = "Elegí una opción.";
-    }
-  }
-  if (step === 3) {
-    if (!draft.location.provinceId) errors.province = "Elegí la provincia.";
-    else if (!draft.location.locality) errors.locality = "Elegí la localidad de la lista.";
-  }
-  if (step === 4) {
-    errors.description = requiredText(draft.description, MAX_DESCRIPTION, "Escribí una descripción.");
-  }
-  // Se descartan las claves sin error.
-  return Object.fromEntries(Object.entries(errors).filter(([, message]) => message)) as Errors;
-}
-
-function optional(value: string): string | undefined {
-  return value.trim() || undefined;
-}
-
-function toInput(draft: Draft): CreateProfileInput {
-  const common = {
-    description: draft.description.trim(),
-    localityId: draft.location.locality!.id,
-  };
-  if (draft.profileType === ProfileType.ORGANIZATION) {
-    return {
-      ...common,
-      profileType: ProfileType.ORGANIZATION,
-      organizationName: draft.organizationName.trim(),
-      instagram: optional(draft.instagram),
-      facebook: optional(draft.facebook),
-      website: optional(draft.website),
-    };
-  }
-  return {
-    ...common,
-    profileType: ProfileType.PERSON,
-    firstName: draft.firstName.trim(),
-    lastName: draft.lastName.trim(),
-    genderType: draft.genderType!,
-  };
-}
 
 type SubmitError = { kind: "exists" } | { kind: "generic"; message: string };
 
@@ -200,9 +95,9 @@ export default function ProfileForm({
   googlePhotoUrl: string | null;
 }) {
   const [step, setStep] = useState(1);
-  const [draft, setDraft] = useState<Draft>(EMPTY_DRAFT);
+  const [draft, setDraft] = useState<ProfileDraft>(EMPTY_PROFILE_DRAFT);
   const [photo, setPhoto] = useState<PhotoChoice>({ kind: "none" });
-  const [errors, setErrors] = useState<Errors>({});
+  const [errors, setErrors] = useState<ProfileErrors>({});
   const [submitError, setSubmitError] = useState<SubmitError | null>(null);
   const [done, setDone] = useState(false);
   const [savingPhoto, setSavingPhoto] = useState(false);
@@ -233,7 +128,7 @@ export default function ProfileForm({
     : `${draft.firstName.trim()} ${draft.lastName.trim()}`.trim();
   const province = provinces.find((p) => p.id === draft.location.provinceId);
 
-  function update<K extends keyof Draft>(key: K, value: Draft[K], clears: FieldKey[] = []) {
+  function update<K extends keyof ProfileDraft>(key: K, value: ProfileDraft[K], clears: ProfileField[] = []) {
     setDraft((current) => ({ ...current, [key]: value }));
     if (clears.length) {
       setErrors((current) => {
@@ -244,9 +139,9 @@ export default function ProfileForm({
     }
   }
 
-  function showErrors(next: Errors) {
+  function showErrors(next: ProfileErrors) {
     setErrors(next);
-    const first = (Object.keys(FIELD_IDS) as FieldKey[]).find((field) => next[field]);
+    const first = (Object.keys(FIELD_IDS) as ProfileField[]).find((field) => next[field]);
     if (first) {
       requestAnimationFrame(() => {
         const element = document.getElementById(FIELD_IDS[first]);
@@ -266,7 +161,7 @@ export default function ProfileForm({
   }
 
   function next() {
-    const found = validate(step, draft);
+    const found = validateStep(step, draft);
     if (Object.keys(found).length) {
       showErrors(found);
       return;
@@ -277,7 +172,7 @@ export default function ProfileForm({
   function submit() {
     // Se revalida todo por si se editó un paso desde la revisión.
     for (let s = 1; s < LAST_STEP; s++) {
-      const found = validate(s, draft);
+      const found = validateStep(s, draft);
       if (Object.keys(found).length) {
         setStep(s);
         showErrors(found);
@@ -286,7 +181,7 @@ export default function ProfileForm({
     }
     setSubmitError(null);
     startTransition(async () => {
-      const result = await createProfileAction(toInput(draft));
+      const result = await createProfileAction(toCreateProfileInput(draft));
       if (result.ok) {
         if (photo.kind !== "none") {
           setSavingPhoto(true);
@@ -352,12 +247,12 @@ export default function ProfileForm({
     );
   }
 
-  const fieldProps = (field: FieldKey, describedBy?: string) => ({
+  const fieldProps = (field: ProfileField, describedBy?: string) => ({
     "aria-invalid": errors[field] ? true : undefined,
     "aria-describedby": [errors[field] ? `${FIELD_IDS[field]}-error` : null, describedBy].filter(Boolean).join(" ") || undefined,
   });
 
-  const error = (field: FieldKey) =>
+  const error = (field: ProfileField) =>
     errors[field] ? <FieldError id={`${FIELD_IDS[field]}-error`}>{errors[field]}</FieldError> : null;
 
   const stepTitle = [
