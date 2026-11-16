@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { ApiError, UNKNOWN_ERROR_CODE } from '@/lib/api/api';
 import { MAX_PHOTO_BYTES } from '@/lib/adoption/photos';
-import { createProfile, setGoogleProfilePhoto, setProfilePhoto } from '@/lib/api/calls/profile';
+import { createProfile, deleteProfilePhoto, setGoogleProfilePhoto, setProfilePhoto } from '@/lib/api/calls/profile';
 import { CreateProfileInput } from '@/lib/api/models/profile/create-profile-input';
 import { ProfileType } from '@/lib/api/models/profile/profile-type';
 import { clearAccessToken } from '@/lib/auth/session';
@@ -38,6 +38,10 @@ export async function setProfilePhotoAction(formData: FormData): Promise<Profile
 
 export async function setGoogleProfilePhotoAction(): Promise<ProfilePhotoResult> {
   return runPhotoRequest(() => setGoogleProfilePhoto());
+}
+
+export async function deleteProfilePhotoAction(): Promise<ProfilePhotoResult> {
+  return runPhotoRequest(() => deleteProfilePhoto());
 }
 
 /**
