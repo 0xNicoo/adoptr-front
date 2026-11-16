@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { PROFILE_PHOTO_FORMAT, photoPreviewUrl, profilePhotoErrorMessage, profilePhotoFileError } from "./photo";
+import {
+  PROFILE_PHOTO_FORMAT,
+  photoAction,
+  photoPreviewUrl,
+  profilePhotoErrorMessage,
+  profilePhotoFileError,
+} from "./photo";
 
 const MB = 1024 * 1024;
 
@@ -21,6 +27,29 @@ describe("photoPreviewUrl", () => {
   it("sin foto no muestra nada, aunque haya foto de Google", () => {
     expect(photoPreviewUrl({ kind: "none" }, google)).toBeNull();
     expect(photoPreviewUrl({ kind: "google" }, null)).toBeNull();
+  });
+
+  it("al editar, muestra la foto actual mientras no se cambie", () => {
+    expect(photoPreviewUrl({ kind: "current" }, google, "https://cdn/actual.jpg")).toBe("https://cdn/actual.jpg");
+    expect(photoPreviewUrl({ kind: "none" }, google, "https://cdn/actual.jpg")).toBeNull();
+  });
+});
+
+describe("photoAction", () => {
+  const file = new File([new Uint8Array([1])], "foto.jpg", { type: "image/jpeg" });
+
+  it("sube la foto elegida o usa la de Google", () => {
+    expect(photoAction({ kind: "upload", file, previewUrl: "blob:x" }, false)).toBe("upload");
+    expect(photoAction({ kind: "google" }, true)).toBe("google");
+  });
+
+  it("no hace nada si la foto no cambió", () => {
+    expect(photoAction({ kind: "current" }, true)).toBe("keep");
+    expect(photoAction({ kind: "none" }, false)).toBe("keep");
+  });
+
+  it("borra la foto si tenía y se quitó", () => {
+    expect(photoAction({ kind: "none" }, true)).toBe("delete");
   });
 });
 

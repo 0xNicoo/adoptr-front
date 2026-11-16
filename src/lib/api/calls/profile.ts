@@ -3,6 +3,7 @@ import { ApiError, apiRequest } from '../api';
 import { CreateProfileInput } from '../models/profile/create-profile-input';
 import { Profile } from '../models/profile/profile';
 import { PublicProfile } from '../models/profile/public-profile';
+import { UpdateProfileInput } from '../models/profile/update-profile-input';
 import { GooglePhoto } from '../models/user/google-photo';
 
 /** Perfil del usuario de la sesión, o `null` si todavía no lo creó. */
@@ -22,6 +23,14 @@ export async function createProfile(input: CreateProfileInput): Promise<Profile>
   const response = await apiRequest<Profile>('/profile', 'POST', input);
   if (!response.data) {
     throw new Error('El alta de perfil no devolvió el perfil creado');
+  }
+  return response.data;
+}
+
+export async function updateProfile(input: UpdateProfileInput): Promise<Profile> {
+  const response = await apiRequest<Profile>('/profile', 'PUT', input);
+  if (!response.data) {
+    throw new Error('La edición de perfil no devolvió el perfil');
   }
   return response.data;
 }

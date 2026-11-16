@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Locality } from "@/lib/api/models/locality/locality";
 import { Gender } from "@/lib/api/models/profile/gender";
+import { Profile } from "@/lib/api/models/profile/profile";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
 import {
   EMPTY_PROFILE_DRAFT,
@@ -8,8 +9,10 @@ import {
   MAX_NAME,
   MAX_SOCIAL,
   ProfileDraft,
+  draftFromProfile,
   firstInvalidSection,
   toCreateProfileInput,
+  toUpdateProfileInput,
   validateProfileSection,
 } from "./profile-form";
 
@@ -98,6 +101,78 @@ describe("firstInvalidSection", () => {
 
   it("devuelve null si todo está bien", () => {
     expect(firstInvalidSection(PERSON, ["type", "data", "location", "description"])).toBeNull();
+  });
+});
+
+describe("draftFromProfile", () => {
+  const province = { id: 6, name: "Buenos Aires" };
+
+  it("precarga una persona", () => {
+    const profile: Profile = {
+      id: 1,
+      profileType: ProfileType.PERSON,
+      firstName: "Dolores",
+      lastName: "Dominguez",
+      genderType: Gender.X,
+      organizationName: null,
+      instagram: null,
+      facebook: null,
+      website: null,
+      description: "Tengo una perra.",
+      photoUrl: null,
+      locality: LA_PLATA,
+      province,
+    };
+
+    expect(draftFromProfile(profile)).toEqual({
+      ...EMPTY_PROFILE_DRAFT,
+      profileType: ProfileType.PERSON,
+      firstName: "Dolores",
+      lastName: "Dominguez",
+      genderType: Gender.X,
+      location: { provinceId: 6, locality: LA_PLATA },
+      description: "Tengo una perra.",
+    });
+  });
+
+  it("precarga una organización con las redes vacías como texto vacío", () => {
+    const profile: Profile = {
+      id: 2,
+      profileType: ProfileType.ORGANIZATION,
+      organizationName: "Refugio Patitas",
+      instagram: "@patitas",
+      facebook: null,
+      website: null,
+      firstName: null,
+      lastName: null,
+      genderType: null,
+      description: "Rescatamos.",
+      photoUrl: "https://cdn/profiles/2/a.jpg",
+      locality: LA_PLATA,
+      province,
+    };
+
+    expect(draftFromProfile(profile)).toEqual({
+      ...EMPTY_PROFILE_DRAFT,
+      profileType: ProfileType.ORGANIZATION,
+      organizationName: "Refugio Patitas",
+      instagram: "@patitas",
+      location: { provinceId: 6, locality: LA_PLATA },
+      description: "Rescatamos.",
+    });
+  });
+});
+
+describe("toUpdateProfileInput", () => {
+  it("es el mismo body que el alta, sin el tipo", () => {
+    expect(toUpdateProfileInput(PERSON)).toEqual({
+      firstName: "Dolores",
+      lastName: "Dominguez",
+      genderType: Gender.X,
+      description: "Tengo una perra.",
+      localityId: 6441030,
+    });
+    expect(toUpdateProfileInput(ORGANIZATION)).not.toHaveProperty("profileType");
   });
 });
 

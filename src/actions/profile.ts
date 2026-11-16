@@ -3,14 +3,27 @@
 import { redirect } from 'next/navigation';
 import { ApiError, UNKNOWN_ERROR_CODE } from '@/lib/api/api';
 import { MAX_PHOTO_BYTES } from '@/lib/adoption/photos';
-import { createProfile, deleteProfilePhoto, setGoogleProfilePhoto, setProfilePhoto } from '@/lib/api/calls/profile';
-import { CreateProfileInput } from '@/lib/api/models/profile/create-profile-input';
+import {
+  createProfile,
+  deleteProfilePhoto,
+  setGoogleProfilePhoto,
+  setProfilePhoto,
+  updateProfile,
+} from '@/lib/api/calls/profile';
+import {
+  CreateOrganizationProfileInput,
+  CreatePersonProfileInput,
+  CreateProfileInput,
+} from '@/lib/api/models/profile/create-profile-input';
+import { UpdateProfileInput } from '@/lib/api/models/profile/update-profile-input';
 import { ProfileType } from '@/lib/api/models/profile/profile-type';
 import { clearAccessToken } from '@/lib/auth/session';
 
 export type ProfilePhotoResult = { ok: true } | { ok: false; code: string };
 
-async function runPhotoRequest(request: () => Promise<unknown>): Promise<ProfilePhotoResult> {
+export type UpdateProfileResult = { ok: true } | { ok: false; code: string };
+
+async function runProfileRequest(request: () => Promise<unknown>): Promise<{ ok: true } | { ok: false; code: string }> {
   let code: string;
   try {
     await request();
@@ -33,15 +46,31 @@ export async function setProfilePhotoAction(formData: FormData): Promise<Profile
   if (file.size > MAX_PHOTO_BYTES) {
     return { ok: false, code: 'IMAGE_TOO_LARGE' };
   }
-  return runPhotoRequest(() => setProfilePhoto(file));
+  return runProfileRequest(() => setProfilePhoto(file));
 }
 
 export async function setGoogleProfilePhotoAction(): Promise<ProfilePhotoResult> {
-  return runPhotoRequest(() => setGoogleProfilePhoto());
+  return runProfileRequest(() => setGoogleProfilePhoto());
 }
 
 export async function deleteProfilePhotoAction(): Promise<ProfilePhotoResult> {
-  return runPhotoRequest(() => deleteProfilePhoto());
+  return runProfileRequest(() => deleteProfilePhoto());
+}
+
+export async function updateProfileAction(input: UpdateProfileInput): Promise<UpdateProfileResult> {
+  const fields = input as Partial<Record<keyof CreatePersonProfileInput | keyof CreateOrganizationProfileInput, unknown>>;
+  const body = {
+    description: fields.description,
+    localityId: fields.localityId,
+    firstName: fields.firstName,
+    lastName: fields.lastName,
+    genderType: fields.genderType,
+    organizationName: fields.organizationName,
+    instagram: fields.instagram,
+    facebook: fields.facebook,
+    website: fields.website,
+  } as UpdateProfileInput;
+  return runProfileRequest(() => updateProfile(body));
 }
 
 /**

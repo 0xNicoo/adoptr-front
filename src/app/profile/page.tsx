@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PencilSimple } from "@phosphor-icons/react/dist/ssr";
 import { redirect } from "next/navigation";
 import ProfileAdoptions from "@/app/components/profile/profile-adoptions";
 import ProfileCard from "@/app/components/profile/profile-card";
@@ -80,6 +81,12 @@ export default async function MyProfilePage({ searchParams }: { searchParams: Pr
       <ProfileCard
         profile={profile}
         photoAction={<ProfilePhotoMenu hasPhoto={profile.photoUrl !== null} googlePhotoUrl={googlePhotoUrl} />}
+        actions={
+          <Button variant="secondary" size="sm" href="/profile/edit" className="w-full">
+            <PencilSimple aria-hidden={true} weight="bold" className="h-5 w-5" />
+            Editar perfil
+          </Button>
+        }
       />
       <ProfileAdoptions
         owner
