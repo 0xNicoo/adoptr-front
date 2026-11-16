@@ -2,10 +2,43 @@
 
 import { redirect } from 'next/navigation';
 import { ApiError, UNKNOWN_ERROR_CODE } from '@/lib/api/api';
-import { createProfile } from '@/lib/api/calls/profile';
+import { MAX_PHOTO_BYTES } from '@/lib/adoption/photos';
+import { createProfile, setGoogleProfilePhoto, setProfilePhoto } from '@/lib/api/calls/profile';
 import { CreateProfileInput } from '@/lib/api/models/profile/create-profile-input';
 import { ProfileType } from '@/lib/api/models/profile/profile-type';
 import { clearAccessToken } from '@/lib/auth/session';
+
+export type ProfilePhotoResult = { ok: true } | { ok: false; code: string };
+
+async function runPhotoRequest(request: () => Promise<unknown>): Promise<ProfilePhotoResult> {
+  let code: string;
+  try {
+    await request();
+    return { ok: true };
+  } catch (error) {
+    code = error instanceof ApiError ? error.code : UNKNOWN_ERROR_CODE;
+  }
+  if (code === 'UNAUTHENTICATED') {
+    await clearAccessToken();
+    redirect('/login');
+  }
+  return { ok: false, code };
+}
+
+export async function setProfilePhotoAction(formData: FormData): Promise<ProfilePhotoResult> {
+  const file = formData.get('file');
+  if (!(file instanceof File) || file.size === 0) {
+    return { ok: false, code: 'IMAGE_INVALID' };
+  }
+  if (file.size > MAX_PHOTO_BYTES) {
+    return { ok: false, code: 'IMAGE_TOO_LARGE' };
+  }
+  return runPhotoRequest(() => setProfilePhoto(file));
+}
+
+export async function setGoogleProfilePhotoAction(): Promise<ProfilePhotoResult> {
+  return runPhotoRequest(() => setGoogleProfilePhoto());
+}
 
 /**
  * Resultado del alta. Devuelve el `code` del back en vez de lanzar el error, porque

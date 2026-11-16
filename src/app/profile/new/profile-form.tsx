@@ -2,7 +2,12 @@
 
 import Link from "next/link";
 import { type ReactNode, useEffect, useRef, useState, useTransition } from "react";
-import { createProfileAction } from "@/actions/profile";
+import {
+  ProfilePhotoResult,
+  createProfileAction,
+  setGoogleProfilePhotoAction,
+  setProfilePhotoAction,
+} from "@/actions/profile";
 import LocationSelector, { LocationValue } from "@/app/components/location-selector";
 import Button from "@/app/components/ui/button";
 import { FieldError, FieldHelp, Label, RadioCard, RadioPill, inputClass, labelClass } from "@/app/components/ui/form-field";
@@ -10,6 +15,8 @@ import { Province } from "@/lib/api/models/locality/province";
 import { CreateProfileInput } from "@/lib/api/models/profile/create-profile-input";
 import { Gender } from "@/lib/api/models/profile/gender";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
+import { PhotoChoice, photoPreviewUrl, profilePhotoErrorMessage } from "@/lib/profile/photo";
+import PhotoStep, { PhotoCircle } from "./photo-step";
 
 // Límites iguales a los del back (adoptr-back/docs/arquitectura/api.md, «Perfil»).
 const MAX_NAME = 100;
@@ -18,7 +25,8 @@ const MAX_SOCIAL = 100;
 const MAX_WEBSITE = 255;
 const MAX_DESCRIPTION = 500;
 
-const STEPS = ["Tipo", "Datos", "Ubicación", "Descripción", "Revisión"] as const;
+const STEPS = ["Tipo", "Datos", "Ubicación", "Descripción", "Foto", "Revisión"] as const;
+const PHOTO_STEP = 5;
 const LAST_STEP = STEPS.length;
 
 const TYPES = [
@@ -177,13 +185,35 @@ function toInput(draft: Draft): CreateProfileInput {
 
 type SubmitError = { kind: "exists" } | { kind: "generic"; message: string };
 
-export default function ProfileForm({ provinces }: { provinces: Province[] }) {
+function savePhoto(photo: PhotoChoice): Promise<ProfilePhotoResult> {
+  if (photo.kind === "google") return setGoogleProfilePhotoAction();
+  const formData = new FormData();
+  if (photo.kind === "upload") formData.append("file", photo.file, photo.file.name);
+  return setProfilePhotoAction(formData);
+}
+
+export default function ProfileForm({
+  provinces,
+  googlePhotoUrl,
+}: {
+  provinces: Province[];
+  googlePhotoUrl: string | null;
+}) {
   const [step, setStep] = useState(1);
   const [draft, setDraft] = useState<Draft>(EMPTY_DRAFT);
+  const [photo, setPhoto] = useState<PhotoChoice>({ kind: "none" });
   const [errors, setErrors] = useState<Errors>({});
   const [submitError, setSubmitError] = useState<SubmitError | null>(null);
   const [done, setDone] = useState(false);
+  const [savingPhoto, setSavingPhoto] = useState(false);
+  const [photoError, setPhotoError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (photo.kind !== "upload") return;
+    const url = photo.previewUrl;
+    return () => URL.revokeObjectURL(url);
+  }, [photo]);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
@@ -198,6 +228,9 @@ export default function ProfileForm({ provinces }: { provinces: Province[] }) {
   }, [step, done]);
 
   const isOrganization = draft.profileType === ProfileType.ORGANIZATION;
+  const displayName = isOrganization
+    ? draft.organizationName.trim()
+    : `${draft.firstName.trim()} ${draft.lastName.trim()}`.trim();
   const province = provinces.find((p) => p.id === draft.location.provinceId);
 
   function update<K extends keyof Draft>(key: K, value: Draft[K], clears: FieldKey[] = []) {
@@ -255,6 +288,12 @@ export default function ProfileForm({ provinces }: { provinces: Province[] }) {
     startTransition(async () => {
       const result = await createProfileAction(toInput(draft));
       if (result.ok) {
+        if (photo.kind !== "none") {
+          setSavingPhoto(true);
+          const photoResult = await savePhoto(photo);
+          setSavingPhoto(false);
+          if (!photoResult.ok) setPhotoError(profilePhotoErrorMessage(photoResult.code));
+        }
         setDone(true);
         return;
       }
@@ -276,6 +315,13 @@ export default function ProfileForm({ provinces }: { provinces: Province[] }) {
     });
   }
 
+  function retryPhoto() {
+    startTransition(async () => {
+      const photoResult = await savePhoto(photo);
+      setPhotoError(photoResult.ok ? null : profilePhotoErrorMessage(photoResult.code));
+    });
+  }
+
   if (done) {
     const name = isOrganization ? draft.organizationName.trim() : draft.firstName.trim();
     return (
@@ -287,8 +333,20 @@ export default function ProfileForm({ provinces }: { provinces: Province[] }) {
         <p className="text-[17px] leading-relaxed">
           Ya no vas a tener que repetir estos datos. Podés editarlos cuando quieras desde tu perfil.
         </p>
-        <Button variant="cta" href="/profile">
-          Ir a mi perfil
+        {photoError && (
+          <div role="alert" className="flex w-full flex-col gap-3 rounded-field border-3 border-danger bg-danger-soft px-5 py-4">
+            <p className="font-semibold">
+              Tu perfil quedó creado, pero no pudimos guardar la foto. {photoError}
+            </p>
+            <div>
+              <Button variant="secondary" size="sm" onClick={retryPhoto} disabled={pending}>
+                {pending ? "Subiendo la foto…" : "Reintentar"}
+              </Button>
+            </div>
+          </div>
+        )}
+        <Button variant="cta" href="/profile" disabled={pending}>
+          {photoError ? "Seguir sin foto" : "Ir a mi perfil"}
         </Button>
       </section>
     );
@@ -307,6 +365,7 @@ export default function ProfileForm({ provinces }: { provinces: Province[] }) {
     isOrganization ? "Sobre la organización" : "Sobre vos",
     isOrganization ? "¿Dónde están?" : "¿Dónde vivís?",
     isOrganization ? "Contanos de la organización" : "Contanos de vos",
+    isOrganization ? "Una foto o el logo" : "Tu foto",
     "Revisá los datos",
   ][step - 1];
 
@@ -319,7 +378,7 @@ export default function ProfileForm({ provinces }: { provinces: Province[] }) {
         </p>
       </div>
 
-      <ol aria-label="Pasos" className="flex justify-between gap-3 md:grid md:grid-cols-5">
+      <ol aria-label="Pasos" className="flex justify-between gap-3 md:grid md:grid-cols-6">
         {STEPS.map((label, index) => {
           const number = index + 1;
           const state = number < step ? "done" : number === step ? "current" : "todo";
@@ -527,7 +586,11 @@ export default function ProfileForm({ provinces }: { provinces: Province[] }) {
           </div>
         )}
 
-        {step === 5 && (
+        {step === PHOTO_STEP && (
+          <PhotoStep value={photo} onChange={setPhoto} googlePhotoUrl={googlePhotoUrl} name={displayName} />
+        )}
+
+        {step === LAST_STEP && (
           <dl className="flex flex-col gap-5">
             <ReviewRow label="Perfil de" onEdit={() => goTo(1)} editLabel="Cambiar tipo de perfil">
               {TYPES.find((t) => t.value === draft.profileType)?.label}
@@ -558,6 +621,12 @@ export default function ProfileForm({ provinces }: { provinces: Province[] }) {
             </ReviewRow>
             <ReviewRow label="Descripción" onEdit={() => goTo(4)} editLabel="Editar descripción">
               <span className="whitespace-pre-line">{draft.description.trim()}</span>
+            </ReviewRow>
+            <ReviewRow label="Foto" onEdit={() => goTo(PHOTO_STEP)} editLabel="Cambiar foto">
+              <span className="flex items-center gap-3">
+                <PhotoCircle url={photoPreviewUrl(photo, googlePhotoUrl)} name={displayName} size="sm" />
+                {photo.kind === "google" ? "Tu foto de Google" : photo.kind === "upload" ? "La foto que subiste" : "Sin foto"}
+              </span>
             </ReviewRow>
           </dl>
         )}
@@ -597,7 +666,7 @@ export default function ProfileForm({ provinces }: { provinces: Province[] }) {
             </Button>
           ) : (
             <Button variant="cta" onClick={submit} disabled={pending}>
-              {pending ? "Creando perfil…" : "Crear perfil"}
+              {savingPhoto ? "Subiendo la foto…" : pending ? "Creando perfil…" : "Crear perfil"}
             </Button>
           )}
         </div>
