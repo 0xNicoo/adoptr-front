@@ -3,7 +3,7 @@ import { Species } from "@/lib/api/models/adoption/species";
 import { ConversationPublication } from "@/lib/api/models/chat/chat";
 import { initials } from "@/lib/profile/display";
 
-// Avatares del chat: la mascota (portada o ilustración) y la persona (iniciales).
+// Avatares del chat: la mascota (portada o ilustración) y la persona (foto o iniciales).
 
 const PET_BACKGROUNDS = ["bg-accent-teal", "bg-accent-mustard", "bg-cta", "bg-primary"] as const;
 const PERSON_BACKGROUNDS = ["bg-cta", "bg-accent-teal", "bg-accent-mustard", "bg-positive"] as const;
@@ -32,15 +32,25 @@ export function PetThumb({ publication, size = "md" }: { publication: Conversati
   );
 }
 
-export function PersonAvatar({ name, seed, size = "md" }: { name: string; seed: number; size?: "sm" | "md" }) {
+export function PersonAvatar({
+  name,
+  seed,
+  photoUrl,
+  size = "md",
+}: {
+  name: string;
+  seed: number;
+  photoUrl: string | null;
+  size?: "sm" | "md";
+}) {
   return (
     <span
       aria-hidden="true"
-      className={`flex shrink-0 items-center justify-center rounded-full border-3 border-ink font-display ${
+      className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-full border-3 border-ink font-display ${
         size === "sm" ? "size-11 text-lg" : "size-12 text-xl"
       } ${PERSON_BACKGROUNDS[seed % PERSON_BACKGROUNDS.length]}`}
     >
-      {initials(name)}
+      {photoUrl ? <Image src={photoUrl} alt="" fill unoptimized className="object-cover" /> : initials(name)}
     </span>
   );
 }

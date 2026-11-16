@@ -62,7 +62,7 @@ export default function ConversationPanel({
         >
           <ArrowLeft aria-hidden={true} weight="bold" className="h-5 w-5" />
         </Link>
-        <PersonAvatar name={counterpart.displayName} seed={counterpart.profileId} />
+        <PersonAvatar name={counterpart.displayName} seed={counterpart.profileId} photoUrl={counterpart.photoUrl} />
         <div className="min-w-0 flex-1">
           <h2 className="truncate text-lg font-bold">{counterpart.displayName}</h2>
           <p className="truncate text-sm text-ink-soft">{counterpartSubtitle(conversation)}</p>

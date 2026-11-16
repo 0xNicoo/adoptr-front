@@ -154,7 +154,7 @@ describe("draftFromAdoption", () => {
     photos: [],
     locality: LOCALITY,
     province: { id: 6, name: "Buenos Aires" },
-    owner: { profileId: 3, displayName: "Victoria Miranda", profileType: ProfileTypeForTest.PERSON },
+    owner: { profileId: 3, displayName: "Victoria Miranda", profileType: ProfileTypeForTest.PERSON, photoUrl: null },
     viewerIsOwner: true,
     createdAt: "2026-10-01T09:30:00",
     updatedAt: "2026-10-01T09:30:00",

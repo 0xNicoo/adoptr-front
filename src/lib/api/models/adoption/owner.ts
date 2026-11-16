@@ -6,4 +6,5 @@ export interface Owner {
   profileId: number;
   displayName: string;
   profileType: ProfileType;
+  photoUrl: string | null;
 }
