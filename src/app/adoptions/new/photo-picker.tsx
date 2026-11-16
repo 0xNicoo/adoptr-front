@@ -4,9 +4,15 @@ import { ArrowsPointingOutIcon, PhotoIcon, XMarkIcon } from "@heroicons/react/24
 import Image from "next/image";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { FieldError, FieldHelp } from "@/app/components/ui/form-field";
-import { CropArea } from "@/lib/adoption/photo-crop";
-import { ACCEPTED_PHOTO_TYPES, MAX_PHOTOS, PHOTO_RULES_TEXT, selectPhotos } from "@/lib/adoption/photos";
-import PhotoCropDialog, { CropRequest } from "./photo-crop-dialog";
+import PhotoCropDialog, { CropRequest } from "@/app/components/ui/photo-crop-dialog";
+import {
+  ACCEPTED_PHOTO_TYPES,
+  ADOPTION_PHOTO_FORMAT,
+  MAX_PHOTOS,
+  PHOTO_RULES_TEXT,
+  selectPhotos,
+} from "@/lib/adoption/photos";
+import { CropArea } from "@/lib/photo/crop";
 
 export interface DraftPhoto {
   id: string;
@@ -238,6 +244,7 @@ export default function PhotoPicker({
 
       <PhotoCropDialog
         request={cropRequest}
+        format={ADOPTION_PHOTO_FORMAT}
         confirmLabel={cropMode === "adjust" ? "Guardar" : "Usar esta foto"}
         cancelLabel={cropMode === "adjust" ? "Cancelar" : "Descartar esta foto"}
         onConfirm={onConfirmCrop}

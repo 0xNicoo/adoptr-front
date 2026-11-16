@@ -1,6 +1,10 @@
 // Fotos del alta de adopción. Mismos límites que el back (adoptr-back/docs/arquitectura/api.md):
 // el navegador avisa antes de subir, pero quien valida el contenido real es el back.
 
+import { CropFormat } from "@/lib/photo/crop";
+
+export const ADOPTION_PHOTO_FORMAT: CropFormat = { aspectWidth: 3, aspectHeight: 4, maxOutputWidth: 1200 };
+
 export const MAX_PHOTOS = 5;
 export const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 export const ACCEPTED_PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"];
