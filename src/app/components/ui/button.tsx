@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 // Con `href` se renderiza como link; deshabilitado siempre es un <button disabled>,
 // para que no se pueda navegar a un destino que todavía no existe.
 
-export type ButtonVariant = "cta" | "primary" | "secondary";
+export type ButtonVariant = "cta" | "primary" | "secondary" | "danger";
 
 export type ButtonSize = "md" | "sm";
 
@@ -34,6 +34,7 @@ const variants: Record<ButtonVariant, string> = {
   cta: "bg-cta text-ink hover:bg-cta-hover",
   primary: "bg-primary text-white",
   secondary: "bg-surface text-ink",
+  danger: "bg-danger text-white",
 };
 
 const disabledStyle =
