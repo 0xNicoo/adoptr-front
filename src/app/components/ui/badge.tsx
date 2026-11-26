@@ -12,7 +12,7 @@ const variants: Record<BadgeVariant, string> = {
   soon: "rounded-lg bg-accent-mustard text-ink uppercase tracking-[0.06em] text-[13px] -rotate-3",
   // Igual que «soon», para usar sobre fondos de color (tarjetas mostaza o turquesa).
   "soon-light": "rounded-lg bg-surface text-ink uppercase tracking-[0.06em] text-[13px] -rotate-3",
-  accent: "rounded-lg bg-accent-teal text-ink uppercase tracking-[0.06em] text-[14px] -rotate-2",
+  accent: "rounded-lg bg-accent-teal text-ink uppercase tracking-[0.03em] text-[12px] -rotate-2 sm:tracking-[0.06em] sm:text-[14px]",
 };
 
 type BadgeProps = {
