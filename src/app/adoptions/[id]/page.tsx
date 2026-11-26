@@ -7,6 +7,7 @@ import Badge from "@/app/components/ui/badge";
 import Button from "@/app/components/ui/button";
 import HealthChips from "@/app/components/ui/health-chips";
 import { birthMonthToAge, formatAge } from "@/lib/adoption/age";
+import { canDelete } from "@/lib/adoption/delete";
 import { SEX_LABEL, SIZE_LABEL, SPECIES_LABEL, formatPublishedDate, healthChips } from "@/lib/adoption/labels";
 import { getAdoption } from "@/lib/api/calls/adoption";
 import { getViewerFavoriteIds } from "@/lib/api/calls/favorite";
@@ -19,6 +20,7 @@ import FavoriteButton from "@/app/components/adoption/favorite-button";
 import { Adoption } from "@/lib/api/models/adoption/adoption";
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
 import { ProfileType } from "@/lib/api/models/profile/profile-type";
+import DeleteAdoptionButton from "@/app/components/adoption/delete-adoption-button";
 import StatusChangeButton from "@/app/components/adoption/status-change-button";
 import { adoptedLabel } from "@/lib/adoption/labels";
 import BackLink from "./back-link";
@@ -126,6 +128,7 @@ export default async function AdoptionDetailPage({ params, searchParams }: { par
                   Editar
                 </Button>
                 <StatusChangeButton target={{ adoptionId: pet.id, petName: pet.petName, sex: pet.sex, status: pet.status }} />
+                {canDelete(pet.status) && <DeleteAdoptionButton target={{ adoptionId: pet.id, petName: pet.petName }} />}
               </div>
             )}
           </div>

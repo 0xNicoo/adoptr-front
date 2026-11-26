@@ -3,7 +3,13 @@
 import { redirect } from 'next/navigation';
 import { MAX_PHOTO_BYTES } from '@/lib/adoption/photos';
 import { ApiError, UNKNOWN_ERROR_CODE } from '@/lib/api/api';
-import { addAdoptionPhoto, changeAdoptionStatus, createAdoption, updateAdoption } from '@/lib/api/calls/adoption';
+import {
+  addAdoptionPhoto,
+  changeAdoptionStatus,
+  createAdoption,
+  deleteAdoption,
+  updateAdoption,
+} from '@/lib/api/calls/adoption';
 import { AdoptionInput } from '@/lib/api/models/adoption/adoption-input';
 import { AdoptionStatus } from '@/lib/api/models/adoption/adoption-status';
 import { Species } from '@/lib/api/models/adoption/species';
@@ -111,6 +117,26 @@ export async function updateAdoptionAction(adoptionId: number, input: AdoptionIn
   let code: string;
   try {
     await updateAdoption(adoptionId, toRequestBody(input));
+    return { ok: true };
+  } catch (error) {
+    code = error instanceof ApiError ? error.code : UNKNOWN_ERROR_CODE;
+  }
+  if (code === 'UNAUTHENTICATED') {
+    await clearAccessToken();
+    redirect('/login');
+  }
+  return { ok: false, code };
+}
+
+export type DeleteAdoptionResult = { ok: true } | { ok: false; code: string };
+
+export async function deleteAdoptionAction(adoptionId: number): Promise<DeleteAdoptionResult> {
+  if (!Number.isInteger(adoptionId)) {
+    return { ok: false, code: 'VALIDATION_ERROR' };
+  }
+  let code: string;
+  try {
+    await deleteAdoption(adoptionId);
     return { ok: true };
   } catch (error) {
     code = error instanceof ApiError ? error.code : UNKNOWN_ERROR_CODE;

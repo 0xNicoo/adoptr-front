@@ -92,3 +92,7 @@ export async function updateAdoption(id: number, input: AdoptionInput): Promise<
   }
   return response.data;
 }
+
+export async function deleteAdoption(id: number): Promise<void> {
+  await apiRequest<void>(`/adoptions/${id}`, 'DELETE');
+}

@@ -1,15 +1,18 @@
 "use client";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { ArrowCounterClockwise, DotsThree, House, PencilSimple } from "@phosphor-icons/react/dist/ssr";
+import { ArrowCounterClockwise, DotsThree, House, PencilSimple, Trash } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { useState } from "react";
+import { canDelete } from "@/lib/adoption/delete";
 import { statusActionLabel } from "@/lib/adoption/status-change";
 import { AdoptionStatus } from "@/lib/api/models/adoption/adoption-status";
+import DeleteAdoptionDialog from "./delete-adoption-dialog";
 import StatusChangeDialog, { type StatusChangeTarget } from "./status-change-dialog";
 
 export default function OwnerCardMenu({ target }: { target: StatusChangeTarget }) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const StatusIcon = target.status === AdoptionStatus.ADOPTED ? ArrowCounterClockwise : House;
 
   return (
@@ -44,9 +47,22 @@ export default function OwnerCardMenu({ target }: { target: StatusChangeTarget }
               {statusActionLabel(target.sex, target.status)}
             </button>
           </MenuItem>
+          {canDelete(target.status) && (
+            <MenuItem>
+              <button
+                type="button"
+                onClick={() => setDeleteOpen(true)}
+                className="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-[15px] font-semibold text-danger data-focus:bg-danger-soft"
+              >
+                <Trash aria-hidden={true} weight="bold" className="h-5 w-5 shrink-0" />
+                Eliminar
+              </button>
+            </MenuItem>
+          )}
         </MenuItems>
       </Menu>
       <StatusChangeDialog target={target} open={dialogOpen} onClose={() => setDialogOpen(false)} />
+      <DeleteAdoptionDialog target={target} open={deleteOpen} onClose={() => setDeleteOpen(false)} />
     </>
   );
 }
