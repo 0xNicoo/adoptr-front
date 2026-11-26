@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import type { ReactNode } from "react";
 import { logoutAction } from "@/actions/auth";
 import { useLiveUnread } from "./use-live-unread";
 
@@ -31,10 +32,11 @@ export function unreadText(count: number): string {
 }
 
 /** «Chats» del menú mobile, con el contador en vivo. */
-export function MobileChatsLink({ unread, className }: { unread: number; className: string }) {
+export function MobileChatsLink({ unread, className, icon }: { unread: number; className: string; icon?: ReactNode }) {
   const count = useLiveUnread(unread);
   return (
     <Link href="/chats" className={className}>
+      {icon}
       Chats
       <UnreadDot count={count} />
       {count > 0 && <span className="sr-only">, {unreadText(count)}</span>}
@@ -53,11 +55,12 @@ function useLogout() {
   };
 }
 
-export function LogoutButton({ className = "" }: { className?: string }) {
+export function LogoutButton({ className = "", icon }: { className?: string; icon?: ReactNode }) {
   const handleLogout = useLogout();
 
   return (
     <button type="button" onClick={handleLogout} className={className}>
+      {icon}
       Salir
     </button>
   );

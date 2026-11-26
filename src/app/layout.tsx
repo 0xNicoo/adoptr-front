@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Lilita_One } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -25,6 +25,10 @@ const gentyDemo = localFont({
 export const metadata: Metadata = {
   title: "Adoptr",
   description: "Pagina para adopcion de mascotas",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1C3EB2",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

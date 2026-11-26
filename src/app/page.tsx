@@ -83,7 +83,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="como" className="scroll-mt-4 border-b-3 border-ink bg-primary text-white">
+      <section id="como" className="scroll-mt-20 border-b-3 border-ink bg-primary text-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-20">
           <h2 className="font-display text-4xl [text-shadow:4px_4px_0_var(--color-ink)] md:text-5xl">¿Cómo adoptar?</h2>
           <ol className="grid gap-7 md:grid-cols-3">
