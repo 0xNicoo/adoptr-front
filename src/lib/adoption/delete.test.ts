@@ -25,6 +25,7 @@ describe("deleteErrorMessage", () => {
   it("traduce los errores del back", () => {
     expect(deleteErrorMessage("ADOPTION_NOT_FOUND")).toBe("Esta publicación ya no existe.");
     expect(deleteErrorMessage("ADOPTION_NOT_OWNER")).toBe("Solo quien la publicó puede eliminarla.");
+    expect(deleteErrorMessage("ADOPTION_ADOPTED_NOT_DELETABLE")).toBe("Una publicación adoptada no se puede eliminar.");
   });
 
   it("cualquier otro código da un mensaje genérico", () => {

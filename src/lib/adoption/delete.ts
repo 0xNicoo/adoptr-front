@@ -24,6 +24,8 @@ export function deleteErrorMessage(code: string): string {
       return "Esta publicación ya no existe.";
     case "ADOPTION_NOT_OWNER":
       return "Solo quien la publicó puede eliminarla.";
+    case "ADOPTION_ADOPTED_NOT_DELETABLE":
+      return "Una publicación adoptada no se puede eliminar.";
     default:
       return "No pudimos eliminar la publicación. Probá de nuevo.";
   }
