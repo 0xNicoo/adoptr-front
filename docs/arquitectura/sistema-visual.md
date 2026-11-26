@@ -108,7 +108,7 @@ Sobre fondos oscuros (`primary` o `ink`), el contorno y la sombra tinta casi no 
 
 **Aviso (toast):** abajo al centro, píldora `ink` con texto en `surface`, sombra dura `cta` y ✕; se va solo a los 6 s (`toast.tsx`, `useToast()`).
 
-**Navbar:** fondo `primary` (azul Adoptr) con línea inferior `ink` de 4 px. Logo en `surface` (blanco) con «tr» naranja y sombra dura tinta; links, íconos y botón del menú mobile en `surface` (8,7:1). Subrayado de hover en `cta` (3,6:1 sobre el azul). «Ingresar» como botón `cta` con `tone="dark"`. Nada en tinta sobre el azul: no llega a 3:1.
+**Navbar:** fondo `primary` (azul Adoptr) con línea inferior `ink` de 4 px. Logo en `surface` (blanco) con «tr» naranja y sombra dura tinta; links, íconos y botón del menú mobile en `surface` (8,7:1). Subrayado de hover en `cta` (3,6:1 sobre el azul). «Ingresar» como botón `cta` con `tone="dark"`. Nada en tinta sobre el azul: no llega a 3:1. Es `sticky` arriba en todas las pantallas, y `themeColor` (en `layout.tsx`) pinta del mismo azul la barra del navegador en el celular. El menú mobile (`mobile-menu.tsx`) se abre debajo de la barra, sobre la página oscurecida con `ink` al 60 %: filas de 48 px en `surface`, con ícono Phosphor en las opciones de la cuenta, y líneas `ink-soft` entre grupos. Las anclas dentro de una página (`#como`) llevan `scroll-mt` para no quedar debajo de la navbar.
 
 **Stepper:** pasos numerados en círculos; completo en `positive` con tilde, actual en `cta`, pendientes con contorno punteado `ink-soft`.
 
